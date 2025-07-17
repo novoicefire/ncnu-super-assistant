@@ -1,3 +1,5 @@
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (完整 RWD 版) */
+
 .course-planner {
     display: flex;
     flex-direction: column;
@@ -91,9 +93,43 @@
     cursor: pointer;
     transition: background-color 0.3s;
     vertical-align: middle !important;
+    line-height: 1.4;
 }
 
 .course-cell:hover {
     background-color: #ffcdd2;
     color: #c62828;
+}
+
+/* --- RWD 新增樣式 --- */
+@media (max-width: 1024px) {
+  .planner-content {
+    flex-direction: column; /* 主要內容區塊改為垂直排列 */
+  }
+
+  .course-list-container {
+    max-height: 40vh; /* 限制課程列表的高度 */
+    order: 2; /* 將課程列表放到課表下面 */
+  }
+
+  .schedule-container {
+    order: 1; /* 將課表放到最上面 */
+  }
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column; /* 篩選器內部也改為垂直排列 */
+    gap: 0.5rem;
+    align-items: stretch; /* 讓輸入框等寬 */
+  }
+
+  .course-table th, .course-table td {
+    font-size: 0.7rem; /* 進一步縮小課表字體 */
+    padding: 4px;
+  }
+
+  .course-cell {
+    line-height: 1.2;
+  }
 }

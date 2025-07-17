@@ -1,3 +1,15 @@
+/* frontend/src/App.css (完整 RWD 版) */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f7f6;
+  color: #333;
+  margin: 0;
+}
+
 .navbar {
   background-color: #004c40;
   padding: 1rem 2rem;
@@ -66,4 +78,38 @@ input, select {
   border: 1px solid #ccc;
   margin: 0 5px;
   font-size: 1rem;
+}
+
+/* --- RWD 新增樣式 --- */
+/* 當螢幕寬度小於或等於 768px 時套用 */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem; /* 縮小邊距 */
+    flex-direction: column; /* 改為垂直排列 */
+    gap: 0.5rem;
+  }
+
+  .nav-brand {
+    font-size: 1.2rem; /* 縮小品牌字體 */
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-links {
+    gap: 0.2rem; /* 縮小連結間距 */
+    flex-wrap: wrap; /* 允許換行 */
+    justify-content: center;
+  }
+
+  .nav-links a {
+    padding: 0.4rem 0.6rem; /* 縮小連結內邊距 */
+    font-size: 0.9rem;
+  }
+
+  .container {
+    padding: 1rem; /* 縮小內容區邊距 */
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
 }

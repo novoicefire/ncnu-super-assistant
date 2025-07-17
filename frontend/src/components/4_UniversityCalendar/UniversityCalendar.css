@@ -1,4 +1,4 @@
-/* frontend/src/components/4_UniversityCalendar/UniversityCalendar.css */
+/* frontend/src/components/4_UniversityCalendar/UniversityCalendar.css (完整 RWD 版) */
 
 .calendar-container {
     padding: 1rem;
@@ -60,6 +60,7 @@
     border: 1px solid #ddd;
     position: relative;
     overflow-y: auto; /* 如果事件太多，允許滾動 */
+    transition: background-color 0.3s;
 }
 
 /* 非本月的日期格子 */
@@ -104,4 +105,34 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; /* 如果事件文字太長，用...顯示 */
+}
+
+/* --- RWD 新增樣式 --- */
+@media (max-width: 768px) {
+    .calendar-wrapper {
+        padding: 0.5rem; /* 縮小日曆外邊距 */
+    }
+
+    .react-calendar__tile {
+        height: 80px; /* 縮小日期格子高度 */
+        font-size: 0.8rem;
+        padding: 3px;
+    }
+
+    .event-item-in-tile {
+        font-size: 0.6rem; /* 縮小事件標籤字體 */
+        padding: 1px 3px;
+    }
+    
+    .react-calendar__navigation button {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* 針對更小的螢幕 */
+    .react-calendar__month-view__weekdays__weekday abbr {
+        /* 將 "星期一" 簡化為 "一" */
+        text-decoration: none !important;
+    }
 }

@@ -1,20 +1,26 @@
+/* frontend/src/components/3_CampusDirectory/CampusDirectory.css (完整 RWD 版) */
+
 .directory-container {
     padding: 1rem;
 }
+
 .search-bar {
     margin-bottom: 2rem;
     text-align: center;
 }
+
 .search-bar input {
     width: 50%;
     padding: 12px;
     font-size: 1rem;
 }
+
 .contact-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
+
 .contact-card {
     background-color: white;
     border: 1px solid #e0e0e0;
@@ -23,22 +29,39 @@
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
+
 .contact-card h3 {
     margin-top: 0;
 }
+
 .contact-card p {
     margin: 0.5rem 0;
     word-break: break-all;
 }
+
 .contact-card .title-en {
     color: #757575;
     font-style: italic;
     margin-bottom: 1rem;
 }
+
 .contact-card a {
     color: #00796b;
     text-decoration: none;
 }
+
 .contact-card a:hover {
     text-decoration: underline;
+}
+
+/* --- RWD 新增樣式 --- */
+@media (max-width: 768px) {
+  .search-bar input {
+    width: 90%; /* 搜尋框寬度變大 */
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr; /* 改為單欄佈局 */
+    gap: 1rem;
+  }
 }
