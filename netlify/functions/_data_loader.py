@@ -6,9 +6,13 @@ from icalendar import Calendar
 DATA = {}
 CALENDAR_EVENTS = []
   
-  # 使用相對路徑從專案根目錄的 data 資料夾載入
-  # Netlify 會將專案根目錄作為執行的起點
-DATA_PATH = Path('data')
+# 建立一個相對於當前檔案位置的絕對路徑來定位 data 資料夾
+# Path(__file__) -> 取得 _data_loader.py 的完整路徑
+# .parent -> 取得所在的資料夾 (functions)
+# .parent -> 再往上一層 (netlify)
+# .parent -> 再往上一層，就回到了專案的根目錄
+# / 'data' -> 進入 data 資料夾
+DATA_PATH = Path(__file__).parent.parent.parent / 'data'
 
 def load_all_data():
       global DATA, CALENDAR_EVENTS
