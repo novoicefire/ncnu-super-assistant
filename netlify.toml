@@ -1,11 +1,26 @@
+# Netlify 的主要建置設定
 [build]
-  # 先進入 frontend 資料夾，然後執行 npm install，最後執行 npm run build
+  # 進入 frontend 資料夾，安裝依賴，然後建置專案
   command = "cd frontend && npm install && npm run build"
+  
+  # 前端專案建置後的輸出目錄
   publish = "frontend/dist"
+  
+  # Serverless Functions 所在的目錄
   functions = "netlify/functions"
 
-# 將 /api/* 的請求導向到我們的 functions
+# 規則一：將 /api/* 的請求轉發到後端函數 (最優先)
+# 這條規則會被最先匹配
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+# 規則二：處理單頁應用 (SPA) 的前端路由 (後備規則)
+# 如果請求的路徑不是檔案且不是 /api/*，就將它導向到 index.html
+# 這樣 React Router 才能接管並顯示正確的頁面
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["!admin"]} # 這裡可以隨意設定，只是為了與 API 規則區分
