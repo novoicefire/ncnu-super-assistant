@@ -1,32 +1,26 @@
 # Netlify 的主要建置設定
 [build]
-  # Base directory: 告訴 Netlify，所有與建置相關的指令都從 'frontend/' 這個資料夾開始執行
-  base = "frontend/"
+  # 注意：我們移除了 base = "frontend/" 這一行！
   
-  # Build command: 因為已經在 'frontend/' 裡了，所以可以直接執行
-  command = "npm run build"
+  # Build command: 從根目錄執行，我們先 cd 進入 frontend，完成工作後再回來
+  command = "cd frontend && npm install && npm run build"
   
-  # Publish directory: 建置完成後，要發布的資料夾 (相對於 base)
-  publish = "dist/"
+  # Publish directory: 發布目錄的路徑必須從根目錄算起
+  publish = "frontend/dist/"
   
-  # Functions directory: 無伺服器函數的位置 (相對於專案根目錄)
+  # Functions directory: 函數目錄的路徑也從根目錄算起
   functions = "netlify/functions/"
 
-# --- 重定向規則 ---
+# --- 重定向規則 (這部分保持不變) ---
 
-# 規則一：API 代理 (將 /api/... 的請求轉發到後端函數)
-# 這個規則必須放在最前面
+# 規則一：API 代理
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
-# 規則二：單頁應用 (SPA) 的回退 (Fallback) 規則
-# 這個規則會捕捉所有其他未匹配到的路徑 (例如 /tracker, /directory)
-# 並將它們導向到 index.html，讓 React Router 能夠處理
-# 這個規則必須放在最後面
+# 規則二：單頁應用 (SPA) 回退規則
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  
