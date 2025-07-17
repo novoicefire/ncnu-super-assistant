@@ -1,0 +1,99 @@
+.course-planner {
+    display: flex;
+    flex-direction: column;
+}
+
+.filters {
+    background-color: #e0f2f1;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.planner-content {
+    display: flex;
+    gap: 1rem;
+}
+
+.course-list-container {
+    flex: 1;
+    max-height: 70vh;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.course-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.course-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+}
+
+.course-list li:hover {
+    background-color: #f0f0f0;
+}
+
+.course-info {
+    flex-grow: 1;
+}
+
+.course-info small {
+    color: #666;
+}
+
+.course-list button {
+    padding: 5px 10px;
+    font-size: 1rem;
+    margin-left: 1rem;
+    flex-shrink: 0;
+}
+
+.schedule-container {
+    flex: 2;
+}
+
+.course-table table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background-color: white;
+}
+
+.course-table th, .course-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    height: 50px;
+    font-size: 0.8rem;
+}
+
+.course-table th {
+    background-color: #e0f2f1;
+}
+
+.course-cell {
+    background-color: #b2dfdb;
+    color: #004d40;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    vertical-align: middle !important;
+}
+
+.course-cell:hover {
+    background-color: #ffcdd2;
+    color: #c62828;
+}

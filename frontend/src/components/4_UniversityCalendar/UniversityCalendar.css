@@ -1,0 +1,30 @@
+.calendar-container {
+    padding: 1rem;
+}
+.event-list {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.event-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+.event-item:last-child {
+    border-bottom: none;
+}
+.event-date {
+    background-color: #00796b;
+    color: white;
+    padding: 0.8rem;
+    border-radius: 8px;
+    min-width: 150px;
+    text-align: center;
+    margin-right: 1.5rem;
+}
+.event-summary {
+    font-size: 1.1rem;
+}   
