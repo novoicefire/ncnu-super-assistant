@@ -1,26 +1,32 @@
 # Netlify 的主要建置設定
 [build]
-  # 進入 frontend 資料夾，安裝依賴，然後建置專案
-  command = "cd frontend && npm install && npm run build"
+  # Base directory: 告訴 Netlify，所有與建置相關的指令都從 'frontend/' 這個資料夾開始執行
+  base = "frontend/"
   
-  # 前端專案建置後的輸出目錄
-  publish = "frontend/dist"
+  # Build command: 因為已經在 'frontend/' 裡了，所以可以直接執行
+  command = "npm run build"
   
-  # Serverless Functions 所在的目錄
-  functions = "netlify/functions"
+  # Publish directory: 建置完成後，要發布的資料夾 (相對於 base)
+  publish = "dist/"
+  
+  # Functions directory: 無伺服器函數的位置 (相對於專案根目錄)
+  functions = "netlify/functions/"
 
-# 規則一：將 /api/* 的請求轉發到後端函數 (最優先)
-# 這條規則會被最先匹配
+# --- 重定向規則 ---
+
+# 規則一：API 代理 (將 /api/... 的請求轉發到後端函數)
+# 這個規則必須放在最前面
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
-# 規則二：處理單頁應用 (SPA) 的前端路由 (後備規則)
-# 如果請求的路徑不是檔案且不是 /api/*，就將它導向到 index.html
-# 這樣 React Router 才能接管並顯示正確的頁面
+# 規則二：單頁應用 (SPA) 的回退 (Fallback) 規則
+# 這個規則會捕捉所有其他未匹配到的路徑 (例如 /tracker, /directory)
+# 並將它們導向到 index.html，讓 React Router 能夠處理
+# 這個規則必須放在最後面
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = {Role = ["!admin"]} # 這裡可以隨意設定，只是為了與 API 規則區分
+  
