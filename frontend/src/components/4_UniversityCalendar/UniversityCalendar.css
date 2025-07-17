@@ -4,68 +4,104 @@
     padding: 1rem;
 }
 
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-}
-
-.calendar-header h1 {
-    margin: 0;
-}
-
-.year-selector {
-    background-color: #e0f2f1;
-    padding: 0.5rem 1rem;
+.calendar-wrapper {
+    background: white;
+    padding: 1.5rem;
     border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* --- react-calendar 的全域覆蓋 --- */
+
+.react-calendar {
+    width: 100%;
+    border: none;
+    font-family: inherit;
+    line-height: 1.5em;
+}
+
+/* 月份和年份導航列 */
+.react-calendar__navigation {
     display: flex;
-    align-items: center;
+    height: 44px;
+    margin-bottom: 1em;
 }
 
-.year-selector label {
-    margin-right: 0.5rem;
-    color: #004d40;
-    font-weight: bold;
-}
-
-.year-selector select {
-    font-size: 1rem;
-    padding: 0.3rem;
-    border-radius: 4px;
-    border: 1px solid #00796b;
-}
-
-.event-list {
-    background-color: white;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.event-item {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
-}
-
-.event-item:last-child {
-    border-bottom: none;
-}
-
-.event-date {
-    background-color: #00796b;
+.react-calendar__navigation button {
+    min-width: 44px;
+    background: #00796b; /* 主題色 */
     color: white;
-    padding: 0.8rem;
-    border-radius: 8px;
-    min-width: 120px; /* 稍微縮小寬度 */
-    text-align: center;
-    margin-right: 1.5rem;
-    font-weight: bold;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 4px;
+    margin: 0 2px;
 }
 
-.event-summary {
-    font-size: 1.1rem;
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+    background-color: #004c40; /* 懸停顏色 */
+}
+
+/* 星期標題 (日、一、二...) */
+.react-calendar__month-view__weekdays__weekday {
+    text-align: center;
+    font-weight: bold;
+    color: #004c40;
+    text-decoration: none;
+}
+
+/* 日期格子 */
+.react-calendar__tile {
+    height: 120px; /* 增加格子高度以容納事件 */
+    text-align: left;
+    vertical-align: top;
+    padding: 5px;
+    background: #f8f8fa;
+    border: 1px solid #ddd;
+    position: relative;
+    overflow-y: auto; /* 如果事件太多，允許滾動 */
+}
+
+/* 非本月的日期格子 */
+.react-calendar__month-view__days__day--neighboringMonth {
+    color: #b0b0b0;
+    background: #fff;
+}
+
+/* 今天的日期格子 */
+.react-calendar__tile--now {
+    background: #e0f2f1; /* 淡淡的主題色 */
+    font-weight: bold;
+}
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+    background: #b2dfdb;
+}
+
+/* 被選中的日期格子 */
+.react-calendar__tile--active {
+    background: #00796b;
+    color: white;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: #004c40;
+}
+
+/* --- 事件在格子中的樣式 --- */
+
+.event-list-in-tile {
+    margin-top: 5px;
+}
+
+.event-item-in-tile {
+    background-color: #009688;
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 如果事件文字太長，用...顯示 */
 }
