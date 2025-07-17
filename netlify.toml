@@ -1,0 +1,13 @@
+[build]
+  # 前端專案的建置指令
+  command = "npm run build"
+  # 前端專案建置後的輸出目錄
+  publish = "frontend/dist"
+  # Serverless Functions 所在的目錄
+  functions = "netlify/functions"
+
+# 將 /api/* 的請求導向到我們的 functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
