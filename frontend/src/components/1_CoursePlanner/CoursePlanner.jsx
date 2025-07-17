@@ -3,7 +3,7 @@ import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
 import './CoursePlanner.css';
 
-const API_URL = '/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const CoursePlanner = () => {
     const [allCourses, setAllCourses] = useState([]);
