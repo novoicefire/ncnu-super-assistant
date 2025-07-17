@@ -1,9 +1,7 @@
 [build]
-  # 前端專案的建置指令
-  command = "npm run build"
-  # 前端專案建置後的輸出目錄
+  # 先進入 frontend 資料夾，然後執行 npm install，最後執行 npm run build
+  command = "cd frontend && npm install && npm run build"
   publish = "frontend/dist"
-  # Serverless Functions 所在的目錄
   functions = "netlify/functions"
 
 # 將 /api/* 的請求導向到我們的 functions
