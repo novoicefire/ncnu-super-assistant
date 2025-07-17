@@ -133,3 +133,12 @@
     line-height: 1.2;
   }
 }
+/* ... (所有原有樣式保持不變) ... */
+
+/* --- 新增午休儲存格樣式 --- */
+.lunch-break {
+    background-color: #f0f0f0;
+    color: #aaa;
+    font-style: italic;
+    font-size: 0.8rem;
+}
