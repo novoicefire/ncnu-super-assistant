@@ -11,7 +11,13 @@ from datetime import datetime
 # --- 應用程式設定 ---
 app = Flask(__name__)
 # 允許所有來源的跨域請求，方便前後端分離開發
-CORS(app)
+CORS(
+    app,
+    resources={r"/api/*": {"origins": [
+        "https://ncnu-super-assistant.vercel.app",  # 您 Vercel 網站的網址
+        "http://localhost:5173"                     # 本地開發時的 Vite 網址
+    ]}}
+)
 
 # --- 資料載入與快取 ---
 # 使用全域變數來模擬資料庫/快取
