@@ -1,8 +1,25 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (完整 RWD 版) */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (完整 RWD + 熱度版) */
 
 .course-planner {
     display: flex;
     flex-direction: column;
+}
+
+.planner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.save-status {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 .filters {
@@ -55,6 +72,20 @@
 
 .course-info small {
     color: #666;
+    display: block; /* 確保 small 標籤獨佔一行 */
+    margin-top: 4px;
+}
+
+/* 熱度指示器樣式 */
+.hotness-indicator {
+    display: inline-block;
+    background-color: #fff3e0;
+    color: #ef6c00;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 10px;
 }
 
 .course-list button {
@@ -101,44 +132,38 @@
     color: #c62828;
 }
 
-/* --- RWD 新增樣式 --- */
-@media (max-width: 1024px) {
-  .planner-content {
-    flex-direction: column; /* 主要內容區塊改為垂直排列 */
-  }
-
-  .course-list-container {
-    max-height: 40vh; /* 限制課程列表的高度 */
-    order: 2; /* 將課程列表放到課表下面 */
-  }
-
-  .schedule-container {
-    order: 1; /* 將課表放到最上面 */
-  }
-}
-
-@media (max-width: 768px) {
-  .filters {
-    flex-direction: column; /* 篩選器內部也改為垂直排列 */
-    gap: 0.5rem;
-    align-items: stretch; /* 讓輸入框等寬 */
-  }
-
-  .course-table th, .course-table td {
-    font-size: 0.7rem; /* 進一步縮小課表字體 */
-    padding: 4px;
-  }
-
-  .course-cell {
-    line-height: 1.2;
-  }
-}
-/* ... (所有原有樣式保持不變) ... */
-
-/* --- 新增午休儲存格樣式 --- */
 .lunch-break {
     background-color: #f0f0f0;
     color: #aaa;
     font-style: italic;
     font-size: 0.8rem;
+}
+
+/* --- RWD --- */
+@media (max-width: 1024px) {
+  .planner-content {
+    flex-direction: column;
+  }
+  .course-list-container {
+    max-height: 40vh;
+    order: 2;
+  }
+  .schedule-container {
+    order: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .course-table th, .course-table td {
+    font-size: 0.7rem;
+    padding: 4px;
+  }
+  .course-cell {
+    line-height: 1.2;
+  }
 }

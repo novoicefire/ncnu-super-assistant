@@ -1,0 +1,49 @@
+.auth-section {
+    min-width: 200px; /* 給定最小寬度以防止登入按鈕變形 */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.user-name {
+    color: white;
+    font-weight: bold;
+}
+
+.logout-button {
+    background-color: #d32f2f; /* 紅色登出按鈕 */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #c62828;
+}
+
+/* RWD for Navbar */
+@media (max-width: 1024px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .user-name {
+        display: none; /* 在較小螢幕上隱藏名字，節省空間 */
+    }
+}

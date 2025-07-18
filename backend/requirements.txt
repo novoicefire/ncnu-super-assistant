@@ -3,3 +3,5 @@ Flask-Cors
 requests
 icalendar
 gunicorn
+python-dotenv
+supabase>=2.0,<3.0  # 使用官方新的 supabase-py 套件
