@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (已解決衝突的最終版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (路徑修正版)
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
@@ -10,8 +10,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const CoursePlanner = () => {
     const { user, isLoggedIn } = useAuth();
-
-    // 狀態管理
     const [staticCourses, setStaticCourses] = useState([]);
     const [hotnessData, setHotnessData] = useState({});
     const [schedule, setSchedule] = useState({});
@@ -21,16 +19,13 @@ const CoursePlanner = () => {
     const [filters, setFilters] = useState({ courseName: '', teacher: '', department: '', division: '' });
     const [filteredCourses, setFilteredCourses] = useState([]);
 
-    // 1. 初次載入：獲取靜態課程資料和熱度資料
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                // 從 Vercel 部署的靜態路徑獲取課程資料
+                // [核心修正] 將路徑指向 /data/ 內的檔案
                 const courseResPromise = axios.get('/data/本學期開課資訊API.json'); 
-                // 從 Render 後端獲取熱度資料
                 const hotnessResPromise = axios.get(`${API_URL}/api/courses/hotness`);
-
                 const [courseRes, hotnessRes] = await Promise.all([courseResPromise, hotnessResPromise]);
 
                 setStaticCourses(courseRes.data?.course_ncnu?.item || []);
@@ -44,28 +39,22 @@ const CoursePlanner = () => {
         fetchData();
     }, []);
 
-    // 2. 當使用者登入狀態改變時，從後端載入或清空課表
     useEffect(() => {
         if (isLoggedIn && user?.google_id) {
             axios.get(`${API_URL}/api/schedule`, { params: { user_id: user.google_id } })
                 .then(res => setSchedule(res.data || {}))
-                .catch(err => {
-                    console.error("Failed to load user schedule:", err);
-                    setSchedule({});
-                });
+                .catch(err => setSchedule({}));
         } else {
             setSchedule({});
         }
     }, [isLoggedIn, user]);
     
-    // 當課表變動時，重新計算總學分
     useEffect(() => {
         const uniqueCourses = [...new Map(Object.values(schedule).map(item => [item['course_id'], item])).values()];
         const total = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
         setTotalCredits(total);
     }, [schedule]);
 
-    // 3. 篩選邏輯
     useEffect(() => {
         let result = staticCourses;
         if (filters.courseName) result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
@@ -83,7 +72,6 @@ const CoursePlanner = () => {
         return [...new Set(staticCourses.map(c => c.department).filter(Boolean))].sort();
     }, [staticCourses]);
 
-    // 4. 儲存課表的統一函數
     const saveSchedule = useCallback(async (newSchedule) => {
         setSchedule(newSchedule);
         if (isLoggedIn && user?.google_id) {
@@ -99,7 +87,6 @@ const CoursePlanner = () => {
         }
     }, [isLoggedIn, user]);
 
-    // 5. 強健的時間解析函數
     const parseTimeSlots = (timeString) => {
         if (!timeString || typeof timeString !== 'string') return [];
         const timeGroups = timeString.match(/\d[a-zA-Z]+/g) || [];
@@ -120,14 +107,12 @@ const CoursePlanner = () => {
             alert('此課程無時間資訊，無法加入課表。');
             return;
         }
-
         for (let slot of slots) {
             if (schedule[slot]) {
                 alert(`課程衝堂！\n時段 ${slot[0]} 的 ${slot.substring(1)} 節已被「${schedule[slot].course_cname}」佔用。`);
                 return;
             }
         }
-
         const newSchedule = { ...schedule };
         slots.forEach(slot => { newSchedule[slot] = course; });
         saveSchedule(newSchedule);
