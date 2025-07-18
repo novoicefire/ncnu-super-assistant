@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+=======
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (時間解析修正版)
+
+import React, { useState, useEffect, useMemo } from 'react';
+>>>>>>> 31acea65cf84f5d4e3846339a68f6e32ac071fcc
 import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
 import './CoursePlanner.css';
@@ -8,6 +14,7 @@ import { useAuth } from '../../AuthContext.jsx'; // 引入 AuthContext
 const API_URL = import.meta.env.VITE_API_URL;
 
 const CoursePlanner = () => {
+<<<<<<< HEAD
     const { user, isLoggedIn } = useAuth();
 
     // 狀態管理
@@ -86,6 +93,35 @@ const CoursePlanner = () => {
     // 3. 篩選邏輯 (與之前相同，但來源是 staticCourses)
     useEffect(() => {
         let result = staticCourses;
+=======
+    // ... (所有 state 宣告保持不變) ...
+    const [allCourses, setAllCourses] = useState([]);
+    const [filteredCourses, setFilteredCourses] = useState([]);
+    const [schedule, setSchedule] = useState({});
+    const [totalCredits, setTotalCredits] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+    const [searchParams, setSearchParams] = useState({ year: '113', semester: '2' });
+    const [filters, setFilters] = useState({ courseName: '', teacher: '', department: '', division: '' });
+
+    useEffect(() => {
+        setIsLoading(true);
+        axios.get(`${API_URL}/api/courses`, { params: { year: searchParams.year, semester: searchParams.semester, unitId: 'all' } })
+            .then(response => setAllCourses(response.data || []))
+            .catch(error => {
+                console.error("Error fetching courses:", error);
+                setAllCourses([]);
+            })
+            .finally(() => setIsLoading(false));
+    }, [searchParams]);
+
+    const uniqueDepartments = useMemo(() => {
+        if (allCourses.length === 0) return [];
+        return [...new Set(allCourses.map(c => c.department))].sort();
+    }, [allCourses]);
+
+    useEffect(() => {
+        let result = allCourses;
+>>>>>>> 31acea65cf84f5d4e3846339a68f6e32ac071fcc
         if (filters.courseName) result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
         if (filters.teacher) result = result.filter(c => c.teacher.toLowerCase().includes(filters.teacher.toLowerCase()));
         if (filters.department) result = result.filter(c => c.department === filters.department);
@@ -96,6 +132,7 @@ const CoursePlanner = () => {
         setFilteredCourses(result);
     }, [filters, staticCourses]);
 
+<<<<<<< HEAD
     const uniqueDepartments = useMemo(() => {
         if (staticCourses.length === 0) return [];
         return [...new Set(staticCourses.map(c => c.department).filter(Boolean))].sort();
@@ -125,6 +162,28 @@ const CoursePlanner = () => {
         for (const group of timeGroups) {
             const day = group[0];
             const periods = group.substring(1);
+=======
+    const handleParamChange = (e) => setSearchParams(prev => ({...prev, [e.target.name]: e.target.value}));
+    const handleFilterChange = (e) => setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
+
+    /**
+     * [核心修正] 全新的、強健的時間解析函數
+     * @param {string} timeString - 原始時間字串，例如 "4i5bcd" 或 "3h5fg"
+     * @returns {string[]} - 解析後的時間格陣列，例如 ['4i', '5b', '5c', '5d']
+     */
+    const parseTimeSlots = (timeString) => {
+        if (!timeString || typeof timeString !== 'string') return [];
+        
+        // 使用正規表示式來切分時間字串
+        // \d[a-zA-Z]+ 會匹配 "一個數字" 後面跟著 "一個或多個字母" 的模式
+        // 例如 "4i5bcd" 會被切成 ["4i", "5bcd"]
+        const timeGroups = timeString.match(/\d[a-zA-Z]+/g) || [];
+        
+        const slots = [];
+        for (const group of timeGroups) {
+            const day = group[0]; // 第一個字元是星期
+            const periods = group.substring(1); // 後面的都是節次
+>>>>>>> 31acea65cf84f5d4e3846339a68f6e32ac071fcc
             for (const period of periods) {
                 slots.push(`${day}${period}`);
             }
