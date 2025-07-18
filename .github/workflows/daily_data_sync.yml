@@ -1,5 +1,3 @@
-# .github/workflows/daily_data_sync.yml
-
 name: Daily Sync Course Data
 
 # --- 觸發條件 ---
