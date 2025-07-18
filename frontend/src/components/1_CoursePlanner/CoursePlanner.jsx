@@ -1,32 +1,23 @@
-<<<<<<< HEAD
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-=======
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (時間解析修正版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (已解決衝突的最終版)
 
-import React, { useState, useEffect, useMemo } from 'react';
->>>>>>> 31acea65cf84f5d4e3846339a68f6e32ac071fcc
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
 import './CoursePlanner.css';
-import { useAuth } from '../../AuthContext.jsx'; // 引入 AuthContext
+import { useAuth } from '../../AuthContext.jsx';
 
-// API_URL 指向我們的 Render 後端
 const API_URL = import.meta.env.VITE_API_URL;
 
 const CoursePlanner = () => {
-<<<<<<< HEAD
     const { user, isLoggedIn } = useAuth();
 
     // 狀態管理
-    const [staticCourses, setStaticCourses] = useState([]); // 存放從 data/ 讀取的課程
-    const [hotnessData, setHotnessData] = useState({});     // 存放課程熱度
-    const [schedule, setSchedule] = useState({});           // 當前課表
-    const [totalCredits, setTotalCredits] = useState(0);    // 總學分
+    const [staticCourses, setStaticCourses] = useState([]);
+    const [hotnessData, setHotnessData] = useState({});
+    const [schedule, setSchedule] = useState({});
+    const [totalCredits, setTotalCredits] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);        // 儲存狀態
-
-    // 篩選器狀態
-    const [searchParams, setSearchParams] = useState({ year: '113', semester: '2' });
+    const [isSaving, setIsSaving] = useState(false);
     const [filters, setFilters] = useState({ courseName: '', teacher: '', department: '', division: '' });
     const [filteredCourses, setFilteredCourses] = useState([]);
 
@@ -35,7 +26,7 @@ const CoursePlanner = () => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                // 從 Vercel 部署的靜態路徑獲取課程資料，速度極快
+                // 從 Vercel 部署的靜態路徑獲取課程資料
                 const courseResPromise = axios.get('/本學期開課資訊API.json'); 
                 // 從 Render 後端獲取熱度資料
                 const hotnessResPromise = axios.get(`${API_URL}/api/courses/hotness`);
@@ -46,82 +37,37 @@ const CoursePlanner = () => {
                 setHotnessData(hotnessRes.data || {});
             } catch (error) {
                 console.error("Failed to fetch initial data:", error);
-                // 可以在此處加入錯誤提示
             } finally {
                 setIsLoading(false);
             }
         };
         fetchData();
-    }, []); // 這個 effect 只在初次渲染時執行
+    }, []);
 
     // 2. 當使用者登入狀態改變時，從後端載入或清空課表
     useEffect(() => {
         if (isLoggedIn && user?.google_id) {
-            console.log("User logged in, fetching schedule for:", user.google_id);
             axios.get(`${API_URL}/api/schedule`, { params: { user_id: user.google_id } })
-                .then(res => {
-                    setSchedule(res.data || {});
-                })
+                .then(res => setSchedule(res.data || {}))
                 .catch(err => {
                     console.error("Failed to load user schedule:", err);
                     setSchedule({});
                 });
         } else {
-            // 如果未登入或已登出，清空課表
             setSchedule({});
         }
     }, [isLoggedIn, user]);
     
     // 當課表變動時，重新計算總學分
     useEffect(() => {
-        const credits = Object.values(schedule).reduce((acc, course) => {
-            // 使用 Set 來避免重複計算同一門課的學分（對於跨多個時段的課）
-            return acc.add(course.course_id);
-        }, new Set());
-        
-        let total = 0;
-        credits.forEach(courseId => {
-            const course = Object.values(schedule).find(c => c.course_id === courseId);
-            if (course) {
-                total += parseFloat(course.course_credit || 0);
-            }
-        });
+        const uniqueCourses = [...new Map(Object.values(schedule).map(item => [item['course_id'], item])).values()];
+        const total = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
         setTotalCredits(total);
     }, [schedule]);
 
-
-    // 3. 篩選邏輯 (與之前相同，但來源是 staticCourses)
+    // 3. 篩選邏輯
     useEffect(() => {
         let result = staticCourses;
-=======
-    // ... (所有 state 宣告保持不變) ...
-    const [allCourses, setAllCourses] = useState([]);
-    const [filteredCourses, setFilteredCourses] = useState([]);
-    const [schedule, setSchedule] = useState({});
-    const [totalCredits, setTotalCredits] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
-    const [searchParams, setSearchParams] = useState({ year: '113', semester: '2' });
-    const [filters, setFilters] = useState({ courseName: '', teacher: '', department: '', division: '' });
-
-    useEffect(() => {
-        setIsLoading(true);
-        axios.get(`${API_URL}/api/courses`, { params: { year: searchParams.year, semester: searchParams.semester, unitId: 'all' } })
-            .then(response => setAllCourses(response.data || []))
-            .catch(error => {
-                console.error("Error fetching courses:", error);
-                setAllCourses([]);
-            })
-            .finally(() => setIsLoading(false));
-    }, [searchParams]);
-
-    const uniqueDepartments = useMemo(() => {
-        if (allCourses.length === 0) return [];
-        return [...new Set(allCourses.map(c => c.department))].sort();
-    }, [allCourses]);
-
-    useEffect(() => {
-        let result = allCourses;
->>>>>>> 31acea65cf84f5d4e3846339a68f6e32ac071fcc
         if (filters.courseName) result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
         if (filters.teacher) result = result.filter(c => c.teacher.toLowerCase().includes(filters.teacher.toLowerCase()));
         if (filters.department) result = result.filter(c => c.department === filters.department);
@@ -132,7 +78,6 @@ const CoursePlanner = () => {
         setFilteredCourses(result);
     }, [filters, staticCourses]);
 
-<<<<<<< HEAD
     const uniqueDepartments = useMemo(() => {
         if (staticCourses.length === 0) return [];
         return [...new Set(staticCourses.map(c => c.department).filter(Boolean))].sort();
@@ -154,7 +99,7 @@ const CoursePlanner = () => {
         }
     }, [isLoggedIn, user]);
 
-    // 5. 時間解析與排課邏輯 (與上一版相同)
+    // 5. 強健的時間解析函數
     const parseTimeSlots = (timeString) => {
         if (!timeString || typeof timeString !== 'string') return [];
         const timeGroups = timeString.match(/\d[a-zA-Z]+/g) || [];
@@ -162,28 +107,6 @@ const CoursePlanner = () => {
         for (const group of timeGroups) {
             const day = group[0];
             const periods = group.substring(1);
-=======
-    const handleParamChange = (e) => setSearchParams(prev => ({...prev, [e.target.name]: e.target.value}));
-    const handleFilterChange = (e) => setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
-
-    /**
-     * [核心修正] 全新的、強健的時間解析函數
-     * @param {string} timeString - 原始時間字串，例如 "4i5bcd" 或 "3h5fg"
-     * @returns {string[]} - 解析後的時間格陣列，例如 ['4i', '5b', '5c', '5d']
-     */
-    const parseTimeSlots = (timeString) => {
-        if (!timeString || typeof timeString !== 'string') return [];
-        
-        // 使用正規表示式來切分時間字串
-        // \d[a-zA-Z]+ 會匹配 "一個數字" 後面跟著 "一個或多個字母" 的模式
-        // 例如 "4i5bcd" 會被切成 ["4i", "5bcd"]
-        const timeGroups = timeString.match(/\d[a-zA-Z]+/g) || [];
-        
-        const slots = [];
-        for (const group of timeGroups) {
-            const day = group[0]; // 第一個字元是星期
-            const periods = group.substring(1); // 後面的都是節次
->>>>>>> 31acea65cf84f5d4e3846339a68f6e32ac071fcc
             for (const period of periods) {
                 slots.push(`${day}${period}`);
             }
@@ -221,9 +144,7 @@ const CoursePlanner = () => {
         saveSchedule(newSchedule);
     };
 
-    // UI 相關的事件處理
     const handleFilterChange = (e) => setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    const handleParamChange = (e) => setSearchParams(prev => ({...prev, [e.target.name]: e.target.value}));
 
     return (
         <div className="course-planner">
@@ -236,11 +157,6 @@ const CoursePlanner = () => {
             </div>
             
             <div className="filters">
-                {/* 
-                  由於我們現在使用打包的靜態資料，學年學期選擇器暫時移除。
-                  若要實現，需要將 GitHub Actions 流程改為下載所有學期的資料，
-                  並讓前端根據選擇來讀取不同的 JSON 檔案。
-                */}
                 <input type="text" name="courseName" placeholder="課程名稱" onChange={handleFilterChange} />
                 <input type="text" name="teacher" placeholder="教師姓名" onChange={handleFilterChange} />
                 <select name="department" onChange={handleFilterChange} value={filters.department}>
