@@ -1,84 +1,68 @@
-// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (完整動態版)
+// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (最終修正版)
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './GraduationTracker.css';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
-
 const GraduationTracker = () => {
-    // 狀態管理
     const [departments, setDepartments] = useState([]);
     const [requiredCourses, setRequiredCourses] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     
-    // 使用者選擇的條件
     const [selection, setSelection] = useState({
         year: '113',
         deptId: '12',
         classType: 'B'
     });
 
-    // 從 localStorage 讀取/寫入已完成課程
-    // Key 會根據 selection 動態變化
     const [completedCourses, setCompletedCourses] = useState(() => {
         const key = `${selection.year}-${selection.deptId}-${selection.classType}`;
-        try {
-            const saved = localStorage.getItem(key);
-            return saved ? JSON.parse(saved) : {};
-        } catch {
-            return {};
-        }
+        const saved = localStorage.getItem(key);
+        return saved ? JSON.parse(saved) : {};
     });
 
-    // 載入系所列表 (只在初次渲染時執行一次)
     useEffect(() => {
+        // [核心修正] 直接讀取靜態 JSON 檔案來獲取系所列表
         axios.get('/data/開課單位代碼API.json')
-            .then(res => setDepartments(res.data.course_deptId.item || []))
-            .catch(err => console.error("Error fetching depts:", err));
+            .then(res => {
+                setDepartments(res.data?.course_deptId?.item || []);
+            })
+            .catch(err => console.error("Error fetching departments from static file:", err));
     }, []);
     
-    // 當使用者選擇變更時，觸發 API 請求
     useEffect(() => {
         const fetchRequiredCourses = async () => {
-            if (!selection.year || !selection.deptId || !selection.classType) return;
-            
             setIsLoading(true);
             setError('');
             try {
-                const response = await axios.get(`${API_URL}/api/required_courses`, {
-                    params: {
-                        year: selection.year,
-                        deptId: selection.deptId,
-                        class: selection.classType
-                    }
-                });
+                // [核心修正] 直接讀取靜態的範例必修課 JSON 檔案
+                // 注意：這意味著無論使用者選擇哪個系，目前都只會顯示國企系的資料
+                // 這是因為我們只有這一個範例檔案
+                const response = await axios.get('/data/本學年某系所必修課資訊API(以國企系大學班為範例).json');
                 
-                if (response.data.error) {
-                    setError(response.data.error);
-                    setRequiredCourses([]);
+                // 模擬 API 行為，檢查選擇是否符合範例檔
+                if (selection.deptId === '12' && selection.classType === 'B') {
+                    const courses = response.data?.course_require_ncnu?.item || [];
+                    setRequiredCourses(courses.filter(c => c.course_id.trim() !== "必修課程"));
                 } else {
-                    setRequiredCourses(response.data.filter(c => c.course_id.trim() !== "必修課程"));
+                    setError('注意：目前範例資料庫僅支援顯示「國企系學士班」的必修課程。');
+                    setRequiredCourses([]);
                 }
             } catch (err) {
-                setError('無法獲取必修課程資料，請確認選擇的條件是否正確，或學校 API 是否可用。');
+                setError('無法獲取必修課程資料，可能是範例檔案遺失。');
                 setRequiredCourses([]);
             } finally {
                 setIsLoading(false);
             }
         };
-
         fetchRequiredCourses();
 
-        // 同時，更新已完成課程的狀態，從 localStorage 讀取新 key 的資料
         const key = `${selection.year}-${selection.deptId}-${selection.classType}`;
         const saved = localStorage.getItem(key);
         setCompletedCourses(saved ? JSON.parse(saved) : {});
-
     }, [selection]);
 
-    // 當完成課程列表變更時，儲存到 localStorage
     useEffect(() => {
         const key = `${selection.year}-${selection.deptId}-${selection.classType}`;
         localStorage.setItem(key, JSON.stringify(completedCourses));
@@ -126,7 +110,7 @@ const GraduationTracker = () => {
             {isLoading && <p>載入中...</p>}
             {error && <p className="error-message">{error}</p>}
             
-            {!isLoading && !error && requiredCourses.length > 0 && (
+            {!isLoading && requiredCourses.length > 0 && (
                 <>
                     <div className="progress-section">
                         <h3>進度總覽</h3>
@@ -137,29 +121,14 @@ const GraduationTracker = () => {
                         </div>
                         <p>已完成學分: {completedCredits} / 總必修學分: {totalCredits}</p>
                     </div>
-
                     <div className="courses-display">
                         <div className="course-column">
                             <h3>未完成課程 ({uncompleted.length})</h3>
-                            <ul>
-                                {uncompleted.map(c => (
-                                    <li key={c.course_id} onClick={() => toggleCourseStatus(c.course_id)}>
-                                        <span className="checkbox"></span>
-                                        {c.course_cname} ({c.course_credit}學分)
-                                    </li>
-                                ))}
-                            </ul>
+                            <ul>{uncompleted.map(c => (<li key={c.course_id} onClick={() => toggleCourseStatus(c.course_id)}><span className="checkbox"></span>{c.course_cname} ({c.course_credit}學分)</li>))}</ul>
                         </div>
                         <div className="course-column">
                             <h3>已完成課程 ({completed.length})</h3>
-                            <ul>
-                                {completed.map(c => (
-                                    <li key={c.course_id} className="completed" onClick={() => toggleCourseStatus(c.course_id)}>
-                                        <span className="checkbox checked">✓</span>
-                                        {c.course_cname} ({c.course_credit}學分)
-                                    </li>
-                                ))}
-                            </ul>
+                            <ul>{completed.map(c => (<li key={c.course_id} className="completed" onClick={() => toggleCourseStatus(c.course_id)}><span className="checkbox checked">✓</span>{c.course_cname} ({c.course_credit}學分)</li>))}</ul>
                         </div>
                     </div>
                 </>

@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (路徑修正版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (最終修正版)
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
@@ -22,25 +22,33 @@ const CoursePlanner = () => {
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
+            
+            // [核心修正] 分開處理兩個請求，避免 Promise.all 的問題
+            // 1. 先獲取必要的靜態課程資料
             try {
-                // [核心修正] 將路徑指向 /data/ 內的檔案
-                const courseResPromise = axios.get('/data/本學期開課資訊API.json'); 
-                const hotnessResPromise = axios.get(`${API_URL}/api/courses/hotness`);
-                const [courseRes, hotnessRes] = await Promise.all([courseResPromise, hotnessResPromise]);
-
+                const courseRes = await axios.get('/data/本學期開課資訊API.json'); 
                 setStaticCourses(courseRes.data?.course_ncnu?.item || []);
+            } catch (error) {
+                console.error("Failed to fetch static course data:", error);
+                setStaticCourses([]); // 即使失敗也要給一個空陣列，避免網站崩潰
+            }
+
+            // 2. 再獲取非必要的熱度資料，它的失敗不應該影響課程顯示
+            try {
+                const hotnessRes = await axios.get(`${API_URL}/api/courses/hotness`);
                 setHotnessData(hotnessRes.data || {});
             } catch (error) {
-                console.error("Failed to fetch initial data:", error);
-                setStaticCourses([]); // 確保失敗時清空
-                setHotnessData({});
-            } finally {
-                setIsLoading(false);
+                console.error("Failed to fetch hotness data (backend might be asleep):", error);
+                setHotnessData({}); // 失敗則給空物件
             }
+
+            setIsLoading(false);
         };
         fetchData();
     }, []);
 
+    // ... (剩下的所有程式碼與您現有版本完全相同，此處省略) ...
+    // ... (從 useEffect for login status 開始的所有程式碼都不需要修改) ...
     useEffect(() => {
         if (isLoggedIn && user?.google_id) {
             axios.get(`${API_URL}/api/schedule`, { params: { user_id: user.google_id } })
