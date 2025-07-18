@@ -1,0 +1,55 @@
+# .github/workflows/daily_data_sync.yml
+
+name: Daily Sync Course Data
+
+# --- 觸發條件 ---
+on:
+  # 1. 每天 UTC 時間 18:00 (約等於台灣時間凌晨 2:00) 自動運行
+  schedule:
+    - cron: '0 18 * * *'
+  
+  # 2. 允許在 GitHub Actions 頁面手動觸發
+  workflow_dispatch:
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 虛擬環境
+
+    steps:
+      # 步驟 1: 從您的倉庫拉取最新的程式碼
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 步驟 2: 設定 Python 環境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 步驟 3: 安裝 Python 腳本所需的套件
+      - name: Install Python dependencies
+        run: pip install requests
+
+      # 步驟 4: 執行 Python 腳本，抓取最新的課程資料並存檔
+      - name: Fetch course data from NCNU API
+        run: python scripts/fetch_course_data.py
+
+      # 步驟 5: 檢查是否有檔案變更，如果有，則自動 commit 並 push
+      - name: Commit and push if data changed
+        run: |
+          # 設定 Git 的使用者名稱和 Email
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # 將新產生的 JSON 檔案加入 Git 的追蹤列表
+          git add frontend/public/data/本學期開課資訊API.json
+          
+          # 檢查是否有實際的檔案內容變更
+          # 如果沒有變更 (例如抓下來的資料跟昨天一樣)，就不執行 commit
+          if git diff-index --quiet HEAD; then
+            echo "課程資料無變更，無需推送。"
+          else
+            git commit -m "Data: 自動同步最新課程資料"
+            git push
+            echo "✔ 成功推送更新的課程資料到倉庫！Vercel 將會開始自動部署。"
+          fi

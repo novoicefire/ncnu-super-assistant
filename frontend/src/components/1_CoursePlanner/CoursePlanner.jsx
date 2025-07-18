@@ -27,7 +27,7 @@ const CoursePlanner = () => {
             setIsLoading(true);
             try {
                 // 從 Vercel 部署的靜態路徑獲取課程資料
-                const courseResPromise = axios.get('/本學期開課資訊API.json'); 
+                const courseResPromise = axios.get('/data/本學期開課資訊API.json'); 
                 // 從 Render 後端獲取熱度資料
                 const hotnessResPromise = axios.get(`${API_URL}/api/courses/hotness`);
 
