@@ -32,6 +32,8 @@ const CoursePlanner = () => {
                 setHotnessData(hotnessRes.data || {});
             } catch (error) {
                 console.error("Failed to fetch initial data:", error);
+                setStaticCourses([]); // 確保失敗時清空
+                setHotnessData({});
             } finally {
                 setIsLoading(false);
             }
@@ -186,5 +188,4 @@ const CoursePlanner = () => {
         </div>
     );
 };
-
 export default CoursePlanner;

@@ -1,4 +1,4 @@
-# backend/app.py (清理版)
+# backend/app.py (熱度計算修正版)
 
 import os
 import json
@@ -70,8 +70,6 @@ def load_static_data():
 def index():
     return "NCNU Super Assistant Backend is alive! (User Data & Hotness API)"
 
-# --- [舊的 /api/courses 端點已被移除] ---
-
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
     user_info = request.json
@@ -104,8 +102,17 @@ def get_course_hotness():
     try:
         response = supabase.table('schedules').select('schedule_data').execute()
         if not response.data: return jsonify({})
+        
         all_schedules = [item['schedule_data'] for item in response.data]
-        course_counts = Counter(course['course_id'] for schedule in all_schedules for course in schedule.values())
+        course_counts = Counter()
+        
+        # [核心修正] 遍歷每個使用者的課表
+        for schedule in all_schedules:
+            # 在每個課表中，提取不重複的 course_id
+            unique_course_ids_in_schedule = {course['course_id'] for course in schedule.values()}
+            # 將這些不重複的 ID 加入計數器
+            course_counts.update(unique_course_ids_in_schedule)
+            
         return jsonify(dict(course_counts))
     except Exception as e: return jsonify({"error": str(e)}), 500
 
