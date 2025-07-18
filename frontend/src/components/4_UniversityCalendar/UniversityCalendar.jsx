@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Calendar from 'react-calendar';
+import ical from 'ical.js'; 
 
 // 導入 react-calendar 的基礎樣式，這是讓日曆正常顯示的關鍵
 import 'react-calendar/dist/Calendar.css';
@@ -19,12 +20,31 @@ const UniversityCalendar = () => {
 
     // 從 API 獲取所有事件資料，只在初次載入時執行
     useEffect(() => {
-        axios.get(`${API_URL}/api/calendar`)
-            .then(res => {
-                setAllEvents(res.data || []);
-            })
-            .catch(err => console.error("Error fetching calendar events:", err))
-            .finally(() => setIsLoading(false));
+        const fetchCalendar = async () => {
+            setIsLoading(true);
+            try {
+                // [核心修正] 讀取本地的 ICS 檔案
+                const response = await axios.get('/data/calendar.ics');
+                const jcalData = ical.parse(response.data);
+                const vcalendar = new ical.Component(jcalData);
+                const vevents = vcalendar.getAllSubcomponents('vevent');
+
+                const events = vevents.map(vevent => {
+                    const event = new ical.Event(vevent);
+                    return {
+                        summary: event.summary,
+                        start: event.startDate.toJSDate().toISOString(),
+                        end: event.endDate.toJSDate().toISOString(),
+                    };
+                });
+                setAllEvents(events);
+            } catch (error) {
+                console.error("Error fetching or parsing calendar:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchCalendar();
     }, []);
 
     /**

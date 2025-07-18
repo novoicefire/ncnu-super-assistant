@@ -34,8 +34,8 @@ const GraduationTracker = () => {
 
     // 載入系所列表 (只在初次渲染時執行一次)
     useEffect(() => {
-        axios.get(`${API_URL}/api/departments`)
-            .then(res => setDepartments(res.data))
+        axios.get('/data/開課單位代碼API.json')
+            .then(res => setDepartments(res.data.course_deptId.item || []))
             .catch(err => console.error("Error fetching depts:", err));
     }, []);
     

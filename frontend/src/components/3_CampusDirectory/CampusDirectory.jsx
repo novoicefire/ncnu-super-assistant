@@ -20,13 +20,32 @@ const CampusDirectory = () => {
     }, []);
 
     useEffect(() => {
-        const results = contacts.filter(contact =>
-            contact.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (contact.description && contact.description.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-        setFilteredContacts(results);
-    }, [searchTerm, contacts]);
+        // [核心修正] 並行讀取兩個靜態 JSON
+        const fetchContactData = async () => {
+            try {
+                const contactPromise = axios.get('/data/校園聯絡資訊API.json');
+                const unitPromise = axios.get('/data/行政教學單位代碼API.json');
 
+                const [contactRes, unitRes] = await Promise.all([contactPromise, unitPromise]);
+                
+                const contactItems = contactRes.data.contact_info.item || [];
+                const unitItems = unitRes.data.deptId_ncnu.item || [];
+
+                // 整合資料的邏輯
+                const unitMap = new Map(unitItems.map(item => [item.中文名稱, item.網站網址]));
+                const mergedContacts = contactItems.map(contact => ({
+                    ...contact,
+                    web: unitMap.get(contact.title) || contact.web,
+                }));
+                
+                setContacts(mergedContacts);
+                setFilteredContacts(mergedContacts);
+            } catch (error) {
+                console.error("Error fetching contact data:", error);
+            }
+        };
+        fetchContactData();
+    }, []);
     return (
         <div className="directory-container">
             <h1>校園通訊錄</h1>
