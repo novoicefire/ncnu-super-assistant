@@ -14,10 +14,17 @@ import threading
 # --- 初始化 ---
 load_dotenv()
 app = Flask(__name__)
-# --- 終極除錯修改點 START ---
-# 暫時允許來自任何來源的請求，使用 "*"
-CORS(app, resources={r"/api/*": {"origins": "*"}})
-# --- 終極除錯修改點 END ---
+
+# --- 安全設定 START ---
+# 明確列出所有允許的前端來源網址
+ALLOWED_ORIGINS = [
+    "https://ncnu-super-assistant.vercel.app",  # 您的正式版網站
+    "https://ncnu-super-assistant-git-develop-yoialexs-projects.vercel.app", # 您的測試版網站
+    "http://localhost:5173"  # 本地開發環境
+]
+CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
+# --- 安全設定 END ---
+
 
 # --- 全域變數宣告 ---
 supabase: Client = None
@@ -42,7 +49,6 @@ def load_static_data_if_needed():
     if not data_loaded.is_set():
         print("Static data not loaded yet. Loading now...")
         global STATIC_DATA, CALENDAR_EVENTS
-        # ... (此處省略內部程式碼，與上一版相同)
         api_urls = {
             'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
             'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
@@ -83,9 +89,8 @@ def load_static_data_if_needed():
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v11 - Debug CORS All Origins)"
+    return "NCNU Super Assistant Backend is alive! (v12 - Final Secure CORS)"
 
-# ... (所有 API 端點的程式碼都與上一版完全相同，此處省略) ...
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
     user_info = request.json
@@ -158,7 +163,6 @@ def get_contacts():
 def get_calendar():
     load_static_data_if_needed()
     return jsonify(CALENDAR_EVENTS)
-
 
 # --- 應用程式啟動區塊 ---
 with app.app_context():
