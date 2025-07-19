@@ -1,4 +1,4 @@
-# backend/app.py (修正 NameError 的最終版)
+# backend/app.py (最終穩定版 - 延遲初始化)
 
 import os
 import json
@@ -11,9 +11,6 @@ from collections import Counter
 import requests
 from icalendar import Calendar
 from datetime import datetime
-import React from 'react';# 強制 Vercel 重新部署的註解 - 2025/07/19
-function App() {
-}
 
 # --- 初始化 ---
 load_dotenv()
@@ -27,7 +24,7 @@ CALENDAR_EVENTS = []
 
 def initialize_app():
     """在應用程式上下文中，初始化所有服務和快取資料"""
-    global supabase
+    global supabase, STATIC_DATA, CALENDAR_EVENTS
     
     if supabase is None:
         print("Initializing Supabase client and loading static data...")
@@ -44,9 +41,7 @@ def initialize_app():
 
 def load_static_data():
     """抓取不常變動的資料並存入快取"""
-    # [核心修正] 聲明我們要修改的是全域變數
     global STATIC_DATA, CALENDAR_EVENTS
-    
     if STATIC_DATA: return
     
     api_urls = {
