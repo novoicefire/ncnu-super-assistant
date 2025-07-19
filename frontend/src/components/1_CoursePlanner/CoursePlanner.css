@@ -14,14 +14,6 @@
     margin-bottom: 1rem; /* Add some space below the header */
 }
 
-.save-status {
-    padding: 8px 12px;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
-}
-
 .filters {
     background-color: #e0f2f1;
     padding: 1rem;
@@ -137,24 +129,6 @@
     color: #aaa;
     font-style: italic;
     font-size: 0.8rem;
-}
-
-/* 儲存狀態樣式 */
-.save-status.idle {
-    background-color: #e3f2fd;
-    color: #1565c0;
-}
-.save-status.saving {
-    background-color: #fff3e0;
-    color: #ff9800;
-}
-.save-status.success {
-    background-color: #e8f5e9;
-    color: #4caf50;
-}
-.save-status.error {
-    background-color: #ffcdd2;
-    color: #f44336;
 }
 
 /* RWD */
