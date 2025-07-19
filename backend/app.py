@@ -11,6 +11,9 @@ from collections import Counter
 import requests
 from icalendar import Calendar
 from datetime import datetime
+import React from 'react';# 強制 Vercel 重新部署的註解 - 2025/07/19
+function App() {
+}
 
 # --- 初始化 ---
 load_dotenv()
