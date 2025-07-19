@@ -1,161 +1,102 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (最終完整版) */
+/* CoursePlanner.css - 完整且正確的最終版本 */
 
+/* 1. 基礎佈局：這是整個頁面的主容器，負責劃分左右兩大欄 */
 .course-planner {
-    display: flex;
-    flex-direction: column;
-}
-
-.planner-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem; /* Add some space below the header */
-}
-
-.filters {
-    background-color: #e0f2f1;
+    display: flex; /* <<< 這是維持左右佈局最關鍵的屬性 */
+    height: calc(100vh - 80px); /* 減去 Navbar 的高度 */
     padding: 1rem;
-    border-radius: 8px;
+    gap: 1rem;
+}
+
+/* 2. 左側欄：包含選單、搜尋框和搜尋結果 */
+.controls-and-results {
+    flex: 3; /* 設定寬度比例，佔 3/8 */
+    min-width: 320px; /* 在大螢幕上，確保左欄不會太窄 */
+    display: flex;
+    flex-direction: column; /* 讓裡面的「控制區」和「結果區」垂直排列 */
+    overflow-y: hidden; /* 重要！防止左欄本身滾動 */
+}
+
+/* 3. 右側欄：包含您的課程表 */
+.course-table-container {
+    flex: 5; /* 設定寬度比例，佔 5/8 */
+    overflow-x: auto; /* 在小螢幕上，讓課程表可以水平滾動，而不是擠壓變形 */
+}
+
+/* =================================================================== */
+/* 4. 【響應式修正】控制區：包含系所、班別選單和搜尋框              */
+/* =================================================================== */
+.course-controls {
+    display: flex;
+    flex-wrap: wrap; /* <<< 這是解決您最初問題的核心：允許換行 */
+    gap: 1rem;       /* 項目之間的間距 */
     margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #eee;
 }
 
-.planner-content {
-    display: flex;
-    gap: 1rem;
-}
-
-.course-list-container {
-    flex: 1;
-    min-width: 300px; /* Ensure it has a minimum width */
-    max-height: 70vh;
-    overflow-y: auto;
+/* 控制區裡面的每一個選單和輸入框的樣式 */
+.course-controls select,
+.course-controls input {
+    flex-grow: 1;     /* 允許擴展填充空間 */
+    flex-shrink: 1;   /* 允許收縮 */
+    flex-basis: 200px;/* 設定一個理想的基礎寬度，用於計算何時該換行 */
+    min-width: 180px; /* 確保項目不會被壓縮得太小 */
+    padding: 0.5rem;
     border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+/* =================================================================== */
+
+/* 5. 搜尋結果列表 */
+.search-results {
+    overflow-y: auto; /* <<< 這是讓結果可以獨立滾動的關鍵 */
+    flex-grow: 1; /* 讓它填滿左欄中除了控制區以外的所有剩餘空間 */
+    padding-right: 0.5rem; /* 為滾動條留出一些空間 */
+}
+
+/* 6. 搜尋結果中的每一個課程項目 */
+.course-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     padding: 1rem;
-    border-radius: 8px;
-    background-color: white;
-}
-
-.course-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.course-list li {
+    margin-bottom: 0.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.8rem;
-    border-bottom: 1px solid #eee;
-}
-
-.course-list li:hover {
-    background-color: #f0f0f0;
-}
-
-.course-info {
-    flex-grow: 1;
-}
-
-.course-info small {
-    color: #666;
-    display: block;
-    margin-top: 4px;
-}
-
-.hotness-indicator {
-    display: inline-block;
-    background-color: #fff3e0;
-    color: #ef6c00;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-left: 10px;
-}
-
-.course-list button {
-    padding: 5px 10px;
-    font-size: 1rem;
-    margin-left: 1rem;
-    flex-shrink: 0;
-}
-
-.schedule-container {
-    flex: 2;
-}
-
-.course-table table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    background-color: white;
-}
-
-.course-table th, .course-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    height: 50px;
-    font-size: 0.8rem;
-}
-
-.course-table th {
-    background-color: #e0f2f1;
-}
-
-.course-cell {
-    background-color: #b2dfdb;
-    color: #004d40;
     cursor: pointer;
-    transition: background-color 0.3s;
-    vertical-align: middle !important;
-    line-height: 1.4;
+    transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-.course-cell:hover {
-    background-color: #ffcdd2;
-    color: #c62828;
+.course-item:hover {
+    background-color: #f0f8ff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.lunch-break {
-    background-color: #f0f0f0;
-    color: #aaa;
-    font-style: italic;
+.course-info h4 {
+    margin: 0 0 0.25rem 0;
+    color: #333;
+}
+
+.course-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.add-course-btn {
+    padding: 0.3rem 0.6rem;
     font-size: 0.8rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-/* RWD */
-@media (max-width: 1024px) {
-  .planner-content {
-    flex-direction: column;
-  }
-  .course-list-container {
-    max-height: 40vh;
-    order: 2;
-  }
-  .schedule-container {
-    order: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: stretch;
-  }
-  .course-table th, .course-table td {
-    font-size: 0.7rem;
-    padding: 4px;
-  }
-  .course-cell {
-    line-height: 1.2;
-  }
+.add-course-btn:hover {
+    background-color: #218838;
 }
