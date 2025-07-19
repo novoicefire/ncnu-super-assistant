@@ -1,8 +1,7 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (整合 react-hot-toast 的最终版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (最終反饋優化版)
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast'; // [核心修改] 1. 导入 toast 函数
 import CourseTable from './CourseTable.jsx';
 import './CoursePlanner.css';
 import { useAuth } from '../../AuthContext.jsx';
@@ -15,11 +14,10 @@ const CoursePlanner = () => {
     const [schedule, setSchedule] = useState({});
     const [totalCredits, setTotalCredits] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    // [核心修改] 2. 移除了 isSaving 和 saveStatus 状态，因为 toast 会自己处理
+    const [saveStatus, setSaveStatus] = useState("idle"); // idle, saving, success, error
     const [filters, setFilters] = useState({ courseName: '', teacher: '', department: '', division: '' });
     const [filteredCourses, setFilteredCourses] = useState([]);
 
-    // --- useEffects (所有 useEffect 逻辑都不变) ---
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
@@ -35,7 +33,7 @@ const CoursePlanner = () => {
                     try {
                         const courseRes = await axios.get('/data/本學期開課資訊API.json');
                         setStaticCourses(courseRes.data?.course_ncnu?.item || []);
-                    } catch (staticError) { console.error("Failed to fetch even static course data:", staticError); }
+                    } catch (staticError) { console.error("Failed to fetch static course data:", staticError); }
                 }
             } finally {
                 setIsLoading(false);
@@ -77,29 +75,29 @@ const CoursePlanner = () => {
         return [...new Set(staticCourses.map(c => c.department).filter(Boolean))].sort();
     }, [staticCourses]);
 
-    // [核心修改] 3. 重写 saveSchedule 函数，使用 toast 来提供反馈
     const saveSchedule = useCallback(async (newSchedule) => {
         setSchedule(newSchedule);
         if (isLoggedIn && user?.google_id) {
-            const toastId = toast.loading('儲存中...'); // 显示“载入中”的 toast
+            setSaveStatus("saving");
             try {
                 const response = await robustRequest('post', '/api/schedule', { 
                     params: { user_id: user.google_id },
                     data: newSchedule 
                 });
                 if (response && response.success) {
-                    toast.success('課表已同步至雲端！', { id: toastId }); // 成功後，更新同一個 toast
+                    setSaveStatus("success");
                 } else {
                     throw new Error(response.error || "Backend response did not indicate success.");
                 }
             } catch (error) {
-                toast.error('儲存失敗，請見查網路或稍後再試。', { id: toastId }); // 失敗後，更新同一個 toast
+                setSaveStatus("error");
                 console.error("Failed to save schedule to cloud:", error);
+            } finally {
+                setTimeout(() => setSaveStatus("idle"), 3000);
             }
         }
     }, [isLoggedIn, user]);
 
-    // ... (parseTimeSlots, addToSchedule, removeFromSchedule 的逻辑完全不变) ...
     const parseTimeSlots = (timeString) => {
         if (!timeString || typeof timeString !== 'string') return [];
         const timeGroups = timeString.match(/\d[a-zA-Z]+/g) || [];
@@ -113,13 +111,10 @@ const CoursePlanner = () => {
         }
         return slots;
     };
+    
     const addToSchedule = (course) => {
-        if (!isLoggedIn) {
-            toast.error("請先登入才能儲存課表！");
-            return;
-        }
         const slots = parseTimeSlots(course.time);
-        if (slots.length === 0) { alert('此課程無時間訊息，無法加入課表。'); return; }
+        if (slots.length === 0) { alert('此課程無時間資訊，無法加入課表。'); return; }
         for (let slot of slots) {
             if (schedule[slot]) {
                 alert(`課程衝堂！\n時段 ${slot[0]} 的 ${slot.substring(1)} 節已被「${schedule[slot].course_cname}」佔用。`);
@@ -130,6 +125,7 @@ const CoursePlanner = () => {
         slots.forEach(slot => { newSchedule[slot] = course; });
         saveSchedule(newSchedule);
     };
+
     const removeFromSchedule = (courseId, time) => {
         const slots = parseTimeSlots(time);
         const newSchedule = { ...schedule };
@@ -142,12 +138,24 @@ const CoursePlanner = () => {
     };
 
     const handleFilterChange = (e) => setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    
+    const getSaveStatusMessage = () => {
+        if (!isLoggedIn) return "登入後即可將課表儲存至雲端";
+        switch (saveStatus) {
+            case "saving": return "儲存中...";
+            case "success": return "✔ 課表已同步至雲端！";
+            case "error": return "❌ 儲存失敗，請檢查網路或稍後再試。";
+            default: return "課表變動將自動同步";
+        }
+    };
 
     return (
         <div className="course-planner">
             <div className="planner-header">
-                <h1>課表規劃器</h1>
-                {/* [核心修改] 4. 移除了旧的 save-status div */}
+                <h1>智慧化課程規劃與模擬排課系統</h1>
+                <div className={`save-status ${saveStatus}`}>
+                    {getSaveStatusMessage()}
+                </div>
             </div>
             
             <div className="filters">
@@ -158,7 +166,7 @@ const CoursePlanner = () => {
                     {uniqueDepartments.map(dep => <option key={dep} value={dep}>{dep}</option>)}
                 </select>
                 <select name="division" onChange={handleFilterChange} value={filters.division}>
-                    <option value="">所有班别</option>
+                    <option value="">所有班別</option>
                     <option value="學士班">學士班</option>
                     <option value="碩士班">碩士班</option>
                     <option value="博士班">博士班</option>
