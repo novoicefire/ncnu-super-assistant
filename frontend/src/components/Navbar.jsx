@@ -1,17 +1,20 @@
-// frontend/src/components/Navbar.jsx (已修正 Export 错误)
+// frontend/src/components/Navbar.jsx (狀態依賴修正版)
 
 import React, { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
 import './Navbar.css';
 
-// 这个元件是 Navbar 内部使用的，所以不需要从这个檔案汇出
 const GoogleLoginButton = () => {
-    const { handleGoogleLogin } = useAuth();
+    const { handleGoogleLogin, isLoggedIn } = useAuth(); // [核心修正 1] 獲取 isLoggedIn 狀態
     const buttonDiv = useRef(null);
 
     useEffect(() => {
-        if (window.google && buttonDiv.current) {
+        // [核心修正 2] 只有在未登入時，才渲染 Google 按鈕
+        if (!isLoggedIn && window.google && buttonDiv.current) {
+            // 清空容器，防止重複渲染
+            buttonDiv.current.innerHTML = "";
+
             window.google.accounts.id.initialize({
                 client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
                 callback: handleGoogleLogin,
@@ -22,7 +25,15 @@ const GoogleLoginButton = () => {
             );
             window.google.accounts.id.prompt(); 
         }
-    }, [handleGoogleLogin]);
+    // [核心修正 3] 將 isLoggedIn 加入依賴陣列
+    // 這會使得當 isLoggedIn 從 false 變為 true 時，這個 effect 會重新執行
+    // 雖然在這個版本中，重新執行時按鈕不會被渲染，但這是一個好的實踐
+    }, [isLoggedIn, handleGoogleLogin]);
+
+    // 如果已經登入，就不渲染這個元件的任何內容
+    if (isLoggedIn) {
+        return null;
+    }
 
     return <div ref={buttonDiv} id="google-signin-button"></div>;
 };
@@ -45,7 +56,7 @@ const Navbar = () => {
           <div className="auth-section">
             {isLoading ? (
                 <div>載入中...</div>
-            ) : isLoggedIn ? (
+            ) : isLoggedIn && user ? ( // [核心修正 4] 確保 user 物件存在
                 <div className="user-profile">
                     <img src={user.avatar_url} alt={user.full_name} className="avatar" />
                     <span className="user-name">{user.full_name}</span>
@@ -59,5 +70,4 @@ const Navbar = () => {
     );
 };
 
-// [核心修正] 确保我们汇出的是 Navbar 这个主要的元件
 export default Navbar;
