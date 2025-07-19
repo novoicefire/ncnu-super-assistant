@@ -1,7 +1,7 @@
-/* UniversityCalendar.css */
+/* UniversityCalendar.css - 包含日期區間選擇器的樣式 */
 
 .calendar-container {
-    padding: 2rem; /* 桌面端邊距 */
+    padding: 2rem;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -19,16 +19,17 @@
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #eee;
-    flex-wrap: wrap; 
-    gap: 1rem;
+    flex-wrap: wrap; /* 允許換行以適應小螢幕 */
+    gap: 1rem; /* 在換行時提供間距 */
 }
 
 .calendar-header h2 {
     margin: 0;
     color: #333;
-    flex-shrink: 0;
+    flex-shrink: 0; /* 防止標題被壓縮 */
 }
 
+/* --- 新增點：所有控制項的容器 --- */
 .calendar-controls {
     display: flex;
     align-items: center;
@@ -36,6 +37,7 @@
     gap: 1rem;
 }
 
+/* --- 新增點：日期區間選擇器的容器 --- */
 .date-range-selector {
     display: flex;
     align-items: center;
@@ -50,6 +52,7 @@
     font-weight: bold;
 }
 
+/* --- 新增點：日期輸入框的樣式 --- */
 .date-input {
     border: 1px solid #ced4da;
     padding: 0.375rem 0.75rem;
@@ -57,12 +60,13 @@
     font-size: 0.9rem;
 }
 
+/* --- 修改點：通用的按鈕樣式 --- */
 .calendar-btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     font-weight: bold;
     color: white;
-    background-color: #6c757d;
+    background-color: #6c757d; /* 中性色 */
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -73,6 +77,7 @@
     background-color: #5a6268;
 }
 
+/* --- 修改點：讓 "定位回當日" 按鈕使用不同的顏色 --- */
 .calendar-btn.today-btn {
     background-color: #007bff;
 }
@@ -120,6 +125,7 @@
     margin: 0;
 }
 
+/* 美化滾動條樣式 */
 .events-list-container::-webkit-scrollbar {
     width: 8px;
 }
@@ -133,36 +139,4 @@
 }
 .events-list-container::-webkit-scrollbar-thumb:hover {
     background: #aaa;
-}
-
-/* --- 新增點：針對手機的響應式設計 --- */
-@media (max-width: 768px) {
-    .calendar-container {
-        padding: 1rem; /* 手機上使用較小的邊距 */
-        height: auto; /* 在手機上高度可以自適應，不限制為 80vh */
-        margin: 1rem auto;
-    }
-
-    .calendar-header {
-        flex-direction: column; /* 標題和控制項垂直堆疊 */
-        align-items: stretch; /* 讓控制項也撐滿寬度 */
-    }
-
-    .calendar-controls {
-        flex-direction: column; /* 控制項內部也垂直堆疊 */
-        align-items: stretch;
-    }
-
-    .date-range-selector {
-        flex-direction: column; /* 日期選擇器內部也垂直堆疊 */
-        padding: 0.5rem;
-    }
-
-    .date-range-selector .date-input {
-        width: 100%; /* 日期輸入框撐滿 */
-    }
-
-    .date-range-selector span {
-        display: none; /* 隱藏中間的 "-"，因為已經垂直排列了 */
-    }
 }

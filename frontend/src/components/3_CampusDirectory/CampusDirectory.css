@@ -1,9 +1,9 @@
-/* CampusDirectory.css */
+/* CampusDirectory.css - 全新美化樣式 */
 
 .directory-container {
   max-width: 1200px;
   margin: 2rem auto;
-  padding: 0 2rem; /* 桌面端左右邊距 */
+  padding: 0 2rem;
 }
 
 .directory-container h2 {
@@ -23,13 +23,19 @@
   box-sizing: border-box;
 }
 
+/* --- 修改點：使用 CSS Grid 進行響應式佈局 --- */
 .directory-grid {
   display: grid;
-  /* 稍微減小最小寬度，以適應更窄的螢幕 */
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  /* 
+    auto-fill: 自動填充
+    minmax(320px, 1fr): 每張卡片最小 320px，最大則平均分配剩餘空間
+    這使得在不同螢幕寬度下，卡片會自動排列成最適合的欄數
+  */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem; /* 卡片之間的間距 */
 }
 
+/* --- 修改點：全新的卡片樣式 --- */
 .contact-card {
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
@@ -67,21 +73,4 @@
   display: flex;
   align-items: center;
   gap: 0.5rem; /* 圖示與文字的間距 */
-}
-
-.no-tel-info {
-  color: #999;
-  font-style: italic;
-}
-
-
-/* --- 新增點：針對手機的響應式設計 --- */
-@media (max-width: 768px) {
-  .directory-container {
-    padding: 0 1rem; /* 手機上使用較小的左右邊距 */
-  }
-
-  .directory-container h2 {
-    font-size: 2rem; /* 手機上標題可以小一點 */
-  }
 }
