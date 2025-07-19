@@ -1,161 +1,52 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (最終完整版) */
+/* CoursePlanner.css */
+.course-planner-container {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
-.course-planner {
+.course-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.course-filters select,
+.course-filters input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.filter-group {
     display: flex;
     flex-direction: column;
 }
 
-.planner-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem; /* Add some space below the header */
-}
-
-.filters {
-    background-color: #e0f2f1;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.planner-content {
-    display: flex;
-    gap: 1rem;
-}
-
-.course-list-container {
-    flex: 1;
-    min-width: 300px; /* Ensure it has a minimum width */
-    max-height: 70vh;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    padding: 1rem;
-    border-radius: 8px;
-    background-color: white;
-}
-
-.course-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.course-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.8rem;
-    border-bottom: 1px solid #eee;
-}
-
-.course-list li:hover {
-    background-color: #f0f0f0;
-}
-
-.course-info {
-    flex-grow: 1;
-}
-
-.course-info small {
+.filter-group label {
+    font-size: 0.8rem;
     color: #666;
-    display: block;
-    margin-top: 4px;
+    margin-bottom: 0.25rem;
 }
 
-.hotness-indicator {
-    display: inline-block;
-    background-color: #fff3e0;
-    color: #ef6c00;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-left: 10px;
+.course-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* 讓滾動在 iOS 上更流暢 */
 }
 
-.course-list button {
-    padding: 5px 10px;
-    font-size: 1rem;
-    margin-left: 1rem;
-    flex-shrink: 0;
-}
-
-.schedule-container {
-    flex: 2;
-}
-
-.course-table table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    background-color: white;
-}
-
-.course-table th, .course-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    height: 50px;
-    font-size: 0.8rem;
-}
-
-.course-table th {
-    background-color: #e0f2f1;
-}
-
-.course-cell {
-    background-color: #b2dfdb;
-    color: #004d40;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    vertical-align: middle !important;
-    line-height: 1.4;
-}
-
-.course-cell:hover {
-    background-color: #ffcdd2;
-    color: #c62828;
-}
-
-.lunch-break {
-    background-color: #f0f0f0;
-    color: #aaa;
-    font-style: italic;
-    font-size: 0.8rem;
-}
-
-/* RWD */
-@media (max-width: 1024px) {
-  .planner-content {
-    flex-direction: column;
-  }
-  .course-list-container {
-    max-height: 40vh;
-    order: 2;
-  }
-  .schedule-container {
-    order: 1;
-  }
-}
-
+/* --- 新增點：針對手機的響應式設計 --- */
 @media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: stretch;
+  .course-filters {
+    flex-direction: column; /* 關鍵：將篩選器改為垂直堆疊 */
+    align-items: stretch; /* 讓所有項目都撐滿寬度 */
   }
-  .course-table th, .course-table td {
-    font-size: 0.7rem;
-    padding: 4px;
-  }
-  .course-cell {
-    line-height: 1.2;
+
+  /* 讓所有選單和輸入框在垂直堆疊時，寬度為 100% */
+  .course-filters select,
+  .course-filters input {
+    width: 100%;
   }
 }
