@@ -1,4 +1,4 @@
-// frontend/src/AuthContext.jsx (強制刷新版)
+// frontend/src/AuthContext.jsx (已修正 JSX 標籤錯字)
 
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
@@ -36,11 +36,9 @@ export const AuthProvider = ({ children }) => {
             const response = await axios.post(`${API_URL}/api/auth/google`, userInfo);
             
             const fullUserData = response.data;
-            // 狀態更新和本地儲存依然保留
             setUser(fullUserData); 
             localStorage.setItem('user', JSON.stringify(fullUserData));
             
-            // [核心修正] 在成功處理完所有邏輯後，強制重載頁面
             window.location.reload();
 
         } catch (error) {
@@ -54,14 +52,14 @@ export const AuthProvider = ({ children }) => {
         if (window.google) {
             window.google.accounts.id.disableAutoSelect();
         }
-        // 登出時也重載頁面，以確保狀態乾淨
         window.location.reload();
     }, []);
 
     return (
         <AuthContext.Provider value={{ user, isLoggedIn: !!user, isLoading, handleGoogleLogin, logout }}>
             {children}
-        </Auth.Provider>
+        {/* [核心修正] 將 </Auth.Provider> 改為 </AuthContext.Provider> */}
+        </AuthContext.Provider> 
     );
 };
 
