@@ -1,4 +1,4 @@
-/* UniversityCalendar.css - 全新列表樣式 */
+/* UniversityCalendar.css - 包含日期區間選擇器的樣式 */
 
 .calendar-container {
     padding: 2rem;
@@ -7,7 +7,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-width: 800px;
     margin: 2rem auto;
-    height: 80vh; /* 給定一個高度，讓列表可以滾動 */
+    height: 80vh;
     display: flex;
     flex-direction: column;
 }
@@ -19,39 +19,83 @@
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #eee;
+    flex-wrap: wrap; /* 允許換行以適應小螢幕 */
+    gap: 1rem; /* 在換行時提供間距 */
 }
 
 .calendar-header h2 {
     margin: 0;
     color: #333;
+    flex-shrink: 0; /* 防止標題被壓縮 */
 }
 
-.go-to-today-btn {
+/* --- 新增點：所有控制項的容器 --- */
+.calendar-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* --- 新增點：日期區間選擇器的容器 --- */
+.date-range-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #e9ecef;
+    padding: 0.5rem;
+    border-radius: 6px;
+}
+
+.date-range-selector span {
+    color: #495057;
+    font-weight: bold;
+}
+
+/* --- 新增點：日期輸入框的樣式 --- */
+.date-input {
+    border: 1px solid #ced4da;
+    padding: 0.375rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* --- 修改點：通用的按鈕樣式 --- */
+.calendar-btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     font-weight: bold;
     color: white;
-    background-color: #007bff;
+    background-color: #6c757d; /* 中性色 */
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
-.go-to-today-btn:hover {
+.calendar-btn:hover {
+    background-color: #5a6268;
+}
+
+/* --- 修改點：讓 "定位回當日" 按鈕使用不同的顏色 --- */
+.calendar-btn.today-btn {
+    background-color: #007bff;
+}
+
+.calendar-btn.today-btn:hover {
     background-color: #0056b3;
 }
 
 .events-list-container {
-    overflow-y: auto; /* 這是讓列表可以上下滾動的關鍵 */
-    padding-right: 1rem; /* 留出滾動條的空間，避免內容遮擋 */
-    flex-grow: 1; /* 讓列表填滿剩餘空間 */
+    overflow-y: auto;
+    padding-right: 1rem;
+    flex-grow: 1;
 }
 
 .event-item {
     background-color: #ffffff;
     border: 1px solid #ddd;
-    border-left: 5px solid #ccc; /* 預設的左側邊框 */
+    border-left: 5px solid #ccc;
     border-radius: 5px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -63,10 +107,9 @@
     transform: translateY(-2px);
 }
 
-/* --- 新增點：這是今日事件的特殊樣式 --- */
 .event-item.today-marker {
-    border-left: 5px solid #007bff; /* 用醒目的藍色來標示 */
-    background-color: #f0f8ff; /* 給予淡淡的背景色 */
+    border-left: 5px solid #007bff;
+    background-color: #f0f8ff;
 }
 
 .event-summary {
@@ -82,21 +125,18 @@
     margin: 0;
 }
 
-/* 美化滾動條樣式 (可選) */
+/* 美化滾動條樣式 */
 .events-list-container::-webkit-scrollbar {
     width: 8px;
 }
-
 .events-list-container::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
-
 .events-list-container::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 10px;
 }
-
 .events-list-container::-webkit-scrollbar-thumb:hover {
     background: #aaa;
 }

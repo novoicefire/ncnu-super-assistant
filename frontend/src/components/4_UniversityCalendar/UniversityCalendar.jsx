@@ -8,9 +8,10 @@ const UniversityCalendar = () => {
     const [error, setError] = useState(null);
     const [todayMarker, setTodayMarker] = useState(null);
 
-    // --- 新增點：使用 useRef 來獲取 DOM 元素的參照 ---
-    // eventRefs 將會是一個物件，用來存放每個事件 DOM 節點的參照
-    // 鍵為事件的起始日期，值為該節點
+    // 新增：管理日期區間選擇的 state
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
     const eventRefs = useRef({});
 
     useEffect(() => {
@@ -20,16 +21,13 @@ const UniversityCalendar = () => {
                 const data = await robustRequest('get', '/api/calendar');
                 if (Array.isArray(data)) {
                     setEvents(data);
-                    // --- 新增點：找到第一個未來或當天的事件 ---
                     const today = new Date();
-                    today.setHours(0, 0, 0, 0); // 將時間設為午夜，只比較日期
-
-                    // 尋找第一個開始日期 >= 今天 的事件
+                    today.setHours(0, 0, 0, 0);
+                    
                     const firstUpcomingEvent = data.find(event => new Date(event.start) >= today);
                     if (firstUpcomingEvent) {
                         setTodayMarker(firstUpcomingEvent.start);
                     }
-
                 } else {
                     setError('無法識別的行事曆資料格式');
                 }
@@ -43,17 +41,47 @@ const UniversityCalendar = () => {
         fetchCalendar();
     }, []);
 
-    // --- 新增點：滾動到今日事件的函式 ---
     const scrollToToday = () => {
         if (todayMarker && eventRefs.current[todayMarker]) {
             eventRefs.current[todayMarker].scrollIntoView({
                 behavior: 'smooth',
-                block: 'center', // 將目標置於視窗中央，體驗更好
+                block: 'center',
             });
         }
     };
+
+    // 新增：處理日期區間定位的函式
+    const scrollToDateRange = () => {
+        if (!startDate || !endDate) {
+            alert('請選擇起始與結束日期。');
+            return;
+        }
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        
+        if (start > end) {
+            alert('起始日期不能晚於結束日期。');
+            return;
+        }
+
+        // 尋找在區間內的第一個事件
+        const targetEvent = events.find(event => {
+            const eventStart = new Date(event.start);
+            return eventStart >= start && eventStart <= end;
+        });
+
+        if (targetEvent) {
+            eventRefs.current[targetEvent.start].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            });
+        } else {
+            alert('您選擇的日期區間內沒有找到任何行事曆事件。');
+        }
+    };
     
-    // --- 新增點：格式化日期的輔助函式 ---
+    // 格式化日期的輔助函式
     const formatDate = (start, end) => {
         const startDate = new Date(start);
         const endDate = new Date(end);
@@ -73,7 +101,6 @@ const UniversityCalendar = () => {
         return `${formattedStart} - ${formattedEnd}`;
     };
 
-
     if (loading) return <div><p>正在載入暨大行事曆...</p></div>;
     if (error) return <div><p style={{ color: 'red' }}>{error}</p></div>;
 
@@ -81,19 +108,38 @@ const UniversityCalendar = () => {
         <div className="calendar-container">
             <div className="calendar-header">
                 <h2>暨大行事曆</h2>
-                {/* --- 新增點：定位回當日的按鈕 --- */}
-                <button onClick={scrollToToday} className="go-to-today-btn">
-                    定位回當日
-                </button>
+                <div className="calendar-controls">
+                    {/* 日期區間選擇器 */}
+                    <div className="date-range-selector">
+                        <input 
+                            type="date" 
+                            className="date-input"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+                        <span>-</span>
+                        <input 
+                            type="date"
+                            className="date-input"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                        />
+                        <button onClick={scrollToDateRange} className="calendar-btn">
+                            定位至區間
+                        </button>
+                    </div>
+                    
+                    <button onClick={scrollToToday} className="calendar-btn today-btn">
+                        定位回當日
+                    </button>
+                </div>
             </div>
             
-            {/* --- 修改點：從日曆格線改為事件列表 --- */}
             <div className="events-list-container">
                 {events.length > 0 ? (
                     events.map(event => (
                         <div
                             key={event.start + event.summary}
-                            // --- 新增點：為每個項目加上 ref 和特殊的 class ---
                             ref={el => (eventRefs.current[event.start] = el)}
                             className={`event-item ${todayMarker === event.start ? 'today-marker' : ''}`}
                         >
