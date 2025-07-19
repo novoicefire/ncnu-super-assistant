@@ -1,108 +1,110 @@
-// frontend/src/components/4_UniversityCalendar/UniversityCalendar.jsx (日曆版)
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Calendar from 'react-calendar';
-import ical from 'ical.js'; 
-
-// 導入 react-calendar 的基礎樣式，這是讓日曆正常顯示的關鍵
-import 'react-calendar/dist/Calendar.css';
-// 導入我們自己的客製化樣式
+import React, { useState, useEffect, useRef } from 'react';
+import { robustRequest } from '../../apiHelper';
 import './UniversityCalendar.css';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
-
 const UniversityCalendar = () => {
-    const [allEvents, setAllEvents] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    // 使用 'value' 來追蹤日曆上被點擊或正在顯示的月份
-    const [value, setValue] = useState(new Date());
+    const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [todayMarker, setTodayMarker] = useState(null);
 
-    // 從 API 獲取所有事件資料，只在初次載入時執行
+    // --- 新增點：使用 useRef 來獲取 DOM 元素的參照 ---
+    // eventRefs 將會是一個物件，用來存放每個事件 DOM 節點的參照
+    // 鍵為事件的起始日期，值為該節點
+    const eventRefs = useRef({});
+
     useEffect(() => {
         const fetchCalendar = async () => {
-            setIsLoading(true);
             try {
-                // [核心修正] 讀取本地的 ICS 檔案
-                const response = await axios.get('/data/calendar.ics');
-                const jcalData = ical.parse(response.data);
-                const vcalendar = new ical.Component(jcalData);
-                const vevents = vcalendar.getAllSubcomponents('vevent');
+                setLoading(true);
+                const data = await robustRequest('get', '/api/calendar');
+                if (Array.isArray(data)) {
+                    setEvents(data);
+                    // --- 新增點：找到第一個未來或當天的事件 ---
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // 將時間設為午夜，只比較日期
 
-                const events = vevents.map(vevent => {
-                    const event = new ical.Event(vevent);
-                    return {
-                        summary: event.summary,
-                        start: event.startDate.toJSDate().toISOString(),
-                        end: event.endDate.toJSDate().toISOString(),
-                    };
-                });
-                setAllEvents(events);
-            } catch (error) {
-                console.error("Error fetching or parsing calendar:", error);
+                    // 尋找第一個開始日期 >= 今天 的事件
+                    const firstUpcomingEvent = data.find(event => new Date(event.start) >= today);
+                    if (firstUpcomingEvent) {
+                        setTodayMarker(firstUpcomingEvent.start);
+                    }
+
+                } else {
+                    setError('無法識別的行事曆資料格式');
+                }
+            } catch (err) {
+                setError(`讀取行事曆失敗: ${err.message}`);
             } finally {
-                setIsLoading(false);
+                setLoading(false);
             }
         };
+
         fetchCalendar();
     }, []);
 
-    /**
-     * 檢查兩個日期是否為同一天（忽略時間）
-     * @param {Date} d1 - 日期一
-     * @param {Date} d2 - 日期二
-     * @returns {boolean}
-     */
-    const isSameDay = (d1, d2) => {
-        return d1.getFullYear() === d2.getFullYear() &&
-               d1.getMonth() === d2.getMonth() &&
-               d1.getDate() === d2.getDate();
-    };
-
-    /**
-     * 這是 react-calendar 的核心功能，用來自訂每個日期格子的內容
-     * @param {object} param0 - 包含 date 和 view 的物件
-     * @returns JSX 或 null
-     */
-    const tileContent = ({ date, view }) => {
-        // 我們只在「月」視圖下顯示事件
-        if (view === 'month') {
-            // 找出所有在 'date' 這一天發生的事件
-            const eventsOnThisDay = allEvents.filter(event => 
-                isSameDay(new Date(event.start), date)
-            );
-
-            // 如果這天有事件，就渲染它們
-            if (eventsOnThisDay.length > 0) {
-                return (
-                    <div className="event-list-in-tile">
-                        {eventsOnThisDay.map((event, index) => (
-                            <div key={index} className="event-item-in-tile">
-                                {event.summary}
-                            </div>
-                        ))}
-                    </div>
-                );
-            }
+    // --- 新增點：滾動到今日事件的函式 ---
+    const scrollToToday = () => {
+        if (todayMarker && eventRefs.current[todayMarker]) {
+            eventRefs.current[todayMarker].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center', // 將目標置於視窗中央，體驗更好
+            });
         }
-        return null;
     };
+    
+    // --- 新增點：格式化日期的輔助函式 ---
+    const formatDate = (start, end) => {
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+
+        // 如果是全天事件，endDate 會是隔天 00:00，需減一天
+        if (endDate.getHours() === 0 && endDate.getMinutes() === 0) {
+           endDate.setDate(endDate.getDate() - 1);
+        }
+
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedStart = startDate.toLocaleDateString('zh-TW', options);
+        const formattedEnd = endDate.toLocaleDateString('zh-TW', options);
+
+        if (formattedStart === formattedEnd) {
+            return formattedStart;
+        }
+        return `${formattedStart} - ${formattedEnd}`;
+    };
+
+
+    if (loading) return <div><p>正在載入暨大行事曆...</p></div>;
+    if (error) return <div><p style={{ color: 'red' }}>{error}</p></div>;
 
     return (
         <div className="calendar-container">
-            <h1>國立暨南國際大學 行事曆</h1>
-            {isLoading ? (
-                <p>載入行事曆中...</p>
-            ) : (
-                <div className="calendar-wrapper">
-                    <Calendar
-                        onChange={setValue}
-                        value={value}
-                        tileContent={tileContent} // 使用我們的自訂函數來渲染事件
-                        locale="zh-TW" // 將日曆設定為中文（星期一、星期二...）
-                    />
-                </div>
-            )}
+            <div className="calendar-header">
+                <h2>暨大行事曆</h2>
+                {/* --- 新增點：定位回當日的按鈕 --- */}
+                <button onClick={scrollToToday} className="go-to-today-btn">
+                    定位回當日
+                </button>
+            </div>
+            
+            {/* --- 修改點：從日曆格線改為事件列表 --- */}
+            <div className="events-list-container">
+                {events.length > 0 ? (
+                    events.map(event => (
+                        <div
+                            key={event.start + event.summary}
+                            // --- 新增點：為每個項目加上 ref 和特殊的 class ---
+                            ref={el => (eventRefs.current[event.start] = el)}
+                            className={`event-item ${todayMarker === event.start ? 'today-marker' : ''}`}
+                        >
+                            <p className="event-summary">{event.summary}</p>
+                            <p className="event-date">{formatDate(event.start, event.end)}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>目前沒有任何行事曆事件。</p>
+                )}
+            </div>
         </div>
     );
 };
