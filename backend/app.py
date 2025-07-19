@@ -105,8 +105,8 @@ def get_course_hotness():
         all_schedules = [item['schedule_data'] for item in response.data if item.get('schedule_data')]
         course_counts = Counter()
         for schedule in all_schedules:
-            unique_course_ids_in_schedule = {course['course_id'] for course in schedule.values()}
-            course_counts.update(unique_course_ids_in_schedule)
+            unique_course_ids = {course['course_id'] for course in schedule.values()}
+            course_counts.update(unique_course_ids)
         return jsonify(dict(course_counts))
     except Exception as e: return jsonify({"error": str(e)}), 500
 
@@ -117,7 +117,7 @@ def get_departments():
 
 @app.route('/api/contacts')
 def get_contacts():
-    contacts = STATIC_DATA.get('contact_nu', [])
+    contacts = STATIC_DATA.get('contact_ncnu', [])
     unit_info = STATIC_DATA.get('unitId_ncnu', [])
     if contacts and unit_info:
         for contact in contacts:
