@@ -28,13 +28,11 @@ const CampusDirectory = () => {
     fetchContacts();
   }, []);
 
-  // --- 修正點：在這裡加入防禦性檢查 ---
+  // 過濾邏輯保持不變，因為它是正確的
   const filteredContacts = contacts.filter(contact => {
-    // 檢查 title 是否存在且匹配
     const titleMatch = contact.title && typeof contact.title === 'string' &&
       contact.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // 檢查 tel 是否存在、是個陣列，並且其中有項目匹配
     const telMatch = contact.tel && Array.isArray(contact.tel) &&
       contact.tel.some(t => t.ext && typeof t.ext === 'string' && t.ext.includes(searchTerm));
 
@@ -54,16 +52,29 @@ const CampusDirectory = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <div className="directory-grid">
+        {/* --- 修正點：將渲染邏輯變得極度穩健 --- */}
         {filteredContacts.map((contact, index) => (
-          <div key={contact.title + index} className="contact-card">
-            <h3>{contact.title}</h3>
+          // 使用 index 作為 key 是最安全的選擇，避免因資料問題導致 key 衝突
+          <div key={index} className="contact-card">
+            {/* 即使沒有標題也不會崩潰 */}
+            <h3>{contact.title || '無標題'}</h3>
             <div className="contact-info">
-              {/* 也為 tel 陣列加上防禦性檢查，以防萬一 */}
-              {contact.tel && contact.tel.map((t, telIndex) => (
-                <p key={telIndex}>
-                  📞 {t.name}: {t.ext}
-                </p>
-              ))}
+              {/* 
+                最關鍵的修正：
+                明確檢查 contact.tel 是否為一個「長度大於 0 的陣列」。
+                如果是，才進行 map 渲染。
+                如果不是，就顯示一個提示訊息。
+              */}
+              {Array.isArray(contact.tel) && contact.tel.length > 0 ? (
+                contact.tel.map((t, telIndex) => (
+                  <p key={telIndex}>
+                    {/* 為電話物件的內部屬性也加上後備值，確保萬無一失 */}
+                    📞 {t.name || '未知電話'}: {t.ext || 'N/A'}
+                  </p>
+                ))
+              ) : (
+                <p className="no-tel-info">無電話資訊</p>
+              )}
             </div>
           </div>
         ))}
