@@ -25,21 +25,6 @@
     flex-wrap: wrap;
 }
 
-/* --- 修改點：新增這個規則 --- */
-/* 
-  讓篩選器內的每一個項目都具備彈性。
-  - flex-grow: 1 -> 允許項目在有空間時伸展，填滿可用空間。
-  - flex-shrink: 1 -> 允許項目在空間不足時收縮。
-  - flex-basis: 200px -> 指定一個理想的基礎寬度。
-  這三者的組合拳，能創造出完美的響應式彈性效果。
-*/
-.filters > select,
-.filters > input {
-    flex: 1 1 200px;
-    min-width: 200px; /* 確保再怎麼縮小，也不會變得太窄而難以使用 */
-}
-/* --- 修改結束 --- */
-
 .planner-content {
     display: flex;
     gap: 1rem;
@@ -172,10 +157,5 @@
   }
   .course-cell {
     line-height: 1.2;
-  }
-  /* 在垂直排列時，我們不再需要 flex: 1 1 200px 的設定，可以移除 min-width */
-  .filters > select,
-  .filters > input {
-    min-width: 0;
   }
 }
