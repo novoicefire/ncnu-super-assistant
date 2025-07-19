@@ -1,4 +1,4 @@
-// frontend/src/AuthContext.jsx (移除 reload 的最終版)
+// frontend/src/AuthContext.jsx (恢復強制刷新的最終版)
 
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
@@ -14,8 +14,11 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            try { setUser(JSON.parse(storedUser)); } 
-            catch (e) { localStorage.removeItem('user'); }
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (e) {
+                localStorage.removeItem('user');
+            }
         }
         setIsLoading(false);
     }, []);
@@ -24,26 +27,32 @@ export const AuthProvider = ({ children }) => {
         try {
             const decodedToken = jwtDecode(credentialResponse.credential);
             const userInfo = {
-                google_id: decodedToken.sub, email: decodedToken.email,
-                full_name: decodedToken.name, avatar_url: decodedToken.picture,
+                google_id: decodedToken.sub,
+                email: decodedToken.email,
+                full_name: decodedToken.name,
+                avatar_url: decodedToken.picture,
             };
+            
             const response = await axios.post(`${API_URL}/api/auth/google`, userInfo);
-            const fullUserData = response.data;
-            setUser(fullUserData); 
-            localStorage.setItem('user', JSON.stringify(fullUserData));
-            // [核心修正] 移除了 window.location.reload()
+            
+            // 將使用者資料存入 localStorage
+            localStorage.setItem('user', JSON.stringify(response.data));
+            
+            // [核心修正] 強制重載頁面，讓應用程式以全新的、已登入的狀態啟動
+            window.location.reload();
+
         } catch (error) {
             console.error("Google login failed:", error);
         }
     }, []);
 
     const logout = useCallback(() => {
-        setUser(null);
         localStorage.removeItem('user');
         if (window.google) {
             window.google.accounts.id.disableAutoSelect();
         }
-        // [核心修正] 移除了 window.location.reload()
+        // [核心修正] 登出時也重載頁面，確保狀態被完全清除
+        window.location.reload();
     }, []);
 
     return (
