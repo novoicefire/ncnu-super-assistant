@@ -1,4 +1,4 @@
-# backend/app.py (加入 Signal Flare 用於除錯)
+# backend/app.py (最終完整版)
 
 import os
 import json
@@ -9,106 +9,166 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 from collections import Counter
 import requests
-from icalendar import Calendar
+import icalendar
 from datetime import datetime
 
-# --- 初始化 (保持不變) ---
+# --- 初始化 ---
 load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": ["https://ncnu-super-assistant.vercel.app", "http://localhost:5173", "https://*.vercel.app"]}})
 
-# --- 全域變數宣告 (保持不變) ---
+# --- 全域變數宣告 ---
 supabase: Client = None
 STATIC_DATA = {}
 CALENDAR_EVENTS = []
 
-# --- 函數 initialize_app 和 load_static_data (保持不變) ---
 def initialize_app():
+    """在應用程式上下文中，初始化所有服務和快取資料"""
     global supabase
+    
     if supabase is None:
         print("Initializing Supabase client and loading static data...")
         url: str = os.environ.get("SUPABASE_URL")
         key: str = os.environ.get("SUPABASE_KEY")
+        
         if not url or not key:
-            raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set.")
+            raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
+        
         supabase = create_client(url, key)
         print("Supabase client initialized.")
         load_static_data()
         print("Static data loaded.")
 
 def load_static_data():
+    """抓取不常變動的資料並存入快取"""
     global STATIC_DATA, CALENDAR_EVENTS
     if STATIC_DATA: return
-    # (此處省略內部程式碼，與之前版本相同)
-    pass 
+    
+    api_urls = {
+        'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
+        'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
+        'course_deptId': 'https://api.ncnu.edu.tw/API/get.aspx?json=course_deptId'
+    }
+    for key, data_url in api_urls.items():
+        try:
+            response = requests.get(data_url, timeout=15)
+            response.raise_for_status()
+            content = response.json()
+            data_key = list(content.keys())[0]
+            STATIC_DATA[key] = content[data_key].get('item', [])
+        except Exception as e:
+            print(f"Warning: Failed to fetch static data for '{key}'. Error: {e}")
+            STATIC_DATA[key] = []
+    
+    try:
+        ics_url = "https://www.google.com/calendar/ical/curricul%40mail.ncnu.edu.tw/public/basic.ics"
+        response = requests.get(ics_url, timeout=15)
+        response.raise_for_status()
+        calendar = icalendar.Calendar.from_ical(response.content)
+        temp_events = []
+        for component in calendar.walk():
+            if component.name == "VEVENT":
+                dtstart, dtend = component.get('dtstart'), component.get('dtend')
+                if dtstart and dtend:
+                    temp_events.append({
+                        "summary": str(component.get('summary')),
+                        "start": dtstart.dt.isoformat() if hasattr(dtstart.dt, 'isoformat') else str(dtstart.dt),
+                        "end": dtend.dt.isoformat() if hasattr(dtend.dt, 'isoformat') else str(dtend.dt)
+                    })
+        CALENDAR_EVENTS.extend(sorted(temp_events, key=lambda x: x['start']))
+    except Exception as e:
+        print(f"Warning: Failed to fetch calendar. Error: {e}")
 
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v7 - Debugging Mode)"
+    return "NCNU Super Assistant Backend is alive! (v8 - Final Fixes)"
 
-# ... ( /api/auth/google 端點保持不變) ...
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
-    # ...
-    return jsonify({}) # 佔位
+    user_info = request.json
+    if not user_info or 'google_id' not in user_info: 
+        return jsonify({"error": "Invalid user info"}), 400
+    try:
+        supabase.table('users').upsert({
+            'google_id': user_info['google_id'], 
+            'email': user_info.get('email'),
+            'full_name': user_info.get('full_name'), 
+            'avatar_url': user_info.get('avatar_url')
+        }, on_conflict='google_id').execute()
+        
+        # 直接回傳前端發來的、最完整的使用者資訊，確保頭像等資料正確
+        return jsonify(user_info)
+    except Exception as e:
+        print(f"ERROR in google_auth: {e}")
+        return jsonify({"error": str(e)}), 500
 
-# [核心修正] 在 handle_schedule 函數的最開頭加入 print 語句
 @app.route("/api/schedule", methods=['GET', 'POST'])
 def handle_schedule():
     user_id = request.args.get('user_id')
-    
-    # --- 這就是我們的信號彈 ---
-    print(f"--- TRIGGERED /api/schedule for user_id: {user_id} ---")
-    
-    if not user_id:
+    if not user_id: 
         return jsonify({"error": "User ID is required"}), 400
 
     if request.method == 'POST':
         schedule_data = request.json
         try:
-            print(f"Attempting to save schedule. Data received: {schedule_data}")
+            print(f"Attempting to save schedule for user_id: {user_id}")
             response = supabase.table('schedules').upsert({
-                'user_id': user_id, 'schedule_data': schedule_data
+                'user_id': user_id, 
+                'schedule_data': schedule_data
             }, on_conflict='user_id').execute()
             
             if response.data:
-                print("Successfully saved schedule to Supabase.")
+                print(f"Successfully saved schedule. Response: {response.data}")
                 return jsonify({"success": True, "data": response.data[0]})
             else:
-                print("Warning: Supabase upsert operation returned no data.")
-                return jsonify({"success": False, "error": "Upsert operation returned no data."})
+                print(f"Warning: Supabase upsert operation returned no data, but likely succeeded.")
+                return jsonify({"success": True, "message": "Upsert successful with no data returned."})
+                
         except Exception as e:
-            # 這是我們最需要看到的錯誤訊息！
-            print(f"!!!!!! FATAL ERROR during POST /api/schedule !!!!!!")
-            print(f"Error Type: {type(e).__name__}")
-            print(f"Error Details: {e}")
+            print(f"!!!!!! FATAL ERROR during POST /api/schedule for user {user_id} !!!!!!")
             import traceback
-            traceback.print_exc() # 打印完整的 Traceback
-            print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            traceback.print_exc()
             return jsonify({"error": str(e)}), 500
 
     if request.method == 'GET':
-        # ... (GET 邏輯保持不變) ...
-        return jsonify({})
+        try:
+            response = supabase.table('schedules').select('schedule_data').eq('user_id', user_id).limit(1).execute()
+            return jsonify(response.data[0]['schedule_data'] if response.data else {})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
-# ... (所有剩下的 API 端點和啟動程式碼都保持不變) ...
 @app.route("/api/courses/hotness")
 def get_course_hotness():
-    # ...
-    return jsonify({})
+    try:
+        response = supabase.table('schedules').select('schedule_data').execute()
+        if not response.data: return jsonify({})
+        all_schedules = [item['schedule_data'] for item in response.data if item.get('schedule_data')]
+        course_counts = Counter()
+        for schedule in all_schedules:
+            unique_course_ids_in_schedule = {course['course_id'] for course in schedule.values()}
+            course_counts.update(unique_course_ids_in_schedule)
+        return jsonify(dict(course_counts))
+    except Exception as e: return jsonify({"error": str(e)}), 500
+
 @app.route('/api/departments')
 def get_departments():
-    # ...
-    return jsonify([])
+    return jsonify(STATIC_DATA.get('course_deptId', []))
+
 @app.route('/api/contacts')
 def get_contacts():
-    # ...
-    return jsonify([])
+    contacts = STATIC_DATA.get('contact_ncnu', [])
+    unit_info = STATIC_DATA.get('unitId_ncnu', [])
+    if contacts and unit_info:
+        for contact in contacts:
+            matching_unit = next((unit for unit in unit_info if unit['中文名稱'] == contact['title']), None)
+            if matching_unit: contact['web'] = matching_unit.get('網站網址', contact.get('web'))
+    return jsonify(contacts)
+
 @app.route('/api/calendar')
 def get_calendar():
-    # ...
-    return jsonify([])
+    return jsonify(CALENDAR_EVENTS)
 
+# --- 應用程式啟動 ---
 with app.app_context():
     initialize_app()

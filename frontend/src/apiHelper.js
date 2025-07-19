@@ -1,3 +1,5 @@
+// frontend/src/apiHelper.js (完整版)
+
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -11,11 +13,11 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
  * 健壯的 API 請求函數，會先嘗試喚醒後端，並帶有重試機制
  * @param {'get' | 'post'} method - HTTP 方法
  * @param {string} endpoint - API 端點，例如 '/api/schedule'
- * @param {object} [data] - 對於 POST 請求，這是要發送的資料
- * @param {object} [params] - 對於 GET 請求，這是 URL 查詢參數
+ * @param {object} [options] - 包含 data (POST) 或 params (GET) 的物件
  * @returns {Promise<any>}
  */
-export const robustRequest = async (method, endpoint, { data, params } = {}) => {
+export const robustRequest = async (method, endpoint, options = {}) => {
+    const { data, params } = options;
     console.log(`Starting robust request to: ${endpoint}`);
 
     // 1. 先發送一個簡單的喚醒請求到根目錄

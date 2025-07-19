@@ -1,7 +1,10 @@
+/* frontend/src/components/Navbar.css (完整版) */
+
 .auth-section {
-    min-width: 200px; /* 給定最小寬度以防止登入按鈕變形 */
+    min-width: 200px;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .user-profile {
@@ -23,7 +26,7 @@
 }
 
 .logout-button {
-    background-color: #d32f2f; /* 紅色登出按鈕 */
+    background-color: #d32f2f;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -44,6 +47,6 @@
         gap: 1rem;
     }
     .user-name {
-        display: none; /* 在較小螢幕上隱藏名字，節省空間 */
+        display: none;
     }
 }

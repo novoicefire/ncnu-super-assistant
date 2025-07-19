@@ -1,83 +1,64 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (整合 robustRequest 的最終版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (最終完整版)
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import axios from 'axios'; // 依然需要 axios 來獲取本地靜態檔案
+import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
 import './CoursePlanner.css';
 import { useAuth } from '../../AuthContext.jsx';
-import { robustRequest } from '../../apiHelper.js'; // 引入我們全新的健壯請求函數
+import { robustRequest } from '../../apiHelper.js';
 
 const CoursePlanner = () => {
     const { user, isLoggedIn } = useAuth();
-
-    // 狀態管理
     const [staticCourses, setStaticCourses] = useState([]);
     const [hotnessData, setHotnessData] = useState({});
     const [schedule, setSchedule] = useState({});
     const [totalCredits, setTotalCredits] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [saveStatus, setSaveStatus] = useState("idle"); // idle, saving, success, error
     const [filters, setFilters] = useState({ courseName: '', teacher: '', department: '', division: '' });
     const [filteredCourses, setFilteredCourses] = useState([]);
 
-    // 1. 初次載入：獲取靜態課程資料和熱度資料
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                // 靜態課程資料直接用 axios 獲取，因為它穩定且快速
                 const coursePromise = axios.get('/data/本學期開課資訊API.json');
-                
-                // 動態的熱度資料，使用我們新的 robustRequest
                 const hotnessPromise = robustRequest('get', '/api/courses/hotness');
-
                 const [courseRes, hotnessDataResult] = await Promise.all([coursePromise, hotnessPromise]);
-                
                 setStaticCourses(courseRes.data?.course_ncnu?.item || []);
                 setHotnessData(hotnessDataResult || {});
-
             } catch (error) {
                 console.error("Failed to fetch initial data:", error);
-                // 即使熱度請求失敗，也要確保課程資料能顯示
-                if (!staticCourses.length) {
+                if (staticCourses.length === 0) { // Check if it's empty before trying again
                     try {
                         const courseRes = await axios.get('/data/本學期開課資訊API.json');
                         setStaticCourses(courseRes.data?.course_ncnu?.item || []);
-                    } catch (staticError) {
-                        console.error("Failed to fetch even static course data:", staticError);
-                    }
+                    } catch (staticError) { console.error("Failed to fetch even static course data:", staticError); }
                 }
             } finally {
                 setIsLoading(false);
             }
         };
         fetchData();
-    }, []); // 這個 effect 只在初次渲染時執行
+    }, []);
 
-    // 2. 當使用者登入狀態改變時，從後端載入或清空課表
     useEffect(() => {
         if (isLoggedIn && user?.google_id) {
             robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } })
-                .then(data => {
-                    setSchedule(data || {});
-                })
-                .catch(err => {
-                    console.error("Failed to load user schedule:", err);
-                    setSchedule({});
-                });
+                .then(data => setSchedule(data || {}))
+                .catch(err => setSchedule({}));
         } else {
             setSchedule({});
         }
     }, [isLoggedIn, user]);
     
-    // 當課表變動時，重新計算總學分
     useEffect(() => {
         const uniqueCourses = [...new Map(Object.values(schedule).map(item => [item['course_id'], item])).values()];
         const total = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
         setTotalCredits(total);
     }, [schedule]);
 
-    // 3. 篩選邏輯
     useEffect(() => {
         let result = staticCourses;
         if (filters.courseName) result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
@@ -95,26 +76,31 @@ const CoursePlanner = () => {
         return [...new Set(staticCourses.map(c => c.department).filter(Boolean))].sort();
     }, [staticCourses]);
 
-    // 4. 儲存課表的統一函數
     const saveSchedule = useCallback(async (newSchedule) => {
         setSchedule(newSchedule);
         if (isLoggedIn && user?.google_id) {
             setIsSaving(true);
+            setSaveStatus("saving");
             try {
-                await robustRequest('post', '/api/schedule', { 
+                const response = await robustRequest('post', '/api/schedule', { 
                     params: { user_id: user.google_id },
                     data: newSchedule 
                 });
+                if (response && response.success) {
+                    setSaveStatus("success");
+                } else {
+                    throw new Error(response.error || "Backend response did not indicate success.");
+                }
             } catch (error) {
+                setSaveStatus("error");
                 console.error("Failed to save schedule to cloud:", error);
-                alert("課表雲端儲存失敗，請稍後再試。");
             } finally {
                 setIsSaving(false);
+                setTimeout(() => setSaveStatus("idle"), 3000);
             }
         }
     }, [isLoggedIn, user]);
 
-    // 5. 時間解析與排課邏輯
     const parseTimeSlots = (timeString) => {
         if (!timeString || typeof timeString !== 'string') return [];
         const timeGroups = timeString.match(/\d[a-zA-Z]+/g) || [];
@@ -131,10 +117,7 @@ const CoursePlanner = () => {
     
     const addToSchedule = (course) => {
         const slots = parseTimeSlots(course.time);
-        if (slots.length === 0) {
-            alert('此課程無時間資訊，無法加入課表。');
-            return;
-        }
+        if (slots.length === 0) { alert('此課程無時間資訊，無法加入課表。'); return; }
         for (let slot of slots) {
             if (schedule[slot]) {
                 alert(`課程衝堂！\n時段 ${slot[0]} 的 ${slot.substring(1)} 節已被「${schedule[slot].course_cname}」佔用。`);
@@ -158,14 +141,23 @@ const CoursePlanner = () => {
     };
 
     const handleFilterChange = (e) => setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    
+    const getSaveStatusMessage = () => {
+        if (!isLoggedIn) return "登入後即可將課表儲存至雲端";
+        switch (saveStatus) {
+            case "saving": return "儲存中...";
+            case "success": return "✔ 課表已同步至雲端！";
+            case "error": return "❌ 儲存失敗，請檢查網路或稍後再試。";
+            default: return "課表變動將自動同步";
+        }
+    };
 
     return (
         <div className="course-planner">
             <div className="planner-header">
                 <h1>智慧化課程規劃與模擬排課系統</h1>
-                <div className="save-status">
-                    {isLoggedIn && (isSaving ? "儲存中..." : "課表已同步至雲端")}
-                    {!isLoggedIn && "登入後即可將課表儲存至雲端"}
+                <div className={`save-status ${saveStatus}`}>
+                    {getSaveStatusMessage()}
                 </div>
             </div>
             

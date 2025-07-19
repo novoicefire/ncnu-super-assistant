@@ -1,4 +1,4 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (完整 RWD + 熱度版) */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (最終完整版) */
 
 .course-planner {
     display: flex;
@@ -11,15 +11,15 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+    margin-bottom: 1rem; /* Add some space below the header */
 }
 
 .save-status {
-    background-color: #e8f5e9;
-    color: #2e7d32;
     padding: 8px 12px;
     border-radius: 15px;
     font-size: 0.9rem;
     font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .filters {
@@ -40,6 +40,7 @@
 
 .course-list-container {
     flex: 1;
+    min-width: 300px; /* Ensure it has a minimum width */
     max-height: 70vh;
     overflow-y: auto;
     border: 1px solid #ccc;
@@ -72,11 +73,10 @@
 
 .course-info small {
     color: #666;
-    display: block; /* 確保 small 標籤獨佔一行 */
+    display: block;
     margin-top: 4px;
 }
 
-/* 熱度指示器樣式 */
 .hotness-indicator {
     display: inline-block;
     background-color: #fff3e0;
@@ -139,7 +139,25 @@
     font-size: 0.8rem;
 }
 
-/* --- RWD --- */
+/* 儲存狀態樣式 */
+.save-status.idle {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+.save-status.saving {
+    background-color: #fff3e0;
+    color: #ff9800;
+}
+.save-status.success {
+    background-color: #e8f5e9;
+    color: #4caf50;
+}
+.save-status.error {
+    background-color: #ffcdd2;
+    color: #f44336;
+}
+
+/* RWD */
 @media (max-width: 1024px) {
   .planner-content {
     flex-direction: column;

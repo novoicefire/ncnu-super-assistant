@@ -1,4 +1,4 @@
-// frontend/src/components/Navbar.jsx (最終除錯版)
+// frontend/src/components/Navbar.jsx (最終完整版)
 
 import React, { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -10,31 +10,28 @@ const GoogleLoginButton = () => {
     const buttonDiv = useRef(null);
 
     useEffect(() => {
-        // [核心修正] 每次 Navbar 重新渲染時，這個 effect 都可能重新運行
-        // 這確保了 Google 按鈕總是使用最新的 handleGoogleLogin 函數
-        if (window.google && buttonDiv.current) {
-            // 加入 console.log 來確認初始化
-            console.log("Initializing Google Sign-In Button with client_id:", import.meta.env.VITE_GOOGLE_CLIENT_ID);
-
+        const currentButtonDiv = buttonDiv.current;
+        if (window.google && currentButtonDiv) {
             window.google.accounts.id.initialize({
                 client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-                callback: handleGoogleLogin, // 使用從 context 傳來的最新函數
+                callback: handleGoogleLogin,
             });
-            
-            // 清空容器，防止重複渲染
-            buttonDiv.current.innerHTML = "";
-            
             window.google.accounts.id.renderButton(
-                buttonDiv.current,
+                currentButtonDiv,
                 { theme: "outline", size: "large", shape: "pill", text: "signin_with" }
             );
             window.google.accounts.id.prompt(); 
         }
-    }, [handleGoogleLogin]); // 依賴 handleGoogleLogin
+
+        return () => {
+            if (currentButtonDiv) {
+                currentButtonDiv.innerHTML = "";
+            }
+        };
+    }, [handleGoogleLogin]); 
 
     return <div ref={buttonDiv} id="google-signin-button"></div>;
 };
-
 
 const Navbar = () => {
     const { isLoggedIn, user, logout, isLoading } = useAuth();
