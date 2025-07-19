@@ -1,5 +1,3 @@
-# backend/app.py (最終穩定儲存邏輯版)
-
 import os
 import json
 from pathlib import Path
@@ -15,7 +13,10 @@ from datetime import datetime
 # --- 初始化 ---
 load_dotenv()
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": ["https://ncnu-super-assistant.vercel.app", "http://localhost:5173", "https://*.vercel.app"]}})
+# --- 修改點 START ---
+# 原本只允許固定網址，現在使用萬用字元 '*' 來允許所有 vercel.app 的子網域
+CORS(app, resources={r"/api/*": {"origins": ["https://*.vercel.app", "http://localhost:5173"]}})
+# --- 修改點 END ---
 
 # --- 全域變數宣告 ---
 supabase: Client = None
@@ -97,31 +98,21 @@ def google_auth():
 def handle_schedule():
     user_id = request.args.get('user_id')
     if not user_id: return jsonify({"error": "User ID is required"}), 400
-
     if request.method == 'POST':
         schedule_data = request.json
         try:
-            # [核心修正] 改用手動的、更穩健的 Upsert 邏輯
-            # 1. 先查詢該使用者是否已存在課表紀錄
             response = supabase.table('schedules').select('id').eq('user_id', user_id).limit(1).execute()
-            
             if response.data:
-                # 2. 如果存在，執行更新 (update)
-                print(f"Updating schedule for user: {user_id}")
                 update_response = supabase.table('schedules').update({'schedule_data': schedule_data}).eq('user_id', user_id).execute()
                 return jsonify({"success": True, "action": "updated", "data": update_response.data[0]})
             else:
-                # 3. 如果不存在，執行插入 (insert)
-                print(f"Inserting new schedule for user: {user_id}")
                 insert_response = supabase.table('schedules').insert({'user_id': user_id, 'schedule_data': schedule_data}).execute()
                 return jsonify({"success": True, "action": "inserted", "data": insert_response.data[0]})
-
         except Exception as e:
             print(f"!!!!!! FATAL ERROR during POST /api/schedule for user {user_id} !!!!!!")
             import traceback
             traceback.print_exc()
             return jsonify({"error": str(e)}), 500
-
     if request.method == 'GET':
         try:
             response = supabase.table('schedules').select('schedule_data').eq('user_id', user_id).limit(1).execute()
