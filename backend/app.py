@@ -14,19 +14,19 @@ import threading
 # --- 初始化 ---
 load_dotenv()
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": ["https://*.vercel.app", "http://localhost:5173"]}})
+# --- 終極除錯修改點 START ---
+# 暫時允許來自任何來源的請求，使用 "*"
+CORS(app, resources={r"/api/*": {"origins": "*"}})
+# --- 終極除錯修改點 END ---
 
 # --- 全域變數宣告 ---
 supabase: Client = None
 STATIC_DATA = {}
 CALENDAR_EVENTS = []
-data_loaded = threading.Event() # 使用一個事件來標記資料是否已載入
+data_loaded = threading.Event()
 
 def initialize_app():
-    """
-    在應用程式上下文中，初始化所有服務。
-    修改：這個函式現在只初始化 Supabase 客戶端，讓伺服器可以快速啟動。
-    """
+    """在應用程式上下文中，初始化所有服務"""
     global supabase
     if supabase is None:
         print("Initializing Supabase client...")
@@ -36,17 +36,13 @@ def initialize_app():
             raise ValueError("FATAL: SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
         supabase = create_client(url, key)
         print("Supabase client initialized.")
-        # --- 修改點：不再於啟動時載入資料 ---
-        # load_static_data() # <--- 已移除
 
 def load_static_data_if_needed():
-    """
-    檢查資料是否已載入，如果沒有，則執行載入。
-    這是一個「懶加載」實現，只在第一次需要時執行。
-    """
+    """懶加載：檢查資料是否已載入，如果沒有，則執行載入"""
     if not data_loaded.is_set():
         print("Static data not loaded yet. Loading now...")
         global STATIC_DATA, CALENDAR_EVENTS
+        # ... (此處省略內部程式碼，與上一版相同)
         api_urls = {
             'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
             'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
@@ -81,15 +77,15 @@ def load_static_data_if_needed():
         except Exception as e:
             print(f"Warning: Failed to fetch calendar. Error: {e}")
         
-        data_loaded.set() # 標記資料已載入完成
+        data_loaded.set()
         print("Static data loading finished.")
-
 
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v10 - Lazy Load)"
+    return "NCNU Super Assistant Backend is alive! (v11 - Debug CORS All Origins)"
 
+# ... (所有 API 端點的程式碼都與上一版完全相同，此處省略) ...
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
     user_info = request.json
@@ -144,12 +140,12 @@ def get_course_hotness():
 
 @app.route('/api/departments')
 def get_departments():
-    load_static_data_if_needed() # 修改點：在回應前確保資料已載入
+    load_static_data_if_needed()
     return jsonify(STATIC_DATA.get('course_deptId', []))
 
 @app.route('/api/contacts')
 def get_contacts():
-    load_static_data_if_needed() # 修改點：在回應前確保資料已載入
+    load_static_data_if_needed()
     contacts = STATIC_DATA.get('contact_ncnu', [])
     unit_info = STATIC_DATA.get('unitId_ncnu', [])
     if contacts and unit_info:
@@ -160,10 +156,10 @@ def get_contacts():
 
 @app.route('/api/calendar')
 def get_calendar():
-    load_static_data_if_needed() # 修改點：在回應前確保資料已載入
+    load_static_data_if_needed()
     return jsonify(CALENDAR_EVENTS)
 
+
 # --- 應用程式啟動區塊 ---
-# 這段程式碼現在會非常快地完成
 with app.app_context():
     initialize_app()
