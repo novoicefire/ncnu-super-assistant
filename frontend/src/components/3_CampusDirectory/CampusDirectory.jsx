@@ -28,10 +28,18 @@ const CampusDirectory = () => {
     fetchContacts();
   }, []);
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contact.tel.some(t => t.ext.includes(searchTerm))
-  );
+  // --- 修正點：在這裡加入防禦性檢查 ---
+  const filteredContacts = contacts.filter(contact => {
+    // 檢查 title 是否存在且匹配
+    const titleMatch = contact.title && typeof contact.title === 'string' &&
+      contact.title.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // 檢查 tel 是否存在、是個陣列，並且其中有項目匹配
+    const telMatch = contact.tel && Array.isArray(contact.tel) &&
+      contact.tel.some(t => t.ext && typeof t.ext === 'string' && t.ext.includes(searchTerm));
+
+    return titleMatch || telMatch;
+  });
 
   if (loading) return <div><p>正在載入校園通訊錄...</p></div>;
   if (error) return <div><p style={{ color: 'red' }}>{error}</p></div>;
@@ -47,15 +55,15 @@ const CampusDirectory = () => {
       />
       <div className="directory-grid">
         {filteredContacts.map((contact, index) => (
-          <div key={index} className="contact-card">
+          <div key={contact.title + index} className="contact-card">
             <h3>{contact.title}</h3>
             <div className="contact-info">
-              {contact.tel.map((t, telIndex) => (
+              {/* 也為 tel 陣列加上防禦性檢查，以防萬一 */}
+              {contact.tel && contact.tel.map((t, telIndex) => (
                 <p key={telIndex}>
                   📞 {t.name}: {t.ext}
                 </p>
               ))}
-              {/* --- 修改點：顯示網站的整個區塊已被完全刪除 --- */}
             </div>
           </div>
         ))}
