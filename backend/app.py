@@ -1,4 +1,4 @@
-# backend/app.py (最終完整功能版)
+# backend/app.py (最終穩定版 - 延遲初始化)
 
 import os
 import json
@@ -17,20 +17,37 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": ["https://ncnu-super-assistant.vercel.app", "http://localhost:5173", "https://*.vercel.app"]}})
 
-# --- Supabase 連線 ---
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
-supabase: Client = create_client(url, key)
+# [核心修正 1] 先將 supabase 宣告為全域變數，但不進行初始化
+supabase: Client = None
 
-# --- 全域快取 (用於不變的資料) ---
-STATIC_DATA = {}
-CALENDAR_EVENTS = []
+# [核心修正 2] 將所有需要在啟動時執行的操作，全部放入一個函數
+def initialize_app():
+    """在應用程式上下文中，初始化所有服務和快取資料"""
+    global supabase, STATIC_DATA, CALENDAR_EVENTS
+    
+    # 只有在 supabase 還沒有被初始化時，才進行初始化
+    if supabase is None:
+        print("Initializing Supabase client and loading static data...")
+        # 1. 初始化 Supabase Client
+        url: str = os.environ.get("SUPABASE_URL")
+        key: str = os.environ.get("SUPABASE_KEY")
+        
+        # 檢查點：如果金鑰不存在，就直接拋出錯誤，方便在 Log 中看到
+        if not url or not key:
+            raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
+        
+        supabase = create_client(url, key)
+        print("Supabase client initialized.")
+
+        # 2. 載入靜態資料
+        load_static_data()
+        print("Static data loaded.")
 
 def load_static_data():
-    """在應用程式啟動時，抓取不常變動的資料並存入快取。"""
+    """抓取不常變動的資料並存入快取"""
     global STATIC_DATA, CALENDAR_EVENTS
     if STATIC_DATA: return
-    print("Loading static data (departments, contacts, calendar)...")
+    
     api_urls = {
         'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
         'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
@@ -46,6 +63,7 @@ def load_static_data():
         except Exception as e:
             print(f"Warning: Failed to fetch static data for '{key}'. Error: {e}")
             STATIC_DATA[key] = []
+    
     try:
         ics_url = "https://www.google.com/calendar/ical/curricul%40mail.ncnu.edu.tw/public/basic.ics"
         response = requests.get(ics_url, timeout=15)
@@ -65,12 +83,13 @@ def load_static_data():
     except Exception as e:
         print(f"Warning: Failed to fetch calendar. Error: {e}")
 
-# --- API 端點 ---
+# --- API 端點 (所有端點的邏輯都保持不變) ---
 @app.route("/")
 def index():
-    # 加入一個獨特的版本標記
-    return "NCNU Super Assistant Backend is ALIVE! (Version: FINAL_DEPLOY_20250718)"
+    return "NCNU Super Assistant Backend is alive! (v3 - Lazy Init)"
 
+# ... (此處省略所有 @app.route(...) 端點的程式碼，因為它們的內容完全不需要修改) ...
+# ... (請確保您保留了 /api/auth/google, /api/schedule, /api/courses/hotness, /api/departments 等所有端點) ...
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
     user_info = request.json
@@ -106,12 +125,11 @@ def get_course_hotness():
         all_schedules = [item['schedule_data'] for item in response.data if item.get('schedule_data')]
         course_counts = Counter()
         for schedule in all_schedules:
-            unique_course_ids = {course['course_id'] for course in schedule.values()}
-            course_counts.update(unique_course_ids)
+            unique_course_ids_in_schedule = {course['course_id'] for course in schedule.values()}
+            course_counts.update(unique_course_ids_in_schedule)
         return jsonify(dict(course_counts))
     except Exception as e: return jsonify({"error": str(e)}), 500
 
-# --- 靜態資料端點 (現在它們回來了！) ---
 @app.route('/api/departments')
 def get_departments():
     return jsonify(STATIC_DATA.get('course_deptId', []))
@@ -130,5 +148,7 @@ def get_contacts():
 def get_calendar():
     return jsonify(CALENDAR_EVENTS)
 
+# --- 應用程式啟動 ---
+# [核心修正 3] 在應用程式上下文中呼叫這個統一的初始化函數
 with app.app_context():
-    load_static_data()
+    initialize_app()
