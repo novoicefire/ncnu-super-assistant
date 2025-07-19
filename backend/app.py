@@ -15,16 +15,13 @@ import threading
 load_dotenv()
 app = Flask(__name__)
 
-# --- 安全設定 START ---
-# 明確列出所有允許的前端來源網址
+# --- 安全設定 ---
 ALLOWED_ORIGINS = [
-    "https://ncnu-super-assistant.vercel.app",  # 您的正式版網站
-    "https://ncnu-super-assistant-git-develop-yoialexs-projects.vercel.app", # 您的測試版網站
-    "http://localhost:5173"  # 本地開發環境
+    "https://ncnu-super-assistant.vercel.app",
+    "https://ncnu-super-assistant-git-develop-yoialexs-projects.vercel.app",
+    "http://localhost:5173"
 ]
 CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
-# --- 安全設定 END ---
-
 
 # --- 全域變數宣告 ---
 supabase: Client = None
@@ -33,7 +30,6 @@ CALENDAR_EVENTS = []
 data_loaded = threading.Event()
 
 def initialize_app():
-    """在應用程式上下文中，初始化所有服務"""
     global supabase
     if supabase is None:
         print("Initializing Supabase client...")
@@ -45,7 +41,6 @@ def initialize_app():
         print("Supabase client initialized.")
 
 def load_static_data_if_needed():
-    """懶加載：檢查資料是否已載入，如果沒有，則執行載入"""
     if not data_loaded.is_set():
         print("Static data not loaded yet. Loading now...")
         global STATIC_DATA, CALENDAR_EVENTS
@@ -82,15 +77,15 @@ def load_static_data_if_needed():
             CALENDAR_EVENTS.extend(sorted(temp_events, key=lambda x: x['start']))
         except Exception as e:
             print(f"Warning: Failed to fetch calendar. Error: {e}")
-        
         data_loaded.set()
         print("Static data loading finished.")
 
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v13 - Contacts Data Transform)"
+    return "NCNU Super Assistant Backend is alive! (v14 - Raw Contacts)"
 
+# --- 此處省略 auth, schedule, hotness, departments 等 API，它們保持不變 ---
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
     user_info = request.json
@@ -151,42 +146,27 @@ def get_departments():
 @app.route('/api/contacts')
 def get_contacts():
     """
-    這個 API 現在會將校方原始資料轉換成前端易於處理的乾淨格式
+    修改點：這個 API 現在只做最基礎的清理，傳遞前端需要的原始欄位
     """
     load_static_data_if_needed()
     raw_contacts = STATIC_DATA.get('contact_ncnu', [])
     
-    transformed_contacts = []
+    cleaned_contacts = []
     for raw_contact in raw_contacts:
-        tel_list = []
-        
-        # 處理 phone1
-        if raw_contact.get("phone1"):
-            tel_list.append({"name": "電話", "ext": raw_contact["phone1"]})
-            
-        # 處理 phone2 (校內分機)
-        if raw_contact.get("phone2"):
-            # 試圖只取 # 後面的分機號碼
-            ext_part = raw_contact["phone2"].split('#')[-1]
-            if ext_part: # 確保分割後有內容
-                 tel_list.append({"name": "分機", "ext": ext_part})
-
-        # 處理 fax
-        if raw_contact.get("fax"):
-            tel_list.append({"name": "傳真", "ext": raw_contact["fax"]})
-
-        transformed_contacts.append({
+        cleaned_contacts.append({
             "title": raw_contact.get("title", "無標題"),
-            "tel": tel_list
+            "phone1": raw_contact.get("phone1", ""),
+            "phone2": raw_contact.get("phone2", ""),
+            "fax": raw_contact.get("fax", ""),
+            "email": raw_contact.get("email", "")
         })
         
-    return jsonify(transformed_contacts)
+    return jsonify(cleaned_contacts)
 
 @app.route('/api/calendar')
 def get_calendar():
     load_static_data_if_needed()
     return jsonify(CALENDAR_EVENTS)
-
 
 # --- 應用程式啟動區塊 ---
 with app.app_context():
