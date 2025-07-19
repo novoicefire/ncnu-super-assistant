@@ -9,76 +9,86 @@ from collections import Counter
 import requests
 import icalendar
 from datetime import datetime
+import threading
 
 # --- 初始化 ---
 load_dotenv()
 app = Flask(__name__)
-# --- 修改點 START ---
-# 原本只允許固定網址，現在使用萬用字元 '*' 來允許所有 vercel.app 的子網域
 CORS(app, resources={r"/api/*": {"origins": ["https://*.vercel.app", "http://localhost:5173"]}})
-# --- 修改點 END ---
 
 # --- 全域變數宣告 ---
 supabase: Client = None
 STATIC_DATA = {}
 CALENDAR_EVENTS = []
+data_loaded = threading.Event() # 使用一個事件來標記資料是否已載入
 
 def initialize_app():
-    """在應用程式上下文中，初始化所有服務和快取資料"""
+    """
+    在應用程式上下文中，初始化所有服務。
+    修改：這個函式現在只初始化 Supabase 客戶端，讓伺服器可以快速啟動。
+    """
     global supabase
     if supabase is None:
-        print("Initializing Supabase client and loading static data...")
+        print("Initializing Supabase client...")
         url: str = os.environ.get("SUPABASE_URL")
         key: str = os.environ.get("SUPABASE_KEY")
         if not url or not key:
-            raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
+            raise ValueError("FATAL: SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
         supabase = create_client(url, key)
         print("Supabase client initialized.")
-        load_static_data()
-        print("Static data loaded.")
+        # --- 修改點：不再於啟動時載入資料 ---
+        # load_static_data() # <--- 已移除
 
-def load_static_data():
-    """抓取不常變動的資料並存入快取"""
-    global STATIC_DATA, CALENDAR_EVENTS
-    if STATIC_DATA: return
-    api_urls = {
-        'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
-        'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
-        'course_deptId': 'https://api.ncnu.edu.tw/API/get.aspx?json=course_deptId'
-    }
-    for key, data_url in api_urls.items():
+def load_static_data_if_needed():
+    """
+    檢查資料是否已載入，如果沒有，則執行載入。
+    這是一個「懶加載」實現，只在第一次需要時執行。
+    """
+    if not data_loaded.is_set():
+        print("Static data not loaded yet. Loading now...")
+        global STATIC_DATA, CALENDAR_EVENTS
+        api_urls = {
+            'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
+            'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
+            'course_deptId': 'https://api.ncnu.edu.tw/API/get.aspx?json=course_deptId'
+        }
+        for key, data_url in api_urls.items():
+            try:
+                response = requests.get(data_url, timeout=15)
+                response.raise_for_status()
+                content = response.json()
+                data_key = list(content.keys())[0]
+                STATIC_DATA[key] = content[data_key].get('item', [])
+            except Exception as e:
+                print(f"Warning: Failed to fetch static data for '{key}'. Error: {e}")
+                STATIC_DATA[key] = []
         try:
-            response = requests.get(data_url, timeout=15)
+            ics_url = "https://www.google.com/calendar/ical/curricul%40mail.ncnu.edu.tw/public/basic.ics"
+            response = requests.get(ics_url, timeout=15)
             response.raise_for_status()
-            content = response.json()
-            data_key = list(content.keys())[0]
-            STATIC_DATA[key] = content[data_key].get('item', [])
+            calendar = icalendar.Calendar.from_ical(response.content)
+            temp_events = []
+            for component in calendar.walk():
+                if component.name == "VEVENT":
+                    dtstart, dtend = component.get('dtstart'), component.get('dtend')
+                    if dtstart and dtend:
+                        temp_events.append({
+                            "summary": str(component.get('summary')),
+                            "start": dtstart.dt.isoformat() if hasattr(dtstart.dt, 'isoformat') else str(dtstart.dt),
+                            "end": dtend.dt.isoformat() if hasattr(dtend.dt, 'isoformat') else str(dtend.dt)
+                        })
+            CALENDAR_EVENTS.extend(sorted(temp_events, key=lambda x: x['start']))
         except Exception as e:
-            print(f"Warning: Failed to fetch static data for '{key}'. Error: {e}")
-            STATIC_DATA[key] = []
-    try:
-        ics_url = "https://www.google.com/calendar/ical/curricul%40mail.ncnu.edu.tw/public/basic.ics"
-        response = requests.get(ics_url, timeout=15)
-        response.raise_for_status()
-        calendar = icalendar.Calendar.from_ical(response.content)
-        temp_events = []
-        for component in calendar.walk():
-            if component.name == "VEVENT":
-                dtstart, dtend = component.get('dtstart'), component.get('dtend')
-                if dtstart and dtend:
-                    temp_events.append({
-                        "summary": str(component.get('summary')),
-                        "start": dtstart.dt.isoformat() if hasattr(dtstart.dt, 'isoformat') else str(dtstart.dt),
-                        "end": dtend.dt.isoformat() if hasattr(dtend.dt, 'isoformat') else str(dtend.dt)
-                    })
-        CALENDAR_EVENTS.extend(sorted(temp_events, key=lambda x: x['start']))
-    except Exception as e:
-        print(f"Warning: Failed to fetch calendar. Error: {e}")
+            print(f"Warning: Failed to fetch calendar. Error: {e}")
+        
+        data_loaded.set() # 標記資料已載入完成
+        print("Static data loading finished.")
+
 
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v9 - Robust Save)"
+    return "NCNU Super Assistant Backend is alive! (v10 - Lazy Load)"
 
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
@@ -134,10 +144,12 @@ def get_course_hotness():
 
 @app.route('/api/departments')
 def get_departments():
+    load_static_data_if_needed() # 修改點：在回應前確保資料已載入
     return jsonify(STATIC_DATA.get('course_deptId', []))
 
 @app.route('/api/contacts')
 def get_contacts():
+    load_static_data_if_needed() # 修改點：在回應前確保資料已載入
     contacts = STATIC_DATA.get('contact_ncnu', [])
     unit_info = STATIC_DATA.get('unitId_ncnu', [])
     if contacts and unit_info:
@@ -148,7 +160,10 @@ def get_contacts():
 
 @app.route('/api/calendar')
 def get_calendar():
+    load_static_data_if_needed() # 修改點：在回應前確保資料已載入
     return jsonify(CALENDAR_EVENTS)
 
+# --- 應用程式啟動區塊 ---
+# 這段程式碼現在會非常快地完成
 with app.app_context():
     initialize_app()
