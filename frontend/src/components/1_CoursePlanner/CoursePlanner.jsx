@@ -204,4 +204,4 @@ const CoursePlanner = () => {
     );
 };
 
-export default CoursePlanner;
+export default CoursePlanner;   
