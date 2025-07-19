@@ -1,4 +1,4 @@
-// frontend/src/AuthContext.jsx (useCallback 修正版)
+// frontend/src/AuthContext.jsx (強制刷新版)
 
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
@@ -23,8 +23,6 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
     }, []);
 
-    // [核心修正 1] 使用 useCallback 包裹 handleGoogleLogin
-    // 這確保了當 setUser 函數的實例改變時 (雖然很少見)，這個函數也會被重新建立
     const handleGoogleLogin = useCallback(async (credentialResponse) => {
         try {
             const decodedToken = jwtDecode(credentialResponse.credential);
@@ -38,28 +36,32 @@ export const AuthProvider = ({ children }) => {
             const response = await axios.post(`${API_URL}/api/auth/google`, userInfo);
             
             const fullUserData = response.data;
-            setUser(fullUserData); // 觸發狀態更新
+            // 狀態更新和本地儲存依然保留
+            setUser(fullUserData); 
             localStorage.setItem('user', JSON.stringify(fullUserData));
+            
+            // [核心修正] 在成功處理完所有邏輯後，強制重載頁面
+            window.location.reload();
+
         } catch (error) {
             console.error("Google login failed:", error);
         }
-    }, []); // 依賴為空陣列，表示此函數在元件生命週期內是穩定的
+    }, []);
 
-    // [核心修正 2] 使用 useCallback 包裹 logout
     const logout = useCallback(() => {
         setUser(null);
         localStorage.removeItem('user');
         if (window.google) {
             window.google.accounts.id.disableAutoSelect();
         }
-        // 重新整理頁面以確保所有狀態都被重置，這是最簡單可靠的方法
+        // 登出時也重載頁面，以確保狀態乾淨
         window.location.reload();
     }, []);
 
     return (
         <AuthContext.Provider value={{ user, isLoggedIn: !!user, isLoading, handleGoogleLogin, logout }}>
             {children}
-        </AuthContext.Provider>
+        </Auth.Provider>
     );
 };
 
