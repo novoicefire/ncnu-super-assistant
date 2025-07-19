@@ -1,145 +1,181 @@
-/* CoursePlanner.css - 包含響應式篩選器修正 */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (最終完整版) */
 
 .course-planner {
-  padding: 2rem;
-  max-width: 1400px;
-  margin: auto;
-  display: flex;
-  gap: 2rem;
-  height: calc(100vh - 100px); /* 減去 Navbar 高度，避免整個頁面滾動 */
+    display: flex;
+    flex-direction: column;
 }
 
-.planner-main {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.planner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem; /* Add some space below the header */
 }
 
-.planner-sidebar {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.filters {
+    background-color: #e0f2f1;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
-.planner-sidebar h3 {
-  margin-top: 0;
-  border-bottom: 2px solid #dee2e6;
-  padding-bottom: 0.5rem;
+/* --- 修改點：新增這個規則 --- */
+/* 
+  讓篩選器內的每一個項目都具備彈性。
+  - flex-grow: 1 -> 允許項目在有空間時伸展，填滿可用空間。
+  - flex-shrink: 1 -> 允許項目在空間不足時收縮。
+  - flex-basis: 200px -> 指定一個理想的基礎寬度。
+  這三者的組合拳，能創造出完美的響應式彈性效果。
+*/
+.filters > select,
+.filters > input {
+    flex: 1 1 200px;
+    min-width: 200px; /* 確保再怎麼縮小，也不會變得太窄而難以使用 */
+}
+/* --- 修改結束 --- */
+
+.planner-content {
+    display: flex;
+    gap: 1rem;
 }
 
-/* --- 修改點 START --- */
-
-/* 篩選器容器 */
-.course-filters {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  /* 關鍵修正 1: 允許換行 */
-  flex-wrap: wrap; 
-  /* 關鍵修正 2: 設定項目之間的間距，換行後也會有垂直間距 */
-  gap: 1rem; 
+.course-list-container {
+    flex: 1;
+    min-width: 300px; /* Ensure it has a minimum width */
+    max-height: 70vh;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: white;
 }
-
-/* 篩選器通用樣式 (輸入框和下拉選單) */
-.filter-item {
-  border: 1px solid #ced4da;
-  padding: 0.5rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  /* 
-    關鍵修正 3: 使用 flex 屬性讓項目有彈性
-    - flex-grow: 1 (允許項目放大以填滿空間)
-    - flex-shrink: 1 (允許項目縮小)
-    - flex-basis: 180px (項目的基準寬度，小於此寬度時傾向於換行)
-  */
-  flex: 1 1 180px; 
-  min-width: 180px; /* 確保項目不會被過度壓縮 */
-}
-
-/* --- 修改點 END --- */
-
-.selected-courses-container,
-.available-courses-container {
-  overflow-y: auto; /* 讓列表可以獨立滾動 */
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-}
-
-.selected-courses-container {
-  flex-shrink: 0; /* 不讓已選課程區塊被壓縮 */
-  margin-bottom: 1rem;
-}
-
-.available-courses-container {
-  flex-grow: 1; /* 讓可選課程列表填滿剩餘的垂直空間 */
-}
-
 
 .course-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.course-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem;
-  border-bottom: 1px solid #e9ecef;
-  cursor: pointer;
-  transition: background-color 0.2s;
+.course-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
 }
 
-.course-item:hover {
-  background-color: #e9ecef;
+.course-list li:hover {
+    background-color: #f0f0f0;
 }
 
 .course-info {
-  display: flex;
-  flex-direction: column;
+    flex-grow: 1;
 }
 
-.course-name {
-  font-weight: bold;
-}
-
-.course-details {
-  font-size: 0.85rem;
-  color: #6c757d;
-}
-
-.course-actions button {
-  padding: 0.25rem 0.5rem;
-  margin-left: 0.5rem;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.course-actions button:hover {
-  background-color: #0056b3;
-}
-
-.course-actions button.remove-btn {
-  background-color: #dc3545;
-}
-.course-actions button.remove-btn:hover {
-  background-color: #c82333;
+.course-info small {
+    color: #666;
+    display: block;
+    margin-top: 4px;
 }
 
 .hotness-indicator {
-  font-size: 0.8rem;
-  color: #fd7e14;
-  margin-left: 0.5rem;
+    display: inline-block;
+    background-color: #fff3e0;
+    color: #ef6c00;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 10px;
 }
 
-/* 在 CourseTable.css 中定義的 .course-table-container 的樣式可以保持不變 */
+.course-list button {
+    padding: 5px 10px;
+    font-size: 1rem;
+    margin-left: 1rem;
+    flex-shrink: 0;
+}
+
+.schedule-container {
+    flex: 2;
+}
+
+.course-table table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background-color: white;
+}
+
+.course-table th, .course-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    height: 50px;
+    font-size: 0.8rem;
+}
+
+.course-table th {
+    background-color: #e0f2f1;
+}
+
+.course-cell {
+    background-color: #b2dfdb;
+    color: #004d40;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    vertical-align: middle !important;
+    line-height: 1.4;
+}
+
+.course-cell:hover {
+    background-color: #ffcdd2;
+    color: #c62828;
+}
+
+.lunch-break {
+    background-color: #f0f0f0;
+    color: #aaa;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+/* RWD */
+@media (max-width: 1024px) {
+  .planner-content {
+    flex-direction: column;
+  }
+  .course-list-container {
+    max-height: 40vh;
+    order: 2;
+  }
+  .schedule-container {
+    order: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .course-table th, .course-table td {
+    font-size: 0.7rem;
+    padding: 4px;
+  }
+  .course-cell {
+    line-height: 1.2;
+  }
+  /* 在垂直排列時，我們不再需要 flex: 1 1 200px 的設定，可以移除 min-width */
+  .filters > select,
+  .filters > input {
+    min-width: 0;
+  }
+}
