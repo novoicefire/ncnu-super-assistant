@@ -1,5 +1,3 @@
-# backend/app.py (最終穩定儲存邏輯版)
-
 import os
 import json
 from pathlib import Path
@@ -11,73 +9,87 @@ from collections import Counter
 import requests
 import icalendar
 from datetime import datetime
+import threading
 
 # --- 初始化 ---
 load_dotenv()
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": ["https://ncnu-super-assistant.vercel.app", "http://localhost:5173", "https://*.vercel.app"]}})
+
+# --- 安全設定 START ---
+# 明確列出所有允許的前端來源網址
+ALLOWED_ORIGINS = [
+    "https://ncnu-super-assistant.vercel.app",  # 您的正式版網站
+    "https://ncnu-super-assistant-git-develop-yoialexs-projects.vercel.app", # 您的測試版網站
+    "http://localhost:5173"  # 本地開發環境
+]
+CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
+# --- 安全設定 END ---
+
 
 # --- 全域變數宣告 ---
 supabase: Client = None
 STATIC_DATA = {}
 CALENDAR_EVENTS = []
+data_loaded = threading.Event()
 
 def initialize_app():
-    """在應用程式上下文中，初始化所有服務和快取資料"""
+    """在應用程式上下文中，初始化所有服務"""
     global supabase
     if supabase is None:
-        print("Initializing Supabase client and loading static data...")
+        print("Initializing Supabase client...")
         url: str = os.environ.get("SUPABASE_URL")
         key: str = os.environ.get("SUPABASE_KEY")
         if not url or not key:
-            raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
+            raise ValueError("FATAL: SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
         supabase = create_client(url, key)
         print("Supabase client initialized.")
-        load_static_data()
-        print("Static data loaded.")
 
-def load_static_data():
-    """抓取不常變動的資料並存入快取"""
-    global STATIC_DATA, CALENDAR_EVENTS
-    if STATIC_DATA: return
-    api_urls = {
-        'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
-        'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
-        'course_deptId': 'https://api.ncnu.edu.tw/API/get.aspx?json=course_deptId'
-    }
-    for key, data_url in api_urls.items():
+def load_static_data_if_needed():
+    """懶加載：檢查資料是否已載入，如果沒有，則執行載入"""
+    if not data_loaded.is_set():
+        print("Static data not loaded yet. Loading now...")
+        global STATIC_DATA, CALENDAR_EVENTS
+        api_urls = {
+            'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
+            'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
+            'course_deptId': 'https://api.ncnu.edu.tw/API/get.aspx?json=course_deptId'
+        }
+        for key, data_url in api_urls.items():
+            try:
+                response = requests.get(data_url, timeout=15)
+                response.raise_for_status()
+                content = response.json()
+                data_key = list(content.keys())[0]
+                STATIC_DATA[key] = content[data_key].get('item', [])
+            except Exception as e:
+                print(f"Warning: Failed to fetch static data for '{key}'. Error: {e}")
+                STATIC_DATA[key] = []
         try:
-            response = requests.get(data_url, timeout=15)
+            ics_url = "https://www.google.com/calendar/ical/curricul%40mail.ncnu.edu.tw/public/basic.ics"
+            response = requests.get(ics_url, timeout=15)
             response.raise_for_status()
-            content = response.json()
-            data_key = list(content.keys())[0]
-            STATIC_DATA[key] = content[data_key].get('item', [])
+            calendar = icalendar.Calendar.from_ical(response.content)
+            temp_events = []
+            for component in calendar.walk():
+                if component.name == "VEVENT":
+                    dtstart, dtend = component.get('dtstart'), component.get('dtend')
+                    if dtstart and dtend:
+                        temp_events.append({
+                            "summary": str(component.get('summary')),
+                            "start": dtstart.dt.isoformat() if hasattr(dtstart.dt, 'isoformat') else str(dtstart.dt),
+                            "end": dtend.dt.isoformat() if hasattr(dtend.dt, 'isoformat') else str(dtend.dt)
+                        })
+            CALENDAR_EVENTS.extend(sorted(temp_events, key=lambda x: x['start']))
         except Exception as e:
-            print(f"Warning: Failed to fetch static data for '{key}'. Error: {e}")
-            STATIC_DATA[key] = []
-    try:
-        ics_url = "https://www.google.com/calendar/ical/curricul%40mail.ncnu.edu.tw/public/basic.ics"
-        response = requests.get(ics_url, timeout=15)
-        response.raise_for_status()
-        calendar = icalendar.Calendar.from_ical(response.content)
-        temp_events = []
-        for component in calendar.walk():
-            if component.name == "VEVENT":
-                dtstart, dtend = component.get('dtstart'), component.get('dtend')
-                if dtstart and dtend:
-                    temp_events.append({
-                        "summary": str(component.get('summary')),
-                        "start": dtstart.dt.isoformat() if hasattr(dtstart.dt, 'isoformat') else str(dtstart.dt),
-                        "end": dtend.dt.isoformat() if hasattr(dtend.dt, 'isoformat') else str(dtend.dt)
-                    })
-        CALENDAR_EVENTS.extend(sorted(temp_events, key=lambda x: x['start']))
-    except Exception as e:
-        print(f"Warning: Failed to fetch calendar. Error: {e}")
+            print(f"Warning: Failed to fetch calendar. Error: {e}")
+        
+        data_loaded.set()
+        print("Static data loading finished.")
 
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v9 - Robust Save)"
+    return "NCNU Super Assistant Backend is alive! (v12 - Final Secure CORS)"
 
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
@@ -97,31 +109,21 @@ def google_auth():
 def handle_schedule():
     user_id = request.args.get('user_id')
     if not user_id: return jsonify({"error": "User ID is required"}), 400
-
     if request.method == 'POST':
         schedule_data = request.json
         try:
-            # [核心修正] 改用手動的、更穩健的 Upsert 邏輯
-            # 1. 先查詢該使用者是否已存在課表紀錄
             response = supabase.table('schedules').select('id').eq('user_id', user_id).limit(1).execute()
-            
             if response.data:
-                # 2. 如果存在，執行更新 (update)
-                print(f"Updating schedule for user: {user_id}")
                 update_response = supabase.table('schedules').update({'schedule_data': schedule_data}).eq('user_id', user_id).execute()
                 return jsonify({"success": True, "action": "updated", "data": update_response.data[0]})
             else:
-                # 3. 如果不存在，執行插入 (insert)
-                print(f"Inserting new schedule for user: {user_id}")
                 insert_response = supabase.table('schedules').insert({'user_id': user_id, 'schedule_data': schedule_data}).execute()
                 return jsonify({"success": True, "action": "inserted", "data": insert_response.data[0]})
-
         except Exception as e:
             print(f"!!!!!! FATAL ERROR during POST /api/schedule for user {user_id} !!!!!!")
             import traceback
             traceback.print_exc()
             return jsonify({"error": str(e)}), 500
-
     if request.method == 'GET':
         try:
             response = supabase.table('schedules').select('schedule_data').eq('user_id', user_id).limit(1).execute()
@@ -143,10 +145,12 @@ def get_course_hotness():
 
 @app.route('/api/departments')
 def get_departments():
+    load_static_data_if_needed()
     return jsonify(STATIC_DATA.get('course_deptId', []))
 
 @app.route('/api/contacts')
 def get_contacts():
+    load_static_data_if_needed()
     contacts = STATIC_DATA.get('contact_ncnu', [])
     unit_info = STATIC_DATA.get('unitId_ncnu', [])
     if contacts and unit_info:
@@ -157,7 +161,9 @@ def get_contacts():
 
 @app.route('/api/calendar')
 def get_calendar():
+    load_static_data_if_needed()
     return jsonify(CALENDAR_EVENTS)
 
+# --- 應用程式啟動區塊 ---
 with app.app_context():
     initialize_app()
