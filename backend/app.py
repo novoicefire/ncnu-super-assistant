@@ -1,4 +1,4 @@
-# backend/app.py (最終完整版)
+# backend/app.py (最終穩定儲存邏輯版)
 
 import os
 import json
@@ -25,15 +25,12 @@ CALENDAR_EVENTS = []
 def initialize_app():
     """在應用程式上下文中，初始化所有服務和快取資料"""
     global supabase
-    
     if supabase is None:
         print("Initializing Supabase client and loading static data...")
         url: str = os.environ.get("SUPABASE_URL")
         key: str = os.environ.get("SUPABASE_KEY")
-        
         if not url or not key:
             raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
-        
         supabase = create_client(url, key)
         print("Supabase client initialized.")
         load_static_data()
@@ -43,7 +40,6 @@ def load_static_data():
     """抓取不常變動的資料並存入快取"""
     global STATIC_DATA, CALENDAR_EVENTS
     if STATIC_DATA: return
-    
     api_urls = {
         'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
         'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
@@ -59,7 +55,6 @@ def load_static_data():
         except Exception as e:
             print(f"Warning: Failed to fetch static data for '{key}'. Error: {e}")
             STATIC_DATA[key] = []
-    
     try:
         ics_url = "https://www.google.com/calendar/ical/curricul%40mail.ncnu.edu.tw/public/basic.ics"
         response = requests.get(ics_url, timeout=15)
@@ -82,22 +77,17 @@ def load_static_data():
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v8 - Final Fixes)"
+    return "NCNU Super Assistant Backend is alive! (v9 - Robust Save)"
 
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
     user_info = request.json
-    if not user_info or 'google_id' not in user_info: 
-        return jsonify({"error": "Invalid user info"}), 400
+    if not user_info or 'google_id' not in user_info: return jsonify({"error": "Invalid user info"}), 400
     try:
         supabase.table('users').upsert({
-            'google_id': user_info['google_id'], 
-            'email': user_info.get('email'),
-            'full_name': user_info.get('full_name'), 
-            'avatar_url': user_info.get('avatar_url')
+            'google_id': user_info['google_id'], 'email': user_info.get('email'),
+            'full_name': user_info.get('full_name'), 'avatar_url': user_info.get('avatar_url')
         }, on_conflict='google_id').execute()
-        
-        # 直接回傳前端發來的、最完整的使用者資訊，確保頭像等資料正確
         return jsonify(user_info)
     except Exception as e:
         print(f"ERROR in google_auth: {e}")
@@ -106,25 +96,26 @@ def google_auth():
 @app.route("/api/schedule", methods=['GET', 'POST'])
 def handle_schedule():
     user_id = request.args.get('user_id')
-    if not user_id: 
-        return jsonify({"error": "User ID is required"}), 400
+    if not user_id: return jsonify({"error": "User ID is required"}), 400
 
     if request.method == 'POST':
         schedule_data = request.json
         try:
-            print(f"Attempting to save schedule for user_id: {user_id}")
-            response = supabase.table('schedules').upsert({
-                'user_id': user_id, 
-                'schedule_data': schedule_data
-            }, on_conflict='user_id').execute()
+            # [核心修正] 改用手動的、更穩健的 Upsert 邏輯
+            # 1. 先查詢該使用者是否已存在課表紀錄
+            response = supabase.table('schedules').select('id').eq('user_id', user_id).limit(1).execute()
             
             if response.data:
-                print(f"Successfully saved schedule. Response: {response.data}")
-                return jsonify({"success": True, "data": response.data[0]})
+                # 2. 如果存在，執行更新 (update)
+                print(f"Updating schedule for user: {user_id}")
+                update_response = supabase.table('schedules').update({'schedule_data': schedule_data}).eq('user_id', user_id).execute()
+                return jsonify({"success": True, "action": "updated", "data": update_response.data[0]})
             else:
-                print(f"Warning: Supabase upsert operation returned no data, but likely succeeded.")
-                return jsonify({"success": True, "message": "Upsert successful with no data returned."})
-                
+                # 3. 如果不存在，執行插入 (insert)
+                print(f"Inserting new schedule for user: {user_id}")
+                insert_response = supabase.table('schedules').insert({'user_id': user_id, 'schedule_data': schedule_data}).execute()
+                return jsonify({"success": True, "action": "inserted", "data": insert_response.data[0]})
+
         except Exception as e:
             print(f"!!!!!! FATAL ERROR during POST /api/schedule for user {user_id} !!!!!!")
             import traceback
@@ -135,8 +126,7 @@ def handle_schedule():
         try:
             response = supabase.table('schedules').select('schedule_data').eq('user_id', user_id).limit(1).execute()
             return jsonify(response.data[0]['schedule_data'] if response.data else {})
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
+        except Exception as e: return jsonify({"error": str(e)}), 500
 
 @app.route("/api/courses/hotness")
 def get_course_hotness():
@@ -169,6 +159,5 @@ def get_contacts():
 def get_calendar():
     return jsonify(CALENDAR_EVENTS)
 
-# --- 應用程式啟動 ---
 with app.app_context():
     initialize_app()
