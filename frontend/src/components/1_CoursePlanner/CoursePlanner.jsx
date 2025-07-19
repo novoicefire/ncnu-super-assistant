@@ -169,7 +169,7 @@ const CoursePlanner = () => {
 
             <div className="planner-content">
                 <div className="course-list-container">
-                    <h3>课程列表 ({filteredCourses.length})</h3>
+                    <h3>課程列表 ({filteredCourses.length})</h3>
                     {isLoading ? <p>载入课程中...</p> : (
                         <ul className="course-list">
                             {filteredCourses.slice(0, 200).map((course, index) => (
