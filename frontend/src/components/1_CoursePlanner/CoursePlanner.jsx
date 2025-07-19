@@ -88,12 +88,12 @@ const CoursePlanner = () => {
                     data: newSchedule 
                 });
                 if (response && response.success) {
-                    toast.success('课表已同步至云端！', { id: toastId }); // 成功后，更新同一个 toast
+                    toast.success('課表已同步至雲端！', { id: toastId }); // 成功後，更新同一個 toast
                 } else {
                     throw new Error(response.error || "Backend response did not indicate success.");
                 }
             } catch (error) {
-                toast.error('储存失败，请检查网路或稍后再试。', { id: toastId }); // 失败后，更新同一个 toast
+                toast.error('儲存失敗，請見查網路或稍後再試。', { id: toastId }); // 失敗後，更新同一個 toast
                 console.error("Failed to save schedule to cloud:", error);
             }
         }
@@ -115,14 +115,14 @@ const CoursePlanner = () => {
     };
     const addToSchedule = (course) => {
         if (!isLoggedIn) {
-            toast.error("请先登入才能儲存課表！");
+            toast.error("請先登入才能儲存課表！");
             return;
         }
         const slots = parseTimeSlots(course.time);
-        if (slots.length === 0) { alert('此课程无时间资讯，无法加入课表。'); return; }
+        if (slots.length === 0) { alert('此課程無時間訊息，無法加入課表。'); return; }
         for (let slot of slots) {
             if (schedule[slot]) {
-                alert(`课程冲堂！\n时段 ${slot[0]} 的 ${slot.substring(1)} 节已被「${schedule[slot].course_cname}」占用。`);
+                alert(`課程衝堂！\n時段 ${slot[0]} 的 ${slot.substring(1)} 節已被「${schedule[slot].course_cname}」佔用。`);
                 return;
             }
         }
@@ -146,13 +146,13 @@ const CoursePlanner = () => {
     return (
         <div className="course-planner">
             <div className="planner-header">
-                <h1>智慧化課程規劃與模擬排課系統</h1>
+                <h1>課表規劃器</h1>
                 {/* [核心修改] 4. 移除了旧的 save-status div */}
             </div>
             
             <div className="filters">
-                <input type="text" name="courseName" placeholder="课程名称" onChange={handleFilterChange} />
-                <input type="text" name="teacher" placeholder="教师姓名" onChange={handleFilterChange} />
+                <input type="text" name="courseName" placeholder="課程名稱" onChange={handleFilterChange} />
+                <input type="text" name="teacher" placeholder="教師姓名" onChange={handleFilterChange} />
                 <select name="department" onChange={handleFilterChange} value={filters.department}>
                     <option value="">所有系所</option>
                     {uniqueDepartments.map(dep => <option key={dep} value={dep}>{dep}</option>)}
@@ -184,7 +184,7 @@ const CoursePlanner = () => {
                                     <button onClick={() => addToSchedule(course)} disabled={!course.time}>+</button>
                                 </li>
                             ))}
-                            {filteredCourses.length > 200 && <li>...仅显示前200笔结果...</li>}
+                            {filteredCourses.length > 200 && <li>...僅顯示前200筆結果...</li>}
                         </ul>
                     )}
                 </div>
