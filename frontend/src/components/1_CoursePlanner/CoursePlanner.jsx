@@ -178,7 +178,7 @@ const CoursePlanner = () => {
             <div className="planner-content">
                 <div className="course-list-container">
                     <h3>課程列表 ({filteredCourses.length})</h3>
-                    {isLoading ? <p>載入課程中...</p> : (
+                    {isLoading ? <p>載入課程中...有時候會等比較久，因為太久沒人用後端會自動休眠，大概一分鐘內就會醒來</p> : (
                         <ul className="course-list">
                             {filteredCourses.slice(0, 200).map((course, index) => (
                                 <li key={`${course.course_id}-${course.time}-${index}`}>
