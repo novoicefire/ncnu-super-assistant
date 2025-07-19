@@ -12,6 +12,7 @@ const CampusDirectory = () => {
     const fetchContacts = async () => {
       try {
         setLoading(true);
+        // 現在從後端拿到的 data，已經是轉換過的乾淨資料了
         const data = await robustRequest('get', '/api/contacts');
         if (Array.isArray(data)) {
           setContacts(data);
@@ -28,14 +29,10 @@ const CampusDirectory = () => {
     fetchContacts();
   }, []);
 
-  // 過濾邏輯保持不變，因為它是正確的
+  // 現在這個過濾邏輯將能完美運作
   const filteredContacts = contacts.filter(contact => {
-    const titleMatch = contact.title && typeof contact.title === 'string' &&
-      contact.title.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const telMatch = contact.tel && Array.isArray(contact.tel) &&
-      contact.tel.some(t => t.ext && typeof t.ext === 'string' && t.ext.includes(searchTerm));
-
+    const titleMatch = contact.title && contact.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const telMatch = contact.tel && contact.tel.some(t => t.ext && t.ext.includes(searchTerm));
     return titleMatch || telMatch;
   });
 
@@ -52,24 +49,15 @@ const CampusDirectory = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <div className="directory-grid">
-        {/* --- 修正點：將渲染邏輯變得極度穩健 --- */}
         {filteredContacts.map((contact, index) => (
-          // 使用 index 作為 key 是最安全的選擇，避免因資料問題導致 key 衝突
           <div key={index} className="contact-card">
-            {/* 即使沒有標題也不會崩潰 */}
             <h3>{contact.title || '無標題'}</h3>
             <div className="contact-info">
-              {/* 
-                最關鍵的修正：
-                明確檢查 contact.tel 是否為一個「長度大於 0 的陣列」。
-                如果是，才進行 map 渲染。
-                如果不是，就顯示一個提示訊息。
-              */}
+              {/* 這段程式碼現在可以安心地渲染 tel 陣列 */}
               {Array.isArray(contact.tel) && contact.tel.length > 0 ? (
                 contact.tel.map((t, telIndex) => (
                   <p key={telIndex}>
-                    {/* 為電話物件的內部屬性也加上後備值，確保萬無一失 */}
-                    📞 {t.name || '未知電話'}: {t.ext || 'N/A'}
+                    📞 {t.name}: {t.ext}
                   </p>
                 ))
               ) : (

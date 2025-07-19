@@ -89,7 +89,7 @@ def load_static_data_if_needed():
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v12 - Final Secure CORS)"
+    return "NCNU Super Assistant Backend is alive! (v13 - Contacts Data Transform)"
 
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
@@ -150,19 +150,43 @@ def get_departments():
 
 @app.route('/api/contacts')
 def get_contacts():
+    """
+    這個 API 現在會將校方原始資料轉換成前端易於處理的乾淨格式
+    """
     load_static_data_if_needed()
-    contacts = STATIC_DATA.get('contact_ncnu', [])
-    unit_info = STATIC_DATA.get('unitId_ncnu', [])
-    if contacts and unit_info:
-        for contact in contacts:
-            matching_unit = next((unit for unit in unit_info if unit['中文名稱'] == contact['title']), None)
-            if matching_unit: contact['web'] = matching_unit.get('網站網址', contact.get('web'))
-    return jsonify(contacts)
+    raw_contacts = STATIC_DATA.get('contact_ncnu', [])
+    
+    transformed_contacts = []
+    for raw_contact in raw_contacts:
+        tel_list = []
+        
+        # 處理 phone1
+        if raw_contact.get("phone1"):
+            tel_list.append({"name": "電話", "ext": raw_contact["phone1"]})
+            
+        # 處理 phone2 (校內分機)
+        if raw_contact.get("phone2"):
+            # 試圖只取 # 後面的分機號碼
+            ext_part = raw_contact["phone2"].split('#')[-1]
+            if ext_part: # 確保分割後有內容
+                 tel_list.append({"name": "分機", "ext": ext_part})
+
+        # 處理 fax
+        if raw_contact.get("fax"):
+            tel_list.append({"name": "傳真", "ext": raw_contact["fax"]})
+
+        transformed_contacts.append({
+            "title": raw_contact.get("title", "無標題"),
+            "tel": tel_list
+        })
+        
+    return jsonify(transformed_contacts)
 
 @app.route('/api/calendar')
 def get_calendar():
     load_static_data_if_needed()
     return jsonify(CALENDAR_EVENTS)
+
 
 # --- 應用程式啟動區塊 ---
 with app.app_context():
