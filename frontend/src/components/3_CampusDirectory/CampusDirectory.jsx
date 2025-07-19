@@ -1,77 +1,67 @@
-// frontend/src/components/3_CampusDirectory/CampusDirectory.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { robustRequest } from '../../apiHelper';
 import './CampusDirectory.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 const CampusDirectory = () => {
-    const [contacts, setContacts] = useState([]);
-    const [filteredContacts, setFilteredContacts] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
+  const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        axios.get(`${API_URL}/api/contacts`)
-            .then(res => {
-                setContacts(res.data);
-                setFilteredContacts(res.data);
-            })
-            .catch(err => console.error("Error fetching contacts:", err));
-    }, []);
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        setLoading(true);
+        const data = await robustRequest('get', '/api/contacts');
+        if (Array.isArray(data)) {
+          setContacts(data);
+        } else {
+          setError('無法識別的通訊錄資料格式');
+        }
+      } catch (err) {
+        setError(`讀取通訊錄失敗: ${err.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    useEffect(() => {
-        // [核心修正] 並行讀取兩個靜態 JSON
-        const fetchContactData = async () => {
-            try {
-                const contactPromise = axios.get('/data/校園聯絡資訊API.json');
-                const unitPromise = axios.get('/data/行政教學單位代碼API.json');
+    fetchContacts();
+  }, []);
 
-                const [contactRes, unitRes] = await Promise.all([contactPromise, unitPromise]);
-                
-                const contactItems = contactRes.data.contact_info.item || [];
-                const unitItems = unitRes.data.deptId_ncnu.item || [];
+  const filteredContacts = contacts.filter(contact =>
+    contact.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    contact.tel.some(t => t.ext.includes(searchTerm))
+  );
 
-                // 整合資料的邏輯
-                const unitMap = new Map(unitItems.map(item => [item.中文名稱, item.網站網址]));
-                const mergedContacts = contactItems.map(contact => ({
-                    ...contact,
-                    web: unitMap.get(contact.title) || contact.web,
-                }));
-                
-                setContacts(mergedContacts);
-                setFilteredContacts(mergedContacts);
-            } catch (error) {
-                console.error("Error fetching contact data:", error);
-            }
-        };
-        fetchContactData();
-    }, []);
-    return (
-        <div className="directory-container">
-            <h1>校園通訊錄</h1>
-            <div className="search-bar">
-                <input
-                    type="text"
-                    placeholder="輸入單位名稱或關鍵字搜尋..."
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                />
+  if (loading) return <div><p>正在載入校園通訊錄...</p></div>;
+  if (error) return <div><p style={{ color: 'red' }}>{error}</p></div>;
+
+  return (
+    <div className="directory-container">
+      <h2>校園通訊錄</h2>
+      <input
+        type="text"
+        placeholder="依單位名稱或分機號碼搜尋..."
+        className="directory-search-bar"
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <div className="directory-grid">
+        {filteredContacts.map((contact, index) => (
+          <div key={index} className="contact-card">
+            <h3>{contact.title}</h3>
+            <div className="contact-info">
+              {contact.tel.map((t, telIndex) => (
+                <p key={telIndex}>
+                  📞 {t.name}: {t.ext}
+                </p>
+              ))}
+              {/* --- 修改點：顯示網站的整個區塊已被完全刪除 --- */}
             </div>
-            <div className="contact-grid">
-                {filteredContacts.map((contact, index) => (
-                    <div className="contact-card" key={index}>
-                        <h3>{contact.title}</h3>
-                        <p className="title-en">{contact.title_en}</p>
-                        {contact.phone1 && <p>📞 電話1: <a href={`tel:${contact.phone1}`}>{contact.phone1}</a></p>}
-                        {contact.phone2 && <p>📞 電話2: <a href={`tel:${contact.phone2.replace(/#(\d+)/, ',$1')}`}>{contact.phone2}</a></p>}
-                        {contact.fax && <p>📠 傳真: {contact.fax}</p>}
-                        {contact.email !== '未申請' && contact.email && <p>📧 電郵: <a href={`mailto:${contact.email}`}>{contact.email}</a></p>}
-                        {contact.web && <p>🌐 網站: <a href={contact.web} target="_blank" rel="noopener noreferrer">點我前往</a></p>}
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default CampusDirectory;
