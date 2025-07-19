@@ -1,4 +1,4 @@
-// frontend/src/components/Navbar.jsx (帶有 Cleanup Function 的最終版)
+// frontend/src/components/Navbar.jsx (最終除錯版)
 
 import React, { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -10,32 +10,31 @@ const GoogleLoginButton = () => {
     const buttonDiv = useRef(null);
 
     useEffect(() => {
-        const currentButtonDiv = buttonDiv.current; // 將 ref 的 current 值存為變數
-        if (window.google && currentButtonDiv) {
+        // [核心修正] 每次 Navbar 重新渲染時，這個 effect 都可能重新運行
+        // 這確保了 Google 按鈕總是使用最新的 handleGoogleLogin 函數
+        if (window.google && buttonDiv.current) {
+            // 加入 console.log 來確認初始化
+            console.log("Initializing Google Sign-In Button with client_id:", import.meta.env.VITE_GOOGLE_CLIENT_ID);
+
             window.google.accounts.id.initialize({
                 client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-                callback: handleGoogleLogin,
+                callback: handleGoogleLogin, // 使用從 context 傳來的最新函數
             });
+            
+            // 清空容器，防止重複渲染
+            buttonDiv.current.innerHTML = "";
+            
             window.google.accounts.id.renderButton(
-                currentButtonDiv,
+                buttonDiv.current,
                 { theme: "outline", size: "large", shape: "pill", text: "signin_with" }
             );
             window.google.accounts.id.prompt(); 
         }
-
-        // [核心修正] useEffect 的清理函式
-        // 這個函式會在 <GoogleLoginButton /> 元件即將被從畫面上移除時執行
-        return () => {
-            if (currentButtonDiv) {
-                // 清空這個 div 的所有內容，還給 React 一個乾淨的 DOM 節點
-                currentButtonDiv.innerHTML = "";
-            }
-        };
-    // 依賴陣列保持不變，因為這個元件只應該在初次渲染時初始化一次
-    }, [handleGoogleLogin]); 
+    }, [handleGoogleLogin]); // 依賴 handleGoogleLogin
 
     return <div ref={buttonDiv} id="google-signin-button"></div>;
 };
+
 
 const Navbar = () => {
     const { isLoggedIn, user, logout, isLoading } = useAuth();
@@ -43,12 +42,14 @@ const Navbar = () => {
     return (
         <nav className="navbar">
           <NavLink to="/" className="nav-brand">暨大生超級助理</NavLink>
+          
           <div className="nav-links">
             <NavLink to="/">智慧排課</NavLink>
             <NavLink to="/tracker">畢業進度</NavLink>
             <NavLink to="/directory">校園通訊錄</NavLink>
             <NavLink to="/calendar">學校行事曆</NavLink>
           </div>
+
           <div className="auth-section">
             {isLoading ? (
                 <div>載入中...</div>
