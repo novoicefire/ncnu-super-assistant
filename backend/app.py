@@ -68,7 +68,8 @@ def load_static_data():
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (Full Feature Version)"
+    # 加入一個獨特的版本標記
+    return "NCNU Super Assistant Backend is ALIVE! (Version: FINAL_DEPLOY_20250718)"
 
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
