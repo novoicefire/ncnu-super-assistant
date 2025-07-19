@@ -1,102 +1,145 @@
-/* CoursePlanner.css - 完整且正確的最終版本 */
+/* CoursePlanner.css - 包含響應式篩選器修正 */
 
-/* 1. 基礎佈局：這是整個頁面的主容器，負責劃分左右兩大欄 */
 .course-planner {
-    display: flex; /* <<< 這是維持左右佈局最關鍵的屬性 */
-    height: calc(100vh - 80px); /* 減去 Navbar 的高度 */
-    padding: 1rem;
-    gap: 1rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  gap: 2rem;
+  height: calc(100vh - 100px); /* 減去 Navbar 高度，避免整個頁面滾動 */
 }
 
-/* 2. 左側欄：包含選單、搜尋框和搜尋結果 */
-.controls-and-results {
-    flex: 3; /* 設定寬度比例，佔 3/8 */
-    min-width: 320px; /* 在大螢幕上，確保左欄不會太窄 */
-    display: flex;
-    flex-direction: column; /* 讓裡面的「控制區」和「結果區」垂直排列 */
-    overflow-y: hidden; /* 重要！防止左欄本身滾動 */
+.planner-main {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-/* 3. 右側欄：包含您的課程表 */
-.course-table-container {
-    flex: 5; /* 設定寬度比例，佔 5/8 */
-    overflow-x: auto; /* 在小螢幕上，讓課程表可以水平滾動，而不是擠壓變形 */
+.planner-sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* =================================================================== */
-/* 4. 【響應式修正】控制區：包含系所、班別選單和搜尋框              */
-/* =================================================================== */
-.course-controls {
-    display: flex;
-    flex-wrap: wrap; /* <<< 這是解決您最初問題的核心：允許換行 */
-    gap: 1rem;       /* 項目之間的間距 */
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #eee;
+.planner-sidebar h3 {
+  margin-top: 0;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 0.5rem;
 }
 
-/* 控制區裡面的每一個選單和輸入框的樣式 */
-.course-controls select,
-.course-controls input {
-    flex-grow: 1;     /* 允許擴展填充空間 */
-    flex-shrink: 1;   /* 允許收縮 */
-    flex-basis: 200px;/* 設定一個理想的基礎寬度，用於計算何時該換行 */
-    min-width: 180px; /* 確保項目不會被壓縮得太小 */
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-/* =================================================================== */
+/* --- 修改點 START --- */
 
-/* 5. 搜尋結果列表 */
-.search-results {
-    overflow-y: auto; /* <<< 這是讓結果可以獨立滾動的關鍵 */
-    flex-grow: 1; /* 讓它填滿左欄中除了控制區以外的所有剩餘空間 */
-    padding-right: 0.5rem; /* 為滾動條留出一些空間 */
+/* 篩選器容器 */
+.course-filters {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  /* 關鍵修正 1: 允許換行 */
+  flex-wrap: wrap; 
+  /* 關鍵修正 2: 設定項目之間的間距，換行後也會有垂直間距 */
+  gap: 1rem; 
 }
 
-/* 6. 搜尋結果中的每一個課程項目 */
+/* 篩選器通用樣式 (輸入框和下拉選單) */
+.filter-item {
+  border: 1px solid #ced4da;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  /* 
+    關鍵修正 3: 使用 flex 屬性讓項目有彈性
+    - flex-grow: 1 (允許項目放大以填滿空間)
+    - flex-shrink: 1 (允許項目縮小)
+    - flex-basis: 180px (項目的基準寬度，小於此寬度時傾向於換行)
+  */
+  flex: 1 1 180px; 
+  min-width: 180px; /* 確保項目不會被過度壓縮 */
+}
+
+/* --- 修改點 END --- */
+
+.selected-courses-container,
+.available-courses-container {
+  overflow-y: auto; /* 讓列表可以獨立滾動 */
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.selected-courses-container {
+  flex-shrink: 0; /* 不讓已選課程區塊被壓縮 */
+  margin-bottom: 1rem;
+}
+
+.available-courses-container {
+  flex-grow: 1; /* 讓可選課程列表填滿剩餘的垂直空間 */
+}
+
+
+.course-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
 .course-item {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 1rem;
-    margin-bottom: 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .course-item:hover {
-    background-color: #f0f8ff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #e9ecef;
 }
 
-.course-info h4 {
-    margin: 0 0 0.25rem 0;
-    color: #333;
+.course-info {
+  display: flex;
+  flex-direction: column;
 }
 
-.course-info p {
-    margin: 0;
-    font-size: 0.85rem;
-    color: #666;
+.course-name {
+  font-weight: bold;
 }
 
-.add-course-btn {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+.course-details {
+  font-size: 0.85rem;
+  color: #6c757d;
 }
 
-.add-course-btn:hover {
-    background-color: #218838;
+.course-actions button {
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }
+
+.course-actions button:hover {
+  background-color: #0056b3;
+}
+
+.course-actions button.remove-btn {
+  background-color: #dc3545;
+}
+.course-actions button.remove-btn:hover {
+  background-color: #c82333;
+}
+
+.hotness-indicator {
+  font-size: 0.8rem;
+  color: #fd7e14;
+  margin-left: 0.5rem;
+}
+
+/* 在 CourseTable.css 中定義的 .course-table-container 的樣式可以保持不變 */
