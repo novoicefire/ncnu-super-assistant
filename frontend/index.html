@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-TW">
+<html lang="zh-Hant-TW">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -8,6 +8,11 @@
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- [核心修改] 1. 直接從 Google 載入 GIS 函式庫 -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- 2. 載入我們的 React 應用 -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
