@@ -1,5 +1,5 @@
-# .github/workflows/auto-changelog.yml
-name: Auto Generate Changelog
+# .github/workflows/auto-changelog.yml (Gemini版本)
+name: AI-Powered Changelog with Gemini
 
 on:
   push:
@@ -28,14 +28,14 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g semver
-          npm install js-yaml
 
-      - name: Generate changelog entry
+      - name: Generate Gemini-powered changelog
         id: changelog
         run: |
-          node .github/scripts/generate-changelog.js
+          node .github/scripts/gemini-changelog-generator.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}  # 🔑 Gemini API Key
 
       - name: Commit and push changes
         if: steps.changelog.outputs.has_changes == 'true'
@@ -43,5 +43,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add frontend/src/components/5_UpdateLog/updateData.js
-          git commit -m "docs: 自動更新版本 ${{ steps.changelog.outputs.new_version }} 的更新記錄"
+          git commit -m "docs: 🤖 AI自動更新版本 ${{ steps.changelog.outputs.new_version }} 記錄"
           git push
