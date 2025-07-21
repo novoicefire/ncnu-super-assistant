@@ -2,6 +2,43 @@
 
 export const updateHistory = [
   {
+    "version": "v2.3.0",
+    "date": "2025-07-21",
+    "type": "major",
+    "title": "重大功能更新",
+    "description": "重大功能更新！本次版本帶來了顯著的功能擴展和使用體驗改善。",
+    "features": [
+      "✨ 🎉 重大更新:🎨 視覺統一",
+      "✨ 🎯 新增:👤 用戶頭像優化+📝 用戶名稱顯示+🔘 登出按鈕設計+🎭 整體容器",
+      "✨ 🎯 新增:自動化更新專區",
+      "✨ 🎯 新增:更新資訊專區",
+      "✨ 🎯 新增:✅支援所有 100+ 個系所與學程支援學士班、碩士班、博士班完整選擇",
+      "✨ 🎯 新增:✅ 完全開放支援所有 100+ 個系所與學程支援學士班、碩士班、博士班完整選擇",
+      "✨ 🎯 新增:觀餐系觀光組畢業進度追蹤",
+      "✨ 🎯 新增:🔔 通知系統",
+      "✨ 🎯 新增:課表按鈕（綠色 + 白色加號）+動態按鈕狀態+📱 響應式優化",
+      "⚡ Remake:UniversityCalendar",
+      "⚡ 於任何/()不匹配現有靜態檔案的請求路徑，都請不要回報 404，而是將請求『重寫』(rewrite) 到 /index.html",
+      "⚡ Trigger initial deployment for develop branch",
+      "⚡ Commit",
+      "⚡ Commit",
+      "🔧 🔧 fix:撤回提交8e0b7f3",
+      "🔧 🔧 修復：正確的課程熱度🔥顯示邏輯",
+      "🔧 🔧 修復：系所資料來源",
+      "🔧 🔧 修復：系所資料來源",
+      "🔧 🔧 修復：更新 localStorage key 格式",
+      "🔧 Delete(通識)and(學年)",
+      "🔧 GraduationTracker.css",
+      "🔧 CoursePlanner.css",
+      "🔧 Fix: Update for allowd origins",
+      "🔧 Fix: Update for staging",
+      "🔧 Fix: Update CORS policy for staging",
+      "🔧 Fix: Update CORS policy for staging",
+      "🔧 Fix: Implement robust manual upsert for schedule saving",
+      "🔧 Fix: Implement robust manual upsert for schedule saving"
+    ]
+  },
+  {
     version: "v2.2.0",
     date: "2025-01-21", 
     type: "major",
