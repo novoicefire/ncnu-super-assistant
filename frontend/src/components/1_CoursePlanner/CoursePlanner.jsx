@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (動態按鈕版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (通知系統版)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
@@ -21,6 +21,9 @@ const CoursePlanner = () => {
         division: ''
     });
     const [filteredCourses, setFilteredCourses] = useState([]);
+    
+    // 🔔 新增：通知系統狀態
+    const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -85,7 +88,21 @@ const CoursePlanner = () => {
         return [...new Set(staticCourses.map(c => c.division).filter(division => division && division !== '通識'))].sort();
     }, [staticCourses]);
 
-    const saveSchedule = useCallback(async (newSchedule) => {
+    // 🔔 新增：通知管理函數
+    const showNotification = useCallback((message, type = 'info') => {
+        const id = Date.now();
+        const notification = { id, message, type };
+        
+        setNotifications(prev => [...prev, notification]);
+        
+        // 4秒後自動移除通知
+        setTimeout(() => {
+            setNotifications(prev => prev.filter(n => n.id !== id));
+        }, 4000);
+    }, []);
+
+    // 🔔 修改：saveSchedule 函數，加入通知
+    const saveSchedule = useCallback(async (newSchedule, actionType = 'update', courseName = '') => {
         setSchedule(newSchedule);
         if (isLoggedIn && user?.google_id) {
             setSaveStatus("saving");
@@ -96,17 +113,34 @@ const CoursePlanner = () => {
                 });
                 if (response && response.success) {
                     setSaveStatus("success");
+                    
+                    // 🔔 根據操作類型顯示不同通知
+                    if (actionType === 'add') {
+                        showNotification(`✅ 「${courseName}」已成功加入課表並同步至雲端`, 'success');
+                    } else if (actionType === 'remove') {
+                        showNotification(`🗑️ 「${courseName}」已從課表移除並同步至雲端`, 'success');
+                    } else {
+                        showNotification('✔ 課表已同步至雲端', 'success');
+                    }
                 } else {
                     throw new Error(response.error || "Backend response did not indicate success.");
                 }
             } catch (error) {
                 setSaveStatus("error");
                 console.error("Failed to save schedule to cloud:", error);
+                showNotification('❌ 儲存失敗，請檢查網路連線或稍後再試', 'error');
             } finally {
                 setTimeout(() => setSaveStatus("idle"), 3000);
             }
+        } else if (!isLoggedIn) {
+            // 🔔 未登入時的通知
+            if (actionType === 'add') {
+                showNotification(`📝 「${courseName}」已加入本地課表，登入後可同步至雲端`, 'warning');
+            } else if (actionType === 'remove') {
+                showNotification(`📝 「${courseName}」已從本地課表移除`, 'warning');
+            }
         }
-    }, [isLoggedIn, user]);
+    }, [isLoggedIn, user, showNotification]);
 
     const parseTimeSlots = (timeString) => {
         if (!timeString || typeof timeString !== 'string') return [];
@@ -122,15 +156,19 @@ const CoursePlanner = () => {
         return slots;
     };
 
+    // 🔔 修改：addToSchedule 函數，加入通知
     const addToSchedule = (course) => {
         const slots = parseTimeSlots(course.time);
         if (slots.length === 0) {
-            alert('此課程無時間資訊，無法加入課表。');
+            showNotification('⚠️ 此課程無時間資訊，無法加入課表', 'warning');
             return;
         }
         for (let slot of slots) {
             if (schedule[slot]) {
-                alert(`課程衝堂！\n時段 ${slot[0]} 的 ${slot.substring(1)} 節已被「${schedule[slot].course_cname}」佔用。`);
+                showNotification(
+                    `⚠️ 課程時間衝突！時段 ${slot[0]} 的 ${slot.substring(1)} 節已被「${schedule[slot].course_cname}」佔用`,
+                    'warning'
+                );
                 return;
             }
         }
@@ -138,21 +176,24 @@ const CoursePlanner = () => {
         slots.forEach(slot => {
             newSchedule[slot] = course;
         });
-        saveSchedule(newSchedule);
+        saveSchedule(newSchedule, 'add', course.course_cname);
     };
 
+    // 🔔 修改：removeFromSchedule 函數，加入通知
     const removeFromSchedule = (courseId, time) => {
         const slots = parseTimeSlots(time);
         const newSchedule = { ...schedule };
+        let courseName = '';
+        
         slots.forEach(slot => {
             if (newSchedule[slot] && newSchedule[slot].course_id === courseId && newSchedule[slot].time === time) {
+                courseName = newSchedule[slot].course_cname;
                 delete newSchedule[slot];
             }
         });
-        saveSchedule(newSchedule);
+        saveSchedule(newSchedule, 'remove', courseName);
     };
 
-    // 🎯 新增：檢查課程是否已在課表中
     const isCourseInSchedule = (course) => {
         const slots = parseTimeSlots(course.time);
         return slots.some(slot => 
@@ -162,7 +203,6 @@ const CoursePlanner = () => {
         );
     };
 
-    // 🎯 新增：統一的按鈕點擊處理
     const handleCourseToggle = (course) => {
         if (isCourseInSchedule(course)) {
             removeFromSchedule(course.course_id, course.time);
@@ -185,6 +225,24 @@ const CoursePlanner = () => {
 
     return (
         <div className="course-planner">
+            {/* 🔔 新增：通知容器 */}
+            <div className="notifications-container">
+                {notifications.map(notification => (
+                    <div 
+                        key={notification.id} 
+                        className={`notification notification-${notification.type}`}
+                    >
+                        <span>{notification.message}</span>
+                        <button 
+                            className="notification-close"
+                            onClick={() => setNotifications(prev => prev.filter(n => n.id !== notification.id))}
+                        >
+                            ×
+                        </button>
+                    </div>
+                ))}
+            </div>
+
             <div className="planner-header">
                 <h2>智慧排課系統</h2>
                 <div className="save-status">{getSaveStatusMessage()}</div>
@@ -257,7 +315,6 @@ const CoursePlanner = () => {
                                                 {course.division} | {course.course_credit}學分 | {course.time}
                                             </small>
                                         </div>
-                                        {/* 🎯 新增：動態切換按鈕 */}
                                         <button 
                                             className={`course-toggle-btn ${isCourseInSchedule(course) ? 'remove' : 'add'}`}
                                             onClick={() => handleCourseToggle(course)}
