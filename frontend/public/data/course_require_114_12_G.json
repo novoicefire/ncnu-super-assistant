@@ -1,0 +1,86 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 9 門課程",
+        "course_credit": "23.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125000",
+        "course_cname": "國際行銷管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125006",
+        "course_cname": "國際企業學專題研討(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125017",
+        "course_cname": "國際財務管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125021",
+        "course_cname": "國際企業學專題研討(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125056",
+        "course_cname": "研究方法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125101",
+        "course_cname": "組織行為與理論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125105",
+        "course_cname": "國際策略管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125107",
+        "course_cname": "國際企業管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "國企系",
+        "class": "碩士班",
+        "course_id": "125115",
+        "course_cname": "國際投資分析",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 21 門課程",
+        "course_credit": "61.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140001",
+        "course_cname": "經濟學及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140003",
+        "course_cname": "微積分及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140004",
+        "course_cname": "個體經濟學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140010",
+        "course_cname": "經濟學及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140011",
+        "course_cname": "微積分及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140018",
+        "course_cname": "統計學及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140020",
+        "course_cname": "投資學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140029",
+        "course_cname": "統計學及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140030",
+        "course_cname": "迴歸分析",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140070",
+        "course_cname": "財務管理(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140071",
+        "course_cname": "財務管理(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140119",
+        "course_cname": "金融機構管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140121",
+        "course_cname": "衍生性金融商品",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140124",
+        "course_cname": "債券市場",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140129",
+        "course_cname": "會計學及實習(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140149",
+        "course_cname": "財務報表分析",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140150",
+        "course_cname": "程式設計(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140156",
+        "course_cname": "財務金融專題(一)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "140157",
+        "course_cname": "財務金融專題(二)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "C20005",
+        "course_cname": "會計學及實習(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "學士班",
+        "course_id": "C20006",
+        "course_cname": "管理學",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

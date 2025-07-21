@@ -1,0 +1,94 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 10 門課程",
+        "course_credit": "10.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245011",
+        "course_cname": "化學技術(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245016",
+        "course_cname": "專題報告一(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245019",
+        "course_cname": "專題報告一(下)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245020",
+        "course_cname": "化學技術(下)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245022",
+        "course_cname": "研究方法一(下)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245025",
+        "course_cname": "專題報告二(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245030",
+        "course_cname": "專題報告二(下)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245050",
+        "course_cname": "研究方法一(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245051",
+        "course_cname": "研究方法二(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化系",
+        "class": "碩士班",
+        "course_id": "245052",
+        "course_cname": "研究方法二(下)",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

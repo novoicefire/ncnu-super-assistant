@@ -1,0 +1,70 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 7 門課程",
+        "course_credit": "14.0"
+      },
+      {
+        "year": "114",
+        "department": "課科所",
+        "class": "碩士班",
+        "course_id": "355046",
+        "course_cname": "教育研究法專題研究",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "課科所",
+        "class": "碩士班",
+        "course_id": "355048",
+        "course_cname": "課程、教學與科技專題研究(一)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "課科所",
+        "class": "碩士班",
+        "course_id": "355049",
+        "course_cname": "課程、教學與科技專題研究(三)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "課科所",
+        "class": "碩士班",
+        "course_id": "355051",
+        "course_cname": "課程與科技專題研究",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "課科所",
+        "class": "碩士班",
+        "course_id": "355053",
+        "course_cname": "課程、教學與科技專題研究(二)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "課科所",
+        "class": "碩士班",
+        "course_id": "355054",
+        "course_cname": "課程、教學與科技專題研究(四)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "課科所",
+        "class": "碩士班",
+        "course_id": "355058",
+        "course_cname": "數位學習專題研究",
+        "course_credit": "2.0"
+      }
+    ]
+  }
+}

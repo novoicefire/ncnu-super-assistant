@@ -1,0 +1,182 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 21 門課程",
+        "course_credit": "45.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050014",
+        "course_cname": "中國史(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050015",
+        "course_cname": "世界史(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050016",
+        "course_cname": "史學導論(一)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050023",
+        "course_cname": "中國史(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050024",
+        "course_cname": "世界史(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050025",
+        "course_cname": "史學導論(二)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050028",
+        "course_cname": "中國史參考資料選讀(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050029",
+        "course_cname": "世界史參考資料選讀(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050030",
+        "course_cname": "中國史(三)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050031",
+        "course_cname": "中國史參考資料選讀(三)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050032",
+        "course_cname": "世界史(三)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050033",
+        "course_cname": "世界史參考資料選讀(三)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050038",
+        "course_cname": "中國史參考資料選讀(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050039",
+        "course_cname": "世界史參考資料選讀(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050040",
+        "course_cname": "中國史(四)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050041",
+        "course_cname": "中國史參考資料選讀(四)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050042",
+        "course_cname": "世界史(四)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050043",
+        "course_cname": "世界史參考資料選讀(四)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050122",
+        "course_cname": "臺灣史(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050130",
+        "course_cname": "臺灣史(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "歷史系",
+        "class": "學士班",
+        "course_id": "050195",
+        "course_cname": "歷史學實作",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 12 門課程",
+        "course_credit": "29.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520001",
+        "course_cname": "AI人工智慧導論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520002",
+        "course_cname": "專題實作探索",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520003",
+        "course_cname": "永續環境與能源導論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520005",
+        "course_cname": "畢業專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520011",
+        "course_cname": "普通物理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520012",
+        "course_cname": "普通化學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520013",
+        "course_cname": "普通物理實驗",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520014",
+        "course_cname": "機率與統計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520015",
+        "course_cname": "計算機概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520018",
+        "course_cname": "科技導論",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520019",
+        "course_cname": "微積分(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "科院學士班",
+        "class": "學士班",
+        "course_id": "520020",
+        "course_cname": "微積分(下)",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 42 門課程",
+        "course_credit": "106.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600001",
+        "course_cname": "普通生物學",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600002",
+        "course_cname": "普通心理學",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600003",
+        "course_cname": "普通化學",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600004",
+        "course_cname": "護理學概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600006",
+        "course_cname": "智慧健康資訊管理",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600010",
+        "course_cname": "原鄉部落健康營造",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600011",
+        "course_cname": "原住民健康照護",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600012",
+        "course_cname": "生物統計",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600013",
+        "course_cname": "微生物及免疫學(含實驗)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600014",
+        "course_cname": "解剖學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600015",
+        "course_cname": "生命的價值",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600016",
+        "course_cname": "營養學",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600017",
+        "course_cname": "人類發展學（含實驗）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600018",
+        "course_cname": "生理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600019",
+        "course_cname": "病理學（含實驗）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600020",
+        "course_cname": "生命的價值(含實作)(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600021",
+        "course_cname": "人類發展學(含實習)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600022",
+        "course_cname": "生理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600023",
+        "course_cname": "病理學(含實驗)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600024",
+        "course_cname": "營養學",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600025",
+        "course_cname": "基本護理學",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600026",
+        "course_cname": "基本護理學實習",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600027",
+        "course_cname": "藥理學(含實驗)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600028",
+        "course_cname": "身體檢查與評估(含實作)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600029",
+        "course_cname": "內外科護理學(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600030",
+        "course_cname": "內外科護理學實習(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600031",
+        "course_cname": "產科護理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600032",
+        "course_cname": "產科護理學實習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600033",
+        "course_cname": "內外科護理學實習(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600034",
+        "course_cname": "內外科護理學(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600035",
+        "course_cname": "兒科護理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600036",
+        "course_cname": "兒科護理學實習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600037",
+        "course_cname": "精神衛生護理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600038",
+        "course_cname": "精神衛生護理學實習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600039",
+        "course_cname": "護理行政概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600040",
+        "course_cname": "社區衛生護理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600041",
+        "course_cname": "社區衛生護理學實習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600042",
+        "course_cname": "護理研究概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600043",
+        "course_cname": "綜合臨床護理實習(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600044",
+        "course_cname": "綜合臨床護理實習(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600045",
+        "course_cname": "護理專業倫理與法律",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "護理系原專班",
+        "class": "學士班",
+        "course_id": "600046",
+        "course_cname": "護理專業問題研討",
+        "course_credit": "2.0"
+      }
+    ]
+  }
+}

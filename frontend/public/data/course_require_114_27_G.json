@@ -1,0 +1,94 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 10 門課程",
+        "course_credit": "10.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275011",
+        "course_cname": "專題討論一(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275012",
+        "course_cname": "專題研究一(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275013",
+        "course_cname": "專題討論一(下)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275024",
+        "course_cname": "專題研究一(下)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275027",
+        "course_cname": "專題討論二(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275028",
+        "course_cname": "專題研究二(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275034",
+        "course_cname": "專題討論二(下)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275035",
+        "course_cname": "專題研究二(下)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275065",
+        "course_cname": "化學技術(上)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "應化生醫所",
+        "class": "碩士班",
+        "course_id": "275067",
+        "course_cname": "化學技術(下)",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

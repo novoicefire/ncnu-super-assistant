@@ -1,0 +1,126 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 14 門課程",
+        "course_credit": "38.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510001",
+        "course_cname": "生涯導航(1)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510002",
+        "course_cname": "生涯導航(2)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510004",
+        "course_cname": "微積分及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510005",
+        "course_cname": "會計學及實習(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510006",
+        "course_cname": "經濟學及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510007",
+        "course_cname": "微積分及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510008",
+        "course_cname": "經濟學及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510009",
+        "course_cname": "程式設計(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510010",
+        "course_cname": "統計學及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510012",
+        "course_cname": "統計學及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510016",
+        "course_cname": "統整實作專題與個案(1)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "510017",
+        "course_cname": "統整實作專題與個案(2)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "C20005",
+        "course_cname": "會計學及實習(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "管院學士班",
+        "class": "學士班",
+        "course_id": "C20006",
+        "course_cname": "管理學",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

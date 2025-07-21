@@ -1,0 +1,476 @@
+前端課程檔案清理詳細報告
+========================================
+掃描路徑: C:\Users\ofire\Desktop\ncnu-super-assistant\frontend\public\data
+掃描時間: 2025-07-21 22:40:48,216
+
+已刪除檔案 (370):
+  course_require_114_01_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_04_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_09_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_11_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_13_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_14_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_15_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_15_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_15_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_16_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_16_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_16_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_17_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_17_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_17_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_18_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_18_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_19_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_19_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_19_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_25_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_25_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_26_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_26_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_27_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_27_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_28_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_29_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_29_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_31_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_31_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_32_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_33_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_33_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_34_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_34_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_35_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_35_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_36_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_36_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_37_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_37_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_38_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_38_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_39_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_39_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_41_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_42_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_42_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_43_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_43_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_45_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_45_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_45_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_46_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_46_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_47_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_47_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_47_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_48_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_48_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_49_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_49_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_50_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_50_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_51_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_51_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_52_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_52_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_53_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_53_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_54_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_54_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_55_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_55_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_56_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_56_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_57_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_57_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_58_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_58_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_59_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_59_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_60_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_60_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_61_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_61_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_62_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_62_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_63_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_63_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_64_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_64_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_64_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_65_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_65_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_65_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_90_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_90_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_90_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_91_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_91_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_91_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_92_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_92_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_92_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_93_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_93_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_94_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_94_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_94_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_95_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_95_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_95_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_98_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_98_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_98_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_99_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_99_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_99_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C1_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C1_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C1_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C2_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C2_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C2_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C3_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C3_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C3_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C4_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C4_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_C4_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xa_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xa_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xa_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xb_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xb_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xb_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xc_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xc_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xc_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xd_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xd_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xd_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xe_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xe_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xe_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xf_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xf_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xf_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xg_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xg_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xg_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xh_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xh_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xh_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xi_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xi_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xi_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xj_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xj_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xj_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xk_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xk_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xk_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xl_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xl_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xl_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xm_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xm_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Xm_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y1_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y1_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y1_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y2_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y2_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y2_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y3_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y3_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y3_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y4_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y4_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y4_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y5_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y5_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y5_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y6_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y6_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y6_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y7_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y7_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y7_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y8_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y8_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y9_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y9_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Y9_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ya_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ya_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ya_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yb_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yb_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yb_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yc_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yc_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yc_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yd_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yd_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yd_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ye_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ye_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ye_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yf_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yf_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yf_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yg_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yg_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yg_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yh_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yh_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yi_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yi_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yi_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yj_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yj_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yj_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yk_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yk_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yk_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yl_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yl_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yl_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ym_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ym_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ym_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yn_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yn_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yn_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yo_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yo_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yo_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yp_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yp_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yp_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yq_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yq_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yq_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yr_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yr_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yr_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ys_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ys_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ys_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yt_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yt_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yt_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yu_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yu_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yv_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yv_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yv_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yw_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yw_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yw_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yx_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yx_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yx_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yy_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yy_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yy_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yz_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yz_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Yz_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z1_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z1_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z1_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z2_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z2_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z2_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z3_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z3_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z3_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z4_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z4_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z5_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z5_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z6_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z6_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z6_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z7_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z7_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z7_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z8_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z8_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z8_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z9_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z9_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Z9_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Za_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Za_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Za_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zb_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zb_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zb_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zc_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zc_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zd_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zd_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zd_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Ze_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zf_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zf_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zf_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zg_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zg_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zg_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zh_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zh_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zh_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zi_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zi_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zi_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zj_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zj_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zj_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zk_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zk_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zk_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zl_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zl_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zl_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zm_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zm_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zm_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zn_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zn_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zn_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zo_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zo_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zp_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zq_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zq_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zq_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zr_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zr_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zr_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zs_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zs_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zs_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zt_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zt_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zt_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zu_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zu_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zu_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zv_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zv_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zv_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zw_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zw_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zw_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zx_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zx_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zx_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zy_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zy_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zy_P.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zz_B.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zz_G.json - 合計0門課程: 合計: 0 門課程
+  course_require_114_Zz_P.json - 合計0門課程: 合計: 0 門課程
+
+保留檔案 (98):
+  course_require_114_00_B.json - 有效課程資料
+  course_require_114_00_G.json - 有效課程資料
+  course_require_114_00_P.json - 有效課程資料
+  course_require_114_01_B.json - 有效課程資料
+  course_require_114_01_G.json - 有效課程資料
+  course_require_114_02_B.json - 有效課程資料
+  course_require_114_02_G.json - 有效課程資料
+  course_require_114_02_P.json - 有效課程資料
+  course_require_114_03_B.json - 有效課程資料
+  course_require_114_03_G.json - 有效課程資料
+  course_require_114_03_P.json - 有效課程資料
+  course_require_114_04_B.json - 有效課程資料
+  course_require_114_04_G.json - 有效課程資料
+  course_require_114_05_B.json - 有效課程資料
+  course_require_114_05_G.json - 有效課程資料
+  course_require_114_05_P.json - 有效課程資料
+  course_require_114_06_B.json - 有效課程資料
+  course_require_114_06_G.json - 有效課程資料
+  course_require_114_06_P.json - 有效課程資料
+  course_require_114_07_B.json - 有效課程資料
+  course_require_114_07_G.json - 有效課程資料
+  course_require_114_07_P.json - 有效課程資料
+  course_require_114_08_B.json - 有效課程資料
+  course_require_114_08_G.json - 有效課程資料
+  course_require_114_08_P.json - 有效課程資料
+  course_require_114_09_B.json - 有效課程資料
+  course_require_114_09_G.json - 有效課程資料
+  course_require_114_11_B.json - 有效課程資料
+  course_require_114_11_G.json - 有效課程資料
+  course_require_114_12_B.json - 有效課程資料
+  course_require_114_12_G.json - 有效課程資料
+  course_require_114_12_P.json - 有效課程資料
+  course_require_114_13_B.json - 有效課程資料
+  course_require_114_13_G.json - 有效課程資料
+  course_require_114_14_B.json - 有效課程資料
+  course_require_114_14_G.json - 有效課程資料
+  course_require_114_18_G.json - 有效課程資料
+  course_require_114_21_B.json - 有效課程資料
+  course_require_114_21_G.json - 有效課程資料
+  course_require_114_21_P.json - 有效課程資料
+  course_require_114_22_B.json - 有效課程資料
+  course_require_114_22_G.json - 有效課程資料
+  course_require_114_22_P.json - 有效課程資料
+  course_require_114_23_B.json - 有效課程資料
+  course_require_114_23_G.json - 有效課程資料
+  course_require_114_23_P.json - 有效課程資料
+  course_require_114_24_B.json - 有效課程資料
+  course_require_114_24_G.json - 有效課程資料
+  course_require_114_24_P.json - 有效課程資料
+  course_require_114_25_G.json - 有效課程資料
+  course_require_114_26_G.json - 有效課程資料
+  course_require_114_27_G.json - 有效課程資料
+  course_require_114_28_B.json - 有效課程資料
+  course_require_114_28_G.json - 有效課程資料
+  course_require_114_29_G.json - 有效課程資料
+  course_require_114_31_G.json - 有效課程資料
+  course_require_114_32_B.json - 有效課程資料
+  course_require_114_32_G.json - 有效課程資料
+  course_require_114_33_G.json - 有效課程資料
+  course_require_114_34_G.json - 有效課程資料
+  course_require_114_35_G.json - 有效課程資料
+  course_require_114_36_G.json - 有效課程資料
+  course_require_114_37_B.json - 有效課程資料
+  course_require_114_38_G.json - 有效課程資料
+  course_require_114_39_G.json - 有效課程資料
+  course_require_114_41_B.json - 有效課程資料
+  course_require_114_41_G.json - 有效課程資料
+  course_require_114_42_B.json - 有效課程資料
+  course_require_114_43_G.json - 有效課程資料
+  course_require_114_46_B.json - 有效課程資料
+  course_require_114_48_G.json - 有效課程資料
+  course_require_114_49_G.json - 有效課程資料
+  course_require_114_50_G.json - 有效課程資料
+  course_require_114_51_B.json - 有效課程資料
+  course_require_114_52_B.json - 有效課程資料
+  course_require_114_53_B.json - 有效課程資料
+  course_require_114_54_G.json - 有效課程資料
+  course_require_114_55_G.json - 有效課程資料
+  course_require_114_56_G.json - 有效課程資料
+  course_require_114_57_G.json - 有效課程資料
+  course_require_114_58_G.json - 有效課程資料
+  course_require_114_59_B.json - 有效課程資料
+  course_require_114_60_B.json - 有效課程資料
+  course_require_114_61_P.json - 有效課程資料
+  course_require_114_62_B.json - 有效課程資料
+  course_require_114_63_G.json - 有效課程資料
+  course_require_114_93_B.json - 有效課程資料
+  course_require_114_Y8_B.json - 有效課程資料
+  course_require_114_Yh_B.json - 有效課程資料
+  course_require_114_Yu_G.json - 有效課程資料
+  course_require_114_Z4_B.json - 有效課程資料
+  course_require_114_Z5_B.json - 有效課程資料
+  course_require_114_Zc_B.json - 有效課程資料
+  course_require_114_Ze_B.json - 有效課程資料
+  course_require_114_Ze_G.json - 有效課程資料
+  course_require_114_Zo_B.json - 有效課程資料
+  course_require_114_Zp_B.json - 有效課程資料
+  course_require_114_Zp_G.json - 有效課程資料

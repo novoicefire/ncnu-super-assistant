@@ -1,0 +1,46 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 4 門課程",
+        "course_credit": "10.0"
+      },
+      {
+        "year": "114",
+        "department": "華文學程",
+        "class": "碩士班",
+        "course_id": "385001",
+        "course_cname": "華語文教材教法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "華文學程",
+        "class": "碩士班",
+        "course_id": "385003",
+        "course_cname": "漢語語言學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "華文學程",
+        "class": "碩士班",
+        "course_id": "385016",
+        "course_cname": "研究方法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "華文學程",
+        "class": "碩士班",
+        "course_id": "385035",
+        "course_cname": "國內外教學實習",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

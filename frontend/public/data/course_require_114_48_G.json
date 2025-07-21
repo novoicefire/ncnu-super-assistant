@@ -1,0 +1,22 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 1 門課程",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "新興產業碩士班",
+        "class": "碩士班",
+        "course_id": "485032",
+        "course_cname": "新興產業趨勢與商業模式",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

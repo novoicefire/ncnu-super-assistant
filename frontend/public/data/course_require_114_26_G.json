@@ -1,0 +1,46 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 4 門課程",
+        "course_credit": "4.0"
+      },
+      {
+        "year": "114",
+        "department": "地震所",
+        "class": "碩士班",
+        "course_id": "265001",
+        "course_cname": "專題研究(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "地震所",
+        "class": "碩士班",
+        "course_id": "265002",
+        "course_cname": "專題討論(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "地震所",
+        "class": "碩士班",
+        "course_id": "265014",
+        "course_cname": "專題研究(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "地震所",
+        "class": "碩士班",
+        "course_id": "265015",
+        "course_cname": "專題討論(二)",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

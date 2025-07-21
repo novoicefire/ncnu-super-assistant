@@ -1,0 +1,190 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 22 門課程",
+        "course_credit": "65.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030002",
+        "course_cname": "社會學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030003",
+        "course_cname": "社會工作概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030007",
+        "course_cname": "心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030013",
+        "course_cname": "人類行為與社會環境",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030015",
+        "course_cname": "社會個案工作",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030016",
+        "course_cname": "社會團體工作",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030028",
+        "course_cname": "社區工作",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030049",
+        "course_cname": "社會福利理論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030050",
+        "course_cname": "社會工作理論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030070",
+        "course_cname": "社會工作管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030097",
+        "course_cname": "社會研究法(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030098",
+        "course_cname": "社會研究法(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030112",
+        "course_cname": "會談技巧",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030114",
+        "course_cname": "社會心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030129",
+        "course_cname": "社會福利行政",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030130",
+        "course_cname": "社會工作倫理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030151",
+        "course_cname": "社會工作實習(1)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030160",
+        "course_cname": "社會政策與社會立法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030162",
+        "course_cname": "方案設計與評估",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030171",
+        "course_cname": "社會工作實習(2)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030172",
+        "course_cname": "防身術",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系",
+        "class": "學士班",
+        "course_id": "030173",
+        "course_cname": "社會統計",
+        "course_credit": "4.0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "博士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 5 門課程",
+        "course_credit": "7.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系",
+        "class": "博士班",
+        "course_id": "089001",
+        "course_cname": "社會科學方法論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系",
+        "class": "博士班",
+        "course_id": "089065",
+        "course_cname": "論文寫作專題(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系",
+        "class": "博士班",
+        "course_id": "089068",
+        "course_cname": "論文寫作專題(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系",
+        "class": "博士班",
+        "course_id": "089075",
+        "course_cname": "專題研討(1)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系",
+        "class": "博士班",
+        "course_id": "089076",
+        "course_cname": "專題研討(2)",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

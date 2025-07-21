@@ -1,0 +1,62 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 6 門課程",
+        "course_credit": "4.0"
+      },
+      {
+        "year": "114",
+        "department": "資工系",
+        "class": "碩士班",
+        "course_id": "215009",
+        "course_cname": "專題討論(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "資工系",
+        "class": "碩士班",
+        "course_id": "215010",
+        "course_cname": "指導與實習(一)",
+        "course_credit": "0.0"
+      },
+      {
+        "year": "114",
+        "department": "資工系",
+        "class": "碩士班",
+        "course_id": "215011",
+        "course_cname": "專題研究(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "資工系",
+        "class": "碩士班",
+        "course_id": "215013",
+        "course_cname": "專題討論(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "資工系",
+        "class": "碩士班",
+        "course_id": "215014",
+        "course_cname": "指導與實習(二)",
+        "course_credit": "0.0"
+      },
+      {
+        "year": "114",
+        "department": "資工系",
+        "class": "碩士班",
+        "course_id": "215015",
+        "course_cname": "專題研究(二)",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

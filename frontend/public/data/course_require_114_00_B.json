@@ -1,0 +1,142 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 16 門課程",
+        "course_credit": "48.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000001",
+        "course_cname": "普通心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000005",
+        "course_cname": "組織行為",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000006",
+        "course_cname": "心理與教育統計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000008",
+        "course_cname": "自我覺察與專業成長",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000010",
+        "course_cname": "人格心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000014",
+        "course_cname": "諮商理論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000015",
+        "course_cname": "心理衛生",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000026",
+        "course_cname": "社會科學研究法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000027",
+        "course_cname": "諮商技術",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000028",
+        "course_cname": "變態心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000033",
+        "course_cname": "團體諮商",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000036",
+        "course_cname": "心理測驗與評量",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000044",
+        "course_cname": "輔導方案設計與評估",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000045",
+        "course_cname": "諮商倫理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000065",
+        "course_cname": "諮商概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系",
+        "class": "學士班",
+        "course_id": "000092",
+        "course_cname": "諮商實習",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 14 門課程",
+        "course_credit": "38.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070001",
+        "course_cname": "教育行政學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070012",
+        "course_cname": "教育政策",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070056",
+        "course_cname": "教育行政實習",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070076",
+        "course_cname": "教育概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070077",
+        "course_cname": "公文處理與應用文",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070079",
+        "course_cname": "法學緒論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070080",
+        "course_cname": "教育哲學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070082",
+        "course_cname": "教育統計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070083",
+        "course_cname": "教育研究法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070085",
+        "course_cname": "學校行政",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070103",
+        "course_cname": "行政法(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070104",
+        "course_cname": "行政法(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070114",
+        "course_cname": "英語聽講（上）",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "教政系",
+        "class": "學士班",
+        "course_id": "070115",
+        "course_cname": "英語聽講（下）",
+        "course_credit": "2.0"
+      }
+    ]
+  }
+}

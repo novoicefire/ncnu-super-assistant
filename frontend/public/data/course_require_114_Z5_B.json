@@ -1,0 +1,54 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 5 門課程",
+        "course_credit": "13.0"
+      },
+      {
+        "year": "114",
+        "department": "觀光管理學程",
+        "class": "學士班",
+        "course_id": "Z50001",
+        "course_cname": "休閒與遊憩概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "觀光管理學程",
+        "class": "學士班",
+        "course_id": "Z50002",
+        "course_cname": "服務業管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "觀光管理學程",
+        "class": "學士班",
+        "course_id": "Z50008",
+        "course_cname": "觀光產業分析",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "觀光管理學程",
+        "class": "學士班",
+        "course_id": "Z50009",
+        "course_cname": "休閒產業發展趨勢",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "觀光管理學程",
+        "class": "學士班",
+        "course_id": "Z50017",
+        "course_cname": "就業專題",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

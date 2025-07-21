@@ -1,0 +1,174 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 20 門課程",
+        "course_credit": "52.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040001",
+        "course_cname": "會話一(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040005",
+        "course_cname": "西洋文學概論(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040015",
+        "course_cname": "會話一(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040019",
+        "course_cname": "西洋文學概論(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040028",
+        "course_cname": "語言學概論(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040034",
+        "course_cname": "會話二(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040041",
+        "course_cname": "會話二(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040042",
+        "course_cname": "語言學概論(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040050",
+        "course_cname": "翻譯理論與習作一(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040084",
+        "course_cname": "翻譯理論與習作一(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040106",
+        "course_cname": "英國文學史一",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040119",
+        "course_cname": "英國文學史二",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040237",
+        "course_cname": "文學作品讀法（上）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040238",
+        "course_cname": "文學作品讀法（下）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040269",
+        "course_cname": "美國文學史一",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040284",
+        "course_cname": "英文寫作一（上）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040286",
+        "course_cname": "英文寫作二（上）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040295",
+        "course_cname": "英文寫作一（下）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040297",
+        "course_cname": "英文寫作二（下）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "外文系",
+        "class": "學士班",
+        "course_id": "040307",
+        "course_cname": "畢業專題",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

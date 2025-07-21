@@ -1,0 +1,190 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 22 門課程",
+        "course_credit": "58.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230001",
+        "course_cname": "普通物理(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230002",
+        "course_cname": "微積分(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230009",
+        "course_cname": "微積分(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230010",
+        "course_cname": "普通物理(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230012",
+        "course_cname": "數位邏輯設計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230013",
+        "course_cname": "電工實驗(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230020",
+        "course_cname": "電子學(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230021",
+        "course_cname": "電路學(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230023",
+        "course_cname": "電工實驗(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230026",
+        "course_cname": "電子學(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230027",
+        "course_cname": "電路學(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230035",
+        "course_cname": "線性代數",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230052",
+        "course_cname": "專題(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230053",
+        "course_cname": "專題(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230057",
+        "course_cname": "工程數學(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230062",
+        "course_cname": "數位邏輯實驗",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230064",
+        "course_cname": "電磁學(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230074",
+        "course_cname": "電磁學(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230084",
+        "course_cname": "工程數學(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230088",
+        "course_cname": "計算機程式",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230108",
+        "course_cname": "訊號與系統",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "電機系",
+        "class": "學士班",
+        "course_id": "230113",
+        "course_cname": "微算機原理與實驗",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

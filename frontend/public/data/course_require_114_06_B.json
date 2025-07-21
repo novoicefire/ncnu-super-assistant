@@ -1,0 +1,134 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 15 門課程",
+        "course_credit": "35.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060048",
+        "course_cname": "研究方法",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060084",
+        "course_cname": "法學緒論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060096",
+        "course_cname": "中華民國憲法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060108",
+        "course_cname": "行政實習",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060144",
+        "course_cname": "公共政策",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060161",
+        "course_cname": "政治學(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060162",
+        "course_cname": "政治學(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060163",
+        "course_cname": "行政學(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060164",
+        "course_cname": "行政學(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060165",
+        "course_cname": "經濟學及實習(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060166",
+        "course_cname": "經濟學及實習(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060167",
+        "course_cname": "社會學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060168",
+        "course_cname": "應用統計及實習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060169",
+        "course_cname": "行政法（上）",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "公行系",
+        "class": "學士班",
+        "course_id": "060170",
+        "course_cname": "行政法（下）",
+        "course_credit": "2.0"
+      }
+    ]
+  }
+}

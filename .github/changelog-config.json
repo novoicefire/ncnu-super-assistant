@@ -1,0 +1,56 @@
+{
+  "keywords": {
+    "major": [
+      "重大",
+      "全面", 
+      "支援全校",
+      "新增系所",
+      "完全重構",
+      "major",
+      "breaking"
+    ],
+    "feature": [
+      "新增",
+      "實現", 
+      "支援",
+      "建立",
+      "加入",
+      "feat",
+      "add",
+      "feature"
+    ],
+    "fix": [
+      "修復",
+      "解決",
+      "修正",
+      "修改",
+      "fix",
+      "resolve",
+      "bug"
+    ],
+    "improvement": [
+      "優化",
+      "改善",
+      "提升",
+      "更新",
+      "調整",
+      "改進",
+      "improve",
+      "optimize",
+      "enhance"
+    ],
+    "technical": [
+      "重構",
+      "架構",
+      "技術",
+      "refactor",
+      "tech",
+      "performance"
+    ]
+  },
+  "versionRules": {
+    "majorThreshold": 3,
+    "autoTitle": true,
+    "includeAuthor": false
+  }
+}
