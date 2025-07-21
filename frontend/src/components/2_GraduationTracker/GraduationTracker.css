@@ -1,4 +1,4 @@
-/* frontend/src/components/2_GraduationTracker/GraduationTracker.css (完整 RWD 版) */
+/* frontend/src/components/2_GraduationTracker/GraduationTracker.css (寬度修復版) */
 
 .tracker-container {
     padding: 1rem;
@@ -9,14 +9,58 @@
     background-color: #e0f2f1;
     padding: 1rem;
     border-radius: 8px;
-    display: flex; /* 改為 flex 以便換行 */
-    flex-wrap: wrap; /* 允許換行 */
-    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
     align-items: center;
+}
+
+/* 🔧 修復：為選單控制項添加統一樣式 */
+.tracker-controls label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+    margin-right: 8px;
+}
+
+.tracker-controls select {
+    width: 180px;
+    max-width: 180px;
+    min-width: 140px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background-color: white;
+    cursor: pointer;
+    box-sizing: border-box;
+    
+    /* 🔧 修復：確保長選項文字正確顯示 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* 🔧 修復：選單選項的樣式控制 */
+.tracker-controls select option {
+    max-width: 180px;
+    word-wrap: break-word;
+    padding: 0.3rem;
+}
+
+/* 🔧 修復：控制項容器的群組樣式 */
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .progress-section {
     margin-bottom: 2rem;
+}
+
+.progress-section h3 {
+    margin-bottom: 1rem;
+    color: #333;
 }
 
 .progress-bar-container {
@@ -24,7 +68,8 @@
     background-color: #e0e0e0;
     border-radius: 10px;
     height: 30px;
-    overflow: hidden; /* 確保內部 div 不會超出圓角 */
+    overflow: hidden;
+    margin-bottom: 0.5rem;
 }
 
 .progress-bar {
@@ -35,6 +80,8 @@
     line-height: 30px;
     color: white;
     transition: width 0.5s ease-in-out;
+    font-weight: bold;
+    font-size: 0.9rem;
 }
 
 .courses-display {
@@ -52,6 +99,9 @@
 
 .course-column h3 {
     margin-top: 0;
+    color: #00796b;
+    border-bottom: 2px solid #e0f2f1;
+    padding-bottom: 0.5rem;
 }
 
 .course-column ul {
@@ -68,10 +118,17 @@
     display: flex;
     align-items: center;
     transition: background-color 0.2s;
+    /* 🔧 修復：課程項目的文字換行 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .course-column li:hover {
     background-color: #f5f5f5;
+}
+
+.course-column li:last-child {
+    border-bottom: none;
 }
 
 .checkbox {
@@ -85,6 +142,7 @@
     line-height: 18px;
     color: #00796b;
     flex-shrink: 0;
+    transition: all 0.2s;
 }
 
 .checkbox.checked {
@@ -92,15 +150,125 @@
     color: white;
 }
 
+.checkbox:hover {
+    transform: scale(1.1);
+}
+
 .completed {
     text-decoration: line-through;
     color: #999;
 }
 
-/* --- RWD 新增樣式 --- */
+/* 🔧 修復：課程資訊的文字樣式 */
+.course-info {
+    flex-grow: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+}
+
+.course-credit {
+    font-size: 0.8rem;
+    color: #666;
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-left: 10px;
+}
+
+/* 🔧 修復：錯誤和載入訊息樣式 */
+.error-message {
+    background-color: #fff3e0;
+    color: #ef6c00;
+    padding: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid #ff9800;
+    margin-bottom: 1rem;
+}
+
+.loading-message {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-style: italic;
+}
+
+/* --- RWD 響應式設計 --- */
+@media (max-width: 1024px) {
+    .courses-display {
+        gap: 1.5rem;
+    }
+    
+    /* 🔧 修復：平板尺寸下的選單調整 */
+    .tracker-controls select {
+        width: 160px;
+        max-width: 160px;
+    }
+}
+
 @media (max-width: 768px) {
-  .courses-display {
-    flex-direction: column; /* 兩欄改為垂直堆疊 */
-    gap: 1.5rem;
-  }
+    .tracker-container {
+        padding: 0.5rem;
+    }
+    
+    .tracker-controls {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    /* 🔧 修復：手機尺寸下的選單調整 */
+    .tracker-controls select {
+        width: 100%;
+        max-width: none;
+        min-width: unset;
+    }
+    
+    .control-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .courses-display {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .progress-bar {
+        font-size: 0.8rem;
+    }
+    
+    .course-column {
+        padding: 0.8rem;
+    }
+    
+    .course-column li {
+        padding: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tracker-controls {
+        padding: 0.8rem;
+    }
+    
+    .progress-bar-container {
+        height: 25px;
+    }
+    
+    .progress-bar {
+        line-height: 25px;
+        font-size: 0.7rem;
+    }
+    
+    .course-column li {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+    
+    .checkbox {
+        width: 18px;
+        height: 18px;
+        line-height: 16px;
+    }
 }
