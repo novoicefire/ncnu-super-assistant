@@ -1,6 +1,7 @@
-// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (移除學年度版)
+// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (系所選單修復版)
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { robustRequest } from '../../apiHelper.js';
 import './GraduationTracker.css';
 
 const GraduationTracker = () => {
@@ -23,12 +24,18 @@ const GraduationTracker = () => {
     });
 
     useEffect(() => {
-        // [核心修正] 直接讀取靜態 JSON 檔案來獲取系所列表
-        axios.get('/data/開課單位代碼API.json')
-            .then(res => {
-                setDepartments(res.data?.course_deptId?.item || []);
-            })
-            .catch(err => console.error("Error fetching departments from static file:", err));
+        // 🔧 修復：恢復使用原來的 API 端點來獲取系所列表
+        const fetchDepartments = async () => {
+            try {
+                const departmentData = await robustRequest('get', '/api/departments');
+                setDepartments(departmentData || []);
+            } catch (error) {
+                console.error("Error fetching departments:", error);
+                setDepartments([]);
+            }
+        };
+        
+        fetchDepartments();
     }, []);
 
     useEffect(() => {
@@ -36,9 +43,7 @@ const GraduationTracker = () => {
             setIsLoading(true);
             setError('');
             try {
-                // [核心修正] 直接讀取靜態的範例必修課 JSON 檔案
-                // 注意：這意味著無論使用者選擇哪個系，目前都只會顯示國企系的資料
-                // 這是因為我們只有這一個範例檔案
+                // 直接讀取靜態的範例必修課 JSON 檔案
                 const response = await axios.get('/data/本學年某系所必修課資訊API(以國企系大學班為範例).json');
                 
                 // 模擬 API 行為，檢查選擇是否符合範例檔
