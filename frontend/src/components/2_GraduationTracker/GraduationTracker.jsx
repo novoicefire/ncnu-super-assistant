@@ -1,7 +1,7 @@
-// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (修復系所選單版)
+// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (僅移除學年度版)
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { robustRequest } from '../../apiHelper';
 import './GraduationTracker.css';
 
 const GraduationTracker = () => {
@@ -10,13 +10,13 @@ const GraduationTracker = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     
-    // 🔧 修復：移除學年度(year)字段，只保留系所和班別
+    // 🔧 修復：移除 year 欄位，只保留 deptId 和 classType
     const [selection, setSelection] = useState({
         deptId: '12',
         classType: 'B'
     });
-    
-    // 🔧 修復：更新 localStorage key 格式，移除年度部分
+
+    // 🔧 修復：localStorage key 不再包含年度
     const [completedCourses, setCompletedCourses] = useState(() => {
         const key = `${selection.deptId}-${selection.classType}`;
         const saved = localStorage.getItem(key);
@@ -24,26 +24,20 @@ const GraduationTracker = () => {
     });
 
     useEffect(() => {
-        // 🔧 修復：使用正確的後端 API 來獲取系所列表
-        const fetchDepartments = async () => {
-            try {
-                const data = await robustRequest('get', '/api/departments');
-                setDepartments(Array.isArray(data) ? data : []);
-            } catch (err) {
-                console.error("Error fetching departments from API:", err);
-                setError('無法載入系所列表，請檢查網路連線。');
-            }
-        };
-        
-        fetchDepartments();
+        // [保持原有邏輯] 直接讀取靜態 JSON 檔案來獲取系所列表
+        axios.get('/data/開課單位代碼API.json')
+            .then(res => {
+                setDepartments(res.data?.course_deptId?.item || []);
+            })
+            .catch(err => console.error("Error fetching departments from static file:", err));
     }, []);
-
+    
     useEffect(() => {
         const fetchRequiredCourses = async () => {
             setIsLoading(true);
             setError('');
             try {
-                // 🔧 修復：使用靜態的範例必修課 JSON 檔案
+                // [保持原有邏輯] 直接讀取靜態的範例必修課 JSON 檔案
                 // 注意：這意味著無論使用者選擇哪個系，目前都只會顯示國企系的資料
                 // 這是因為我們只有這一個範例檔案
                 const response = await axios.get('/data/本學年某系所必修課資訊API(以國企系大學班為範例).json');
@@ -63,20 +57,16 @@ const GraduationTracker = () => {
                 setIsLoading(false);
             }
         };
+        fetchRequiredCourses();
 
-        // 只有當 departments 載入完成後才執行
-        if (departments.length > 0) {
-            fetchRequiredCourses();
-        }
-        
-        // 🔧 修復：更新 localStorage key 格式
+        // 🔧 修復：localStorage key 不再包含年度
         const key = `${selection.deptId}-${selection.classType}`;
         const saved = localStorage.getItem(key);
         setCompletedCourses(saved ? JSON.parse(saved) : {});
-    }, [selection, departments]);
+    }, [selection]);
 
     useEffect(() => {
-        // 🔧 修復：更新 localStorage key 格式
+        // 🔧 修復：localStorage key 不再包含年度
         const key = `${selection.deptId}-${selection.classType}`;
         localStorage.setItem(key, JSON.stringify(completedCourses));
     }, [completedCourses, selection]);
@@ -94,7 +84,7 @@ const GraduationTracker = () => {
             return newStatus;
         });
     };
-
+    
     const uncompleted = requiredCourses.filter(c => !completedCourses[c.course_id]);
     const completed = requiredCourses.filter(c => completedCourses[c.course_id]);
     const totalCredits = requiredCourses.reduce((sum, c) => sum + parseFloat(c.course_credit || 0), 0);
@@ -104,36 +94,29 @@ const GraduationTracker = () => {
     return (
         <div className="tracker-container">
             <h2>畢業學分進度追蹤器</h2>
-            
             <div className="tracker-controls">
-                {/* 🔧 修復：移除學年度選單，只保留系所和班別 */}
+                {/* 🔧 修復：移除學年度輸入格，只保留系所和班別選單 */}
                 <div className="control-group">
                     <label>系所：</label>
                     <select name="deptId" value={selection.deptId} onChange={handleSelectionChange}>
-                        {departments.length > 0 ? (
-                            departments.map(dept => (
-                                <option key={dept.dept_id} value={dept.dept_id}>
-                                    {dept.dept_cname}
-                                </option>
-                            ))
-                        ) : (
-                            <option value="">載入中...</option>
-                        )}
+                        {departments.map(d => (
+                            <option key={d.開課單位代碼} value={d.開課單位代碼}>
+                                {d.單位中文名稱} ({d.開課單位代碼})
+                            </option>
+                        ))}
                     </select>
                 </div>
-                
                 <div className="control-group">
                     <label>班別：</label>
                     <select name="classType" value={selection.classType} onChange={handleSelectionChange}>
                         <option value="B">學士班</option>
-                        <option value="M">碩士班</option>
-                        <option value="D">博士班</option>
+                        <option value="G">碩士班</option>
+                        <option value="P">博士班</option>
                     </select>
                 </div>
             </div>
-
-            {isLoading && <div className="loading-message">載入中...</div>}
             
+            {isLoading && <div className="loading-message">載入中...</div>}
             {error && <div className="error-message">{error}</div>}
             
             {!isLoading && requiredCourses.length > 0 && (
@@ -141,35 +124,33 @@ const GraduationTracker = () => {
                     <div className="progress-section">
                         <h3>學分進度總覽</h3>
                         <div className="progress-bar-container">
-                            <div className="progress-bar" style={{width: `${Math.min(progress, 100)}%`}}>
-                                {Math.round(progress)}%
+                            <div className="progress-bar" style={{ width: `${Math.min(progress, 100)}%` }}>
+                                {progress > 10 ? `${Math.round(progress)}%` : ''}
                             </div>
                         </div>
                         <p>已完成學分: {completedCredits} / 總必修學分: {totalCredits}</p>
                     </div>
-
                     <div className="courses-display">
                         <div className="course-column">
                             <h3>未完成必修課程 ({uncompleted.length})</h3>
                             <ul>
-                                {uncompleted.map(course => (
-                                    <li key={course.course_id} onClick={() => toggleCourseStatus(course.course_id)}>
+                                {uncompleted.map(c => (
+                                    <li key={c.course_id} onClick={() => toggleCourseStatus(c.course_id)}>
                                         <span className="checkbox">☐</span>
-                                        <div className="course-info">{course.course_cname}</div>
-                                        <span className="course-credit">{course.course_credit}學分</span>
+                                        <div className="course-info">{c.course_cname}</div>
+                                        <span className="course-credit">{c.course_credit}學分</span>
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                        
                         <div className="course-column">
                             <h3>已完成必修課程 ({completed.length})</h3>
                             <ul>
-                                {completed.map(course => (
-                                    <li key={course.course_id} onClick={() => toggleCourseStatus(course.course_id)} className="completed">
+                                {completed.map(c => (
+                                    <li key={c.course_id} className="completed" onClick={() => toggleCourseStatus(c.course_id)}>
                                         <span className="checkbox checked">✓</span>
-                                        <div className="course-info">{course.course_cname}</div>
-                                        <span className="course-credit">{course.course_credit}學分</span>
+                                        <div className="course-info">{c.course_cname}</div>
+                                        <span className="course-credit">{c.course_credit}學分</span>
                                     </li>
                                 ))}
                             </ul>
@@ -177,8 +158,7 @@ const GraduationTracker = () => {
                     </div>
                 </>
             )}
-            
-            {!isLoading && requiredCourses.length === 0 && !error && (
+            {!isLoading && !error && requiredCourses.length === 0 && (
                 <p>找不到此條件下的必修課程資料。</p>
             )}
         </div>
