@@ -1,8 +1,98 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (最終完整版) */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (通知系統版) */
 
 .course-planner {
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+/* 🔔 新增：通知系統樣式 */
+.notifications-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 0.9rem;
+    font-weight: 500;
+    animation: slideInRight 0.3s ease-out;
+    -webkit-backdrop-filter: blur(10px);  /* ✅ Safari/iOS Safari 支援 */
+    backdrop-filter: blur(10px);          /* ✅ 現代瀏覽器支援 */
+    border-left: 4px solid;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+
+.notification-success {
+    background-color: rgba(40, 167, 69, 0.95);
+    color: white;
+    border-left-color: #218838;
+}
+
+.notification-error {
+    background-color: rgba(220, 53, 69, 0.95);
+    color: white;
+    border-left-color: #c82333;
+}
+
+.notification-warning {
+    background-color: rgba(255, 193, 7, 0.95);
+    color: #212529;
+    border-left-color: #e0a800;
+}
+
+.notification-info {
+    background-color: rgba(23, 162, 184, 0.95);
+    color: white;
+    border-left-color: #117a8b;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 12px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.notification-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 .planner-header {
@@ -11,7 +101,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 1rem; /* Add some space below the header */
+    margin-bottom: 1rem;
 }
 
 .filters {
@@ -25,6 +115,45 @@
     flex-wrap: wrap;
 }
 
+.filters input,
+.filters select {
+    width: 180px;
+    max-width: 180px;
+    min-width: 140px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.filters select {
+    cursor: pointer;
+    background-color: white;
+}
+
+.filters select option {
+    max-width: 180px;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.filter-group label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
 .planner-content {
     display: flex;
     gap: 1rem;
@@ -32,7 +161,7 @@
 
 .course-list-container {
     flex: 1;
-    min-width: 300px; /* Ensure it has a minimum width */
+    min-width: 300px;
     max-height: 70vh;
     overflow-y: auto;
     border: 1px solid #ccc;
@@ -61,12 +190,17 @@
 
 .course-info {
     flex-grow: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: calc(100% - 60px);
 }
 
 .course-info small {
     color: #666;
     display: block;
     margin-top: 4px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .hotness-indicator {
@@ -80,11 +214,47 @@
     margin-left: 10px;
 }
 
-.course-list button {
-    padding: 5px 10px;
-    font-size: 1rem;
-    margin-left: 1rem;
+.course-toggle-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
     flex-shrink: 0;
+    margin-left: 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.course-toggle-btn.add {
+    background-color: #28a745;
+}
+
+.course-toggle-btn.add:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.course-toggle-btn.remove {
+    background-color: #dc3545;
+}
+
+.course-toggle-btn.remove:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.course-toggle-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .schedule-container {
@@ -104,6 +274,8 @@
     text-align: center;
     height: 50px;
     font-size: 0.8rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .course-table th {
@@ -117,6 +289,9 @@
     transition: background-color 0.3s;
     vertical-align: middle !important;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .course-cell:hover {
@@ -131,31 +306,78 @@
     font-size: 0.8rem;
 }
 
-/* RWD */
+/* RWD響應式設計 */
 @media (max-width: 1024px) {
-  .planner-content {
-    flex-direction: column;
-  }
-  .course-list-container {
-    max-height: 40vh;
-    order: 2;
-  }
-  .schedule-container {
-    order: 1;
-  }
+    .planner-content {
+        flex-direction: column;
+    }
+    
+    .course-list-container {
+        max-height: 40vh;
+        order: 2;
+    }
+    
+    .schedule-container {
+        order: 1;
+    }
+    
+    .filters input,
+    .filters select {
+        width: 160px;
+        max-width: 160px;
+    }
+    
+    /* 🔔 平板版通知調整 */
+    .notifications-container {
+        right: 15px;
+        max-width: 350px;
+    }
 }
 
 @media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: stretch;
-  }
-  .course-table th, .course-table td {
-    font-size: 0.7rem;
-    padding: 4px;
-  }
-  .course-cell {
-    line-height: 1.2;
-  }
+    .filters {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+    
+    .filters input,
+    .filters select {
+        width: 100%;
+        max-width: none;
+        min-width: unset;
+    }
+    
+    .course-table th, .course-table td {
+        font-size: 0.7rem;
+        padding: 4px;
+    }
+    
+    .course-cell {
+        line-height: 1.2;
+    }
+    
+    .course-toggle-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        margin-left: 0.5rem;
+    }
+    
+    .course-info {
+        max-width: calc(100% - 50px);
+    }
+    
+    /* 🔔 手機版通知調整 */
+    .notifications-container {
+        top: 15px;
+        right: 15px;
+        left: 15px;
+        max-width: none;
+    }
+    
+    .notification {
+        font-size: 0.8rem;
+        padding: 10px 12px;
+    }
 }
