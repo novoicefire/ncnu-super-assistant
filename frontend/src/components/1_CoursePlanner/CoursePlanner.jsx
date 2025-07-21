@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (移除通識選項版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (修復課程熱度顯示版)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
@@ -230,11 +230,12 @@ const CoursePlanner = () => {
                                     <li key={index}>
                                         <div className="course-info">
                                             <strong>{course.course_cname}</strong>
-                                            {hotnessData[course.course_id] && (
-                                                <span className="hotness-indicator">
-                                                    🔥 熱門度: {hotnessData[course.course_id]}
-                                                </span>
-                                            )}
+                                            {/* 🔧 修復：正確的課程熱度顯示邏輯 */}
+                                            <span className="hotness-indicator">
+                                                🔥 {hotnessData.hasOwnProperty(course.course_id) 
+                                                    ? hotnessData[course.course_id] 
+                                                    : 0} 人已加入
+                                            </span>
                                             <small>
                                                 {course.teacher} | {course.department} | 
                                                 {course.division} | {course.course_credit}學分 | {course.time}
