@@ -1,7 +1,7 @@
-// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (系所選單修復版)
+// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (修復系所選單版)
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { robustRequest } from '../../apiHelper.js';
+import { robustRequest } from '../../apiHelper';
 import './GraduationTracker.css';
 
 const GraduationTracker = () => {
@@ -24,14 +24,14 @@ const GraduationTracker = () => {
     });
 
     useEffect(() => {
-        // 🔧 修復：恢復使用原來的 API 端點來獲取系所列表
+        // 🔧 修復：使用正確的後端 API 來獲取系所列表
         const fetchDepartments = async () => {
             try {
-                const departmentData = await robustRequest('get', '/api/departments');
-                setDepartments(departmentData || []);
-            } catch (error) {
-                console.error("Error fetching departments:", error);
-                setDepartments([]);
+                const data = await robustRequest('get', '/api/departments');
+                setDepartments(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error("Error fetching departments from API:", err);
+                setError('無法載入系所列表，請檢查網路連線。');
             }
         };
         
@@ -43,7 +43,9 @@ const GraduationTracker = () => {
             setIsLoading(true);
             setError('');
             try {
-                // 直接讀取靜態的範例必修課 JSON 檔案
+                // 🔧 修復：使用靜態的範例必修課 JSON 檔案
+                // 注意：這意味著無論使用者選擇哪個系，目前都只會顯示國企系的資料
+                // 這是因為我們只有這一個範例檔案
                 const response = await axios.get('/data/本學年某系所必修課資訊API(以國企系大學班為範例).json');
                 
                 // 模擬 API 行為，檢查選擇是否符合範例檔
@@ -62,13 +64,16 @@ const GraduationTracker = () => {
             }
         };
 
-        fetchRequiredCourses();
+        // 只有當 departments 載入完成後才執行
+        if (departments.length > 0) {
+            fetchRequiredCourses();
+        }
         
         // 🔧 修復：更新 localStorage key 格式
         const key = `${selection.deptId}-${selection.classType}`;
         const saved = localStorage.getItem(key);
         setCompletedCourses(saved ? JSON.parse(saved) : {});
-    }, [selection]);
+    }, [selection, departments]);
 
     useEffect(() => {
         // 🔧 修復：更新 localStorage key 格式
@@ -105,11 +110,15 @@ const GraduationTracker = () => {
                 <div className="control-group">
                     <label>系所：</label>
                     <select name="deptId" value={selection.deptId} onChange={handleSelectionChange}>
-                        {departments.map(dept => (
-                            <option key={dept.dept_id} value={dept.dept_id}>
-                                {dept.dept_cname}
-                            </option>
-                        ))}
+                        {departments.length > 0 ? (
+                            departments.map(dept => (
+                                <option key={dept.dept_id} value={dept.dept_id}>
+                                    {dept.dept_cname}
+                                </option>
+                            ))
+                        ) : (
+                            <option value="">載入中...</option>
+                        )}
                     </select>
                 </div>
                 
