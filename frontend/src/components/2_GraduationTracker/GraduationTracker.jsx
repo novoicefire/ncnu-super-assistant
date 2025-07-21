@@ -1,5 +1,4 @@
-// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (最終修正版)
-
+// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (移除學年度版)
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './GraduationTracker.css';
@@ -10,14 +9,15 @@ const GraduationTracker = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     
+    // 🔧 修復：移除學年度(year)字段，只保留系所和班別
     const [selection, setSelection] = useState({
-        year: '113',
         deptId: '12',
         classType: 'B'
     });
-
+    
+    // 🔧 修復：更新 localStorage key 格式，移除年度部分
     const [completedCourses, setCompletedCourses] = useState(() => {
-        const key = `${selection.year}-${selection.deptId}-${selection.classType}`;
+        const key = `${selection.deptId}-${selection.classType}`;
         const saved = localStorage.getItem(key);
         return saved ? JSON.parse(saved) : {};
     });
@@ -30,7 +30,7 @@ const GraduationTracker = () => {
             })
             .catch(err => console.error("Error fetching departments from static file:", err));
     }, []);
-    
+
     useEffect(() => {
         const fetchRequiredCourses = async () => {
             setIsLoading(true);
@@ -56,15 +56,18 @@ const GraduationTracker = () => {
                 setIsLoading(false);
             }
         };
-        fetchRequiredCourses();
 
-        const key = `${selection.year}-${selection.deptId}-${selection.classType}`;
+        fetchRequiredCourses();
+        
+        // 🔧 修復：更新 localStorage key 格式
+        const key = `${selection.deptId}-${selection.classType}`;
         const saved = localStorage.getItem(key);
         setCompletedCourses(saved ? JSON.parse(saved) : {});
     }, [selection]);
 
     useEffect(() => {
-        const key = `${selection.year}-${selection.deptId}-${selection.classType}`;
+        // 🔧 修復：更新 localStorage key 格式
+        const key = `${selection.deptId}-${selection.classType}`;
         localStorage.setItem(key, JSON.stringify(completedCourses));
     }, [completedCourses, selection]);
 
@@ -81,7 +84,7 @@ const GraduationTracker = () => {
             return newStatus;
         });
     };
-    
+
     const uncompleted = requiredCourses.filter(c => !completedCourses[c.course_id]);
     const completed = requiredCourses.filter(c => completedCourses[c.course_id]);
     const totalCredits = requiredCourses.reduce((sum, c) => sum + parseFloat(c.course_credit || 0), 0);
@@ -90,50 +93,78 @@ const GraduationTracker = () => {
 
     return (
         <div className="tracker-container">
-            <h1>畢業學分進度追蹤器</h1>
-            <div className="tracker-controls">
-                <input type="number" name="year" value={selection.year} onChange={handleSelectionChange} placeholder="學年度" />
-                <select name="deptId" value={selection.deptId} onChange={handleSelectionChange}>
-                    {departments.map(d => (
-                        <option key={d.開課單位代碼} value={d.開課單位代碼}>
-                            {d.單位中文名稱} ({d.開課單位代碼})
-                        </option>
-                    ))}
-                </select>
-                <select name="classType" value={selection.classType} onChange={handleSelectionChange}>
-                    <option value="B">學士班</option>
-                    <option value="G">碩士班</option>
-                    <option value="P">博士班</option>
-                </select>
-            </div>
+            <h2>畢業學分進度追蹤器</h2>
             
-            {isLoading && <p>載入中...</p>}
-            {error && <p className="error-message">{error}</p>}
+            <div className="tracker-controls">
+                {/* 🔧 修復：移除學年度選單，只保留系所和班別 */}
+                <div className="control-group">
+                    <label>系所：</label>
+                    <select name="deptId" value={selection.deptId} onChange={handleSelectionChange}>
+                        {departments.map(dept => (
+                            <option key={dept.dept_id} value={dept.dept_id}>
+                                {dept.dept_cname}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                
+                <div className="control-group">
+                    <label>班別：</label>
+                    <select name="classType" value={selection.classType} onChange={handleSelectionChange}>
+                        <option value="B">學士班</option>
+                        <option value="M">碩士班</option>
+                        <option value="D">博士班</option>
+                    </select>
+                </div>
+            </div>
+
+            {isLoading && <div className="loading-message">載入中...</div>}
+            
+            {error && <div className="error-message">{error}</div>}
             
             {!isLoading && requiredCourses.length > 0 && (
                 <>
                     <div className="progress-section">
-                        <h3>進度總覽</h3>
+                        <h3>學分進度總覽</h3>
                         <div className="progress-bar-container">
-                            <div className="progress-bar" style={{ width: `${progress}%` }}>
-                                {progress > 10 ? `${Math.round(progress)}%` : ''}
+                            <div className="progress-bar" style={{width: `${Math.min(progress, 100)}%`}}>
+                                {Math.round(progress)}%
                             </div>
                         </div>
                         <p>已完成學分: {completedCredits} / 總必修學分: {totalCredits}</p>
                     </div>
+
                     <div className="courses-display">
                         <div className="course-column">
-                            <h3>未完成課程 ({uncompleted.length})</h3>
-                            <ul>{uncompleted.map(c => (<li key={c.course_id} onClick={() => toggleCourseStatus(c.course_id)}><span className="checkbox"></span>{c.course_cname} ({c.course_credit}學分)</li>))}</ul>
+                            <h3>未完成必修課程 ({uncompleted.length})</h3>
+                            <ul>
+                                {uncompleted.map(course => (
+                                    <li key={course.course_id} onClick={() => toggleCourseStatus(course.course_id)}>
+                                        <span className="checkbox">☐</span>
+                                        <div className="course-info">{course.course_cname}</div>
+                                        <span className="course-credit">{course.course_credit}學分</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
+                        
                         <div className="course-column">
-                            <h3>已完成課程 ({completed.length})</h3>
-                            <ul>{completed.map(c => (<li key={c.course_id} className="completed" onClick={() => toggleCourseStatus(c.course_id)}><span className="checkbox checked">✓</span>{c.course_cname} ({c.course_credit}學分)</li>))}</ul>
+                            <h3>已完成必修課程 ({completed.length})</h3>
+                            <ul>
+                                {completed.map(course => (
+                                    <li key={course.course_id} onClick={() => toggleCourseStatus(course.course_id)} className="completed">
+                                        <span className="checkbox checked">✓</span>
+                                        <div className="course-info">{course.course_cname}</div>
+                                        <span className="course-credit">{course.course_credit}學分</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 </>
             )}
-             {!isLoading && !error && requiredCourses.length === 0 && (
+            
+            {!isLoading && requiredCourses.length === 0 && !error && (
                 <p>找不到此條件下的必修課程資料。</p>
             )}
         </div>
