@@ -1,4 +1,4 @@
-// frontend/src/components/Navbar.jsx (新增更新日誌連結)
+// frontend/src/components/Navbar.jsx (語法修復版)
 import React, { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
@@ -59,7 +59,6 @@ const Navbar = () => {
         <NavLink to="/calendar" className={({ isActive }) => isActive ? 'active' : ''}>
           暨大行事曆
         </NavLink>
-        {/* 🎯 新增更新日誌連結 */}
         <NavLink to="/updates" className={({ isActive }) => isActive ? 'active' : ''}>
           更新日誌
         </NavLink>
@@ -67,12 +66,23 @@ const Navbar = () => {
 
       <div className="auth-section">
         {isLoading ? (
-          <div>載入中...</div>
+          <div className="loading-text">載入中...</div>
         ) : isLoggedIn && user ? (
-          <div className="user-info">
-            <img src={user.avatar_url} alt={user.full_name} className="user-avatar" />
-            <span>{user.full_name}</span>
-            <button onClick={logout} className="logout-btn">登出</button>
+          <div className="user-profile">
+            <img 
+              src={user.avatar_url} 
+              alt={user.full_name} 
+              className="avatar"
+              title={user.full_name}
+            />
+            <span className="user-name">{user.full_name}</span>
+            <button 
+              onClick={logout} 
+              className="logout-button"
+              title="登出"
+            >
+              登出
+            </button>
           </div>
         ) : (
           <GoogleLoginButton />
