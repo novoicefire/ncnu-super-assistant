@@ -1,4 +1,4 @@
-// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (僅移除學年度版)
+// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (支援國企系與觀餐系版)
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -37,17 +37,25 @@ const GraduationTracker = () => {
             setIsLoading(true);
             setError('');
             try {
-                // [保持原有邏輯] 直接讀取靜態的範例必修課 JSON 檔案
-                // 注意：這意味著無論使用者選擇哪個系，目前都只會顯示國企系的資料
-                // 這是因為我們只有這一個範例檔案
-                const response = await axios.get('/data/本學年某系所必修課資訊API(以國企系大學班為範例).json');
+                let response;
+                let isSupported = false;
                 
-                // 模擬 API 行為，檢查選擇是否符合範例檔
+                // 🎯 新增：支援國企系與觀餐系觀光組學士班
                 if (selection.deptId === '12' && selection.classType === 'B') {
+                    // 國企系學士班
+                    response = await axios.get('/data/本學年某系所必修課資訊API(以國企系大學班為範例).json');
+                    isSupported = true;
+                } else if (selection.deptId === '41' && selection.classType === 'B') {
+                    // 觀餐系觀光組學士班
+                    response = await axios.get('/data/本學年某系所必修課資訊API(以觀餐系觀光組大學班為範例).json');
+                    isSupported = true;
+                }
+                
+                if (isSupported && response) {
                     const courses = response.data?.course_require_ncnu?.item || [];
                     setRequiredCourses(courses.filter(c => c.course_id.trim() !== "必修課程"));
                 } else {
-                    setError('注意：目前範例資料庫僅支援顯示「國企系學士班」的必修課程。');
+                    setError('注意：目前範例資料庫僅支援顯示「國企系與觀餐系觀光組 學士班」的必修課程。');
                     setRequiredCourses([]);
                 }
             } catch (err) {
@@ -57,8 +65,9 @@ const GraduationTracker = () => {
                 setIsLoading(false);
             }
         };
-        fetchRequiredCourses();
 
+        fetchRequiredCourses();
+        
         // 🔧 修復：localStorage key 不再包含年度
         const key = `${selection.deptId}-${selection.classType}`;
         const saved = localStorage.getItem(key);
@@ -95,7 +104,7 @@ const GraduationTracker = () => {
         <div className="tracker-container">
             <h2>畢業學分進度追蹤器</h2>
             <div className="tracker-controls">
-                {/* 🔧 修復：移除學年度輸入格，只保留系所和班別選單 */}
+                {/* 🔧 修復：移除學年度選單，只保留系所和班別選單 */}
                 <div className="control-group">
                     <label>系所：</label>
                     <select name="deptId" value={selection.deptId} onChange={handleSelectionChange}>
