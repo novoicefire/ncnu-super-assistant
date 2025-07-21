@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (修復課程熱度顯示版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (動態按鈕版)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
@@ -13,7 +13,7 @@ const CoursePlanner = () => {
     const [schedule, setSchedule] = useState({});
     const [totalCredits, setTotalCredits] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    const [saveStatus, setSaveStatus] = useState("idle"); // idle, saving, success, error
+    const [saveStatus, setSaveStatus] = useState("idle");
     const [filters, setFilters] = useState({
         courseName: '',
         teacher: '',
@@ -70,7 +70,6 @@ const CoursePlanner = () => {
         if (filters.teacher) result = result.filter(c => c.teacher.toLowerCase().includes(filters.teacher.toLowerCase()));
         if (filters.department) result = result.filter(c => c.department === filters.department);
         if (filters.division) {
-            // 🔧 修復：移除通識的特殊處理，統一使用 division 篩選
             result = result.filter(c => c.division === filters.division);
         }
         setFilteredCourses(result);
@@ -81,7 +80,6 @@ const CoursePlanner = () => {
         return [...new Set(staticCourses.map(c => c.department).filter(Boolean))].sort();
     }, [staticCourses]);
 
-    // 🔧 修復：生成班別選單選項，排除「通識」
     const uniqueDivisions = useMemo(() => {
         if (staticCourses.length === 0) return [];
         return [...new Set(staticCourses.map(c => c.division).filter(division => division && division !== '通識'))].sort();
@@ -152,6 +150,25 @@ const CoursePlanner = () => {
             }
         });
         saveSchedule(newSchedule);
+    };
+
+    // 🎯 新增：檢查課程是否已在課表中
+    const isCourseInSchedule = (course) => {
+        const slots = parseTimeSlots(course.time);
+        return slots.some(slot => 
+            schedule[slot] && 
+            schedule[slot].course_id === course.course_id && 
+            schedule[slot].time === course.time
+        );
+    };
+
+    // 🎯 新增：統一的按鈕點擊處理
+    const handleCourseToggle = (course) => {
+        if (isCourseInSchedule(course)) {
+            removeFromSchedule(course.course_id, course.time);
+        } else {
+            addToSchedule(course);
+        }
     };
 
     const handleFilterChange = (e) => setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -230,7 +247,6 @@ const CoursePlanner = () => {
                                     <li key={index}>
                                         <div className="course-info">
                                             <strong>{course.course_cname}</strong>
-                                            {/* 🔧 修復：正確的課程熱度顯示邏輯 */}
                                             <span className="hotness-indicator">
                                                 🔥 {hotnessData.hasOwnProperty(course.course_id) 
                                                     ? hotnessData[course.course_id] 
@@ -241,7 +257,14 @@ const CoursePlanner = () => {
                                                 {course.division} | {course.course_credit}學分 | {course.time}
                                             </small>
                                         </div>
-                                        <button onClick={() => addToSchedule(course)}>➕</button>
+                                        {/* 🎯 新增：動態切換按鈕 */}
+                                        <button 
+                                            className={`course-toggle-btn ${isCourseInSchedule(course) ? 'remove' : 'add'}`}
+                                            onClick={() => handleCourseToggle(course)}
+                                            title={isCourseInSchedule(course) ? '從課表移除' : '加入課表'}
+                                        >
+                                            {isCourseInSchedule(course) ? '−' : '+'}
+                                        </button>
                                     </li>
                                 ))}
                             </ul>

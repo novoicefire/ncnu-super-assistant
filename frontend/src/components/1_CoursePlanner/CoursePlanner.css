@@ -1,4 +1,4 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (寬度修復版) */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (動態按鈕版) */
 
 .course-planner {
     display: flex;
@@ -109,7 +109,7 @@
     /* 🔧 修復：課程資訊區域的文字換行 */
     word-wrap: break-word;
     overflow-wrap: break-word;
-    max-width: calc(100% - 120px); /* 為按鈕留出空間 */
+    max-width: calc(100% - 60px); /* 🎯 為新按鈕調整空間 */
 }
 
 .course-info small {
@@ -132,11 +132,51 @@
     margin-left: 10px;
 }
 
-.course-list button {
-    padding: 5px 10px;
-    font-size: 1rem;
-    margin-left: 1rem;
+/* 🎯 新增：動態課程按鈕樣式 */
+.course-toggle-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
     flex-shrink: 0;
+    margin-left: 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 🎯 加入課表按鈕（綠色 + 白色加號） */
+.course-toggle-btn.add {
+    background-color: #28a745;
+}
+
+.course-toggle-btn.add:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* 🎯 移除課表按鈕（紅色 + 白色減號） */
+.course-toggle-btn.remove {
+    background-color: #dc3545;
+}
+
+.course-toggle-btn.remove:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* 🎯 按鈕活躍狀態 */
+.course-toggle-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .schedule-container {
@@ -235,5 +275,17 @@
     
     .course-cell {
         line-height: 1.2;
+    }
+    
+    /* 🎯 手機版按鈕調整 */
+    .course-toggle-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        margin-left: 0.5rem;
+    }
+    
+    .course-info {
+        max-width: calc(100% - 50px);
     }
 }
