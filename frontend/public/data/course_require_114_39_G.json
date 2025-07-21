@@ -1,0 +1,54 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 5 門課程",
+        "course_credit": "15.0"
+      },
+      {
+        "year": "114",
+        "department": "非營利組織專班",
+        "class": "碩士班",
+        "course_id": "395001",
+        "course_cname": "非營利組織專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "非營利組織專班",
+        "class": "碩士班",
+        "course_id": "395009",
+        "course_cname": "論文寫作專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "非營利組織專班",
+        "class": "碩士班",
+        "course_id": "395022",
+        "course_cname": "社會研究法專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "非營利組織專班",
+        "class": "碩士班",
+        "course_id": "395023",
+        "course_cname": "非營利組織管理專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "非營利組織專班",
+        "class": "碩士班",
+        "course_id": "395050",
+        "course_cname": "非營利組織實務：機構參訪與學術研討",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

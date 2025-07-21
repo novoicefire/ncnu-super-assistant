@@ -1,0 +1,78 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 8 門課程",
+        "course_credit": "20.0"
+      },
+      {
+        "year": "114",
+        "department": "教院學士班",
+        "class": "學士班",
+        "course_id": "530001",
+        "course_cname": "教育行腳",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "教院學士班",
+        "class": "學士班",
+        "course_id": "530002",
+        "course_cname": "教育基礎理論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教院學士班",
+        "class": "學士班",
+        "course_id": "530003",
+        "course_cname": "社會創新導論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教院學士班",
+        "class": "學士班",
+        "course_id": "530008",
+        "course_cname": "校準課程",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "教院學士班",
+        "class": "學士班",
+        "course_id": "530017",
+        "course_cname": "書報寫作",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "教院學士班",
+        "class": "學士班",
+        "course_id": "530024",
+        "course_cname": "文教經營專題企劃",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教院學士班",
+        "class": "學士班",
+        "course_id": "530028",
+        "course_cname": "教育的社會實踐專題實作(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "教院學士班",
+        "class": "學士班",
+        "course_id": "530029",
+        "course_cname": "教育的社會實踐專題實作(下)",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "博士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 8 門課程",
+        "course_credit": "8.0"
+      },
+      {
+        "year": "114",
+        "department": "精準農博",
+        "class": "博士班",
+        "course_id": "619001",
+        "course_cname": "專題研究（一）",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "精準農博",
+        "class": "博士班",
+        "course_id": "619002",
+        "course_cname": "專題研究（三）",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "精準農博",
+        "class": "博士班",
+        "course_id": "619004",
+        "course_cname": "專題研究(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "精準農博",
+        "class": "博士班",
+        "course_id": "619005",
+        "course_cname": "專題研究(四)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "精準農博",
+        "class": "博士班",
+        "course_id": "619006",
+        "course_cname": "專題討論(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "精準農博",
+        "class": "博士班",
+        "course_id": "619007",
+        "course_cname": "專題討論（二）",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "精準農博",
+        "class": "博士班",
+        "course_id": "619008",
+        "course_cname": "專題討論（三）",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "精準農博",
+        "class": "博士班",
+        "course_id": "619009",
+        "course_cname": "專題討論（四）",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

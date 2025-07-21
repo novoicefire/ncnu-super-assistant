@@ -1,4 +1,4 @@
-// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (全校系所支援版)
+// frontend/src/components/2_GraduationTracker/GraduationTracker.jsx (爬蟲適配版)
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -21,17 +21,9 @@ const GraduationTracker = () => {
         return saved ? JSON.parse(saved) : {};
     });
 
-    // 🎯 新增：支援的系所資料對應表
-    const SUPPORTED_DEPARTMENTS = {
-        '12-B': {
-            file: '/data/本學年某系所必修課資訊API(以國企系大學班為範例).json',
-            name: '國際企業學系學士班'
-        },
-        '41-B': {
-            file: '/data/本學年某系所必修課資訊API(以觀餐系觀光組大學班為範例).json',
-            name: '觀光休閒與餐旅管理學系觀光組學士班'
-        }
-        // 🔄 未來可在此處新增更多系所資料檔案
+    // 🎯 新增：動態生成檔案路徑的函數
+    const generateFilePath = (deptId, classType, year = '114') => {
+        return `/data/course_require_${year}_${deptId}_${classType}.json`;
     };
 
     useEffect(() => {
@@ -48,36 +40,45 @@ const GraduationTracker = () => {
             setError('');
             
             try {
-                const key = `${selection.deptId}-${selection.classType}`;
-                const supportedDept = SUPPORTED_DEPARTMENTS[key];
+                // 🎯 動態生成檔案路徑
+                const filePath = generateFilePath(selection.deptId, selection.classType);
                 
-                if (supportedDept) {
-                    // 🎯 有資料的系所：正常載入必修課程
-                    const response = await axios.get(supportedDept.file);
-                    const courses = response.data?.course_require_ncnu?.item || [];
+                const response = await axios.get(filePath);
+                const courses = response.data?.course_require_ncnu?.item || [];
+                
+                if (courses.length > 0) {
+                    // 🎯 有資料：正常顯示課程
                     setRequiredCourses(courses.filter(c => c.course_id.trim() !== "必修課程"));
                     setError(''); // 清除錯誤訊息
                 } else {
-                    // 🎯 無資料的系所：顯示友善提示
+                    // 🎯 空資料：顯示無課程提示
                     const selectedDept = departments.find(d => d.開課單位代碼 === selection.deptId);
                     const deptName = selectedDept ? selectedDept.單位中文名稱 : '所選系所';
                     const classTypeName = getClassTypeName(selection.classType);
                     
                     setRequiredCourses([]);
-                    setError(`
-                        📋 ${deptName}${classTypeName}的必修課程資料準備中
-                        
-                        ✅ 目前已開放查詢：
-                        • 國際企業學系 學士班
-                        • 觀光休閒與餐旅管理學系 學士班
-                        
-                        📩 如需其他系所資料，歡迎聯繫系統管理員
-                    `);
+                    setError(`📋 ${deptName}${classTypeName}目前無必修課程資料或該班別未開設課程`);
                 }
+                
             } catch (err) {
+                // 🎯 檔案不存在或載入失敗
                 console.error('Failed to load required courses:', err);
-                setError('⚠️ 載入必修課程資料時發生錯誤，請稍後再試。');
+                
+                const selectedDept = departments.find(d => d.開課單位代碼 === selection.deptId);
+                const deptName = selectedDept ? selectedDept.單位中文名稱 : '所選系所';
+                const classTypeName = getClassTypeName(selection.classType);
+                
                 setRequiredCourses([]);
+                setError(`
+                    📋 ${deptName}${classTypeName}的必修課程資料暫時無法載入
+                    
+                    可能原因：
+                    • 該系所班別尚未建立必修課程資料
+                    • 網路連線問題
+                    • 資料檔案正在更新中
+                    
+                    📩 如持續無法載入，請聯繫系統管理員
+                `);
             } finally {
                 setIsLoading(false);
             }
@@ -98,7 +99,7 @@ const GraduationTracker = () => {
         localStorage.setItem(key, JSON.stringify(completedCourses));
     }, [completedCourses, selection]);
 
-    // 🎯 新增：班別名稱對應函數
+    // 🎯 班別名稱對應函數
     const getClassTypeName = (classType) => {
         const classTypes = {
             'B': '學士班',
@@ -128,10 +129,6 @@ const GraduationTracker = () => {
     const completedCredits = completed.reduce((sum, c) => sum + parseFloat(c.course_credit || 0), 0);
     const progress = totalCredits > 0 ? (completedCredits / totalCredits) * 100 : 0;
 
-    // 🎯 檢查當前選擇是否有資料
-    const currentKey = `${selection.deptId}-${selection.classType}`;
-    const hasData = SUPPORTED_DEPARTMENTS[currentKey];
-
     return (
         <div className="tracker-container">
             <h2>畢業學分進度追蹤器</h2>
@@ -155,18 +152,11 @@ const GraduationTracker = () => {
                     </select>
                 </div>
             </div>
-
-            {/* 🎯 狀態指示器 */}
-            {hasData && (
-                <div className="data-status-success">
-                    ✅ 此系所班別已有完整必修課程資料
-                </div>
-            )}
             
             {isLoading && <div className="loading-message">載入中...</div>}
             
             {error && (
-                <div className={`error-message ${hasData ? 'error-info' : 'error-notice'}`}>
+                <div className="error-message">
                     {error.split('\n').map((line, index) => (
                         <div key={index}>{line}</div>
                     ))}

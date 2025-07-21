@@ -1,0 +1,134 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 15 門課程",
+        "course_credit": "45.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130003",
+        "course_cname": "程式設計(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130008",
+        "course_cname": "計算機概論(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130014",
+        "course_cname": "程式設計(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130021",
+        "course_cname": "資料結構與演算法(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130027",
+        "course_cname": "系統分析與設計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130030",
+        "course_cname": "管理資訊系統",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130032",
+        "course_cname": "資料庫管理系統",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130039",
+        "course_cname": "企業資訊通訊與網路",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130041",
+        "course_cname": "資訊管理專題與個案(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130044",
+        "course_cname": "資訊管理專題與個案(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130063",
+        "course_cname": "經濟學與實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130065",
+        "course_cname": "微積分與實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "130066",
+        "course_cname": "統計學與實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "C20005",
+        "course_cname": "會計學及實習(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "資管系",
+        "class": "學士班",
+        "course_id": "C20006",
+        "course_cname": "管理學",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

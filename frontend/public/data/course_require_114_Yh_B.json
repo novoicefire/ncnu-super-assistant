@@ -1,0 +1,30 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 2 門課程",
+        "course_credit": "6.0"
+      },
+      {
+        "year": "114",
+        "department": "3D人才養成學程",
+        "class": "學士班",
+        "course_id": "135131",
+        "course_cname": "微創新與應用",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "3D人才養成學程",
+        "class": "學士班",
+        "course_id": "135132",
+        "course_cname": "3D數位內容與應用",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

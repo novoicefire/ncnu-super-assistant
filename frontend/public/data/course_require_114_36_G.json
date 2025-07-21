@@ -1,0 +1,46 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 4 門課程",
+        "course_credit": "13.0"
+      },
+      {
+        "year": "114",
+        "department": "終身學習專班",
+        "class": "碩士班",
+        "course_id": "365001",
+        "course_cname": "終身學習理論與實務研究",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "終身學習專班",
+        "class": "碩士班",
+        "course_id": "365002",
+        "course_cname": "研究方法學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "終身學習專班",
+        "class": "碩士班",
+        "course_id": "365003",
+        "course_cname": "人力資源發展研究",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "終身學習專班",
+        "class": "碩士班",
+        "course_id": "365017",
+        "course_cname": "碩士論文",
+        "course_credit": "4.0"
+      }
+    ]
+  }
+}

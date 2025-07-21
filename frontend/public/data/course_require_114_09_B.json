@@ -1,0 +1,118 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 13 門課程",
+        "course_credit": "39.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000001",
+        "course_cname": "普通心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000004",
+        "course_cname": "終身學習理論與實務",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000006",
+        "course_cname": "心理與教育統計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000009",
+        "course_cname": "人力資源發展理論與實務",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000020",
+        "course_cname": "人力資源管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000026",
+        "course_cname": "社會科學研究法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000032",
+        "course_cname": "組織學習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000039",
+        "course_cname": "訓練發展",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000059",
+        "course_cname": "方案規劃與評鑑",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000060",
+        "course_cname": "終身學習與人力資源發展專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000077",
+        "course_cname": "終身學習與人力資源發展實習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000086",
+        "course_cname": "組織理論與管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "學士班",
+        "course_id": "000089",
+        "course_cname": "成人與高齡學習",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

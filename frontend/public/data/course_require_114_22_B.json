@@ -1,0 +1,238 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 28 門課程",
+        "course_credit": "73.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220017",
+        "course_cname": "工程數學(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220019",
+        "course_cname": "材料力學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220027",
+        "course_cname": "工程數學(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220029",
+        "course_cname": "結構學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220030",
+        "course_cname": "流體力學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220033",
+        "course_cname": "靜力學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220036",
+        "course_cname": "土壤力學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220037",
+        "course_cname": "水文學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220038",
+        "course_cname": "鋼筋混凝土學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220041",
+        "course_cname": "土木工程實驗(一)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220049",
+        "course_cname": "計算機程式",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220053",
+        "course_cname": "水利工程",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220067",
+        "course_cname": "普通物理實驗",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220078",
+        "course_cname": "工程圖學",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220079",
+        "course_cname": "土木工程實驗(二)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220084",
+        "course_cname": "運輸工程",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220085",
+        "course_cname": "工程材料",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220087",
+        "course_cname": "基礎工程",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220090",
+        "course_cname": "水處理工程",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220099",
+        "course_cname": "環境工程",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220108",
+        "course_cname": "微積分(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220109",
+        "course_cname": "測量學",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220110",
+        "course_cname": "測量實習",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220112",
+        "course_cname": "微積分(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220113",
+        "course_cname": "機率與統計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220141",
+        "course_cname": "土木工程概論",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220142",
+        "course_cname": "普通物理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "土木系",
+        "class": "學士班",
+        "course_id": "220145",
+        "course_cname": "土木工程設計實作",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 6 門課程",
+        "course_credit": "18.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "碩士班",
+        "course_id": "145003",
+        "course_cname": "投資學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "碩士班",
+        "course_id": "145005",
+        "course_cname": "財務理論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "碩士班",
+        "course_id": "145009",
+        "course_cname": "國際財務管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "碩士班",
+        "course_id": "145017",
+        "course_cname": "金融機構管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "碩士班",
+        "course_id": "145043",
+        "course_cname": "財金計量方法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "財金系",
+        "class": "碩士班",
+        "course_id": "145054",
+        "course_cname": "期貨與選擇權",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

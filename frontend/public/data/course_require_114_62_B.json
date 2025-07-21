@@ -1,0 +1,54 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 5 門課程",
+        "course_credit": "13.0"
+      },
+      {
+        "year": "114",
+        "department": "高齡長照專班",
+        "class": "學士班",
+        "course_id": "620001",
+        "course_cname": "文化敏感度課程- 原鄉照顧與老人健康基礎實務",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "高齡長照專班",
+        "class": "學士班",
+        "course_id": "620002",
+        "course_cname": "老人學導論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "高齡長照專班",
+        "class": "學士班",
+        "course_id": "620003",
+        "course_cname": "長期照顧概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "高齡長照專班",
+        "class": "學士班",
+        "course_id": "620004",
+        "course_cname": "社會學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "高齡長照專班",
+        "class": "學士班",
+        "course_id": "620005",
+        "course_cname": "社會工作概論",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

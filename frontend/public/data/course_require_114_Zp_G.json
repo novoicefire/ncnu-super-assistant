@@ -1,0 +1,30 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 2 門課程",
+        "course_credit": "6.0"
+      },
+      {
+        "year": "114",
+        "department": "醫學科技學分學程",
+        "class": "碩士班",
+        "course_id": "219117",
+        "course_cname": "英文寫作,口說,簡報(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "醫學科技學分學程",
+        "class": "碩士班",
+        "course_id": "245045",
+        "course_cname": "醫學工程與生物科技導論",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

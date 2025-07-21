@@ -1,0 +1,54 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 5 門課程",
+        "course_credit": "11.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "碩士班",
+        "course_id": "085227",
+        "course_cname": "當代東南亞發展議題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "碩士班",
+        "course_id": "325036",
+        "course_cname": "文化人類學專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "碩士班",
+        "course_id": "325038",
+        "course_cname": "專題研討",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "碩士班",
+        "course_id": "325042",
+        "course_cname": "田野工作與實習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "碩士班",
+        "course_id": "325044",
+        "course_cname": "專題研討2",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

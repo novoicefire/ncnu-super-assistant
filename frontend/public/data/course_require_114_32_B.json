@@ -1,0 +1,142 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 16 門課程",
+        "course_credit": "39.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080007",
+        "course_cname": "人類學概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080008",
+        "course_cname": "東南亞區域概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080015",
+        "course_cname": "書報討論(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080018",
+        "course_cname": "文化人類學導論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080021",
+        "course_cname": "書報討論（二）",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080024",
+        "course_cname": "考古學導論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080025",
+        "course_cname": "初級泰語（下）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080026",
+        "course_cname": "初級越南語（下）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080027",
+        "course_cname": "初級印尼語（下）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080028",
+        "course_cname": "初級緬甸語（下）",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080030",
+        "course_cname": "社會科學導論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080035",
+        "course_cname": "質性研究方法",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080040",
+        "course_cname": "書報討論(三)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080138",
+        "course_cname": "東南亞區域發展(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080152",
+        "course_cname": "東南亞區域發展(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系人類學",
+        "class": "學士班",
+        "course_id": "080161",
+        "course_cname": "研究設計與方法",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

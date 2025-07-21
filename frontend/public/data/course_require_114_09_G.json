@@ -1,0 +1,54 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 5 門課程",
+        "course_credit": "12.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "碩士班",
+        "course_id": "095001",
+        "course_cname": "成人教育學研究",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "碩士班",
+        "course_id": "095072",
+        "course_cname": "教育統計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "碩士班",
+        "course_id": "095112",
+        "course_cname": "終身學習與人力資源創新議題研究",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "碩士班",
+        "course_id": "095119",
+        "course_cname": "研究方法學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系終身學習與人力資源",
+        "class": "碩士班",
+        "course_id": "095134",
+        "course_cname": "終身學習與人力資源發展專題研究",
+        "course_credit": "2.0"
+      }
+    ]
+  }
+}

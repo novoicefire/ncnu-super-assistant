@@ -1,0 +1,38 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 3 門課程",
+        "course_credit": "6.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系",
+        "class": "學士班",
+        "course_id": "080347",
+        "course_cname": "東南亞區域發展",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系",
+        "class": "學士班",
+        "course_id": "080348",
+        "course_cname": "人文社會科學導論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "東南亞系",
+        "class": "學士班",
+        "course_id": "080349",
+        "course_cname": "東南亞綜合能力養成",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

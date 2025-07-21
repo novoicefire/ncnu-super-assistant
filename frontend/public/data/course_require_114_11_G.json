@@ -1,0 +1,94 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 10 門課程",
+        "course_credit": "22.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115000",
+        "course_cname": "總體經濟理論(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115001",
+        "course_cname": "計量經濟理論(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115002",
+        "course_cname": "個體經濟理論(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115003",
+        "course_cname": "論文研討會(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115004",
+        "course_cname": "論文研討會(三)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115020",
+        "course_cname": "應用計量經濟理論(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115023",
+        "course_cname": "總體經濟理論(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115024",
+        "course_cname": "論文研討會(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115027",
+        "course_cname": "個體經濟理論(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "碩士班",
+        "course_id": "115029",
+        "course_cname": "論文研討會(四)",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

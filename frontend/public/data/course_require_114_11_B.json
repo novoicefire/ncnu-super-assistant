@@ -1,0 +1,190 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 22 門課程",
+        "course_credit": "62.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110001",
+        "course_cname": "微積分及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110002",
+        "course_cname": "經濟學及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110011",
+        "course_cname": "經濟學及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110012",
+        "course_cname": "微積分及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110013",
+        "course_cname": "會計學及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110017",
+        "course_cname": "統計學及實習(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110024",
+        "course_cname": "統計學及實習(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110043",
+        "course_cname": "國際貿易",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110087",
+        "course_cname": "總體經濟學(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110088",
+        "course_cname": "個體經濟學(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110092",
+        "course_cname": "總體經濟學(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110093",
+        "course_cname": "個體經濟學(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110104",
+        "course_cname": "國際金融",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110174",
+        "course_cname": "計量經濟學(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110175",
+        "course_cname": "計量經濟學(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110184",
+        "course_cname": "程式設計(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110185",
+        "course_cname": "貨幣銀行學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110186",
+        "course_cname": "財政學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110187",
+        "course_cname": "經濟專題一",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "110188",
+        "course_cname": "經濟專題二",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "C20005",
+        "course_cname": "會計學及實習(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "經濟系",
+        "class": "學士班",
+        "course_id": "C20006",
+        "course_cname": "管理學",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

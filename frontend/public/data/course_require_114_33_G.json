@@ -1,0 +1,78 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 8 門課程",
+        "course_credit": "19.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系輔諮新加坡專班",
+        "class": "碩士班",
+        "course_id": "335001",
+        "course_cname": "諮商理論與技術",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系輔諮新加坡專班",
+        "class": "碩士班",
+        "course_id": "335002",
+        "course_cname": "社區諮商理論與實務",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系輔諮新加坡專班",
+        "class": "碩士班",
+        "course_id": "335004",
+        "course_cname": "輔導的社會學基礎",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系輔諮新加坡專班",
+        "class": "碩士班",
+        "course_id": "335006",
+        "course_cname": "諮商實務",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系輔諮新加坡專班",
+        "class": "碩士班",
+        "course_id": "335007",
+        "course_cname": "輔導研究法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系輔諮新加坡專班",
+        "class": "碩士班",
+        "course_id": "335011",
+        "course_cname": "社區諮商實習",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系輔諮新加坡專班",
+        "class": "碩士班",
+        "course_id": "335018",
+        "course_cname": "心理衡鑑",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "諮人系輔諮新加坡專班",
+        "class": "碩士班",
+        "course_id": "335019",
+        "course_cname": "論文",
+        "course_credit": "0.0"
+      }
+    ]
+  }
+}

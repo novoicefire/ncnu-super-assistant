@@ -1,0 +1,102 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 11 門課程",
+        "course_credit": "22.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020002",
+        "course_cname": "教育概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020011",
+        "course_cname": "教育統計(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020012",
+        "course_cname": "比較教育導論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020030",
+        "course_cname": "教育統計(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020108",
+        "course_cname": "文化概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020160",
+        "course_cname": "文教事業概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020186",
+        "course_cname": "社會科學研究法",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020187",
+        "course_cname": "專業英文(一)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020188",
+        "course_cname": "專業英文(二)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020254",
+        "course_cname": "文教事業生涯規劃(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "國比系",
+        "class": "學士班",
+        "course_id": "020255",
+        "course_cname": "文教事業生涯規劃(下)",
+        "course_credit": "2.0"
+      }
+    ]
+  }
+}

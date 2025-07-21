@@ -1,0 +1,62 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 6 門課程",
+        "course_credit": "4.0"
+      },
+      {
+        "year": "114",
+        "department": "電機通訊所",
+        "class": "碩士班",
+        "course_id": "235001",
+        "course_cname": "專題研究(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "電機通訊所",
+        "class": "碩士班",
+        "course_id": "235002",
+        "course_cname": "專題討論(一)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "電機通訊所",
+        "class": "碩士班",
+        "course_id": "235025",
+        "course_cname": "專題研究(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "電機通訊所",
+        "class": "碩士班",
+        "course_id": "235026",
+        "course_cname": "專題討論(二)",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "電機通訊所",
+        "class": "碩士班",
+        "course_id": "235074",
+        "course_cname": "專題討論(三)",
+        "course_credit": "0.0"
+      },
+      {
+        "year": "114",
+        "department": "電機通訊所",
+        "class": "碩士班",
+        "course_id": "235075",
+        "course_cname": "專題討論(四)",
+        "course_credit": "0.0"
+      }
+    ]
+  }
+}

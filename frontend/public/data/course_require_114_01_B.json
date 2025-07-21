@@ -1,0 +1,166 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 19 門課程",
+        "course_credit": "45.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010004",
+        "course_cname": "文學概論(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010010",
+        "course_cname": "中國語文通論(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010016",
+        "course_cname": "中國語文通論(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010017",
+        "course_cname": "文學概論(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010064",
+        "course_cname": "中國思想史(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010092",
+        "course_cname": "中國思想史(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010146",
+        "course_cname": "文學理論與批評(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010147",
+        "course_cname": "中國傳統文獻概論(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010150",
+        "course_cname": "文字學(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010156",
+        "course_cname": "中國傳統文獻概論(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010160",
+        "course_cname": "文字學(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010163",
+        "course_cname": "文學理論與批評(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010422",
+        "course_cname": "訓詁學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010463",
+        "course_cname": "數位多媒體設計與應用",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010466",
+        "course_cname": "中國文學史(上)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010467",
+        "course_cname": "中國文學史(下)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010476",
+        "course_cname": "畢業製作(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010478",
+        "course_cname": "畢業製作(下)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "學士班",
+        "course_id": "010483",
+        "course_cname": "聲韻學",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

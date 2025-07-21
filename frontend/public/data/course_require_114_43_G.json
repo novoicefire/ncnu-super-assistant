@@ -1,0 +1,78 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 8 門課程",
+        "course_credit": "18.0"
+      },
+      {
+        "year": "114",
+        "department": "兩岸高階主管班",
+        "class": "碩士班",
+        "course_id": "435011",
+        "course_cname": "組織行為與管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "兩岸高階主管班",
+        "class": "碩士班",
+        "course_id": "435014",
+        "course_cname": "企業經營講座",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "兩岸高階主管班",
+        "class": "碩士班",
+        "course_id": "435018",
+        "course_cname": "財務報表分析",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "兩岸高階主管班",
+        "class": "碩士班",
+        "course_id": "435019",
+        "course_cname": "論文寫作(一)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "兩岸高階主管班",
+        "class": "碩士班",
+        "course_id": "435022",
+        "course_cname": "論文寫作(二)",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "兩岸高階主管班",
+        "class": "碩士班",
+        "course_id": "435025",
+        "course_cname": "企業社會責任",
+        "course_credit": "1.0"
+      },
+      {
+        "year": "114",
+        "department": "兩岸高階主管班",
+        "class": "碩士班",
+        "course_id": "435026",
+        "course_cname": "國際金融市場分析",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "兩岸高階主管班",
+        "class": "碩士班",
+        "course_id": "435027",
+        "course_cname": "領導統御與團體知能",
+        "course_credit": "1.0"
+      }
+    ]
+  }
+}

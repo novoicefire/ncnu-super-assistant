@@ -1,0 +1,182 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 21 門課程",
+        "course_credit": "60.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370001",
+        "course_cname": "人類行為與社會環境",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370002",
+        "course_cname": "心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370003",
+        "course_cname": "社會工作概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370004",
+        "course_cname": "社會工作研究法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370005",
+        "course_cname": "社會學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370006",
+        "course_cname": "社會工作專業英文",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370007",
+        "course_cname": "社會工作實習：機構訪視與講演",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370008",
+        "course_cname": "社區工作",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370009",
+        "course_cname": "社會統計",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370010",
+        "course_cname": "社會個案工作",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370011",
+        "course_cname": "社會團體工作",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370012",
+        "course_cname": "社會心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370013",
+        "course_cname": "多元文化與社會工作",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370014",
+        "course_cname": "社會工作倫理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370016",
+        "course_cname": "會談技巧",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370017",
+        "course_cname": "社會福利行政",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370019",
+        "course_cname": "方案設計與評估",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370020",
+        "course_cname": "社會工作實習：機構實地實習",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370021",
+        "course_cname": "社會政策與社會立法",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370022",
+        "course_cname": "社會工作管理",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "社工系二年制專班",
+        "class": "學士班",
+        "course_id": "370023",
+        "course_cname": "社會工作實習：方案規劃與執行",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

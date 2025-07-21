@@ -1,0 +1,46 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 4 門課程",
+        "course_credit": "8.0"
+      },
+      {
+        "year": "114",
+        "department": "通訊與多媒體就業學程",
+        "class": "學士班",
+        "course_id": "210121",
+        "course_cname": "專題（一）",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "通訊與多媒體就業學程",
+        "class": "學士班",
+        "course_id": "210122",
+        "course_cname": "專題(二)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "通訊與多媒體就業學程",
+        "class": "學士班",
+        "course_id": "230052",
+        "course_cname": "專題(上)",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "通訊與多媒體就業學程",
+        "class": "學士班",
+        "course_id": "230053",
+        "course_cname": "專題(下)",
+        "course_credit": "2.0"
+      }
+    ]
+  }
+}

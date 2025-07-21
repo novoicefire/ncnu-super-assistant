@@ -1,0 +1,94 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "學士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 10 門課程",
+        "course_credit": "28.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460002",
+        "course_cname": "社會工作概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460003",
+        "course_cname": "台灣原住民史",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460004",
+        "course_cname": "觀光概論",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460013",
+        "course_cname": "心理學",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460015",
+        "course_cname": "原鄉發展與實務規劃",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460019",
+        "course_cname": "當代原住民議題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460023",
+        "course_cname": "社區工作",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460095",
+        "course_cname": "人類學概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460110",
+        "course_cname": "台灣原住民族文化概論",
+        "course_credit": "2.0"
+      },
+      {
+        "year": "114",
+        "department": "原住民文化與社工學士專班",
+        "class": "學士班",
+        "course_id": "460149",
+        "course_cname": "文化創意產業概論",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

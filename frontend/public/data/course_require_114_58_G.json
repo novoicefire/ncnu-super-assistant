@@ -1,0 +1,38 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 3 門課程",
+        "course_credit": "9.0"
+      },
+      {
+        "year": "114",
+        "department": "地方創生學程",
+        "class": "碩士班",
+        "course_id": "585000",
+        "course_cname": "地方創生與跨域治理專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "地方創生學程",
+        "class": "碩士班",
+        "course_id": "585003",
+        "course_cname": "社會實踐研究方法專題",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "地方創生學程",
+        "class": "碩士班",
+        "course_id": "585010",
+        "course_cname": "論文寫作專題",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}

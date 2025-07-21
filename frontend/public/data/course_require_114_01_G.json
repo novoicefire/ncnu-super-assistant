@@ -1,0 +1,22 @@
+{
+  "course_require_ncnu": {
+    "item": [
+      {
+        "year": "114",
+        "department": "",
+        "class": "碩士班",
+        "course_id": " 必修課程",
+        "course_cname": "合計: 1 門課程",
+        "course_credit": "3.0"
+      },
+      {
+        "year": "114",
+        "department": "中文系",
+        "class": "碩士班",
+        "course_id": "015199",
+        "course_cname": "研究方法",
+        "course_credit": "3.0"
+      }
+    ]
+  }
+}
