@@ -1,102 +1,273 @@
-/* UniversityCalendar.css - 全新列表樣式 */
+/* frontend/src/components/4_UniversityCalendar/UniversityCalendar.css (現代化版) */
 
 .calendar-container {
-    padding: 2rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: 2rem auto;
-    height: 80vh; /* 給定一個高度，讓列表可以滾動 */
-    display: flex;
-    flex-direction: column;
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, #f9f9f9, #e8f5e8);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 900px;
+  margin: var(--spacing-xl) auto;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.calendar-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  opacity: 0.05;
+  border-radius: 50%;
+  z-index: 0;
 }
 
 .calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 3px solid var(--primary-ultra-light);
+  position: relative;
+  z-index: 1;
 }
 
 .calendar-header h2 {
-    margin: 0;
-    color: #333;
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: 2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.calendar-header h2::before {
+  content: '📅';
+  font-size: 1.5rem;
 }
 
 .go-to-today-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: var(--text-white);
+  border: none;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .go-to-today-btn:hover {
-    background-color: #0056b3;
+  background: linear-gradient(135deg, var(--primary-dark), #003d32);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.go-to-today-btn:active {
+  transform: translateY(0);
 }
 
 .events-list-container {
-    overflow-y: auto; /* 這是讓列表可以上下滾動的關鍵 */
-    padding-right: 1rem; /* 留出滾動條的空間，避免內容遮擋 */
-    flex-grow: 1; /* 讓列表填滿剩餘空間 */
+  overflow-y: auto;
+  padding-right: var(--spacing-md);
+  flex-grow: 1;
+  position: relative;
+  z-index: 1;
 }
 
+/* 🎨 現代化事件項目設計 */
 .event-item {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-left: 5px solid #ccc; /* 預設的左側邊框 */
-    border-radius: 5px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    transition: box-shadow 0.2s, transform 0.2s;
+  background: var(--background-card);
+  border: 2px solid rgba(0, 121, 107, 0.1);
+  border-left: 6px solid var(--text-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.event-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  transition: width var(--transition-normal);
 }
 
 .event-item:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
 }
 
-/* --- 新增點：這是今日事件的特殊樣式 --- */
+.event-item:hover::before {
+  width: 8px;
+}
+
+/* 🎯 今日事件特殊樣式 */
 .event-item.today-marker {
-    border-left: 5px solid #007bff; /* 用醒目的藍色來標示 */
-    background-color: #f0f8ff; /* 給予淡淡的背景色 */
+  border-left: 6px solid var(--primary-color);
+  background: linear-gradient(135deg, var(--background-card), var(--primary-ultra-light));
+  box-shadow: var(--shadow-md);
+}
+
+.event-item.today-marker::before {
+  background: linear-gradient(135deg, var(--accent-success), var(--primary-color));
+  width: 8px;
+}
+
+.event-item.today-marker:hover {
+  border-left-color: var(--accent-success);
+  background: linear-gradient(135deg, var(--primary-ultra-light), rgba(40, 167, 69, 0.1));
+}
+
+/* 📝 事件內容樣式 */
+.event-content {
+  position: relative;
+  z-index: 1;
 }
 
 .event-summary {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin: 0 0 0.5rem 0;
-    color: #333;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--primary-dark);
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.event-item.today-marker .event-summary {
+  color: var(--accent-success);
 }
 
 .event-date {
-    font-size: 0.9rem;
-    color: #666;
-    margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
-/* 美化滾動條樣式 (可選) */
+.event-date::before {
+  content: '🕒';
+  font-size: 0.9rem;
+}
+
+.event-item.today-marker .event-date {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* 📱 美化滾動條 */
 .events-list-container::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 .events-list-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
+  background: var(--primary-ultra-light);
+  border-radius: var(--radius-sm);
 }
 
 .events-list-container::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  border-radius: var(--radius-sm);
 }
 
 .events-list-container::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+}
+
+/* 🔍 無事件狀態 */
+.no-events {
+  text-align: center;
+  padding: var(--spacing-xxl);
+  color: var(--text-secondary);
+}
+
+.no-events h3 {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 📱 響應式設計 */
+@media (max-width: 1024px) {
+  .calendar-container {
+    height: 80vh;
+    margin: var(--spacing-lg) auto;
+    padding: var(--spacing-lg);
+  }
+  
+  .calendar-header h2 {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-container {
+    padding: var(--spacing-lg);
+    height: 75vh;
+  }
+  
+  .calendar-header {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    text-align: center;
+  }
+  
+  .calendar-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .go-to-today-btn {
+    width: 100%;
+    padding: var(--spacing-md);
+  }
+  
+  .event-item {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .event-summary {
+    font-size: 1.1rem;
+  }
+  
+  .events-list-container {
+    padding-right: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .event-summary {
+    font-size: 1rem;
+  }
+  
+  .event-date {
+    font-size: 0.85rem;
+  }
+  
+  .event-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
 }
