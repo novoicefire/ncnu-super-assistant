@@ -1,4 +1,4 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (最終完整版) */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (寬度修復版) */
 
 .course-planner {
     display: flex;
@@ -11,7 +11,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 1rem; /* Add some space below the header */
+    margin-bottom: 1rem;
 }
 
 .filters {
@@ -25,6 +25,51 @@
     flex-wrap: wrap;
 }
 
+/* 🔧 修復：固定輸入框和下拉選單的寬度 */
+.filters input,
+.filters select {
+    width: 180px;
+    max-width: 180px;
+    min-width: 140px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    
+    /* 🔧 修復：確保長文字可以正確換行和顯示 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* 🔧 修復：針對下拉選單的特別處理 */
+.filters select {
+    cursor: pointer;
+    background-color: white;
+}
+
+/* 🔧 修復：下拉選單選項的寬度控制 */
+.filters select option {
+    max-width: 180px;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 🔧 修復：篩選區塊的標籤樣式 */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.filter-group label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
 .planner-content {
     display: flex;
     gap: 1rem;
@@ -32,7 +77,7 @@
 
 .course-list-container {
     flex: 1;
-    min-width: 300px; /* Ensure it has a minimum width */
+    min-width: 300px;
     max-height: 70vh;
     overflow-y: auto;
     border: 1px solid #ccc;
@@ -61,12 +106,19 @@
 
 .course-info {
     flex-grow: 1;
+    /* 🔧 修復：課程資訊區域的文字換行 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: calc(100% - 120px); /* 為按鈕留出空間 */
 }
 
 .course-info small {
     color: #666;
     display: block;
     margin-top: 4px;
+    /* 🔧 修復：小字體也要能換行 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .hotness-indicator {
@@ -104,6 +156,9 @@
     text-align: center;
     height: 50px;
     font-size: 0.8rem;
+    /* 🔧 修復：表格內容的文字換行 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .course-table th {
@@ -117,6 +172,10 @@
     transition: background-color 0.3s;
     vertical-align: middle !important;
     line-height: 1.4;
+    /* 🔧 修復：課程格子內的文字換行 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .course-cell:hover {
@@ -133,29 +192,48 @@
 
 /* RWD */
 @media (max-width: 1024px) {
-  .planner-content {
-    flex-direction: column;
-  }
-  .course-list-container {
-    max-height: 40vh;
-    order: 2;
-  }
-  .schedule-container {
-    order: 1;
-  }
+    .planner-content {
+        flex-direction: column;
+    }
+    
+    .course-list-container {
+        max-height: 40vh;
+        order: 2;
+    }
+    
+    .schedule-container {
+        order: 1;
+    }
+    
+    /* 🔧 修復：平板響應式下的輸入框調整 */
+    .filters input,
+    .filters select {
+        width: 160px;
+        max-width: 160px;
+    }
 }
 
 @media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: stretch;
-  }
-  .course-table th, .course-table td {
-    font-size: 0.7rem;
-    padding: 4px;
-  }
-  .course-cell {
-    line-height: 1.2;
-  }
+    .filters {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+    
+    /* 🔧 修復：手機響應式下的輸入框調整 */
+    .filters input,
+    .filters select {
+        width: 100%;
+        max-width: none;
+        min-width: unset;
+    }
+    
+    .course-table th, .course-table td {
+        font-size: 0.7rem;
+        padding: 4px;
+    }
+    
+    .course-cell {
+        line-height: 1.2;
+    }
 }
