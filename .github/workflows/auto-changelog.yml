@@ -1,4 +1,3 @@
-# .github/workflows/auto-changelog.yml (Gemini版本)
 name: AI-Powered Changelog with Gemini
 
 on:
@@ -35,7 +34,7 @@ jobs:
           node .github/scripts/gemini-changelog-generator.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}  # 🔑 Gemini API Key
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Commit and push changes
         if: steps.changelog.outputs.has_changes == 'true'

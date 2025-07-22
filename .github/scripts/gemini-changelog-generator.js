@@ -1,4 +1,4 @@
-// Gemini AI 增強的更新記錄生成器
+// .github/scripts/gemini-changelog-generator.js
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -85,7 +85,8 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
       // 提取 JSON 內容
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]);
+        const result = JSON.parse(jsonMatch[0]);
+        return this.validateAIOutput(result, rawChanges);
       }
       
       throw new Error('無法解析 Gemini 回應');
@@ -95,26 +96,87 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     }
   }
 
+  // 🔍 AI 輸出品質驗證
+  validateAIOutput(aiResult, originalChanges) {
+    const issues = [];
+    
+    // 檢查基本結構
+    if (!aiResult.title || aiResult.title.length < 5) {
+      issues.push('標題過短或缺失');
+    }
+    
+    if (!aiResult.features || aiResult.features.length === 0) {
+      issues.push('功能列表為空');
+    }
+    
+    if (aiResult.features && aiResult.features.length > originalChanges.length + 3) {
+      issues.push('功能列表可能包含冗餘項目');
+    }
+
+    // 關鍵字覆蓋率檢查
+    const originalKeywords = this.extractKeywords(originalChanges);
+    const aiKeywords = this.extractKeywords(aiResult.features || []);
+    const coverage = this.calculateCoverage(originalKeywords, aiKeywords);
+    
+    console.log(`📊 品質檢查 - 關鍵詞覆蓋率: ${Math.round(coverage * 100)}%`);
+    console.log(`📊 品質檢查 - 發現問題: ${issues.length}個`);
+    
+    if (coverage < 0.4) {
+      issues.push(`關鍵詞覆蓋率過低: ${Math.round(coverage * 100)}%`);
+    }
+    
+    if (issues.length > 0) {
+      console.log('⚠️ AI 輸出品質問題:', issues);
+      return null; // 品質不達標，使用後備方案
+    }
+    
+    return aiResult;
+  }
+
+  // 🔤 提取關鍵詞
+  extractKeywords(textArray) {
+    const keywords = new Set();
+    textArray.forEach(text => {
+      // 提取中文詞語（2-4字）
+      const matches = text.match(/[\u4e00-\u9fa5]{2,4}/g) || [];
+      matches.forEach(word => keywords.add(word));
+    });
+    return Array.from(keywords);
+  }
+
+  // 📊 計算覆蓋率
+  calculateCoverage(originalKeywords, aiKeywords) {
+    if (originalKeywords.length === 0) return 1;
+    
+    const covered = originalKeywords.filter(keyword => 
+      aiKeywords.some(aiKeyword => 
+        aiKeyword.includes(keyword) || keyword.includes(aiKeyword)
+      )
+    );
+    
+    return covered.length / originalKeywords.length;
+  }
+
   // 🧠 本地智能後備方案
   localSmartEnhance(rawChanges) {
     const keywordMap = {
       ui: { 
-        keywords: ['介面', '按鈕', '樣式', 'navbar', '頭像', '版面', '顏色'], 
+        keywords: ['介面', '按鈕', '樣式', 'navbar', '頭像', '版面', '顏色', 'css'], 
         title: '介面設計優化',
         emoji: '🎨'
       },
       feature: { 
-        keywords: ['新增', '實現', '支援', '建立', '功能'], 
+        keywords: ['新增', '實現', '支援', '建立', '功能', 'feat'], 
         title: '新功能發布',
         emoji: '✨' 
       },
       fix: { 
-        keywords: ['修復', '解決', '修正', '錯誤', 'bug'], 
+        keywords: ['修復', '解決', '修正', '錯誤', 'bug', 'fix'], 
         title: '問題修復',
         emoji: '🔧' 
       },
       improvement: { 
-        keywords: ['優化', '改善', '提升', '調整', '更新'], 
+        keywords: ['優化', '改善', '提升', '調整', '更新', 'improve'], 
         title: '體驗改善',
         emoji: '⚡' 
       }
@@ -136,8 +198,13 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     for (const [category, changes] of Object.entries(categorized)) {
       const info = keywordMap[category];
       if (changes.length === 1) {
-        features.push(`${info.emoji} ${changes[0].slice(0, 20)}...`);
+        // 單一變更，簡化描述
+        const simplified = changes[0]
+          .replace(/^(feat|fix|docs|style|refactor|perf|test|chore)(\(.+\))?:\s*/, '')
+          .slice(0, 18);
+        features.push(`${info.emoji} ${simplified}`);
       } else if (changes.length > 1) {
+        // 多個變更，使用分類標題
         features.push(`${info.emoji} ${info.title}`);
       }
     }
@@ -148,7 +215,10 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     const hasFix = categorized.fix && categorized.fix.length > 0;
 
     let type, title;
-    if (hasFeature) {
+    if (hasFeature && (categorized.feature.length >= 2 || hasUI)) {
+      type = 'feature';
+      title = '新功能與介面升級';
+    } else if (hasFeature) {
       type = 'feature';
       title = '新功能發布';
     } else if (hasUI) {
@@ -187,6 +257,7 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
           // 過濾自動生成的 commit
           const msg = commit.message.toLowerCase();
           return !msg.includes('docs: 自動更新版本') && 
+                 !msg.includes('docs: 🤖 ai自動更新版本') &&
                  !msg.includes('merge pull request') &&
                  !msg.includes('merge branch');
         });
@@ -198,7 +269,7 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     }
   }
 
-  // 📊 基礎分析（用作 AI 的輔助資訊）
+  // 📊 基礎分析
   basicAnalyze(commits) {
     const changes = commits.map(commit => {
       let message = commit.message;
