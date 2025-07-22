@@ -594,9 +594,21 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     const updateEntry = this.generateUpdateEntry(aiResult, { newVersion });
     const success = this.updateChangelogFile(updateEntry);
     
+    // 🔧 修復：使用正確的 GitHub Actions 輸出格式
     if (success) {
-      console.log('has_changes=true' + '>' + '$GITHUB_OUTPUT');
-      console.log(`new_version=${newVersion}` + '>' + '$GITHUB_OUTPUT');
+      // 使用 GitHub Actions 原生輸出格式
+      const fs = require('fs');
+      const outputFile = process.env.GITHUB_OUTPUT;
+      
+      if (outputFile) {
+        // 寫入輸出變數到 GITHUB_OUTPUT 檔案
+        fs.appendFileSync(outputFile, `has_changes=true\n`);
+        fs.appendFileSync(outputFile, `new_version=${newVersion}\n`);
+      } else {
+        // 開發環境或本地測試時的輸出
+        console.log(`::set-output name=has_changes::true`);
+        console.log(`::set-output name=new_version::${newVersion}`);
+      }
       
       try {
         execSync(`git tag v${newVersion}`);
@@ -607,9 +619,14 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
       
       console.log('🎊 更新記錄生成完成！');
     } else {
-      console.log('has_changes=false' + '>' + '$GITHUB_OUTPUT');
+      if (process.env.GITHUB_OUTPUT) {
+        fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_changes=false\n`);
+      } else {
+        console.log(`::set-output name=has_changes::false`);
+      }
       console.log('❌ 更新記錄生成失敗');
     }
+
   }
 }
 

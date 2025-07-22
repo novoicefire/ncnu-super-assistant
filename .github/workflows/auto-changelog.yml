@@ -37,6 +37,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Debug output values
+        run: |
+          echo "has_changes output: '${{ steps.changelog.outputs.has_changes }}'"
+          echo "new_version output: '${{ steps.changelog.outputs.new_version }}'"
+
       - name: Commit and push changes
         if: steps.changelog.outputs.has_changes == 'true'
         run: |
@@ -44,10 +49,17 @@ jobs:
           git config --local user.name "GitHub Action"
           git add frontend/src/components/5_UpdateLog/updateData.js
           git commit -m "docs: 🤖 AI自動更新版本 ${{ steps.changelog.outputs.new_version }} 記錄"
-          git push
+          git push origin main
+
+      - name: Push tags
+        if: steps.changelog.outputs.has_changes == 'true'
+        run: |
+          git push origin --tags
+
       - name: Sync to develop branch
         if: steps.changelog.outputs.has_changes == 'true'
         run: |
+          git fetch origin
           git checkout develop
-          git merge main
+          git merge origin/main
           git push origin develop
