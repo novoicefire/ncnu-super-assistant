@@ -1,74 +1,94 @@
-// frontend/src/components/5_UpdateLog/updateData.js
+// frontend/src/components/5_UpdateLog/updateData.js (統一合併版)
 
 export const updateHistory = [
   {
-    "version": "v2.3.0",
-    "date": "2025-07-21",
-    "type": "major",
-    "title": "重大功能更新",
-    "description": "重大功能更新！本次版本帶來了顯著的功能擴展和使用體驗改善。",
-    "features": [
-      "✨ 🎉 重大更新:🎨 視覺統一",
-      "✨ 🎯 新增:👤 用戶頭像優化+📝 用戶名稱顯示+🔘 登出按鈕設計+🎭 整體容器",
-      "✨ 🎯 新增:自動化更新專區",
-      "✨ 🎯 新增:更新資訊專區",
-      "✨ 🎯 新增:✅支援所有 100+ 個系所與學程支援學士班、碩士班、博士班完整選擇",
-      "✨ 🎯 新增:✅ 完全開放支援所有 100+ 個系所與學程支援學士班、碩士班、博士班完整選擇",
-      "✨ 🎯 新增:觀餐系觀光組畢業進度追蹤",
-      "✨ 🎯 新增:🔔 通知系統",
-      "✨ 🎯 新增:課表按鈕（綠色 + 白色加號）+動態按鈕狀態+📱 響應式優化",
-      "⚡ Remake:UniversityCalendar",
-      "⚡ 於任何/()不匹配現有靜態檔案的請求路徑，都請不要回報 404，而是將請求『重寫』(rewrite) 到 /index.html",
-      "⚡ Trigger initial deployment for develop branch",
-      "⚡ Commit",
-      "⚡ Commit",
-      "🔧 🔧 fix:撤回提交8e0b7f3",
-      "🔧 🔧 修復：正確的課程熱度🔥顯示邏輯",
-      "🔧 🔧 修復：系所資料來源",
-      "🔧 🔧 修復：系所資料來源",
-      "🔧 🔧 修復：更新 localStorage key 格式",
-      "🔧 Delete(通識)and(學年)",
-      "🔧 GraduationTracker.css",
-      "🔧 CoursePlanner.css",
-      "🔧 Fix: Update for allowd origins",
-      "🔧 Fix: Update for staging",
-      "🔧 Fix: Update CORS policy for staging",
-      "🔧 Fix: Update CORS policy for staging",
-      "🔧 Fix: Implement robust manual upsert for schedule saving",
-      "🔧 Fix: Implement robust manual upsert for schedule saving"
+  "version": "v2.5.0",
+  "date": "2025-07-22",
+  "type": "fix",
+  "title": "課程資訊顯示問題修復",
+  "description": "修復通識課程分類顯示異常，並優化課程搜尋篩選功能",
+  "features": [
+    "🔧 修復「中文思辨與表達」課程開課單位顯示問題",
+    "📚 所有通識課程現在正確歸類至「通識領域課程」",
+    "🔍 改善課程篩選功能，確保通識課程可正常搜尋",
+    "✨ 智能課程分類機制，自動處理資料不完整的課程",
+    "📊 提升課程資訊準確性與完整性"
     ]
-  },
+  }
+  ,
+  // ✨ 新版本（AI 自動生成）
   {
-    version: "v2.2.0",
-    date: "2025-01-21", 
-    type: "major",
-    title: "全校系所畢業進度追蹤支援",
-    description: "重大功能擴展！現在支援全校所有系所的畢業進度查詢，並新增了自動化資料管理機制。",
+    version: "v2.4.0",
+    date: "2025-01-22",
+    type: "improvement",
+    title: "導航欄用戶體驗優化",
+    description: "全面改善用戶介面設計，提供更直覺的個人化功能顯示。",
     features: [
-      "🎓 支援全校100+系所的畢業進度查詢",
-      "🤖 自動化課程資料爬取與更新機制",
-      "🧹 智慧空資料檢測與清理功能",
-      "💾 完全獨立的各系所進度儲存",
-      "📱 優化手機端畢業進度查詢體驗"
+      "🎨 圓形用戶頭像設計優化",
+      "📱 響應式顯示完美適配",
+      "🌐 跨瀏覽器相容性提升",
+      "✨ 個人資訊區域美化"
     ],
     technical: [
-      "實現動態 JSON 檔案載入機制",
-      "建立標準化的資料檔案命名規則",
-      "優化錯誤處理與使用者回饋"
+      "修復 CSS backdrop-filter 前綴順序",
+      "優化響應式設計斷點",
+      "統一 hover 動畫效果"
     ]
   },
+  
+  // 🤖 AI 系統建立版本
   {
-    version: "v2.1.0", 
-    date: "2025-01-15",
+    version: "v2.3.0",
+    date: "2025-01-21",
     type: "feature",
-    title: "動態按鈕與通知系統",
-    description: "大幅提升課程操作的使用者體驗，新增即時通知反饋。",
+    title: "AI 智能更新記錄系統",
+    description: "導入 Google Gemini AI 自動分析程式變更，生成簡潔易懂的更新說明。",
     features: [
-      "🎨 全新動態加入/移除課程按鈕設計",
-      "🔔 完整的課表變動通知系統",
-      "🎯 智慧按鈕狀態切換（綠色加號 ↔ 紅色減號）",
-      "🌐 Safari 和 iOS 瀏覽器完整相容性",
-      "⚡ 優化課程熱度顯示邏輯"
+      "🤖 Google Gemini AI 內容分析",
+      "📝 自動生成用戶友善更新說明",
+      "🔄 技術描述智能簡化轉換",
+      "⚡ 重複內容自動合併處理"
+    ],
+    technical: [
+      "整合 Gemini API 自然語言處理",
+      "建立本地智能後備機制",
+      "優化 GitHub Actions 自動化流程"
+    ]
+  },
+
+  // 📚 舊版本記錄（重新整理）
+  {
+    version: "v2.2.0",
+    date: "2025-01-15",
+    type: "major",
+    title: "全校系所畢業進度追蹤",
+    description: "重大功能擴展！支援全校所有系所的畢業進度查詢與自動化資料管理。",
+    features: [
+      "🎓 全校 100+ 系所畢業進度支援",
+      "🤖 自動化課程資料爬取更新",
+      "🧹 智能空資料檢測清理功能",
+      "💾 各系所獨立進度儲存機制",
+      "📱 手機端查詢體驗優化"
+    ],
+    technical: [
+      "實現動態 JSON 檔案載入",
+      "建立標準化檔案命名規則",
+      "優化錯誤處理與用戶回饋"
+    ]
+  },
+
+  {
+    version: "v2.1.0",
+    date: "2025-01-10",
+    type: "feature", 
+    title: "智能按鈕與通知系統",
+    description: "大幅提升課程操作體驗，新增即時反饋與動態視覺設計。",
+    features: [
+      "🎨 動態加入移除課程按鈕",
+      "🔔 完整課表變動通知系統", 
+      "🎯 智能按鈕狀態切換功能",
+      "🌐 Safari iOS 完整相容支援",
+      "⚡ 課程熱度顯示邏輯優化"
     ],
     technical: [
       "實現毛玻璃效果通知系統",
@@ -76,18 +96,19 @@ export const updateHistory = [
       "優化按鈕動畫與視覺反饋"
     ]
   },
+
   {
-    version: "v2.0.0",
-    date: "2025-01-10", 
-    type: "major",
-    title: "UI 寬度修復與內容調整",
-    description: "解決關鍵的版面問題，提供一致的使用者介面體驗。",
+    version: "v2.0.0", 
+    date: "2025-01-05",
+    type: "improvement",
+    title: "UI 版面全面優化", 
+    description: "解決關鍵版面問題，提供一致美觀的使用者介面體驗。",
     features: [
-      "🔧 修復選單寬度隨內容變化的問題", 
-      "📝 移除「通識」選項，精簡班別選擇",
-      "📅 簡化畢業進度介面，移除學年度欄位",
-      "🎯 統一輸入框和下拉選單寬度",
-      "📱 優化響應式設計，改善手機端體驗"
+      "🔧 修復選單寬度變化問題",
+      "📝 精簡班別選擇選項",
+      "📅 簡化畢業進度介面設計", 
+      "🎯 統一輸入框選單寬度",
+      "📱 大幅改善手機端操作"
     ],
     technical: [
       "實現固定寬度約束機制",
@@ -95,36 +116,42 @@ export const updateHistory = [
       "優化 CSS box-sizing 一致性"
     ]
   },
+
   {
     version: "v1.5.0",
-    date: "2024-12-20",
-    type: "feature", 
+    date: "2024-12-20", 
+    type: "feature",
     title: "雙系所畢業進度支援",
-    description: "擴展畢業進度追蹤功能至觀餐系觀光組。",
+    description: "擴展畢業進度追蹤功能，新增觀餐系觀光組學士班支援。",
     features: [
-      "🎓 新增觀餐系觀光組學士班支援",
-      "💾 獨立的系所進度儲存機制",
+      "🎓 觀餐系觀光組學士班支援",
+      "💾 獨立系所進度儲存機制",
       "🔄 系所間流暢切換功能",
-      "📊 45學分完整課程追蹤"
+      "📊 45 學分完整課程追蹤"
+    ],
+    technical: [
+      "多系所資料檔案管理",
+      "獨立 localStorage 儲存邏輯"
     ]
   },
+
   {
     version: "v1.0.0",
     date: "2024-12-01",
-    type: "major",
+    type: "major", 
     title: "暨大生超級助理正式上線",
-    description: "🎉 系統正式發布！為暨南大學學生提供全方位的校園服務。",
+    description: "🎉 系統正式發布！為暨南大學學生提供全方位校園服務平台。",
     features: [
-      "📚 智慧排課系統 - 課程搜尋、篩選與課表管理",
-      "🎓 畢業進度追蹤 - 國企系學士班必修課程管理", 
-      "📞 校園通訊錄 - 完整的校園單位聯絡資訊",
-      "📅 暨大行事曆 - 垂直滾動式事件列表設計",
-      "🔐 Google 登入整合 - 雲端課表同步",
-      "🔥 課程熱度顯示 - 社群智慧功能"
+      "📚 智慧排課系統完整功能",
+      "🎓 畢業進度追蹤管理系統",
+      "📞 校園通訊錄整合服務",
+      "📅 暨大行事曆事件列表", 
+      "🔐 Google 登入雲端同步",
+      "🔥 課程社群智慧推薦"
     ],
     technical: [
-      "React + Vite 前端架構",
-      "Flask + Python 後端服務", 
+      "React + Vite 前端架構建立",
+      "Flask + Python 後端服務",
       "Supabase PostgreSQL 資料庫",
       "Vercel + Render 雲端部署",
       "GitHub Actions 自動化同步"
