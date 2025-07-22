@@ -1,6 +1,20 @@
 // frontend/src/components/5_UpdateLog/updateData.js (統一合併版)
 
 export const updateHistory = [
+  {
+    version: "v2.5.0",
+    date: "2025-07-22",
+    type: "fix",
+    title: "課程資訊顯示問題修復",
+    description: "修復通識課程分類顯示異常，並優化課程搜尋篩選功能",
+    features: [
+      "🔧 修復「中文思辨與表達」課程開課單位顯示問題",
+      "📚 所有通識課程現在正確歸類至「通識領域課程」",
+      "🔍 改善課程篩選功能，確保通識課程可正常搜尋",
+      "✨ 智能課程分類機制，自動處理資料不完整的課程",
+      "📊 提升課程資訊準確性與完整性"
+    ]
+  },
   // ✨ 新版本（AI 自動生成）
   {
     version: "v2.4.0",
