@@ -1,6 +1,17 @@
 // frontend/src/components/5_UpdateLog/updateData.js (統一合併版)
 
 export const updateHistory = [
+  {
+    "version": "v2.5.0",
+    "date": "2025-07-22",
+    "type": "feature",
+    "title": "新功能與介面升級",
+    "description": "本次更新專注於功能擴展，提升使用體驗",
+    "features": [
+      "✨ 新功能發布",
+      "⚡ 修改了AI介入前的更新紀錄"
+    ]
+  },
   // ✨ 新版本（AI 自動生成）
   {
     version: "v2.4.0",
