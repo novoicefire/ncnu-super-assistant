@@ -1,5 +1,6 @@
-/* frontend/src/components/DisclaimerModal.css */
+/* frontend/src/components/DisclaimerModal.css (修復版 - 無CSS變數依賴) */
 
+/* 🔧 修復：使用具體數值，避免CSS變數衝突 */
 .disclaimer-overlay {
   position: fixed;
   top: 0;
@@ -17,14 +18,14 @@
 }
 
 .disclaimer-modal {
-  background: var(--background-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   max-width: 600px;
   width: 100%;
   max-height: 80vh;
   overflow-y: auto;
-  border: 3px solid var(--accent-warning);
+  border: 3px solid #ffc107;
   animation: disclaimerSlideIn 0.4s ease-out;
 }
 
@@ -40,11 +41,11 @@
 }
 
 .disclaimer-header {
-  background: linear-gradient(135deg, var(--accent-warning), #e0a800);
-  color: var(--text-primary);
-  padding: var(--spacing-lg);
+  background: linear-gradient(135deg, #ffc107, #e0a800);
+  color: #333;
+  padding: 1.5rem;
   text-align: center;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: 12px 12px 0 0;
 }
 
 .disclaimer-header h2 {
@@ -55,81 +56,86 @@
 }
 
 .disclaimer-content {
-  padding: var(--spacing-xl);
+  padding: 2rem;
 }
 
 .disclaimer-text {
   line-height: 1.8;
   font-size: 1rem;
-  color: var(--text-primary);
+  color: #333;
 }
 
 .disclaimer-text p {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 1.5rem;
   font-weight: 500;
 }
 
 .disclaimer-text strong {
-  color: var(--accent-error);
+  color: #dc3545;
   font-weight: 700;
 }
 
 .disclaimer-note {
-  background: var(--primary-ultra-light);
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-md);
-  border-left: 4px solid var(--primary-color);
-  margin-top: var(--spacing-lg);
+  background: #e8f4fd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+  margin-top: 1.5rem;
 }
 
 .disclaimer-note p {
-  margin: 0 0 var(--spacing-sm) 0;
+  margin: 0 0 0.5rem 0;
   font-weight: 600;
-  color: var(--primary-dark);
+  color: #0056b3;
 }
 
 .disclaimer-note ul {
-  margin: var(--spacing-sm) 0 0 0;
-  padding-left: var(--spacing-lg);
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
 }
 
 .disclaimer-note li {
-  margin-bottom: var(--spacing-xs);
-  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  color: #495057;
 }
 
 .disclaimer-footer {
-  padding: var(--spacing-lg) var(--spacing-xl) var(--spacing-xl);
+  padding: 1.5rem 2rem 2rem;
   text-align: center;
   border-top: 1px solid #e0e0e0;
 }
 
 .disclaimer-accept-btn {
-  background: linear-gradient(135deg, var(--accent-success), #218838);
-  color: var(--text-white);
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: #ffffff;
   border: none;
-  padding: var(--spacing-md) var(--spacing-xxl);
-  border-radius: var(--radius-xl);
+  padding: 1rem 3rem;
+  border-radius: 25px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
   min-width: 280px;
 }
 
 .disclaimer-accept-btn:hover {
   background: linear-gradient(135deg, #218838, #1e7e34);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
 }
 
 .disclaimer-accept-btn:active {
   transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
 }
 
-/* 📱 響應式設計 */
+/* 🔧 修復：body滾動控制 */
+body.disclaimer-showing {
+  overflow: hidden !important;
+}
+
+/* 📱 響應式設計 - 修復手機版問題 */
 @media (max-width: 768px) {
   .disclaimer-overlay {
     padding: 0.5rem;
@@ -141,7 +147,7 @@
   }
   
   .disclaimer-header {
-    padding: var(--spacing-md);
+    padding: 1rem;
   }
   
   .disclaimer-header h2 {
@@ -149,7 +155,7 @@
   }
   
   .disclaimer-content {
-    padding: var(--spacing-lg);
+    padding: 1.5rem;
   }
   
   .disclaimer-text {
@@ -158,16 +164,16 @@
   }
   
   .disclaimer-note {
-    padding: var(--spacing-md);
+    padding: 1rem;
   }
   
   .disclaimer-footer {
-    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
+    padding: 1rem 1.5rem 1.5rem;
   }
   
   .disclaimer-accept-btn {
     font-size: 1rem;
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: 1rem 1.5rem;
     min-width: 240px;
   }
 }

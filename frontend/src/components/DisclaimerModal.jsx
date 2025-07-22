@@ -1,8 +1,22 @@
-// frontend/src/components/DisclaimerModal.jsx
-import React from 'react';
+// frontend/src/components/DisclaimerModal.jsx (修復版)
+import React, { useEffect } from 'react';
 import './DisclaimerModal.css';
 
 const DisclaimerModal = ({ isVisible, onAccept }) => {
+  // 🔧 修復：更安全的body滾動控制
+  useEffect(() => {
+    if (isVisible) {
+      document.body.classList.add('disclaimer-showing');
+    } else {
+      document.body.classList.remove('disclaimer-showing');
+    }
+
+    // 清理函數
+    return () => {
+      document.body.classList.remove('disclaimer-showing');
+    };
+  }, [isVisible]);
+
   if (!isVisible) return null;
 
   return (

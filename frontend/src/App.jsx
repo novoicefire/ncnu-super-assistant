@@ -1,4 +1,4 @@
-// frontend/src/App.jsx (新增免責聲明公告欄)
+// frontend/src/App.jsx (修復版)
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -10,7 +10,7 @@ import CampusDirectory from './components/3_CampusDirectory/CampusDirectory.jsx'
 import UniversityCalendar from './components/4_UniversityCalendar/UniversityCalendar.jsx';
 import UpdateLog from './components/5_UpdateLog/UpdateLog.jsx';
 import Navbar from './components/Navbar.jsx';
-import DisclaimerModal from './components/DisclaimerModal.jsx'; // 🎯 新增免責聲明
+import DisclaimerModal from './components/DisclaimerModal.jsx';
 
 // 引入全域样式
 import './App.css';
@@ -40,22 +40,23 @@ function App() {
 
   return (
     <Router>
-      {/* 🎯 免責聲明公告欄 - 最高優先級 */}
+      {/* 🎯 免責聲明公告欄 */}
       <DisclaimerModal 
         isVisible={showDisclaimer} 
         onAccept={handleAcceptDisclaimer} 
       />
 
       {/* 🎯 主應用程式內容 */}
-      <div className={`app-container ${showDisclaimer ? 'app-blur' : ''}`}>
+      <div className="app-container">
         <Navbar />
         <div className="container">
           <Routes>
             <Route path="/" element={<CoursePlanner />} />
-            <Route path="/graduation-tracker" element={<GraduationTracker />} />
-            <Route path="/campus-directory" element={<CampusDirectory />} />
-            <Route path="/university-calendar" element={<UniversityCalendar />} />
-            <Route path="/update-log" element={<UpdateLog />} />
+            {/* 🔧 修復：使用正確的路由路徑 */}
+            <Route path="/tracker" element={<GraduationTracker />} />
+            <Route path="/directory" element={<CampusDirectory />} />
+            <Route path="/calendar" element={<UniversityCalendar />} />
+            <Route path="/updates" element={<UpdateLog />} />
           </Routes>
         </div>
         <Toaster />
