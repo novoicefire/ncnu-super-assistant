@@ -1,4 +1,4 @@
-// .github/scripts/gemini-changelog-generator.js (完整版 - Gemini 2.0 Flash)
+// .github/scripts/gemini-changelog-generator.js (修復版 - 基於最新 Gemini API)
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -7,8 +7,8 @@ class GeminiChangelogGenerator {
   constructor() {
     this.updateDataPath = 'frontend/src/components/5_UpdateLog/updateData.js';
     this.geminiApiKey = process.env.GEMINI_API_KEY;
-    // 🚀 更新：使用最新的 Gemini 2.0 Flash 模型
-    this.geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+    // 🔧 修復：使用正確的模型名稱和 API 端點
+    this.geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
   }
 
   // 🤖 使用 Gemini API 整理更新內容
@@ -76,20 +76,25 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
       
       throw new Error('無法解析 Gemini 回應');
     } catch (error) {
-      console.log('🤖 Gemini 2.0 Flash 處理失敗，使用本地智能處理:', error.message);
+      console.log('🤖 Gemini AI 處理失敗，使用本地智能處理:', error.message);
       return null;
     }
   }
 
-  // 🔧 修復：API 請求重試機制（Gemini 2.0 版本）
+  // 🔧 修復：API 請求重試機制（基於最新 Google AI 文檔）
   async makeApiRequestWithRetry(prompt, maxRetries = 3) {
+    // 動態導入 node-fetch
+    const fetch = (await import('node-fetch')).default;
+    
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const response = await fetch(this.geminiApiUrl, {
+        // 🔧 修復：使用 URL 參數傳遞 API Key（基於最新文檔）
+        const url = `${this.geminiApiUrl}?key=${this.geminiApiKey}`;
+        
+        const response = await fetch(url, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'X-goog-api-key': this.geminiApiKey  // 🎯 正確的 header 格式
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             contents: [{
@@ -106,12 +111,20 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
           })
         });
 
+        // 詳細錯誤日誌
+        console.log(`🔍 API 請求狀態: ${response.status}`);
+
         if (response.status === 404) {
-          throw new Error(`API 端點不存在 (404) - 請確認模型名稱正確`);
+          throw new Error(`API 端點不存在 (404) - 模型可能不可用或名稱錯誤`);
         }
 
         if (response.status === 403) {
-          throw new Error(`API 金鑰權限錯誤 (403) - 請檢查金鑰是否有效`);
+          throw new Error(`API 金鑰權限錯誤 (403) - 請檢查金鑰是否有效且有權限`);
+        }
+
+        if (response.status === 400) {
+          const errorText = await response.text();
+          throw new Error(`請求格式錯誤 (400): ${errorText}`);
         }
 
         if (response.status === 429) {
@@ -125,7 +138,7 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
           throw new Error(`API 請求失敗: ${response.status} ${errorText}`);
         }
 
-        console.log('✅ Gemini 2.0 Flash API 調用成功');
+        console.log('✅ Gemini API 調用成功');
         return response;
       } catch (error) {
         console.log(`⚠️ 嘗試 ${attempt}/${maxRetries} 失敗: ${error.message}`);
@@ -398,7 +411,7 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
 
   // 🚀 主執行函數
   async run() {
-    console.log('🤖 開始使用 Gemini 2.0 Flash 生成智能更新記錄...');
+    console.log('🤖 開始使用 Gemini AI 生成智能更新記錄...');
     
     // 檢查 API Key
     if (!this.geminiApiKey) {
@@ -410,7 +423,8 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     const commits = this.getRecentCommits();
     if (commits.length === 0) {
       console.log('📭 沒有找到新的 commits，跳過更新');
-      console.log('::set-output name=has_changes::false');
+      // 🔧 修復：使用新的 GitHub Actions 輸出格式
+      console.log('has_changes=false' + '>' + '$GITHUB_OUTPUT');
       return;
     }
 
@@ -422,7 +436,7 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     const rawChanges = this.basicAnalyze(commits);
     
     // 嘗試使用 Gemini AI 增強
-    console.log('🤖 正在使用 Gemini 2.0 Flash 分析...');
+    console.log('🤖 正在使用 Gemini AI 分析...');
     let aiResult = await this.enhanceWithGemini(commits, rawChanges);
     
     // 後備方案：本地智能處理
@@ -449,8 +463,9 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     const success = this.updateChangelogFile(updateEntry);
     
     if (success) {
-      console.log('::set-output name=has_changes::true');
-      console.log(`::set-output name=new_version::${newVersion}`);
+      // 🔧 修復：使用新的 GitHub Actions 輸出格式
+      console.log('has_changes=true' + '>' + '$GITHUB_OUTPUT');
+      console.log(`new_version=${newVersion}` + '>' + '$GITHUB_OUTPUT');
       
       // 創建 git tag
       try {
@@ -462,7 +477,7 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
       
       console.log('🎊 更新記錄生成完成！');
     } else {
-      console.log('::set-output name=has_changes::false');
+      console.log('has_changes=false' + '>' + '$GITHUB_OUTPUT');
       console.log('❌ 更新記錄生成失敗');
     }
   }
