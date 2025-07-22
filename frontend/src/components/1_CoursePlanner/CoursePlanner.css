@@ -114,7 +114,7 @@
     flex-wrap: wrap;
 }
 
-.filters input,
+.filters input[type="text"],
 .filters select {
     width: 180px;
     max-width: 180px;
@@ -178,12 +178,14 @@
 }
 
 .conflict-checkbox {
-    width: 18px;
-    height: 18px;
+    width: 18px !important;     /* 🔧 加入 !important 確保優先級 */
+    height: 18px !important;
     cursor: pointer;
     accent-color: #00796b;
-    margin: 0 1px 0 0;  /* 🔧 新增：右邊距 1px，左邊距 0 */
+    margin: 0 1px 0 0;
+    flex-shrink: 0;             /* 🔧 新增：防止被壓縮 */
 }
+
 
 .conflict-checkbox-text {
     display: flex;
@@ -395,7 +397,7 @@
         align-items: stretch;
     }
     
-    .filters input,
+    .filters input[type="text"],    /* 🔧 修改：明確指定類型 */
     .filters select {
         width: 100%;
         max-width: none;
@@ -446,9 +448,9 @@
     }
     
     .conflict-checkbox {
-        width: 16px;
-        height: 16px;
-        margin: 0 1px 0 0;  /* 🔧 新增：手機版也保持緊湊 */
+        width: 16px !important;     /* 🔧 手機版也加入 !important */
+        height: 16px !important;
+        margin: 0 1px 0 0;
     }
 
     .conflict-count {
