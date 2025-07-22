@@ -139,25 +139,3 @@ body.disclaimer-active {
   z-index: 50;
 }
 
-/* 📱 針對小螢幕優化 */
-@media (max-width: 480px) {
-  .container {
-    padding: 0.5rem;
-  }
-}
-/* 🎯 免責聲明相關樣式 - 修復版 */
-
-/* 確保免責聲明在最高層級，但不影響其他元素 */
-body.disclaimer-showing {
-  overflow: hidden;
-}
-
-/* 🔧 移除可能造成衝突的全域樣式 */
-/* 不再使用 app-blur 和相關樣式 */
-
-/* 📱 確保響應式設計不受影響 */
-@media (max-width: 768px) {
-  .container {
-    /* 保持原有的響應式樣式，不做額外修改 */
-  }
-}
