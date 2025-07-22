@@ -165,11 +165,11 @@
     font-size: 0.8rem;
     font-weight: bold;
     color: #333;
-    gap: 8px;
+    gap: 4px;  /* 🔧 修改：從 8px 縮小為 4px */
     padding: 0.5rem;
     border-radius: 6px;
     transition: all 0.2s ease;
-    -webkit-user-select: none;  /* 🔧 修復：Safari 相容性 */
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -442,6 +442,7 @@
     .conflict-filter-label {
         padding: 0.4rem;
         font-size: 0.75rem;
+        gap: 3px;  /* 🔧 手機版也相應縮小 */
     }
     
     .conflict-checkbox {
