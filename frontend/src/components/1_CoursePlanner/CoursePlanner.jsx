@@ -460,3 +460,6 @@ const CoursePlanner = () => {
 };
 
 export default CoursePlanner;
+
+
+// 2025-7-22修復了中文思辨顯示不出開課名稱的問題，原因是校務系統匯出的EXCEL根本沒有給他們寫開課單位
