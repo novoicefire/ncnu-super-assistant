@@ -165,8 +165,8 @@
     font-size: 0.8rem;
     font-weight: bold;
     color: #333;
-    gap: 4px;  /* 🔧 修改：從 8px 縮小為 4px */
-    padding: 0.5rem;
+    gap: 1px;  /* 🔧 修改：從 4px 進一步縮小為 1px，幾乎無間距 */
+    padding: 0.2rem 0.5rem 0.2rem 0.1rem;  /* 🔧 修改：減少左側 padding */
     border-radius: 6px;
     transition: all 0.2s ease;
     -webkit-user-select: none;
@@ -182,7 +182,7 @@
     height: 18px;
     cursor: pointer;
     accent-color: #00796b;
-    margin: 0;
+    margin: 0 1px 0 0;  /* 🔧 新增：右邊距 1px，左邊距 0 */
 }
 
 .conflict-checkbox-text {
@@ -440,16 +440,17 @@
     }
     
     .conflict-filter-label {
-        padding: 0.4rem;
+        padding: 0.2rem 0.4rem 0.2rem 0.05rem;  /* 🔧 修改：手機版更緊湊 */
         font-size: 0.75rem;
-        gap: 3px;  /* 🔧 手機版也相應縮小 */
+        gap: 1px;  /* 🔧 修改：保持 1px 間距 */
     }
     
     .conflict-checkbox {
         width: 16px;
         height: 16px;
+        margin: 0 1px 0 0;  /* 🔧 新增：手機版也保持緊湊 */
     }
-    
+
     .conflict-count {
         font-size: 0.65rem;
     }
