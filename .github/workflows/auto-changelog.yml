@@ -45,10 +45,9 @@ jobs:
           git add frontend/src/components/5_UpdateLog/updateData.js
           git commit -m "docs: 🤖 AI自動更新版本 ${{ steps.changelog.outputs.new_version }} 記錄"
           git push
-        # 在 auto-changelog.yml 中加入
-        - name: Sync to develop branch
-          if: steps.changelog.outputs.has_changes == 'true'
-          run: |
-            git checkout develop
-            git merge main
-            git push origin develop
+      - name: Sync to develop branch
+        if: steps.changelog.outputs.has_changes == 'true'
+        run: |
+          git checkout develop
+          git merge main
+          git push origin develop
