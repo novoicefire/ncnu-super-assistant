@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (通知系統版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (修復開課單位顯示問題)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
@@ -18,12 +18,58 @@ const CoursePlanner = () => {
         courseName: '',
         teacher: '',
         department: '',
-        division: ''
+        division: '',
+        hideConflicting: false
     });
     const [filteredCourses, setFilteredCourses] = useState([]);
-    
-    // 🔔 新增：通知系統狀態
     const [notifications, setNotifications] = useState([]);
+
+    // 🎯 新增：課程資料清理與標準化函數
+    const normalizeCourseDepartment = useCallback((course) => {
+        // 處理「中文思辨與表達」課程
+        if (course.course_cname && course.course_cname.includes('中文思辨與表達')) {
+            return {
+                ...course,
+                department: '通識領域課程'
+            };
+        }
+        
+        // 處理其他空 department 的課程
+        if (!course.department || course.department.trim() === '') {
+            // 根據課程名稱推斷所屬單位
+            if (course.course_cname) {
+                const courseName = course.course_cname;
+                
+                // 通識課程關鍵詞檢測
+                if (courseName.includes('通識') || 
+                    courseName.includes('中文思辨') || 
+                    courseName.includes('跨域專業學術英文')) {
+                    return {
+                        ...course,
+                        department: '通識領域課程'
+                    };
+                }
+                
+                // 全校共同課程
+                if (courseName.includes('服務學習') || 
+                    courseName.includes('全校') ||
+                    courseName.includes('共同')) {
+                    return {
+                        ...course,
+                        department: '全校共同課程'
+                    };
+                }
+            }
+            
+            // 預設分類
+            return {
+                ...course,
+                department: '其他課程'
+            };
+        }
+        
+        return course;
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,14 +78,25 @@ const CoursePlanner = () => {
                 const coursePromise = axios.get('/data/本學期開課資訊API.json');
                 const hotnessPromise = robustRequest('get', '/api/courses/hotness');
                 const [courseRes, hotnessDataResult] = await Promise.all([coursePromise, hotnessPromise]);
-                setStaticCourses(courseRes.data?.course_ncnu?.item || []);
+                
+                // 🎯 修改：清理和標準化課程資料
+                const rawCourses = courseRes.data?.course_ncnu?.item || [];
+                const normalizedCourses = rawCourses.map(course => normalizeCourseDepartment(course));
+                
+                console.log('🔍 中文思辨課程檢查:', normalizedCourses.filter(c => 
+                    c.course_cname && c.course_cname.includes('中文思辨')
+                ).map(c => ({ name: c.course_cname, dept: c.department })));
+                
+                setStaticCourses(normalizedCourses);
                 setHotnessData(hotnessDataResult || {});
             } catch (error) {
                 console.error("Failed to fetch initial data:", error);
                 if (staticCourses.length === 0) {
                     try {
                         const courseRes = await axios.get('/data/本學期開課資訊API.json');
-                        setStaticCourses(courseRes.data?.course_ncnu?.item || []);
+                        const rawCourses = courseRes.data?.course_ncnu?.item || [];
+                        const normalizedCourses = rawCourses.map(course => normalizeCourseDepartment(course));
+                        setStaticCourses(normalizedCourses);
                     } catch (staticError) {
                         console.error("Failed to fetch static course data:", staticError);
                     }
@@ -49,7 +106,7 @@ const CoursePlanner = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [normalizeCourseDepartment]);
 
     useEffect(() => {
         if (isLoggedIn && user?.google_id) {
@@ -67,20 +124,55 @@ const CoursePlanner = () => {
         setTotalCredits(total);
     }, [schedule]);
 
+    const hasTimeConflict = useCallback((course) => {
+        if (!course.time || Object.keys(schedule).length === 0) return false;
+        
+        const courseSlots = parseTimeSlots(course.time);
+        if (courseSlots.length === 0) return false;
+        
+        return courseSlots.some(slot => {
+            return schedule[slot] && 
+                   schedule[slot].course_id !== course.course_id;
+        });
+    }, [schedule]);
+
     useEffect(() => {
         let result = staticCourses;
-        if (filters.courseName) result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
-        if (filters.teacher) result = result.filter(c => c.teacher.toLowerCase().includes(filters.teacher.toLowerCase()));
-        if (filters.department) result = result.filter(c => c.department === filters.department);
+        
+        if (filters.courseName) {
+            result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
+        }
+        if (filters.teacher) {
+            result = result.filter(c => c.teacher.toLowerCase().includes(filters.teacher.toLowerCase()));
+        }
+        if (filters.department) {
+            result = result.filter(c => c.department === filters.department);
+        }
         if (filters.division) {
             result = result.filter(c => c.division === filters.division);
         }
+        if (filters.hideConflicting) {
+            result = result.filter(course => !hasTimeConflict(course));
+        }
+        
         setFilteredCourses(result);
-    }, [filters, staticCourses]);
+    }, [filters, staticCourses, hasTimeConflict]);
 
+    // 🎯 修改：改進 department 列表生成邏輯
     const uniqueDepartments = useMemo(() => {
         if (staticCourses.length === 0) return [];
-        return [...new Set(staticCourses.map(c => c.department).filter(Boolean))].sort();
+        
+        const departments = staticCourses
+            .map(c => c.department)
+            .filter(dept => dept && dept.trim() !== '')
+            .filter(Boolean);
+            
+        const uniqueDepts = [...new Set(departments)].sort();
+        
+        console.log('📊 所有開課單位:', uniqueDepts);
+        console.log('📊 通識課程數量:', staticCourses.filter(c => c.department === '通識領域課程').length);
+        
+        return uniqueDepts;
     }, [staticCourses]);
 
     const uniqueDivisions = useMemo(() => {
@@ -88,20 +180,17 @@ const CoursePlanner = () => {
         return [...new Set(staticCourses.map(c => c.division).filter(division => division && division !== '通識'))].sort();
     }, [staticCourses]);
 
-    // 🔔 新增：通知管理函數
     const showNotification = useCallback((message, type = 'info') => {
         const id = Date.now();
         const notification = { id, message, type };
         
         setNotifications(prev => [...prev, notification]);
         
-        // 4秒後自動移除通知
         setTimeout(() => {
             setNotifications(prev => prev.filter(n => n.id !== id));
         }, 4000);
     }, []);
 
-    // 🔔 修改：saveSchedule 函數，加入通知
     const saveSchedule = useCallback(async (newSchedule, actionType = 'update', courseName = '') => {
         setSchedule(newSchedule);
         if (isLoggedIn && user?.google_id) {
@@ -114,7 +203,6 @@ const CoursePlanner = () => {
                 if (response && response.success) {
                     setSaveStatus("success");
                     
-                    // 🔔 根據操作類型顯示不同通知
                     if (actionType === 'add') {
                         showNotification(`✅ 「${courseName}」已成功加入課表並同步至雲端`, 'success');
                     } else if (actionType === 'remove') {
@@ -133,7 +221,6 @@ const CoursePlanner = () => {
                 setTimeout(() => setSaveStatus("idle"), 3000);
             }
         } else if (!isLoggedIn) {
-            // 🔔 未登入時的通知
             if (actionType === 'add') {
                 showNotification(`📝 「${courseName}」已加入本地課表，登入後可同步至雲端`, 'warning');
             } else if (actionType === 'remove') {
@@ -156,7 +243,6 @@ const CoursePlanner = () => {
         return slots;
     };
 
-    // 🔔 修改：addToSchedule 函數，加入通知
     const addToSchedule = (course) => {
         const slots = parseTimeSlots(course.time);
         if (slots.length === 0) {
@@ -179,7 +265,6 @@ const CoursePlanner = () => {
         saveSchedule(newSchedule, 'add', course.course_cname);
     };
 
-    // 🔔 修改：removeFromSchedule 函數，加入通知
     const removeFromSchedule = (courseId, time) => {
         const slots = parseTimeSlots(time);
         const newSchedule = { ...schedule };
@@ -211,7 +296,13 @@ const CoursePlanner = () => {
         }
     };
 
-    const handleFilterChange = (e) => setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const handleFilterChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFilters(prev => ({ 
+            ...prev, 
+            [name]: type === 'checkbox' ? checked : value 
+        }));
+    };
 
     const getSaveStatusMessage = () => {
         if (!isLoggedIn) return "登入後即可將課表儲存至雲端";
@@ -223,9 +314,13 @@ const CoursePlanner = () => {
         }
     };
 
+    const conflictingCoursesCount = useMemo(() => {
+        if (!filters.hideConflicting) return 0;
+        return staticCourses.filter(course => hasTimeConflict(course)).length;
+    }, [staticCourses, hasTimeConflict, filters.hideConflicting]);
+
     return (
         <div className="course-planner">
-            {/* 🔔 新增：通知容器 */}
             <div className="notifications-container">
                 {notifications.map(notification => (
                     <div 
@@ -278,7 +373,7 @@ const CoursePlanner = () => {
                             />
                         </div>
                         <div className="filter-group">
-                            <label>所有系所</label>
+                            <label>開課系所</label>
                             <select name="department" value={filters.department} onChange={handleFilterChange}>
                                 <option value="">所有系所</option>
                                 {uniqueDepartments.map(dept => (
@@ -295,11 +390,37 @@ const CoursePlanner = () => {
                                 ))}
                             </select>
                         </div>
+                        <div className="filter-group conflict-filter-group">
+                            <label className="conflict-filter-label">
+                                <input
+                                    type="checkbox"
+                                    name="hideConflicting"
+                                    checked={filters.hideConflicting}
+                                    onChange={handleFilterChange}
+                                    className="conflict-checkbox"
+                                />
+                                <span className="conflict-checkbox-text">
+                                    隱藏衝堂課程
+                                    {filters.hideConflicting && conflictingCoursesCount > 0 && (
+                                        <span className="conflict-count">
+                                            （已隱藏 {conflictingCoursesCount} 門）
+                                        </span>
+                                    )}
+                                </span>
+                            </label>
+                        </div>
                     </div>
 
                     <div className="planner-content">
                         <div className="course-list-container">
-                            <h3>課程列表 ({filteredCourses.length} 門課程)</h3>
+                            <h3>
+                                課程列表 ({filteredCourses.length} 門課程)
+                                {filters.hideConflicting && conflictingCoursesCount > 0 && (
+                                    <span className="filter-info">
+                                        ・已過濾 {conflictingCoursesCount} 門衝堂課程
+                                    </span>
+                                )}
+                            </h3>
                             <ul className="course-list">
                                 {filteredCourses.map((course, index) => (
                                     <li key={index}>
@@ -339,3 +460,6 @@ const CoursePlanner = () => {
 };
 
 export default CoursePlanner;
+
+
+// 2025-7-22修復了中文思辨顯示不出開課名稱的問題，原因是校務系統匯出的EXCEL根本沒有給他們寫開課單位

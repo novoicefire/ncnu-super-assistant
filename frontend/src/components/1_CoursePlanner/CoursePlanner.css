@@ -1,4 +1,4 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (通知系統版) */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (Safari 相容性修復版) */
 
 .course-planner {
     display: flex;
@@ -6,7 +6,7 @@
     position: relative;
 }
 
-/* 🔔 新增：通知系統樣式 */
+/* 🔔 通知系統樣式 */
 .notifications-container {
     position: fixed;
     top: 20px;
@@ -28,13 +28,12 @@
     font-size: 0.9rem;
     font-weight: 500;
     animation: slideInRight 0.3s ease-out;
-    -webkit-backdrop-filter: blur(10px);  /* ✅ Safari/iOS Safari 支援 */
-    backdrop-filter: blur(10px);          /* ✅ 現代瀏覽器支援 */
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-left: 4px solid;
     max-width: 100%;
     word-wrap: break-word;
 }
-
 
 .notification-success {
     background-color: rgba(40, 167, 69, 0.95);
@@ -115,7 +114,7 @@
     flex-wrap: wrap;
 }
 
-.filters input,
+.filters input[type="text"],
 .filters select {
     width: 180px;
     max-width: 180px;
@@ -152,6 +151,59 @@
     font-size: 0.8rem;
     font-weight: bold;
     color: #333;
+}
+
+/* 🎯 衝堂課程篩選開關樣式 */
+.conflict-filter-group {
+    min-width: 200px;
+}
+
+.conflict-filter-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+    gap: 1px;  /* 🔧 修改：從 4px 進一步縮小為 1px，幾乎無間距 */
+    padding: 0.2rem 0.5rem 0.2rem 0.1rem;  /* 🔧 修改：減少左側 padding */
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.conflict-filter-label:hover {
+    background-color: rgba(0, 121, 107, 0.1);
+}
+
+.conflict-checkbox {
+    width: 18px !important;     /* 🔧 加入 !important 確保優先級 */
+    height: 18px !important;
+    cursor: pointer;
+    accent-color: #00796b;
+    margin: 0 1px 0 0;
+    flex-shrink: 0;             /* 🔧 新增：防止被壓縮 */
+}
+
+
+.conflict-checkbox-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.conflict-count {
+    font-size: 0.7rem;
+    color: #666;
+    font-weight: normal;
+}
+
+.filter-info {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: normal;
+    margin-left: 8px;
 }
 
 .planner-content {
@@ -327,10 +379,14 @@
         max-width: 160px;
     }
     
-    /* 🔔 平板版通知調整 */
     .notifications-container {
         right: 15px;
         max-width: 350px;
+    }
+    
+    .conflict-filter-group {
+        min-width: unset;
+        width: 100%;
     }
 }
 
@@ -341,7 +397,7 @@
         align-items: stretch;
     }
     
-    .filters input,
+    .filters input[type="text"],    /* 🔧 修改：明確指定類型 */
     .filters select {
         width: 100%;
         max-width: none;
@@ -368,7 +424,6 @@
         max-width: calc(100% - 50px);
     }
     
-    /* 🔔 手機版通知調整 */
     .notifications-container {
         top: 15px;
         right: 15px;
@@ -379,5 +434,44 @@
     .notification {
         font-size: 0.8rem;
         padding: 10px 12px;
+    }
+    
+    .conflict-filter-group {
+        min-width: unset;
+        width: 100%;
+    }
+    
+    .conflict-filter-label {
+        padding: 0.2rem 0.4rem 0.2rem 0.05rem;  /* 🔧 修改：手機版更緊湊 */
+        font-size: 0.75rem;
+        gap: 1px;  /* 🔧 修改：保持 1px 間距 */
+    }
+    
+    .conflict-checkbox {
+        width: 16px !important;     /* 🔧 手機版也加入 !important */
+        height: 16px !important;
+        margin: 0 1px 0 0;
+    }
+
+    .conflict-count {
+        font-size: 0.65rem;
+    }
+    
+    .filter-info {
+        display: block;
+        margin-left: 0;
+        margin-top: 4px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .conflict-filter-label {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .conflict-checkbox-text {
+        line-height: 1.3;
     }
 }
