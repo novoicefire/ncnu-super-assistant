@@ -1,0 +1,190 @@
+/* frontend/src/components/DisclaimerModal.css (修復版 - 無CSS變數依賴) */
+
+/* 🔧 修復：使用具體數值，避免CSS變數衝突 */
+.disclaimer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.disclaimer-modal {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 3px solid #ffc107;
+  animation: disclaimerSlideIn 0.4s ease-out;
+}
+
+@keyframes disclaimerSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.disclaimer-header {
+  background: linear-gradient(135deg, #ffc107, #e0a800);
+  color: #333;
+  padding: 1.5rem;
+  text-align: center;
+  border-radius: 12px 12px 0 0;
+}
+
+.disclaimer-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.disclaimer-content {
+  padding: 2rem;
+}
+
+.disclaimer-text {
+  line-height: 1.8;
+  font-size: 1rem;
+  color: #333;
+}
+
+.disclaimer-text p {
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.disclaimer-text strong {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+.disclaimer-note {
+  background: #e8f4fd;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+  margin-top: 1.5rem;
+}
+
+.disclaimer-note p {
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  color: #0056b3;
+}
+
+.disclaimer-note ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.disclaimer-note li {
+  margin-bottom: 0.25rem;
+  color: #495057;
+}
+
+.disclaimer-footer {
+  padding: 1.5rem 2rem 2rem;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+}
+
+.disclaimer-accept-btn {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: #ffffff;
+  border: none;
+  padding: 1rem 3rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+  min-width: 280px;
+}
+
+.disclaimer-accept-btn:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
+}
+
+.disclaimer-accept-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+/* 🔧 修復：body滾動控制 */
+body.disclaimer-showing {
+  overflow: hidden !important;
+}
+
+/* 📱 響應式設計 - 修復手機版問題 */
+@media (max-width: 768px) {
+  .disclaimer-overlay {
+    padding: 0.5rem;
+  }
+  
+  .disclaimer-modal {
+    max-height: 90vh;
+    border-width: 2px;
+  }
+  
+  .disclaimer-header {
+    padding: 1rem;
+  }
+  
+  .disclaimer-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .disclaimer-content {
+    padding: 1.5rem;
+  }
+  
+  .disclaimer-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  .disclaimer-note {
+    padding: 1rem;
+  }
+  
+  .disclaimer-footer {
+    padding: 1rem 1.5rem 1.5rem;
+  }
+  
+  .disclaimer-accept-btn {
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+    min-width: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .disclaimer-text {
+    font-size: 0.85rem;
+  }
+  
+  .disclaimer-accept-btn {
+    font-size: 0.9rem;
+    min-width: 200px;
+  }
+}

@@ -113,3 +113,29 @@ input, select {
     font-size: 1.5rem;
   }
 }
+/* 🎯 免責聲明相關樣式 */
+.app-container {
+  transition: filter var(--transition-normal);
+}
+
+.app-blur {
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+/* 確保免責聲明在最高層級 */
+body.disclaimer-active {
+  overflow: hidden;
+}
+
+/* 🔧 修復可能的 z-index 衝突 */
+.navbar {
+  position: relative;
+  z-index: 100;
+}
+
+.container {
+  position: relative;
+  z-index: 50;
+}
+
