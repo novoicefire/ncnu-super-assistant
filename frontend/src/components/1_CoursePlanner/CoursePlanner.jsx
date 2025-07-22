@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (通知系統版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (新增隱藏衝堂課程功能)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import CourseTable from './CourseTable.jsx';
@@ -18,11 +18,12 @@ const CoursePlanner = () => {
         courseName: '',
         teacher: '',
         department: '',
-        division: ''
+        division: '',
+        hideConflicting: false // 🎯 新增：隱藏衝堂課程開關
     });
     const [filteredCourses, setFilteredCourses] = useState([]);
     
-    // 🔔 新增：通知系統狀態
+    // 🔔 通知系統狀態
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
@@ -67,16 +68,45 @@ const CoursePlanner = () => {
         setTotalCredits(total);
     }, [schedule]);
 
+    // 🎯 新增：時間衝突檢測函數
+    const hasTimeConflict = useCallback((course) => {
+        if (!course.time || Object.keys(schedule).length === 0) return false;
+        
+        const courseSlots = parseTimeSlots(course.time);
+        if (courseSlots.length === 0) return false;
+        
+        // 檢查是否與已選課程時間衝突
+        return courseSlots.some(slot => {
+            return schedule[slot] && 
+                   schedule[slot].course_id !== course.course_id; // 排除自己
+        });
+    }, [schedule]);
+
+    // 🎯 修改：整合衝堂課程篩選邏輯
     useEffect(() => {
         let result = staticCourses;
-        if (filters.courseName) result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
-        if (filters.teacher) result = result.filter(c => c.teacher.toLowerCase().includes(filters.teacher.toLowerCase()));
-        if (filters.department) result = result.filter(c => c.department === filters.department);
+        
+        // 原有篩選邏輯
+        if (filters.courseName) {
+            result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
+        }
+        if (filters.teacher) {
+            result = result.filter(c => c.teacher.toLowerCase().includes(filters.teacher.toLowerCase()));
+        }
+        if (filters.department) {
+            result = result.filter(c => c.department === filters.department);
+        }
         if (filters.division) {
             result = result.filter(c => c.division === filters.division);
         }
+        
+        // 🎯 新增：衝堂課程篩選
+        if (filters.hideConflicting) {
+            result = result.filter(course => !hasTimeConflict(course));
+        }
+        
         setFilteredCourses(result);
-    }, [filters, staticCourses]);
+    }, [filters, staticCourses, hasTimeConflict]);
 
     const uniqueDepartments = useMemo(() => {
         if (staticCourses.length === 0) return [];
@@ -88,20 +118,18 @@ const CoursePlanner = () => {
         return [...new Set(staticCourses.map(c => c.division).filter(division => division && division !== '通識'))].sort();
     }, [staticCourses]);
 
-    // 🔔 新增：通知管理函數
+    // 通知管理函數
     const showNotification = useCallback((message, type = 'info') => {
         const id = Date.now();
         const notification = { id, message, type };
         
         setNotifications(prev => [...prev, notification]);
         
-        // 4秒後自動移除通知
         setTimeout(() => {
             setNotifications(prev => prev.filter(n => n.id !== id));
         }, 4000);
     }, []);
 
-    // 🔔 修改：saveSchedule 函數，加入通知
     const saveSchedule = useCallback(async (newSchedule, actionType = 'update', courseName = '') => {
         setSchedule(newSchedule);
         if (isLoggedIn && user?.google_id) {
@@ -114,7 +142,6 @@ const CoursePlanner = () => {
                 if (response && response.success) {
                     setSaveStatus("success");
                     
-                    // 🔔 根據操作類型顯示不同通知
                     if (actionType === 'add') {
                         showNotification(`✅ 「${courseName}」已成功加入課表並同步至雲端`, 'success');
                     } else if (actionType === 'remove') {
@@ -133,7 +160,6 @@ const CoursePlanner = () => {
                 setTimeout(() => setSaveStatus("idle"), 3000);
             }
         } else if (!isLoggedIn) {
-            // 🔔 未登入時的通知
             if (actionType === 'add') {
                 showNotification(`📝 「${courseName}」已加入本地課表，登入後可同步至雲端`, 'warning');
             } else if (actionType === 'remove') {
@@ -156,7 +182,6 @@ const CoursePlanner = () => {
         return slots;
     };
 
-    // 🔔 修改：addToSchedule 函數，加入通知
     const addToSchedule = (course) => {
         const slots = parseTimeSlots(course.time);
         if (slots.length === 0) {
@@ -179,7 +204,6 @@ const CoursePlanner = () => {
         saveSchedule(newSchedule, 'add', course.course_cname);
     };
 
-    // 🔔 修改：removeFromSchedule 函數，加入通知
     const removeFromSchedule = (courseId, time) => {
         const slots = parseTimeSlots(time);
         const newSchedule = { ...schedule };
@@ -211,7 +235,14 @@ const CoursePlanner = () => {
         }
     };
 
-    const handleFilterChange = (e) => setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    // 🎯 修改：處理篩選變更（包括新的衝堂開關）
+    const handleFilterChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFilters(prev => ({ 
+            ...prev, 
+            [name]: type === 'checkbox' ? checked : value 
+        }));
+    };
 
     const getSaveStatusMessage = () => {
         if (!isLoggedIn) return "登入後即可將課表儲存至雲端";
@@ -223,9 +254,15 @@ const CoursePlanner = () => {
         }
     };
 
+    // 🎯 新增：計算被隱藏的衝堂課程數量
+    const conflictingCoursesCount = useMemo(() => {
+        if (!filters.hideConflicting) return 0;
+        return staticCourses.filter(course => hasTimeConflict(course)).length;
+    }, [staticCourses, hasTimeConflict, filters.hideConflicting]);
+
     return (
         <div className="course-planner">
-            {/* 🔔 新增：通知容器 */}
+            {/* 通知容器 */}
             <div className="notifications-container">
                 {notifications.map(notification => (
                     <div 
@@ -295,11 +332,38 @@ const CoursePlanner = () => {
                                 ))}
                             </select>
                         </div>
+                        {/* 🎯 新增：隱藏衝堂課程開關 */}
+                        <div className="filter-group conflict-filter-group">
+                            <label className="conflict-filter-label">
+                                <input
+                                    type="checkbox"
+                                    name="hideConflicting"
+                                    checked={filters.hideConflicting}
+                                    onChange={handleFilterChange}
+                                    className="conflict-checkbox"
+                                />
+                                <span className="conflict-checkbox-text">
+                                    隱藏衝堂課程
+                                    {filters.hideConflicting && conflictingCoursesCount > 0 && (
+                                        <span className="conflict-count">
+                                            （已隱藏 {conflictingCoursesCount} 門）
+                                        </span>
+                                    )}
+                                </span>
+                            </label>
+                        </div>
                     </div>
 
                     <div className="planner-content">
                         <div className="course-list-container">
-                            <h3>課程列表 ({filteredCourses.length} 門課程)</h3>
+                            <h3>
+                                課程列表 ({filteredCourses.length} 門課程)
+                                {filters.hideConflicting && conflictingCoursesCount > 0 && (
+                                    <span className="filter-info">
+                                        ・已過濾 {conflictingCoursesCount} 門衝堂課程
+                                    </span>
+                                )}
+                            </h3>
                             <ul className="course-list">
                                 {filteredCourses.map((course, index) => (
                                     <li key={index}>
