@@ -27,6 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g semver
+          npm install node-fetch
 
       - name: Generate Gemini-powered changelog
         id: changelog
