@@ -627,3 +627,46 @@
   z-index: 10;
   position: relative;
 }
+/* 🚨 緊急修復：強制顯示廣告 */
+.post-card.ad-post {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  background: #fff9e6 !important;
+  border: 3px solid #ff6b35 !important; /* 🔧 明顯的橘色邊框方便識別 */
+  box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3) !important;
+}
+
+.ad-post * {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.ad-post .ad-banner {
+  display: block !important;
+  visibility: visible !important;
+  background: #ff6b35 !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.ad-post .post-title {
+  color: #d2691e !important;
+  font-weight: bold !important;
+}
+
+/* 🔧 調試：給所有廣告加紅色邊框 */
+.ad-post::before {
+  content: "🚨 這是廣告" !important;
+  position: absolute !important;
+  top: -25px !important;
+  left: 0 !important;
+  background: red !important;
+  color: white !important;
+  padding: 5px 10px !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  z-index: 9999 !important;
+}
