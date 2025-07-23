@@ -1,12 +1,14 @@
-/* frontend/src/components/Navbar.css (修復佈局版) */
+/* frontend/src/components/Navbar.css (完整版 - 包含漸變色設計) */
 
+/* 🎯 主要導航欄 - 漸變色背景 */
 .navbar {
-  background: var(--background-card);
-  box-shadow: var(--shadow-sm);
-  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #00796b, #004d40);
+  box-shadow: 0 2px 8px rgba(0, 121, 107, 0.2);
   position: sticky;
   top: 0;
   z-index: 1000;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .nav-container {
@@ -14,87 +16,93 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 🔧 確保左右分佈 */
+  justify-content: space-between;
   padding: var(--spacing-md) var(--spacing-lg);
-  gap: var(--spacing-lg); /* 🔧 添加間距控制 */
+  gap: var(--spacing-lg);
 }
 
 /* 品牌標誌 */
 .nav-brand {
-  flex-shrink: 0; /* 🔧 防止縮小 */
-  order: 1; /* 🔧 明確設定順序 */
+  flex-shrink: 0;
+  order: 1;
 }
 
 .brand-link {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: #ffffff;
   text-decoration: none;
   transition: all var(--transition-normal);
-  white-space: nowrap; /* 🔧 防止文字換行 */
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .brand-link:hover {
-  color: var(--primary-dark);
+  color: #e0f2f1;
+  transform: translateY(-1px);
 }
 
 /* 導航連結 */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md); /* 🔧 減少間距避免佔用過多空間 */
-  flex-wrap: nowrap; /* 🔧 防止換行 */
-  order: 2; /* 🔧 明確設定順序 */
-  flex: 0 1 auto; /* 🔧 不要佔用過多空間 */
-  justify-content: center; /* 🔧 內部居中 */
+  gap: var(--spacing-md);
+  flex-wrap: nowrap;
+  order: 2;
+  flex: 0 1 auto;
+  justify-content: center;
 }
 
 .nav-link {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.85rem; /* 🔧 稍微縮小字體 */
-  padding: var(--spacing-xs) var(--spacing-sm); /* 🔧 減少內邊距 */
+  font-size: 0.85rem;
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-md);
   transition: all var(--transition-normal);
   white-space: nowrap;
 }
 
 .nav-link:hover {
-  color: var(--primary-color);
-  background: var(--primary-ultra-light);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
 }
 
 .nav-link.active {
-  color: var(--primary-color);
-  background: var(--primary-ultra-light);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
   font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 🎯 管理員連結特殊樣式 */
 .admin-link {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
   color: var(--text-white) !important;
-  border: 2px solid transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .admin-link:hover {
-  background: linear-gradient(135deg, #ee5a24, #d63031);
+  background: linear-gradient(135deg, #ee5a24, #d63031) !important;
   color: var(--text-white) !important;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .admin-link.active {
-  background: linear-gradient(135deg, #d63031, #b71c1c);
+  background: linear-gradient(135deg, #d63031, #b71c1c) !important;
   color: var(--text-white) !important;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* 🔧 用戶區域 - 修復位置 */
+/* 🔧 用戶區域 */
 .nav-user {
-  flex-shrink: 0; /* 🔧 防止縮小 */
-  order: 3; /* 🔧 明確設定最後順序 */
-  margin-left: auto; /* 🔧 確保推到最右邊 */
+  flex-shrink: 0;
+  order: 3;
+  margin-left: auto;
 }
 
 .user-info {
@@ -113,37 +121,42 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 2px solid var(--primary-light);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .user-name {
   font-weight: 500;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.9rem;
-  white-space: nowrap; /* 🔧 防止用戶名換行 */
+  white-space: nowrap;
 }
 
 .logout-btn {
-  background: var(--accent-error);
-  color: var(--text-white);
-  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-md);
   font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-normal);
-  white-space: nowrap; /* 🔧 防止按鈕文字換行 */
+  white-space: nowrap;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 
 .logout-btn:hover {
-  background: #c82333;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav-loading {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
 }
 
@@ -152,14 +165,21 @@
   align-items: center;
 }
 
+/* Google 登入按鈕容器樣式調整 */
+.login-section > div {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* 🔧 大螢幕優化 */
 @media (min-width: 1200px) {
   .nav-links {
-    gap: var(--spacing-lg); /* 大螢幕可以增加間距 */
+    gap: var(--spacing-lg);
   }
   
   .nav-link {
-    font-size: 0.9rem; /* 大螢幕可以稍大字體 */
+    font-size: 0.9rem;
     padding: var(--spacing-sm) var(--spacing-md);
   }
 }
@@ -178,6 +198,10 @@
 
 /* 響應式設計 - 平板 */
 @media (max-width: 768px) {
+  .navbar {
+    background: linear-gradient(135deg, #00796b, #004d40);
+  }
+
   .nav-container {
     flex-direction: column;
     gap: var(--spacing-md);
@@ -185,22 +209,22 @@
   }
 
   .nav-brand {
-    order: 1; /* 品牌在最上面 */
+    order: 1;
     align-self: center;
   }
 
   .nav-user {
-    order: 2; /* 用戶資訊在中間 */
+    order: 2;
     align-self: center;
-    margin-left: 0; /* 🔧 重設margin */
+    margin-left: 0;
   }
 
   .nav-links {
-    order: 3; /* 導航連結在最下面 */
+    order: 3;
     width: 100%;
     justify-content: center;
     gap: var(--spacing-sm);
-    flex-wrap: wrap; /* 平板允許換行 */
+    flex-wrap: wrap;
   }
 
   .nav-link {
@@ -209,7 +233,7 @@
   }
 
   .user-name {
-    display: inline; /* 平板顯示用戶名 */
+    display: inline;
   }
 }
 
@@ -234,7 +258,7 @@
   }
 
   .user-name {
-    display: none; /* 手機隱藏用戶名節省空間 */
+    display: none;
   }
 
   .user-avatar {
@@ -248,4 +272,31 @@
   .nav-container {
     max-width: 1400px;
   }
+}
+
+/* 🎨 特殊動畫效果 */
+@keyframes navbarGlow {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(0, 121, 107, 0.2);
+  }
+  50% {
+    box-shadow: 0 2px 12px rgba(0, 121, 107, 0.3);
+  }
+}
+
+.navbar {
+  animation: navbarGlow 3s ease-in-out infinite;
+}
+
+/* 🔧 確保漸變色優先級 */
+.navbar {
+  background: linear-gradient(135deg, #00796b, #004d40) !important;
+}
+
+/* 焦點可訪問性 */
+.nav-link:focus,
+.brand-link:focus,
+.logout-btn:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
 }

@@ -1,4 +1,4 @@
-// frontend/src/components/Navbar.jsx (完整版 - 包含貼文頁面導航)
+// frontend/src/components/Navbar.jsx (完整版 - 包含漸變色和所有功能)
 import React, { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
@@ -101,7 +101,6 @@ const Navbar = () => {
             📅 暨大行事曆
           </NavLink>
           
-          {/* 🎯 新增：貼文頁面導航 */}
           <NavLink 
             to="/posts" 
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
@@ -116,7 +115,7 @@ const Navbar = () => {
             📝 更新日誌
           </NavLink>
 
-          {/* 🎯 管理員專用連結 */}
+          {/* 管理員專用連結 */}
           {isAdmin && (
             <NavLink 
               to="/admin" 
