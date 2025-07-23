@@ -1,4 +1,4 @@
-// frontend/src/App.jsx (新增管理員路由)
+// frontend/src/App.jsx (完整版 - 包含貼文頁面路由)
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -9,7 +9,8 @@ import GraduationTracker from './components/2_GraduationTracker/GraduationTracke
 import CampusDirectory from './components/3_CampusDirectory/CampusDirectory.jsx';
 import UniversityCalendar from './components/4_UniversityCalendar/UniversityCalendar.jsx';
 import UpdateLog from './components/5_UpdateLog/UpdateLog.jsx';
-import AdminPanel from './components/AdminPanel/AdminPanel.jsx'; // 🎯 新增管理員專區
+import PostsPage from './components/PostsPage/PostsPage.jsx'; // 🎯 新增貼文頁面
+import AdminPanel from './components/AdminPanel/AdminPanel.jsx';
 import Navbar from './components/Navbar.jsx';
 import DisclaimerModal from './components/DisclaimerModal.jsx';
 
@@ -57,7 +58,8 @@ function App() {
             <Route path="/directory" element={<CampusDirectory />} />
             <Route path="/calendar" element={<UniversityCalendar />} />
             <Route path="/updates" element={<UpdateLog />} />
-            <Route path="/admin" element={<AdminPanel />} /> {/* 🎯 新增管理員路由 */}
+            <Route path="/posts" element={<PostsPage />} /> {/* 🎯 新增貼文頁面路由 */}
+            <Route path="/admin" element={<AdminPanel />} />
           </Routes>
         </div>
         <Toaster />

@@ -1,4 +1,4 @@
-// frontend/src/components/Navbar.jsx (語法修復版)
+// frontend/src/components/Navbar.jsx (完整版 - 包含貼文頁面導航)
 import React, { useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
@@ -18,11 +18,11 @@ const GoogleLoginButton = () => {
 
       window.google.accounts.id.renderButton(
         currentButtonDiv,
-        {
-          theme: "outline",
+        { 
+          theme: "outline", 
           size: "large", 
-          shape: "pill",
-          text: "signin_with"
+          shape: "pill", 
+          text: "signin_with" 
         }
       );
 
@@ -41,58 +41,114 @@ const GoogleLoginButton = () => {
 
 const Navbar = () => {
   const { isLoggedIn, user, logout, isLoading, isAdmin } = useAuth();
-  // 🎯 使用 useAuth 取得認證狀態
-  
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  if (isLoading) {
+    return (
+      <nav className="navbar">
+        <div className="nav-container">
+          <div className="nav-brand">
+            <NavLink to="/" className="brand-link">
+              🎓 暨大生超級助理
+            </NavLink>
+          </div>
+          <div className="nav-loading">載入中...</div>
+        </div>
+      </nav>
+    );
+  }
+
   return (
     <nav className="navbar">
-      <div className="nav-brand">暨大生超級助理</div>
-      
-      <div className="nav-links">
-        <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}>
-          智慧排課
-        </NavLink>
-        <NavLink to="/tracker" className={({ isActive }) => isActive ? 'active' : ''}>
-          畢業進度
-        </NavLink>
-        <NavLink to="/directory" className={({ isActive }) => isActive ? 'active' : ''}>
-          校園通訊錄
-        </NavLink>
-        <NavLink to="/calendar" className={({ isActive }) => isActive ? 'active' : ''}>
-          暨大行事曆
-        </NavLink>
-        <NavLink to="/updates" className={({ isActive }) => isActive ? 'active' : ''}>
-          更新日誌
-        </NavLink>
-        {isAdmin && (
-                <NavLink to="/admin" className={({ isActive }) => isActive ? 'active' : ''}>
-            🔐 管理員
+      <div className="nav-container">
+        {/* 品牌標誌 */}
+        <div className="nav-brand">
+          <NavLink to="/" className="brand-link">
+            🎓 暨大生超級助理
           </NavLink>
-        )}
-      </div>
+        </div>
 
-      <div className="auth-section">
-        {isLoading ? (
-          <div className="loading-text">載入中...</div>
-        ) : isLoggedIn && user ? (
-          <div className="user-profile">
-            <img 
-              src={user.avatar_url} 
-              alt={user.full_name} 
-              className="avatar"
-              title={user.full_name}
-            />
-            <span className="user-name">{user.full_name}</span>
-            <button 
-              onClick={logout} 
-              className="logout-button"
-              title="登出"
+        {/* 主要導航連結 */}
+        <div className="nav-links">
+          <NavLink 
+            to="/" 
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📚 智慧排課
+          </NavLink>
+          
+          <NavLink 
+            to="/tracker" 
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            🎓 畢業進度
+          </NavLink>
+          
+          <NavLink 
+            to="/directory" 
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📞 校園通訊錄
+          </NavLink>
+          
+          <NavLink 
+            to="/calendar" 
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📅 暨大行事曆
+          </NavLink>
+          
+          {/* 🎯 新增：貼文頁面導航 */}
+          <NavLink 
+            to="/posts" 
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📰 最新資訊
+          </NavLink>
+          
+          <NavLink 
+            to="/updates" 
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            📝 更新日誌
+          </NavLink>
+
+          {/* 🎯 管理員專用連結 */}
+          {isAdmin && (
+            <NavLink 
+              to="/admin" 
+              className={({ isActive }) => `nav-link admin-link ${isActive ? 'active' : ''}`}
             >
-              登出
-            </button>
-          </div>
-        ) : (
-          <GoogleLoginButton />
-        )}
+              🔐 管理員
+            </NavLink>
+          )}
+        </div>
+
+        {/* 用戶區域 */}
+        <div className="nav-user">
+          {isLoggedIn ? (
+            <div className="user-info">
+              <div className="user-profile">
+                <img 
+                  src={user.avatar_url} 
+                  alt={user.full_name}
+                  className="user-avatar"
+                />
+                <span className="user-name">{user.full_name}</span>
+              </div>
+              <button onClick={handleLogout} className="logout-btn">
+                🔓 登出
+              </button>
+            </div>
+          ) : (
+            <div className="login-section">
+              <GoogleLoginButton />
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
