@@ -7,7 +7,7 @@ class GeminiChangelogGenerator {
   constructor() {
     this.updateDataPath = 'frontend/src/components/5_UpdateLog/updateData.js';
     this.geminiApiKey = process.env.GEMINI_API_KEY;
-    this.geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+    this.geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
   }
 
   // 🤖 使用改進的重試機制
