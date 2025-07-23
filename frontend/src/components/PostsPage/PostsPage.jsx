@@ -1,4 +1,4 @@
-// frontend/src/components/PostsPage/PostsPage.jsx (隱藏廣告數量版本)
+// frontend/src/components/PostsPage/PostsPage.jsx (修復廣告顯示 - 不使用推薦詞彙)
 import React, { useState, useEffect } from 'react';
 import './PostsPage.css';
 
@@ -56,15 +56,21 @@ const PostsPage = () => {
     setCurrentPage(1);
   }, [contentPosts, selectedType, searchTerm, sortBy]);
 
-  // 分頁和廣告插入邏輯
+  // 🔧 修復：分頁和廣告插入邏輯
   useEffect(() => {
     const startIndex = (currentPage - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
     const paginatedContent = filteredPosts.slice(startIndex, endIndex);
     
-    // 🎯 將廣告穿插到內容中（廣告永遠顯示但不提及）
+    // 🎯 確保廣告永遠顯示 - 修復插入邏輯
     const mixedPosts = insertAdsIntoPosts(paginatedContent, adPosts);
     setDisplayPosts(mixedPosts);
+    
+    // 🔧 調試：檢查廣告是否正確插入
+    console.log('廣告數量:', adPosts.length);
+    console.log('內容數量:', paginatedContent.length);
+    console.log('最終顯示數量:', mixedPosts.length);
+    console.log('包含廣告的項目:', mixedPosts.filter(post => post.isAd));
   }, [filteredPosts, currentPage, adPosts, postsPerPage]);
 
   const loadPosts = async () => {
@@ -74,9 +80,12 @@ const PostsPage = () => {
         const posts = JSON.parse(savedPosts);
         const visiblePosts = posts.filter(post => post.isVisible);
         
-        // 🎯 分離廣告和內容（但不顯示廣告統計）
+        // 🔧 確保廣告和內容正確分離
         const ads = visiblePosts.filter(post => post.type === 'ad');
         const content = visiblePosts.filter(post => post.type !== 'ad');
+        
+        console.log('載入的廣告:', ads);
+        console.log('載入的內容:', content);
         
         setAllPosts(visiblePosts);
         setAdPosts(ads);
@@ -89,29 +98,58 @@ const PostsPage = () => {
     }
   };
 
-  // 🎯 廣告穿插邏輯（保持不變但更隱蔽）
+  // 🔧 修復：廣告穿插邏輯
   const insertAdsIntoPosts = (contentPosts, ads) => {
-    if (ads.length === 0) return contentPosts;
+    console.log('插入廣告函數 - 內容:', contentPosts.length, '廣告:', ads.length);
+    
+    if (ads.length === 0) {
+      console.log('沒有廣告，返回純內容');
+      return contentPosts;
+    }
     
     const result = [];
-    const adInterval = Math.max(1, Math.floor(contentPosts.length / ads.length)) || 2;
     
+    // 🔧 修復：即使沒有內容也要顯示廣告
+    if (contentPosts.length === 0) {
+      console.log('沒有內容，只顯示廣告');
+      return ads.map(ad => ({ ...ad, isAd: true }));
+    }
+    
+    // 計算插入間隔
+    const adInterval = Math.max(1, Math.floor(contentPosts.length / ads.length)) || 1;
+    console.log('廣告插入間隔:', adInterval);
+    
+    // 插入內容和廣告
     contentPosts.forEach((post, index) => {
       result.push(post);
       
-      if ((index + 1) % adInterval === 0 && ads[Math.floor(index / adInterval)]) {
+      // 每隔一定數量插入廣告
+      const adIndex = Math.floor(index / adInterval);
+      if ((index + 1) % adInterval === 0 && ads[adIndex]) {
+        console.log(`在位置 ${index + 1} 插入廣告:`, ads[adIndex].title);
         result.push({
-          ...ads[Math.floor(index / adInterval)],
-          isAd: true
+          ...ads[adIndex],
+          isAd: true,
+          uniqueKey: `ad-${ads[adIndex].id}-${index}` // 🔧 添加唯一鍵
         });
       }
     });
     
-    const remainingAds = ads.slice(Math.floor(contentPosts.length / adInterval));
-    remainingAds.forEach(ad => {
-      result.push({ ...ad, isAd: true });
-    });
+    // 🔧 確保所有廣告都被插入
+    const insertedAdCount = result.filter(item => item.isAd).length;
+    if (insertedAdCount < ads.length) {
+      const remainingAds = ads.slice(insertedAdCount);
+      remainingAds.forEach((ad, index) => {
+        console.log('追加剩餘廣告:', ad.title);
+        result.push({
+          ...ad,
+          isAd: true,
+          uniqueKey: `ad-remaining-${ad.id}-${index}`
+        });
+      });
+    }
     
+    console.log('最終結果:', result.length, '項，其中廣告:', result.filter(r => r.isAd).length);
     return result;
   };
 
@@ -155,14 +193,13 @@ const PostsPage = () => {
 
   return (
     <div className="posts-page">
-      {/* 🎯 修改：頁面標頭 - 不顯示廣告數量 */}
+      {/* 頁面標頭 - 不顯示廣告數量 */}
       <div className="posts-header">
         <h1>📰 最新資訊</h1>
         <p>探索最新的文章、公告和相關資訊</p>
         <div className="posts-summary">
           <span>📄 {getTypeCount('article')} 篇文章</span>
           <span>📣 {getTypeCount('announcement')} 則公告</span>
-          {/* 🎯 移除：<span>📢 {adPosts.length} 個廣告</span> */}
         </div>
       </div>
 
@@ -172,7 +209,7 @@ const PostsPage = () => {
           <div className="search-box">
             <input
               type="text"
-              placeholder="🔍 搜尋文章和公告..." // 🎯 修改：不提及廣告
+              placeholder="🔍 搜尋文章和公告..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
@@ -212,13 +249,6 @@ const PostsPage = () => {
             📣 公告 ({getTypeCount('announcement')})
           </button>
         </div>
-
-        {/* 🎯 移除：廣告說明區塊 */}
-        {/* {adPosts.length > 0 && (
-          <div className="ad-notice">
-            💡 <strong>注意：</strong>廣告內容會穿插顯示，不受篩選和搜尋影響
-          </div>
-        )} */}
       </div>
 
       {/* 貼文列表 */}
@@ -249,13 +279,13 @@ const PostsPage = () => {
           <div className="posts-grid">
             {displayPosts.map((post, index) => (
               <article 
-                key={`${post.id}-${index}`} 
-                className={`post-card post-${post.type} ${post.isAd ? 'sponsored-post' : ''}`} // 🎯 修改：改用更隱蔽的類名
+                key={post.uniqueKey || `${post.id}-${index}`} 
+                className={`post-card post-${post.type} ${post.isAd ? 'ad-post' : ''}`} // 🔧 修復：改回 ad-post
               >
-                {/* 🎯 修改：更隱蔽的廣告標記 */}
+                {/* 🔧 修復：廣告標記但不使用推薦詞彙 */}
                 {post.isAd && (
-                  <div className="sponsored-banner"> {/* 🎯 修改：更隱蔽的類名 */}
-                    <span>💫 推薦</span> {/* 🎯 修改：使用「推薦」而非「廣告」 */}
+                  <div className="ad-banner"> {/* 🔧 修復：改回原來的類名 */}
+                    <span>✨ 精選</span> {/* 🔧 使用「精選」而非「推薦」 */}
                   </div>
                 )}
 
@@ -264,7 +294,7 @@ const PostsPage = () => {
                   <span className={`post-badge badge-${post.type}`}>
                     {post.type === 'article' && '📄 文章'}
                     {post.type === 'announcement' && '📣 公告'}
-                    {post.type === 'ad' && '💫 推薦內容'} {/* 🎯 修改：更隱蔽的標識 */}
+                    {post.type === 'ad' && '✨ 精選內容'} {/* 🔧 使用「精選」 */}
                   </span>
                   <span className="post-date">
                     📅 {new Date(post.createdAt).toLocaleDateString('zh-TW', {
@@ -304,7 +334,7 @@ const PostsPage = () => {
         <div className="pagination">
           <div className="pagination-info">
             第 {currentPage} 頁，共 {totalPages} 頁
-            （共 {filteredPosts.length} 項內容） {/* 🎯 修改：不提及廣告數量 */}
+            （共 {filteredPosts.length} 項內容）
           </div>
           
           <div className="pagination-controls">
@@ -361,14 +391,13 @@ const PostsPage = () => {
         </div>
       )}
 
-      {/* 🎯 修改：統計資訊 - 不顯示廣告數量 */}
+      {/* 統計資訊 */}
       <div className="posts-stats">
         <p>
           {searchTerm 
             ? `🔍 搜尋「${searchTerm}」：找到 ${filteredPosts.length} 篇相關內容`
             : `📊 ${selectedType === 'all' ? '全部內容' : getTypeDisplayName(selectedType)}：共 ${filteredPosts.length} 項`
           }
-          {/* 🎯 移除：{adPosts.length > 0 && ` | 📢 廣告 ${adPosts.length} 個（永久顯示）`} */}
         </p>
       </div>
     </div>
