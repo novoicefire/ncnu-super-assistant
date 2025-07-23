@@ -159,6 +159,7 @@ const AdBlockDetector = ({ children }) => {
     );
   }
 
+  // 在 AdBlockDetector.jsx 中修改這個部分
   if (adBlockDetected) {
     return (
       <div className="adblock-overlay">
@@ -166,14 +167,14 @@ const AdBlockDetector = ({ children }) => {
           <div className="adblock-icon">🛡️</div>
           <h2>需要關閉廣告攔截器</h2>
           <p>為了確保所有重要資訊和功能正常運作，您必須將本網站加入廣告攔截器的白名單或關閉廣告攔截器。</p>
-          
+        
           <div className="adblock-instructions">
             <h3>📝 如何加入白名單：</h3>
             <div className="instruction-steps">
               <div className="step">
                 <span className="step-number">1</span>
                 <span>點擊瀏覽器右上角的廣告攔截器圖標（如 uBlock Origin、AdBlock Plus）</span>
-              </div>
+                </div>
               <div className="step">
                 <span className="step-number">2</span>
                 <span>選擇「暫停此網站的廣告攔截」或「加入白名單」</span>
@@ -185,17 +186,17 @@ const AdBlockDetector = ({ children }) => {
             </div>
           </div>
 
+          {/* 🔧 修改後的說明區塊 */}
           <div className="adblock-notice">
             <p>🔒 <strong>為什麼需要關閉廣告攔截器？</strong></p>
-            <p>我們的網站包含重要的學術資訊、服務公告、問題回報管道和重要通知。廣告攔截器會誤判並隱藏這些關鍵內容，導致您無法獲取完整的服務體驗。</p>
-            <p><strong>請注意：本網站不會顯示任何第三方廣告，所有內容都是為了提供更好的學術服務。</strong></p>
+            <p>我們的網站包含重要的學術資訊、服務公告、問題回報管道和重要通知。廣告攔截器可能會誤判並隱藏這些關鍵內容，導致您無法獲取完整的服務體驗。</p>
+            <p><strong>為了確保所有功能正常運作，請將本網站加入白名單。</strong></p>
           </div>
 
           <div className="adblock-actions">
             <button className="retry-btn" onClick={refreshPage}>
               🔄 重新載入頁面
             </button>
-            {/* 🚫 移除：「仍要繼續使用」按鈕 */}
           </div>
 
           <div className="adblock-footer">
@@ -205,6 +206,7 @@ const AdBlockDetector = ({ children }) => {
       </div>
     );
   }
+
 
   return children;
 };
