@@ -1,4 +1,4 @@
-/* frontend/src/components/AdBlockDetector.css */
+/* frontend/src/components/AdBlockDetector.css (完整簡潔版) */
 
 .adblock-checking {
   display: flex;
@@ -67,7 +67,7 @@
 }
 
 .adblock-modal h2 {
-  color: var(--primary-dark);
+  color: #dc3545;
   margin-bottom: var(--spacing-lg);
   font-size: 2rem;
   font-weight: 700;
@@ -123,104 +123,6 @@
 .step span:last-child {
   color: var(--text-primary);
   line-height: 1.5;
-}
-
-.adblock-notice {
-  background: #fff8e1;
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-md);
-  border-left: 4px solid #ffc107;
-  margin-bottom: var(--spacing-xl);
-  text-align: left;
-}
-
-.adblock-notice p {
-  margin: 0 0 var(--spacing-sm) 0;
-  color: #856404;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.adblock-notice p:last-child {
-  margin-bottom: 0;
-}
-
-.adblock-actions {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.retry-btn, .continue-btn {
-  padding: var(--spacing-md) var(--spacing-xl);
-  border: none;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  min-width: 180px;
-}
-
-.retry-btn {
-  background: var(--primary-color);
-  color: var(--text-white);
-}
-
-.retry-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
-}
-
-.continue-btn {
-  background: #6c757d;
-  color: var(--text-white);
-}
-
-.continue-btn:hover {
-  background: #545b62;
-  transform: translateY(-2px);
-}
-
-/* 響應式設計 */
-@media (max-width: 768px) {
-  .adblock-modal {
-    padding: var(--spacing-lg);
-    margin: var(--spacing-md);
-  }
-
-  .adblock-modal h2 {
-    font-size: 1.5rem;
-  }
-
-  .adblock-actions {
-    flex-direction: column;
-  }
-
-  .retry-btn, .continue-btn {
-    width: 100%;
-  }
-
-  .instruction-steps {
-    font-size: 0.9rem;
-  }
-}
-
-/* 測試用的廣告攔截器檢測元素 */
-.adsbox {
-  position: absolute !important;
-  left: -9999px !important;
-  width: 1px !important;
-  height: 1px !important;
-}
-/* 🔒 強制關閉 AdBlock 版本的額外樣式 */
-
-.adblock-modal h2 {
-  color: #dc3545; /* 使用更強烈的紅色表示必須性 */
-  margin-bottom: var(--spacing-lg);
-  font-size: 2rem;
-  font-weight: 700;
 }
 
 .adblock-notice {
@@ -283,11 +185,219 @@
   font-size: 1rem;
 }
 
-/* 響應式調整 */
+/* 🎯 簡潔版 AdBlock 通知樣式 */
+.adblock-modal.compact {
+  max-width: 450px;
+  padding: var(--spacing-xl);
+  text-align: center;
+}
+
+.adblock-modal.compact h2 {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-color);
+}
+
+.adblock-modal.compact > p {
+  font-size: 1rem;
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-primary);
+}
+
+.adblock-steps {
+  background: var(--background-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  text-align: left;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.step-item:last-child {
+  margin-bottom: 0;
+}
+
+.step-item span {
+  background: var(--primary-color);
+  color: var(--text-white);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.retry-btn.compact {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 0.95rem;
+  width: auto;
+  min-width: 160px;
+}
+
+/* 響應式設計 */
 @media (max-width: 768px) {
+  .adblock-modal {
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md);
+  }
+
+  .adblock-modal h2 {
+    font-size: 1.5rem;
+  }
+
+  .adblock-actions {
+    flex-direction: column;
+  }
+
   .retry-btn {
     width: 100%;
-    padding: var(--spacing-md) var(--spacing-lg);
-    font-size: 1rem;
+  }
+
+  .instruction-steps {
+    font-size: 0.9rem;
+  }
+  
+  /* 簡潔版響應式 */
+  .adblock-modal.compact {
+    max-width: 90vw;
+    padding: var(--spacing-lg);
+  }
+  
+  .adblock-modal.compact h2 {
+    font-size: 1.3rem;
+  }
+  
+  .step-item {
+    font-size: 0.85rem;
+  }
+  
+  .retry-btn.compact {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .adblock-modal {
+    padding: var(--spacing-md);
+  }
+
+  .adblock-modal h2 {
+    font-size: 1.3rem;
+  }
+
+  .adblock-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  /* 簡潔版手機響應式 */
+  .adblock-modal.compact {
+    padding: var(--spacing-md);
+  }
+  
+  .adblock-modal.compact .adblock-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+/* 測試用的廣告攔截器檢測元素 */
+.adsbox {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+
+/* 額外的檢測元素樣式 */
+.adtest, .banner-ad, .advertisement, .google-ads, .adsystem, .adsbygoogle {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* 確保檢測元素的基本樣式 */
+.ad-banner, .ad-container, .ads-wrapper {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+}
+
+/* 焦點可訪問性 */
+.retry-btn:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* 載入狀態動畫優化 */
+.checking-spinner {
+  border-width: 3px;
+}
+
+/* 彈窗進入動畫增強 */
+.adblock-modal {
+  animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 按鈕點擊效果 */
+.retry-btn:active {
+  transform: translateY(0);
+}
+
+/* 深色模式支援（如果需要） */
+@media (prefers-color-scheme: dark) {
+  .adblock-overlay {
+    background: rgba(0, 0, 0, 0.9);
+  }
+  
+  .adblock-steps {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .adblock-notice {
+    background: rgba(255, 243, 205, 0.1);
+    border-left-color: #ffc107;
+  }
+}
+
+/* 高對比度支援 */
+@media (prefers-contrast: high) {
+  .adblock-modal {
+    border: 2px solid var(--primary-color);
+  }
+  
+  .step-item span {
+    border: 1px solid var(--text-white);
+  }
+}
+
+/* 減少動畫偏好支援 */
+@media (prefers-reduced-motion: reduce) {
+  .checking-spinner {
+    animation: none;
+  }
+  
+  .adblock-modal {
+    animation: none;
+  }
+  
+  .retry-btn {
+    transition: none;
   }
 }

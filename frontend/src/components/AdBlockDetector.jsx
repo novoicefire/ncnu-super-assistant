@@ -163,50 +163,30 @@ const AdBlockDetector = ({ children }) => {
   if (adBlockDetected) {
     return (
       <div className="adblock-overlay">
-        <div className="adblock-modal">
+        <div className="adblock-modal compact">
           <div className="adblock-icon">🛡️</div>
-          <h2>需要關閉廣告攔截器</h2>
-          <p>為了確保所有重要資訊和功能正常運作，您必須將本網站加入廣告攔截器的白名單或關閉廣告攔截器。</p>
+          <h2>請關閉廣告攔截器</h2>
+          <p>為確保所有功能正常運作，請將本網站加入白名單。</p>
         
-          <div className="adblock-instructions">
-            <h3>📝 如何加入白名單：</h3>
-            <div className="instruction-steps">
-              <div className="step">
-                <span className="step-number">1</span>
-                <span>點擊瀏覽器右上角的廣告攔截器圖標（如 uBlock Origin、AdBlock Plus）</span>
-                </div>
-              <div className="step">
-                <span className="step-number">2</span>
-                <span>選擇「暫停此網站的廣告攔截」或「加入白名單」</span>
-              </div>
-              <div className="step">
-                <span className="step-number">3</span>
-                <span>重新載入頁面即可正常使用所有功能</span>
-              </div>
+          <div className="adblock-steps">
+            <div className="step-item">
+              <span>1.</span> 點擊瀏覽器的廣告攔截器圖標
+            </div>
+            <div className="step-item">
+              <span>2.</span> 選擇「暫停此網站」或「加入白名單」
+            </div>
+            <div className="step-item">
+              <span>3.</span> 重新載入頁面
             </div>
           </div>
 
-          {/* 🔧 修改後的說明區塊 */}
-          <div className="adblock-notice">
-            <p>🔒 <strong>為什麼需要關閉廣告攔截器？</strong></p>
-            <p>我們的網站包含重要的學術資訊、服務公告、問題回報管道和重要通知。廣告攔截器可能會誤判並隱藏這些關鍵內容，導致您無法獲取完整的服務體驗。</p>
-            <p><strong>為了確保所有功能正常運作，請將本網站加入白名單。</strong></p>
-          </div>
-
-          <div className="adblock-actions">
-            <button className="retry-btn" onClick={refreshPage}>
-              🔄 重新載入頁面
-            </button>
-          </div>
-
-          <div className="adblock-footer">
-            <p>🎓 感謝您的理解與配合！</p>
-          </div>
+          <button className="retry-btn compact" onClick={refreshPage}>
+            🔄 重新載入頁面
+          </button>
         </div>
       </div>
     );
   }
-
 
   return children;
 };
