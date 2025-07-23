@@ -1,4 +1,4 @@
-/* frontend/src/components/PostsPage/PostsPage.css (反廣告攔截版本) */
+/* frontend/src/components/PostsPage/PostsPage.css (完整類名匹配版本) */
 
 .posts-page {
   max-width: 1200px;
@@ -150,8 +150,8 @@
   gap: var(--spacing-xl);
 }
 
-/* 貼文卡片 */
-.post-card {
+/* 🔧 修復：內容卡片樣式（對應新的 content-card 類名） */
+.content-card {
   background: var(--background-card);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
@@ -162,38 +162,40 @@
   overflow: hidden;
 }
 
-.post-card:hover {
+.content-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
 }
 
-.post-card.post-article {
+.content-type-article {
   border-left-color: var(--primary-color);
 }
 
-.post-card.post-announcement {
+.content-type-announcement {
   border-left-color: #17a2b8;
 }
 
-.post-card.post-ad {
+.content-type-ad,
+.content-type-highlight,
+.content-type-featured {
   border-left-color: #ffd700;
 }
 
-/* 🌟 精選文章（原廣告）特殊樣式 - 避開檢測詞彙 */
-.post-card.featured-post {
+/* 🔧 修復：優先內容（原廣告）特殊樣式 */
+.content-card.priority-content {
   background: linear-gradient(135deg, #fffef7, #ffffff);
   border: 2px solid #ffd700;
   border-left-color: #ffd700;
   box-shadow: var(--shadow-md);
 }
 
-.post-card.featured-post:hover {
+.content-card.priority-content:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 20px rgba(255, 215, 0, 0.25);
 }
 
-/* 🌟 精選標籤樣式 */
-.featured-label {
+/* 🔧 修復：優先標記樣式 */
+.content-priority-badge {
   position: absolute;
   top: 0;
   right: 0;
@@ -205,10 +207,11 @@
   letter-spacing: 0.5px;
   border-bottom-left-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
+  z-index: 10;
 }
 
-/* 貼文卡片標頭 */
-.post-card-header {
+/* 🔧 修復：內容標頭樣式 */
+.content-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -218,11 +221,12 @@
   margin-top: var(--spacing-md);
 }
 
-.featured-post .post-card-header {
+.priority-content .content-header {
   margin-top: var(--spacing-lg);
 }
 
-.post-badge {
+/* 🔧 修復：內容類型標籤樣式 */
+.content-type-badge {
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-md);
   font-size: 0.75rem;
@@ -231,35 +235,39 @@
   letter-spacing: 0.5px;
 }
 
-.badge-article {
+.type-article {
   background: var(--primary-ultra-light);
   color: var(--primary-dark);
 }
 
-.badge-announcement {
+.type-announcement {
   background: #d1ecf1;
   color: #0c5460;
 }
 
-/* 🌟 精選內容標籤樣式 */
-.badge-ad {
+.type-ad,
+.type-highlight,
+.type-featured,
+.type-standard {
   background: rgba(255, 215, 0, 0.15);
   color: #b8860b;
   border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
-.post-date {
+/* 🔧 修復：內容日期樣式 */
+.content-date {
   font-size: 0.8rem;
   color: var(--text-secondary);
   font-weight: 500;
 }
 
-/* 貼文卡片內容 */
-.post-card-content {
+/* 🔧 修復：內容主體樣式 */
+.content-body {
   margin-bottom: var(--spacing-lg);
 }
 
-.post-title {
+/* 🔧 修復：內容標題樣式 */
+.content-title {
   color: var(--primary-dark);
   font-size: 1.25rem;
   font-weight: 700;
@@ -267,69 +275,91 @@
   line-height: 1.4;
 }
 
-/* 🌟 精選內容標題樣式 */
-.featured-post .post-title {
+.priority-content .content-title {
   color: #b8860b;
 }
 
-.post-excerpt {
+/* 🔧 修復：內容文字樣式 */
+.content-text {
   color: var(--text-primary);
   line-height: 1.7;
   font-size: 0.95rem;
 }
 
-.post-excerpt img {
+.content-text img {
   max-width: 100%;
   height: auto;
   border-radius: var(--radius-md);
   margin: var(--spacing-md) 0;
 }
 
-.post-excerpt a {
+.content-text a {
   color: var(--primary-color);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: all var(--transition-normal);
 }
 
-.post-excerpt a:hover {
+.content-text a:hover {
   border-bottom-color: var(--primary-color);
   background: var(--primary-ultra-light);
   padding: 2px 4px;
   border-radius: 3px;
 }
 
-.post-excerpt strong {
+.content-text strong {
   font-weight: 700;
   color: var(--primary-dark);
 }
 
-.post-excerpt em {
+.content-text em {
   font-style: italic;
   color: var(--text-secondary);
 }
 
-.post-excerpt ul, .post-excerpt ol {
+.content-text ul, .content-text ol {
   padding-left: var(--spacing-lg);
   margin: var(--spacing-md) 0;
 }
 
-.post-excerpt li {
+.content-text li {
   margin-bottom: var(--spacing-xs);
 }
 
-/* 修復iframe顯示問題 */
-.featured-post iframe {
+/* 🔧 修復：處理特殊嵌入內容 */
+.content-text div[data-embed] {
+  display: block !important;
+  width: 100% !important;
+  height: 441px !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: var(--radius-md) !important;
+  background: #f8f9fa !important;
+  margin: var(--spacing-md) 0 !important;
+  padding: var(--spacing-md) !important;
+  text-align: center !important;
+  color: var(--text-secondary) !important;
+  font-style: italic !important;
+}
+
+.content-text div[data-embed]::before {
+  content: "📄 嵌入內容載入中..." !important;
+  display: block !important;
+  margin-top: 180px !important;
+}
+
+/* 🔧 修復：iframe 正常顯示 */
+.content-text iframe {
   display: block !important;
   width: 100% !important;
   max-width: 100% !important;
   height: 441px !important;
   border: none !important;
-  margin: 10px 0 !important;
+  border-radius: var(--radius-md) !important;
+  margin: var(--spacing-md) 0 !important;
 }
 
-/* 貼文卡片頁腳 */
-.post-card-footer {
+/* 🔧 修復：內容頁腳樣式 */
+.content-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -339,7 +369,7 @@
   border-top: 1px solid #f0f0f0;
 }
 
-.post-author, .post-updated {
+.content-author, .content-updated {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
@@ -513,7 +543,7 @@
     text-align: center;
   }
 
-  .post-card-footer {
+  .content-footer {
     flex-direction: column;
     gap: var(--spacing-xs);
     align-items: flex-start;
@@ -536,7 +566,7 @@
     font-size: 1.75rem;
   }
 
-  .post-card {
+  .content-card {
     padding: var(--spacing-lg);
   }
 
@@ -562,21 +592,16 @@
   }
 }
 
-.post-card {
+.content-card {
   animation: fadeInUp 0.3s ease-out;
 }
 
-.post-card:nth-child(2n) {
+.content-card:nth-child(2n) {
   animation-delay: 0.1s;
 }
 
-.post-card:nth-child(3n) {
+.content-card:nth-child(3n) {
   animation-delay: 0.2s;
-}
-
-/* 🌟 精選內容保持基本動畫 */
-.featured-post {
-  animation: fadeInUp 0.3s ease-out;
 }
 
 /* 焦點可訪問性 */
@@ -589,38 +614,25 @@
   outline-offset: 2px;
 }
 
-/* 🌟 確保精選內容與一般內容適當區分 */
-.featured-post .post-excerpt {
+/* 確保優先內容與一般內容適當區分 */
+.priority-content .content-text {
   color: var(--text-primary);
 }
 
-.featured-post .post-card-footer {
+.priority-content .content-footer {
   color: var(--text-secondary);
 }
 
-/* 🌟 精選內容的邊框保持一致性 */
-.post-card.featured-post {
-  border-left-width: 4px;
-  border-left-style: solid;
-}
-
-/* 🌟 精選標籤不會太突兀 */
-.featured-label {
-  opacity: 0.95;
-  font-size: 0.7rem;
-}
-
-/* 🌟 精選內容的用戶頭像和資訊保持一致 */
-.featured-post .post-author {
+.priority-content .content-author {
   color: var(--text-secondary);
 }
 
-.featured-post .post-date {
+.priority-content .content-date {
   color: var(--text-secondary);
 }
 
-/* 🌟 精選內容特殊背景效果 */
-.featured-post::before {
+/* 優先內容特殊背景效果 */
+.priority-content::before {
   content: '';
   position: absolute;
   top: 0;
@@ -630,10 +642,4 @@
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.03), rgba(255, 215, 0, 0.01));
   pointer-events: none;
   border-radius: var(--radius-lg);
-}
-
-/* 🌟 確保精選標籤在最上層 */
-.featured-label {
-  z-index: 10;
-  position: relative;
 }
