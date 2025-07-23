@@ -40,8 +40,9 @@ const GoogleLoginButton = () => {
 };
 
 const Navbar = () => {
-  const { isLoggedIn, user, logout, isLoading } = useAuth();
-
+  const { isLoggedIn, user, logout, isLoading, isAdmin } = useAuth();
+  // 🎯 使用 useAuth 取得認證狀態
+  
   return (
     <nav className="navbar">
       <div className="nav-brand">暨大生超級助理</div>
