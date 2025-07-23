@@ -1,10 +1,10 @@
-// frontend/src/components/PostsPage/PostsPage.jsx (深度反檢測版)
+// frontend/src/components/PostsPage/PostsPage.jsx (修復 iframe 版本)
 import React, { useState, useEffect } from 'react';
 import './PostsPage.css';
 
 const PostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);
-  const [priorityPosts, setPriorityPosts] = useState([]); // 🔧 進一步改名
+  const [priorityPosts, setPriorityPosts] = useState([]);
   const [regularPosts, setRegularPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [displayPosts, setDisplayPosts] = useState([]);
@@ -55,7 +55,6 @@ const PostsPage = () => {
     const endIndex = startIndex + postsPerPage;
     const paginatedContent = filteredPosts.slice(startIndex, endIndex);
     
-    // 🔧 使用更隱蔽的合併策略
     const mixedPosts = blendContentStreams(paginatedContent, priorityPosts);
     setDisplayPosts(mixedPosts);
   }, [filteredPosts, currentPage, priorityPosts, postsPerPage]);
@@ -67,13 +66,13 @@ const PostsPage = () => {
         const posts = JSON.parse(savedPosts);
         const allVisiblePosts = posts.filter(post => post.isVisible);
         
-        // 🔧 深度偽裝：檢測多種可能的標識
+        // 檢測多種可能的標識
         const priority = posts.filter(post => 
           post.type === 'ad' || 
           post.type === 'highlight' || 
           post.type === 'featured' ||
-          post.title.includes('問題回報') || // 基於已知內容檢測
-          post.author === '暨大生超級助理網站' // 基於作者檢測
+          post.title.includes('問題回報') ||
+          post.author === '暨大生超級助理網站'
         );
         const regular = allVisiblePosts.filter(post => 
           post.type !== 'ad' && 
@@ -94,7 +93,6 @@ const PostsPage = () => {
     }
   };
 
-  // 🔧 重新命名函數，使用更自然的詞彙
   const blendContentStreams = (mainContent, priorityContent) => {
     if (priorityContent.length === 0) {
       return mainContent;
@@ -105,12 +103,11 @@ const PostsPage = () => {
     if (mainContent.length === 0) {
       return priorityContent.map((item, index) => ({
         ...item,
-        isPriority: true, // 🔧 避免使用 isAd 或 isSpecial
+        isPriority: true,
         streamKey: `priority-only-${item.id}-${index}`
       }));
     }
     
-    // 🔧 更自然的內容分布算法
     const totalItems = mainContent.length + priorityContent.length;
     const distributionRatio = Math.ceil(totalItems / priorityContent.length);
     
@@ -133,7 +130,6 @@ const PostsPage = () => {
       }
     });
     
-    // 添加剩餘的優先內容
     while (priorityIndex < priorityContent.length) {
       const remainingItem = {
         ...priorityContent[priorityIndex],
@@ -151,7 +147,7 @@ const PostsPage = () => {
     const typeMap = {
       article: '📄 文章',
       announcement: '📣 公告',
-      highlight: '⭐ 重點', // 🔧 新增類型
+      highlight: '⭐ 重點',
       featured: '⭐ 特色'
     };
     return typeMap[type] || type;
@@ -272,12 +268,12 @@ const PostsPage = () => {
             {displayPosts.map((post, index) => (
               <article 
                 key={post.streamKey || `${post.id}-${index}`} 
-                className={`content-card ${post.isPriority ? 'priority-content' : ''} content-type-${post.type || 'standard'}`} // 🔧 完全避開 post-card 等常見模式
+                className={`content-card ${post.isPriority ? 'priority-content' : ''} content-type-${post.type || 'standard'}`}
               >
-                {/* 🔧 更隱蔽的優先標記 */}
+                {/* 優先標記 */}
                 {post.isPriority && (
-                  <div className="content-priority-badge"> {/* 🔧 避開 banner, label 等詞彙 */}
-                    <span>📌 置頂</span> {/* 🔧 使用更自然的詞彙 */}
+                  <div className="content-priority-badge">
+                    <span>📌 置頂</span>
                   </div>
                 )}
 
@@ -298,20 +294,11 @@ const PostsPage = () => {
 
                 <div className="content-body">
                   <h2 className="content-title">{post.title}</h2>
-                  {/* 🔧 特殊處理 iframe 內容以避免檢測 */}
-                  <div className="content-text">
-                    {post.content && post.content.includes('iframe') ? (
-                      <div 
-                        dangerouslySetInnerHTML={{ 
-                          __html: post.content
-                            .replace(/iframe/g, 'div data-embed') // 🔧 偽裝 iframe
-                            .replace(/embed\.dcard\.tw/g, 'content.dcard.tw') // 🔧 偽裝 URL
-                        }} 
-                      />
-                    ) : (
-                      <div dangerouslySetInnerHTML={{ __html: post.content }} />
-                    )}
-                  </div>
+                  {/* 🔧 修復：恢復 iframe 正常功能 */}
+                  <div 
+                    className="content-text"
+                    dangerouslySetInnerHTML={{ __html: post.content }}
+                  />
                 </div>
 
                 <div className="content-footer">
