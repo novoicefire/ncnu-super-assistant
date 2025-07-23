@@ -1,11 +1,9 @@
-// frontend/src/components/PostsPage/PostsPage.jsx (完整的反檢測版本)
+// frontend/src/components/PostsPage/PostsPage.jsx (完全反檢測版本)
 import React, { useState, useEffect } from 'react';
 import './PostsPage.css';
 
 const PostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);
-  const [specialPosts, setSpecialPosts] = useState([]); // 改名：避開檢測
-  const [contentPosts, setContentPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [displayPosts, setDisplayPosts] = useState([]);
   
@@ -22,21 +20,30 @@ const PostsPage = () => {
     loadPosts();
   }, []);
 
-  // 篩選和搜尋功能（不影響特色文章）
+  // 篩選和搜尋功能
   useEffect(() => {
-    let filtered = [...contentPosts];
+    let filtered = [...allPosts];
 
+    // 類型篩選（對所有類型生效，但特殊內容永遠顯示）
     if (selectedType !== 'all') {
-      filtered = filtered.filter(post => post.type === selectedType);
+      // 保留特殊內容，只篩選指定類型的普通內容
+      const regularFiltered = allPosts.filter(post => 
+        post.type === selectedType || post.type === 'ad'
+      );
+      filtered = regularFiltered;
     }
 
+    // 搜尋篩選（特殊內容不受影響）
     if (searchTerm.trim()) {
-      filtered = filtered.filter(post =>
+      const searchFiltered = filtered.filter(post =>
+        post.type === 'ad' || // 特殊內容永遠顯示
         post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         post.content.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      filtered = searchFiltered;
     }
 
+    // 排序（統一排序，特殊內容自然穿插）
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'oldest':
@@ -51,89 +58,37 @@ const PostsPage = () => {
 
     setFilteredPosts(filtered);
     setCurrentPage(1);
-  }, [contentPosts, selectedType, searchTerm, sortBy]);
+  }, [allPosts, selectedType, searchTerm, sortBy]);
 
-  // 分頁和特色文章插入邏輯
+  // 分頁處理
   useEffect(() => {
     const startIndex = (currentPage - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
-    const paginatedContent = filteredPosts.slice(startIndex, endIndex);
+    const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
     
-    const mixedPosts = insertFeaturedIntoPosts(paginatedContent, specialPosts);
-    setDisplayPosts(mixedPosts);
-  }, [filteredPosts, currentPage, specialPosts, postsPerPage]);
+    // 為每個項目添加渲染標記
+    const postsWithMeta = paginatedPosts.map((post, index) => ({
+      ...post,
+      renderKey: `post-${post.id}-${currentPage}-${index}`,
+      isPremium: post.type === 'ad' // 標記特殊內容
+    }));
+    
+    setDisplayPosts(postsWithMeta);
+  }, [filteredPosts, currentPage, postsPerPage]);
 
   const loadPosts = async () => {
     try {
       const savedPosts = localStorage.getItem('adminPosts');
       if (savedPosts) {
         const posts = JSON.parse(savedPosts);
-        const allVisiblePosts = posts.filter(post => post.isVisible);
-        
-        // 將原來的廣告類型重新分類為特色文章
-        const featured = posts.filter(post => post.type === 'ad');
-        const content = allVisiblePosts.filter(post => post.type !== 'ad');
-        
-        setAllPosts(allVisiblePosts);
-        setSpecialPosts(featured);
-        setContentPosts(content);
+        const visiblePosts = posts.filter(post => post.isVisible);
+        setAllPosts(visiblePosts);
       }
     } catch (error) {
       console.error('載入貼文失敗:', error);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // 特色文章穿插邏輯
-  const insertFeaturedIntoPosts = (contentPosts, featuredPosts) => {
-    if (featuredPosts.length === 0) {
-      return contentPosts;
-    }
-    
-    const result = [];
-    
-    if (contentPosts.length === 0) {
-      return featuredPosts.map((featured, index) => ({
-        ...featured,
-        isSpecial: true,
-        uniqueKey: `featured-only-${featured.id}-${index}`
-      }));
-    }
-    
-    const totalSlots = contentPosts.length + featuredPosts.length;
-    const interval = Math.ceil(totalSlots / featuredPosts.length);
-    
-    let featuredIndex = 0;
-    let nextFeaturedPosition = Math.min(interval - 1, 0);
-    
-    contentPosts.forEach((post, index) => {
-      result.push(post);
-      
-      if (index === nextFeaturedPosition && featuredIndex < featuredPosts.length) {
-        const featuredToInsert = {
-          ...featuredPosts[featuredIndex],
-          isSpecial: true,
-          uniqueKey: `featured-inserted-${featuredPosts[featuredIndex].id}-${index}`
-        };
-        result.push(featuredToInsert);
-        
-        featuredIndex++;
-        nextFeaturedPosition += interval;
-      }
-    });
-    
-    while (featuredIndex < featuredPosts.length) {
-      const remainingFeatured = {
-        ...featuredPosts[featuredIndex],
-        isSpecial: true,
-        uniqueKey: `featured-remaining-${featuredPosts[featuredIndex].id}-${featuredIndex}`
-      };
-      result.push(remainingFeatured);
-      featuredIndex++;
-    }
-    
-    return result;
   };
 
   const getTypeDisplayName = (type) => {
@@ -145,25 +100,14 @@ const PostsPage = () => {
   };
 
   const getTypeCount = (type) => {
-    if (type === 'all') return contentPosts.length;
-    return contentPosts.filter(post => post.type === type).length;
+    if (type === 'all') {
+      return allPosts.filter(post => post.type !== 'ad').length;
+    }
+    return allPosts.filter(post => post.type === type).length;
   };
 
   // 分頁邏輯
   const totalPages = Math.ceil(Math.max(1, filteredPosts.length) / postsPerPage);
-  const pageNumbers = [];
-  const maxVisiblePages = 5;
-  
-  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-  
-  if (endPage - startPage < maxVisiblePages - 1) {
-    startPage = Math.max(1, endPage - maxVisiblePages + 1);
-  }
-  
-  for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
-  }
 
   if (isLoading) {
     return (
@@ -192,7 +136,7 @@ const PostsPage = () => {
           <div className="search-box">
             <input
               type="text"
-              placeholder="🔍 搜尋文章和公告..."
+              placeholder="🔍 搜尋內容..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
@@ -259,27 +203,27 @@ const PostsPage = () => {
             )}
           </div>
         ) : (
-          <div className="posts-grid">
+          <div className="content-grid">
             {displayPosts.map((post, index) => (
               <article 
-                key={post.uniqueKey || `${post.id}-${index}`} 
-                className={`post-card post-${post.type} ${post.isSpecial ? 'featured-content' : ''}`}
+                key={post.renderKey} 
+                className={`content-card content-${post.type} ${post.isPremium ? 'premium-content' : ''}`}
               >
-                {/* 特色標記 */}
-                {post.isSpecial && (
-                  <div className="special-label">
-                    <span>⭐ 精選</span>
+                {/* 特殊內容標記 */}
+                {post.isPremium && (
+                  <div className="premium-badge">
+                    <span>⭐ 推薦</span>
                   </div>
                 )}
 
-                {/* 貼文標頭 */}
-                <div className="post-card-header">
-                  <span className={`post-badge badge-${post.type}`}>
+                {/* 內容標頭 */}
+                <div className="content-header">
+                  <span className={`content-label label-${post.type}`}>
                     {post.type === 'article' && '📄 文章'}
                     {post.type === 'announcement' && '📣 公告'}
-                    {post.type === 'ad' && '⭐ 精選內容'}
+                    {post.type === 'ad' && '⭐ 推薦內容'}
                   </span>
-                  <span className="post-date">
+                  <span className="content-date">
                     📅 {new Date(post.createdAt).toLocaleDateString('zh-TW', {
                       year: 'numeric',
                       month: 'long',
@@ -288,20 +232,20 @@ const PostsPage = () => {
                   </span>
                 </div>
 
-                {/* 貼文內容 */}
-                <div className="post-card-content">
-                  <h2 className="post-title">{post.title}</h2>
+                {/* 內容主體 */}
+                <div className="content-body">
+                  <h2 className="content-title">{post.title}</h2>
                   <div 
-                    className="post-excerpt"
+                    className="content-text"
                     dangerouslySetInnerHTML={{ __html: post.content }}
                   />
                 </div>
 
-                {/* 貼文頁腳 */}
-                <div className="post-card-footer">
-                  <span className="post-author">👤 {post.author}</span>
+                {/* 內容頁腳 */}
+                <div className="content-footer">
+                  <span className="content-author">👤 {post.author}</span>
                   {post.updatedAt && (
-                    <span className="post-updated">
+                    <span className="content-updated">
                       ✏️ {new Date(post.updatedAt).toLocaleDateString('zh-TW')}
                     </span>
                   )}
@@ -329,39 +273,18 @@ const PostsPage = () => {
               ⬅️ 上一頁
             </button>
 
-            {startPage > 1 && (
-              <>
+            {Array.from({length: Math.min(5, totalPages)}, (_, i) => {
+              const pageNum = i + 1;
+              return (
                 <button
-                  className="pagination-btn"
-                  onClick={() => setCurrentPage(1)}
+                  key={pageNum}
+                  className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
+                  onClick={() => setCurrentPage(pageNum)}
                 >
-                  1
+                  {pageNum}
                 </button>
-                {startPage > 2 && <span className="pagination-ellipsis">...</span>}
-              </>
-            )}
-
-            {pageNumbers.map(pageNum => (
-              <button
-                key={pageNum}
-                className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
-                onClick={() => setCurrentPage(pageNum)}
-              >
-                {pageNum}
-              </button>
-            ))}
-
-            {endPage < totalPages && (
-              <>
-                {endPage < totalPages - 1 && <span className="pagination-ellipsis">...</span>}
-                <button
-                  className="pagination-btn"
-                  onClick={() => setCurrentPage(totalPages)}
-                >
-                  {totalPages}
-                </button>
-              </>
-            )}
+              );
+            })}
 
             <button
               className="pagination-btn"
@@ -379,7 +302,7 @@ const PostsPage = () => {
         <p>
           {searchTerm 
             ? `🔍 搜尋「${searchTerm}」：找到 ${filteredPosts.length} 篇相關內容`
-            : `📊 ${selectedType === 'all' ? '全部內容' : getTypeDisplayName(selectedType)}：共 ${filteredPosts.length} 項`
+            : `📊 ${selectedType === 'all' ? '全部內容' : getTypeDisplayName(selectedType)}：共 ${getTypeCount(selectedType)} 項`
           }
         </p>
       </div>
