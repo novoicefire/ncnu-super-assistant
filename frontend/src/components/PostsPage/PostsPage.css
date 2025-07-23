@@ -1,4 +1,4 @@
-/* frontend/src/components/PostsPage/PostsPage.css (完整功能版 - 包含分頁和廣告樣式) */
+/* frontend/src/components/PostsPage/PostsPage.css (完整版 - 隱蔽廣告設計) */
 
 .posts-page {
   max-width: 1200px;
@@ -139,16 +139,6 @@
   box-shadow: var(--shadow-md);
 }
 
-/* 🎯 廣告說明 */
-.ad-notice {
-  background: #fff3cd;
-  color: #856404;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
-  border: 1px solid #ffeaa7;
-  font-size: 0.85rem;
-}
-
 /* 貼文容器 */
 .posts-container {
   margin-bottom: var(--spacing-xxl);
@@ -186,31 +176,32 @@
 }
 
 .post-card.post-ad {
-  border-left-color: #ffc107;
+  border-left-color: #f0c674;
 }
 
-/* 🎯 廣告貼文特殊樣式 */
-.post-card.ad-post {
-  background: linear-gradient(135deg, #fff9e6, #ffffff);
-  border: 2px solid #ffc107;
+/* 🎯 更新：推薦內容（原廣告）特殊樣式 - 更隱蔽設計 */
+.post-card.sponsored-post {
+  background: linear-gradient(135deg, #fefcf3, #ffffff);
+  border: 2px solid #f0c674;
+  border-left-color: #f0c674;
   box-shadow: var(--shadow-md);
 }
 
-.post-card.ad-post:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+.post-card.sponsored-post:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(240, 198, 116, 0.25);
 }
 
-.ad-banner {
+/* 🎯 更新：更隱蔽的推薦橫幅 */
+.sponsored-banner {
   position: absolute;
   top: 0;
   right: 0;
-  background: linear-gradient(135deg, #ffc107, #ff9800);
-  color: #000;
+  background: linear-gradient(135deg, #f0c674, #e6b800);
+  color: #5d4e37;
   padding: var(--spacing-xs) var(--spacing-md);
   font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-weight: 600;
   letter-spacing: 0.5px;
   border-bottom-left-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
@@ -224,11 +215,11 @@
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-sm);
   border-bottom: 1px solid #e0e0e0;
-  margin-top: var(--spacing-md); /* 為廣告橫幅留空間 */
+  margin-top: var(--spacing-md);
 }
 
-.ad-post .post-card-header {
-  margin-top: var(--spacing-lg); /* 廣告需要更多空間 */
+.sponsored-post .post-card-header {
+  margin-top: var(--spacing-lg);
 }
 
 .post-badge {
@@ -250,10 +241,11 @@
   color: #0c5460;
 }
 
+/* 🎯 更新：推薦內容標籤樣式 - 更自然 */
 .badge-ad {
-  background: rgba(255, 193, 7, 0.2);
-  color: #856404;
-  border: 1px solid #ffc107;
+  background: rgba(240, 198, 116, 0.15);
+  color: #8b7355;
+  border: 1px solid rgba(240, 198, 116, 0.3);
 }
 
 .post-date {
@@ -275,8 +267,9 @@
   line-height: 1.4;
 }
 
-.ad-post .post-title {
-  color: #b8860b; /* 廣告標題特殊顏色 */
+/* 🎯 更新：推薦內容標題樣式 - 更自然的顏色 */
+.sponsored-post .post-title {
+  color: #8b7355;
 }
 
 .post-excerpt {
@@ -309,6 +302,11 @@
 .post-excerpt strong {
   font-weight: 700;
   color: var(--primary-dark);
+}
+
+.post-excerpt em {
+  font-style: italic;
+  color: var(--text-secondary);
 }
 
 .post-excerpt ul, .post-excerpt ol {
@@ -566,6 +564,14 @@
   animation-delay: 0.2s;
 }
 
+/* 🎯 更新：推薦內容只保留基本動畫，移除過度明顯的效果 */
+.sponsored-post {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* 🎯 移除：過於明顯的廣告發光動畫 */
+/* @keyframes adGlow - 已移除 */
+
 /* 焦點可訪問性 */
 .search-input:focus,
 .sort-select:focus,
@@ -576,16 +582,35 @@
   outline-offset: 2px;
 }
 
-/* 🎯 廣告特殊動畫 */
-.ad-post {
-  animation: fadeInUp 0.3s ease-out, adGlow 3s ease-in-out infinite;
+/* 🎯 移除的廣告說明區塊樣式（已不需要） */
+/* .ad-notice - 已移除 */
+
+/* 🎯 確保推薦內容與一般內容視覺差異最小化 */
+.sponsored-post .post-excerpt {
+  color: var(--text-primary);
 }
 
-@keyframes adGlow {
-  0%, 100% {
-    box-shadow: var(--shadow-md);
-  }
-  50% {
-    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.2);
-  }
+.sponsored-post .post-card-footer {
+  color: var(--text-secondary);
+}
+
+/* 🎯 微調：讓推薦內容的邊框更自然 */
+.post-card.sponsored-post {
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+/* 🎯 確保推薦橫幅不會太突兀 */
+.sponsored-banner {
+  opacity: 0.9;
+  font-size: 0.65rem;
+}
+
+/* 🎯 推薦內容的用戶頭像和資訊保持一致 */
+.sponsored-post .post-author {
+  color: var(--text-secondary);
+}
+
+.sponsored-post .post-date {
+  color: var(--text-secondary);
 }

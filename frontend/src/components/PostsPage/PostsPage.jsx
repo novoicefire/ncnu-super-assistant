@@ -1,20 +1,20 @@
-// frontend/src/components/PostsPage/PostsPage.jsx (完整功能版 - 廣告永久顯示)
+// frontend/src/components/PostsPage/PostsPage.jsx (隱藏廣告數量版本)
 import React, { useState, useEffect } from 'react';
 import './PostsPage.css';
 
 const PostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);
-  const [adPosts, setAdPosts] = useState([]); // 廣告貼文單獨管理
-  const [contentPosts, setContentPosts] = useState([]); // 文章和公告
+  const [adPosts, setAdPosts] = useState([]);
+  const [contentPosts, setContentPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [displayPosts, setDisplayPosts] = useState([]); // 最終顯示的貼文
+  const [displayPosts, setDisplayPosts] = useState([]);
   
   // 篩選和控制狀態
   const [selectedType, setSelectedType] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('newest'); // newest, oldest, title
+  const [sortBy, setSortBy] = useState('newest');
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(6); // 每頁顯示6篇內容
+  const [postsPerPage] = useState(6);
   const [isLoading, setIsLoading] = useState(true);
 
   // 載入貼文資料
@@ -53,7 +53,7 @@ const PostsPage = () => {
     });
 
     setFilteredPosts(filtered);
-    setCurrentPage(1); // 重設到第一頁
+    setCurrentPage(1);
   }, [contentPosts, selectedType, searchTerm, sortBy]);
 
   // 分頁和廣告插入邏輯
@@ -62,7 +62,7 @@ const PostsPage = () => {
     const endIndex = startIndex + postsPerPage;
     const paginatedContent = filteredPosts.slice(startIndex, endIndex);
     
-    // 🎯 將廣告穿插到內容中（廣告永遠顯示）
+    // 🎯 將廣告穿插到內容中（廣告永遠顯示但不提及）
     const mixedPosts = insertAdsIntoPosts(paginatedContent, adPosts);
     setDisplayPosts(mixedPosts);
   }, [filteredPosts, currentPage, adPosts, postsPerPage]);
@@ -74,7 +74,7 @@ const PostsPage = () => {
         const posts = JSON.parse(savedPosts);
         const visiblePosts = posts.filter(post => post.isVisible);
         
-        // 🎯 分離廣告和內容
+        // 🎯 分離廣告和內容（但不顯示廣告統計）
         const ads = visiblePosts.filter(post => post.type === 'ad');
         const content = visiblePosts.filter(post => post.type !== 'ad');
         
@@ -89,7 +89,7 @@ const PostsPage = () => {
     }
   };
 
-  // 🎯 將廣告穿插到內容中的邏輯
+  // 🎯 廣告穿插邏輯（保持不變但更隱蔽）
   const insertAdsIntoPosts = (contentPosts, ads) => {
     if (ads.length === 0) return contentPosts;
     
@@ -99,16 +99,14 @@ const PostsPage = () => {
     contentPosts.forEach((post, index) => {
       result.push(post);
       
-      // 每隔一定數量的內容插入一個廣告
       if ((index + 1) % adInterval === 0 && ads[Math.floor(index / adInterval)]) {
         result.push({
           ...ads[Math.floor(index / adInterval)],
-          isAd: true // 標記為廣告，方便樣式處理
+          isAd: true
         });
       }
     });
     
-    // 如果還有剩餘廣告，追加到末尾
     const remainingAds = ads.slice(Math.floor(contentPosts.length / adInterval));
     remainingAds.forEach(ad => {
       result.push({ ...ad, isAd: true });
@@ -157,14 +155,14 @@ const PostsPage = () => {
 
   return (
     <div className="posts-page">
-      {/* 頁面標頭 */}
+      {/* 🎯 修改：頁面標頭 - 不顯示廣告數量 */}
       <div className="posts-header">
         <h1>📰 最新資訊</h1>
         <p>探索最新的文章、公告和相關資訊</p>
         <div className="posts-summary">
           <span>📄 {getTypeCount('article')} 篇文章</span>
           <span>📣 {getTypeCount('announcement')} 則公告</span>
-          <span>📢 {adPosts.length} 個廣告</span>
+          {/* 🎯 移除：<span>📢 {adPosts.length} 個廣告</span> */}
         </div>
       </div>
 
@@ -174,7 +172,7 @@ const PostsPage = () => {
           <div className="search-box">
             <input
               type="text"
-              placeholder="🔍 搜尋文章和公告..."
+              placeholder="🔍 搜尋文章和公告..." // 🎯 修改：不提及廣告
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
@@ -215,12 +213,12 @@ const PostsPage = () => {
           </button>
         </div>
 
-        {/* 🎯 廣告說明 */}
-        {adPosts.length > 0 && (
+        {/* 🎯 移除：廣告說明區塊 */}
+        {/* {adPosts.length > 0 && (
           <div className="ad-notice">
             💡 <strong>注意：</strong>廣告內容會穿插顯示，不受篩選和搜尋影響
           </div>
-        )}
+        )} */}
       </div>
 
       {/* 貼文列表 */}
@@ -252,12 +250,12 @@ const PostsPage = () => {
             {displayPosts.map((post, index) => (
               <article 
                 key={`${post.id}-${index}`} 
-                className={`post-card post-${post.type} ${post.isAd ? 'ad-post' : ''}`}
+                className={`post-card post-${post.type} ${post.isAd ? 'sponsored-post' : ''}`} // 🎯 修改：改用更隱蔽的類名
               >
-                {/* 🎯 廣告標記 */}
+                {/* 🎯 修改：更隱蔽的廣告標記 */}
                 {post.isAd && (
-                  <div className="ad-banner">
-                    <span>📢 廣告</span>
+                  <div className="sponsored-banner"> {/* 🎯 修改：更隱蔽的類名 */}
+                    <span>💫 推薦</span> {/* 🎯 修改：使用「推薦」而非「廣告」 */}
                   </div>
                 )}
 
@@ -266,7 +264,7 @@ const PostsPage = () => {
                   <span className={`post-badge badge-${post.type}`}>
                     {post.type === 'article' && '📄 文章'}
                     {post.type === 'announcement' && '📣 公告'}
-                    {post.type === 'ad' && '📢 廣告'}
+                    {post.type === 'ad' && '💫 推薦內容'} {/* 🎯 修改：更隱蔽的標識 */}
                   </span>
                   <span className="post-date">
                     📅 {new Date(post.createdAt).toLocaleDateString('zh-TW', {
@@ -306,11 +304,10 @@ const PostsPage = () => {
         <div className="pagination">
           <div className="pagination-info">
             第 {currentPage} 頁，共 {totalPages} 頁
-            （內容項目 {filteredPosts.length} 個{adPosts.length > 0 ? ` + ${adPosts.length} 個廣告` : ''}）
+            （共 {filteredPosts.length} 項內容） {/* 🎯 修改：不提及廣告數量 */}
           </div>
           
           <div className="pagination-controls">
-            {/* 上一頁 */}
             <button
               className="pagination-btn"
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
@@ -319,7 +316,6 @@ const PostsPage = () => {
               ⬅️ 上一頁
             </button>
 
-            {/* 頁碼 */}
             {startPage > 1 && (
               <>
                 <button
@@ -354,7 +350,6 @@ const PostsPage = () => {
               </>
             )}
 
-            {/* 下一頁 */}
             <button
               className="pagination-btn"
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
@@ -366,14 +361,14 @@ const PostsPage = () => {
         </div>
       )}
 
-      {/* 統計資訊 */}
+      {/* 🎯 修改：統計資訊 - 不顯示廣告數量 */}
       <div className="posts-stats">
         <p>
           {searchTerm 
             ? `🔍 搜尋「${searchTerm}」：找到 ${filteredPosts.length} 篇相關內容`
             : `📊 ${selectedType === 'all' ? '全部內容' : getTypeDisplayName(selectedType)}：共 ${filteredPosts.length} 項`
           }
-          {adPosts.length > 0 && ` | 📢 廣告 ${adPosts.length} 個（永久顯示）`}
+          {/* 🎯 移除：{adPosts.length > 0 && ` | 📢 廣告 ${adPosts.length} 個（永久顯示）`} */}
         </p>
       </div>
     </div>
