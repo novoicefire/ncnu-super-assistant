@@ -1,4 +1,4 @@
-// frontend/src/App.jsx (修復版)
+// frontend/src/App.jsx (新增管理員路由)
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -9,6 +9,7 @@ import GraduationTracker from './components/2_GraduationTracker/GraduationTracke
 import CampusDirectory from './components/3_CampusDirectory/CampusDirectory.jsx';
 import UniversityCalendar from './components/4_UniversityCalendar/UniversityCalendar.jsx';
 import UpdateLog from './components/5_UpdateLog/UpdateLog.jsx';
+import AdminPanel from './components/AdminPanel/AdminPanel.jsx'; // 🎯 新增管理員專區
 import Navbar from './components/Navbar.jsx';
 import DisclaimerModal from './components/DisclaimerModal.jsx';
 
@@ -52,11 +53,11 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<CoursePlanner />} />
-            {/* 🔧 修復：使用正確的路由路徑 */}
             <Route path="/tracker" element={<GraduationTracker />} />
             <Route path="/directory" element={<CampusDirectory />} />
             <Route path="/calendar" element={<UniversityCalendar />} />
             <Route path="/updates" element={<UpdateLog />} />
+            <Route path="/admin" element={<AdminPanel />} /> {/* 🎯 新增管理員路由 */}
           </Routes>
         </div>
         <Toaster />

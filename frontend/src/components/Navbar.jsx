@@ -62,6 +62,11 @@ const Navbar = () => {
         <NavLink to="/updates" className={({ isActive }) => isActive ? 'active' : ''}>
           更新日誌
         </NavLink>
+        {isAdmin && (
+                <NavLink to="/admin" className={({ isActive }) => isActive ? 'active' : ''}>
+            🔐 管理員
+          </NavLink>
+        )}
       </div>
 
       <div className="auth-section">

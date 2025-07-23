@@ -1,0 +1,243 @@
+/* frontend/src/components/AdminPanel/AdminPanel.css */
+
+.admin-panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  min-height: 100vh;
+}
+
+.admin-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xxl);
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: var(--text-white);
+  border-radius: var(--radius-lg);
+}
+
+.admin-header h1 {
+  color: var(--text-white);
+  margin-bottom: var(--spacing-sm);
+  font-size: 2.5rem;
+}
+
+.admin-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* 貼文編輯器 */
+.post-editor {
+  margin-bottom: var(--spacing-xxl);
+  padding: var(--spacing-xl);
+}
+
+.post-editor h2 {
+  color: var(--primary-dark);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-editor {
+  width: 100%;
+  min-height: 200px;
+  padding: var(--spacing-md);
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all var(--transition-normal);
+}
+
+.content-editor:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1);
+}
+
+.editor-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-start;
+}
+
+/* 貼文列表 */
+.posts-list h2 {
+  color: var(--primary-dark);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.post-item {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.post-item.hidden-post {
+  opacity: 0.6;
+  background: #f8f9fa;
+  border-left-color: var(--text-light);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.post-meta {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.post-type {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.type-article {
+  background: var(--primary-ultra-light);
+  color: var(--primary-dark);
+}
+
+.type-ad {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.type-announcement {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.post-status {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.post-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.btn-sm {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.8rem;
+}
+
+.post-item h3 {
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-dark);
+}
+
+.post-content {
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+}
+
+.post-content a {
+  color: var(--primary-color);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-normal);
+}
+
+.post-content a:hover {
+  border-bottom-color: var(--primary-color);
+}
+
+.post-footer {
+  display: flex;
+  gap: var(--spacing-lg);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid #f0f0f0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xxl);
+  color: var(--text-secondary);
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .admin-panel {
+    padding: var(--spacing-lg);
+  }
+
+  .admin-header h1 {
+    font-size: 2rem;
+  }
+
+  .post-header {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: flex-start;
+  }
+
+  .post-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .editor-actions {
+    flex-direction: column;
+  }
+
+  .post-footer {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+}
+
+/* 載入動畫 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}

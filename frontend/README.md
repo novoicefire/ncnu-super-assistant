@@ -71,15 +71,11 @@
 啟動開發伺服器
 npm run dev
 
-text
-
 ### 環境變數設置
 
 創建 `.env` 檔案並設置以下變數：
 VITE_API_BASE_URL=your_backend_api_url
 VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
-
-text
 
 ## 📈 版本管理
 
@@ -143,8 +139,6 @@ refactor: 重構
 test: 測試相關
 chore: 其他修改
 
-text
-
 ## 📞 聯絡資訊
 
 - **專案維護**：novoicefire
@@ -159,4 +153,5 @@ text
 
 **⚠️ 重要聲明**：本專案為非官方學生自主開發，所有資訊請以學校正式公告為準。
 
-**🎓 獻給所有暨大學子**：希望這個工具能讓您的大學生活更加便利！
+**🎓 獻給所有暨大學子**：希望這個工具能讓您的大學生活更加便利
+    
