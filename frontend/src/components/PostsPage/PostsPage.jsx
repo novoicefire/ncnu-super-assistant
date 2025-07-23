@@ -1,14 +1,15 @@
-// frontend/src/components/PostsPage/PostsPage.jsx (修復統計篩選版)
+// frontend/src/components/PostsPage/PostsPage.jsx (完整的反檢測版本)
 import React, { useState, useEffect } from 'react';
 import './PostsPage.css';
 
 const PostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);
-  const [priorityPosts, setPriorityPosts] = useState([]);
-  const [regularPosts, setRegularPosts] = useState([]);
+  const [specialPosts, setSpecialPosts] = useState([]); // 改名：避開檢測
+  const [contentPosts, setContentPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [displayPosts, setDisplayPosts] = useState([]);
   
+  // 篩選和控制狀態
   const [selectedType, setSelectedType] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('newest');
@@ -16,20 +17,19 @@ const PostsPage = () => {
   const [postsPerPage] = useState(6);
   const [isLoading, setIsLoading] = useState(true);
 
+  // 載入貼文資料
   useEffect(() => {
     loadPosts();
   }, []);
 
-  // 🔧 修復：篩選和搜尋邏輯
+  // 篩選和搜尋功能（不影響特色文章）
   useEffect(() => {
-    let filtered = [...regularPosts];
+    let filtered = [...contentPosts];
 
-    // 🔧 修復：類型篩選邏輯
     if (selectedType !== 'all') {
-      filtered = regularPosts.filter(post => post.type === selectedType);
+      filtered = filtered.filter(post => post.type === selectedType);
     }
 
-    // 🔧 修復：搜尋篩選邏輯
     if (searchTerm.trim()) {
       filtered = filtered.filter(post =>
         post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -37,7 +37,6 @@ const PostsPage = () => {
       );
     }
 
-    // 排序邏輯
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'oldest':
@@ -52,16 +51,17 @@ const PostsPage = () => {
 
     setFilteredPosts(filtered);
     setCurrentPage(1);
-  }, [regularPosts, selectedType, searchTerm, sortBy]);
+  }, [contentPosts, selectedType, searchTerm, sortBy]);
 
+  // 分頁和特色文章插入邏輯
   useEffect(() => {
     const startIndex = (currentPage - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
     const paginatedContent = filteredPosts.slice(startIndex, endIndex);
     
-    const mixedPosts = blendContentStreams(paginatedContent, priorityPosts);
+    const mixedPosts = insertFeaturedIntoPosts(paginatedContent, specialPosts);
     setDisplayPosts(mixedPosts);
-  }, [filteredPosts, currentPage, priorityPosts, postsPerPage]);
+  }, [filteredPosts, currentPage, specialPosts, postsPerPage]);
 
   const loadPosts = async () => {
     try {
@@ -70,31 +70,13 @@ const PostsPage = () => {
         const posts = JSON.parse(savedPosts);
         const allVisiblePosts = posts.filter(post => post.isVisible);
         
-        // 🔧 修復：更準確的分類邏輯
-        const priority = allVisiblePosts.filter(post => 
-          post.type === 'ad' || 
-          post.type === 'highlight' || 
-          post.type === 'featured' ||
-          (post.title && post.title.includes('問題回報')) ||
-          (post.author && post.author.includes('暨大生超級助理'))
-        );
-        
-        const regular = allVisiblePosts.filter(post => 
-          post.type === 'article' || 
-          post.type === 'announcement'
-        );
-        
-        console.log('🔧 資料載入檢查:', {
-          總貼文: allVisiblePosts.length,
-          優先內容: priority.length,
-          一般內容: regular.length,
-          文章數: regular.filter(p => p.type === 'article').length,
-          公告數: regular.filter(p => p.type === 'announcement').length
-        });
+        // 將原來的廣告類型重新分類為特色文章
+        const featured = posts.filter(post => post.type === 'ad');
+        const content = allVisiblePosts.filter(post => post.type !== 'ad');
         
         setAllPosts(allVisiblePosts);
-        setPriorityPosts(priority);
-        setRegularPosts(regular);
+        setSpecialPosts(featured);
+        setContentPosts(content);
       }
     } catch (error) {
       console.error('載入貼文失敗:', error);
@@ -103,57 +85,57 @@ const PostsPage = () => {
     }
   };
 
-  const blendContentStreams = (mainContent, priorityContent) => {
-    if (priorityContent.length === 0) {
-      return mainContent;
+  // 特色文章穿插邏輯
+  const insertFeaturedIntoPosts = (contentPosts, featuredPosts) => {
+    if (featuredPosts.length === 0) {
+      return contentPosts;
     }
     
     const result = [];
     
-    if (mainContent.length === 0) {
-      return priorityContent.map((item, index) => ({
-        ...item,
-        isPriority: true,
-        streamKey: `priority-only-${item.id}-${index}`
+    if (contentPosts.length === 0) {
+      return featuredPosts.map((featured, index) => ({
+        ...featured,
+        isSpecial: true,
+        uniqueKey: `featured-only-${featured.id}-${index}`
       }));
     }
     
-    const totalItems = mainContent.length + priorityContent.length;
-    const distributionRatio = Math.ceil(totalItems / priorityContent.length);
+    const totalSlots = contentPosts.length + featuredPosts.length;
+    const interval = Math.ceil(totalSlots / featuredPosts.length);
     
-    let priorityIndex = 0;
-    let nextInsertPosition = Math.min(distributionRatio - 1, 0);
+    let featuredIndex = 0;
+    let nextFeaturedPosition = Math.min(interval - 1, 0);
     
-    mainContent.forEach((item, index) => {
-      result.push(item);
+    contentPosts.forEach((post, index) => {
+      result.push(post);
       
-      if (index === nextInsertPosition && priorityIndex < priorityContent.length) {
-        const priorityItem = {
-          ...priorityContent[priorityIndex],
-          isPriority: true,
-          streamKey: `priority-stream-${priorityContent[priorityIndex].id}-${index}`
+      if (index === nextFeaturedPosition && featuredIndex < featuredPosts.length) {
+        const featuredToInsert = {
+          ...featuredPosts[featuredIndex],
+          isSpecial: true,
+          uniqueKey: `featured-inserted-${featuredPosts[featuredIndex].id}-${index}`
         };
-        result.push(priorityItem);
+        result.push(featuredToInsert);
         
-        priorityIndex++;
-        nextInsertPosition += distributionRatio;
+        featuredIndex++;
+        nextFeaturedPosition += interval;
       }
     });
     
-    while (priorityIndex < priorityContent.length) {
-      const remainingItem = {
-        ...priorityContent[priorityIndex],
-        isPriority: true,
-        streamKey: `priority-remaining-${priorityContent[priorityIndex].id}-${priorityIndex}`
+    while (featuredIndex < featuredPosts.length) {
+      const remainingFeatured = {
+        ...featuredPosts[featuredIndex],
+        isSpecial: true,
+        uniqueKey: `featured-remaining-${featuredPosts[featuredIndex].id}-${featuredIndex}`
       };
-      result.push(remainingItem);
-      priorityIndex++;
+      result.push(remainingFeatured);
+      featuredIndex++;
     }
     
     return result;
   };
 
-  // 🔧 修復：統計函數
   const getTypeDisplayName = (type) => {
     const typeMap = {
       article: '📄 文章',
@@ -163,13 +145,11 @@ const PostsPage = () => {
   };
 
   const getTypeCount = (type) => {
-    if (type === 'all') {
-      return regularPosts.length;
-    }
-    return regularPosts.filter(post => post.type === type).length;
+    if (type === 'all') return contentPosts.length;
+    return contentPosts.filter(post => post.type === type).length;
   };
 
-  // 🔧 修復：分頁邏輯
+  // 分頁邏輯
   const totalPages = Math.ceil(Math.max(1, filteredPosts.length) / postsPerPage);
   const pageNumbers = [];
   const maxVisiblePages = 5;
@@ -203,26 +183,7 @@ const PostsPage = () => {
         <div className="posts-summary">
           <span>📄 {getTypeCount('article')} 篇文章</span>
           <span>📣 {getTypeCount('announcement')} 則公告</span>
-          <span>📊 總共 {getTypeCount('all')} 項內容</span>
         </div>
-      </div>
-
-      {/* 🔧 調試資訊（開發時使用） */}
-      <div className="debug-info" style={{
-        background: '#f0f8ff', 
-        padding: '10px', 
-        margin: '10px 0', 
-        borderRadius: '5px',
-        fontSize: '12px',
-        border: '1px solid #ddd'
-      }}>
-        <p><strong>📊 統計調試：</strong></p>
-        <p>一般內容總數: {regularPosts.length}</p>
-        <p>文章數量: {getTypeCount('article')}</p>
-        <p>公告數量: {getTypeCount('announcement')}</p>
-        <p>篩選後數量: {filteredPosts.length}</p>
-        <p>當前篩選: {selectedType}</p>
-        <p>搜尋關鍵字: "{searchTerm}"</p>
       </div>
 
       {/* 搜尋和篩選工具 */}
@@ -301,12 +262,12 @@ const PostsPage = () => {
           <div className="posts-grid">
             {displayPosts.map((post, index) => (
               <article 
-                key={post.streamKey || `${post.id}-${index}`} 
-                className={`post-card post-${post.type} ${post.isPriority ? 'featured-post' : ''}`}
+                key={post.uniqueKey || `${post.id}-${index}`} 
+                className={`post-card post-${post.type} ${post.isSpecial ? 'featured-content' : ''}`}
               >
-                {/* 優先內容標記 */}
-                {post.isPriority && (
-                  <div className="featured-label">
+                {/* 特色標記 */}
+                {post.isSpecial && (
+                  <div className="special-label">
                     <span>⭐ 精選</span>
                   </div>
                 )}
@@ -316,7 +277,7 @@ const PostsPage = () => {
                   <span className={`post-badge badge-${post.type}`}>
                     {post.type === 'article' && '📄 文章'}
                     {post.type === 'announcement' && '📣 公告'}
-                    {(post.type === 'ad' || post.type === 'highlight' || post.type === 'featured') && '⭐ 精選內容'}
+                    {post.type === 'ad' && '⭐ 精選內容'}
                   </span>
                   <span className="post-date">
                     📅 {new Date(post.createdAt).toLocaleDateString('zh-TW', {
@@ -356,7 +317,7 @@ const PostsPage = () => {
         <div className="pagination">
           <div className="pagination-info">
             第 {currentPage} 頁，共 {totalPages} 頁
-            （{selectedType === 'all' ? '全部' : getTypeDisplayName(selectedType)} {filteredPosts.length} 項內容）
+            （共 {filteredPosts.length} 項內容）
           </div>
           
           <div className="pagination-controls">

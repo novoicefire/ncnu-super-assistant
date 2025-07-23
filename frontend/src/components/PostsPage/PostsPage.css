@@ -643,3 +643,49 @@
   pointer-events: none;
   border-radius: var(--radius-lg);
 }
+/* 反廣告攔截器樣式 - 使用新的類名 */
+.featured-content {
+  background: linear-gradient(135deg, #fefcf3, #ffffff) !important;
+  border: 2px solid #f0c674 !important;
+  border-left-color: #f0c674 !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.featured-content:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(240, 198, 116, 0.25);
+}
+
+.special-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(135deg, #f0c674, #e6b800);
+  color: #5d4e37;
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom-left-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+.featured-content .post-card-header {
+  margin-top: var(--spacing-lg);
+}
+
+.featured-content .post-title {
+  color: #8b7355 !important;
+}
+
+.badge-ad {
+  background: rgba(240, 198, 116, 0.15);
+  color: #8b6914;
+  border: 1px solid rgba(240, 198, 116, 0.3);
+}
+
+/* 動畫效果 */
+.featured-content {
+  animation: fadeInUp 0.3s ease-out;
+}
