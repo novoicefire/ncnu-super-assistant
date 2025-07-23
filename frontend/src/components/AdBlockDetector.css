@@ -214,3 +214,80 @@
   width: 1px !important;
   height: 1px !important;
 }
+/* 🔒 強制關閉 AdBlock 版本的額外樣式 */
+
+.adblock-modal h2 {
+  color: #dc3545; /* 使用更強烈的紅色表示必須性 */
+  margin-bottom: var(--spacing-lg);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.adblock-notice {
+  background: #fff3cd;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border-left: 4px solid #ffc107;
+  margin-bottom: var(--spacing-xl);
+  text-align: left;
+}
+
+.adblock-notice p {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: #856404;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.adblock-notice p:last-child {
+  margin-bottom: 0;
+  font-weight: 600;
+  color: #dc3545;
+}
+
+.adblock-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.retry-btn {
+  padding: var(--spacing-lg) var(--spacing-xxl);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  background: var(--primary-color);
+  color: var(--text-white);
+  box-shadow: var(--shadow-md);
+}
+
+.retry-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.adblock-footer {
+  text-align: center;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid #e0e0e0;
+}
+
+.adblock-footer p {
+  margin: 0;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .retry-btn {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1rem;
+  }
+}

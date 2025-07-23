@@ -1,4 +1,4 @@
-// frontend/src/components/AdBlockDetector.jsx (增強版)
+// frontend/src/components/AdBlockDetector.jsx (強制關閉 AdBlock 版本)
 import React, { useState, useEffect } from 'react';
 import './AdBlockDetector.css';
 
@@ -164,8 +164,8 @@ const AdBlockDetector = ({ children }) => {
       <div className="adblock-overlay">
         <div className="adblock-modal">
           <div className="adblock-icon">🛡️</div>
-          <h2>檢測到廣告攔截器</h2>
-          <p>為了確保所有重要資訊正常顯示，請將本網站加入廣告攔截器的白名單。</p>
+          <h2>需要關閉廣告攔截器</h2>
+          <p>為了確保所有重要資訊和功能正常運作，您必須將本網站加入廣告攔截器的白名單或關閉廣告攔截器。</p>
           
           <div className="adblock-instructions">
             <h3>📝 如何加入白名單：</h3>
@@ -186,17 +186,20 @@ const AdBlockDetector = ({ children }) => {
           </div>
 
           <div className="adblock-notice">
-            <p>💡 <strong>為什麼需要關閉廣告攔截器？</strong></p>
-            <p>我們的網站包含重要的學術資訊、服務公告和問題回報管道。廣告攔截器可能會誤判並隱藏這些重要內容，影響您獲取關鍵資訊。</p>
+            <p>🔒 <strong>為什麼需要關閉廣告攔截器？</strong></p>
+            <p>我們的網站包含重要的學術資訊、服務公告、問題回報管道和重要通知。廣告攔截器會誤判並隱藏這些關鍵內容，導致您無法獲取完整的服務體驗。</p>
+            <p><strong>請注意：本網站不會顯示任何第三方廣告，所有內容都是為了提供更好的學術服務。</strong></p>
           </div>
 
           <div className="adblock-actions">
             <button className="retry-btn" onClick={refreshPage}>
               🔄 重新載入頁面
             </button>
-            <button className="continue-btn" onClick={() => setAdBlockDetected(false)}>
-              ⚠️ 仍要繼續使用（部分內容可能無法顯示）
-            </button>
+            {/* 🚫 移除：「仍要繼續使用」按鈕 */}
+          </div>
+
+          <div className="adblock-footer">
+            <p>🎓 感謝您的理解與配合！</p>
           </div>
         </div>
       </div>
