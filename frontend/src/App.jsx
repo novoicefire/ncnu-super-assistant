@@ -1,4 +1,4 @@
-// frontend/src/App.jsx (完整版 - 包含貼文頁面路由)
+// frontend/src/App.jsx (整合 AdBlock 檢測器版本)
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -9,10 +9,11 @@ import GraduationTracker from './components/2_GraduationTracker/GraduationTracke
 import CampusDirectory from './components/3_CampusDirectory/CampusDirectory.jsx';
 import UniversityCalendar from './components/4_UniversityCalendar/UniversityCalendar.jsx';
 import UpdateLog from './components/5_UpdateLog/UpdateLog.jsx';
-import PostsPage from './components/PostsPage/PostsPage.jsx'; // 🎯 新增貼文頁面
+import PostsPage from './components/PostsPage/PostsPage.jsx';
 import AdminPanel from './components/AdminPanel/AdminPanel.jsx';
 import Navbar from './components/Navbar.jsx';
 import DisclaimerModal from './components/DisclaimerModal.jsx';
+import AdBlockDetector from './components/AdBlockDetector.jsx'; // 🎯 新增：AdBlock 檢測器
 
 // 引入全域样式
 import './App.css';
@@ -42,28 +43,30 @@ function App() {
 
   return (
     <Router>
-      {/* 🎯 免責聲明公告欄 */}
-      <DisclaimerModal 
-        isVisible={showDisclaimer} 
-        onAccept={handleAcceptDisclaimer} 
-      />
+      <AdBlockDetector> {/* 🎯 新增：AdBlock 檢測包裹器開始 */}
+        {/* 🎯 免責聲明公告欄 */}
+        <DisclaimerModal 
+          isVisible={showDisclaimer} 
+          onAccept={handleAcceptDisclaimer} 
+        />
 
-      {/* 🎯 主應用程式內容 */}
-      <div className="app-container">
-        <Navbar />
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<CoursePlanner />} />
-            <Route path="/tracker" element={<GraduationTracker />} />
-            <Route path="/directory" element={<CampusDirectory />} />
-            <Route path="/calendar" element={<UniversityCalendar />} />
-            <Route path="/updates" element={<UpdateLog />} />
-            <Route path="/posts" element={<PostsPage />} /> {/* 🎯 新增貼文頁面路由 */}
-            <Route path="/admin" element={<AdminPanel />} />
-          </Routes>
+        {/* 🎯 主應用程式內容 */}
+        <div className="app-container">
+          <Navbar />
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<CoursePlanner />} />
+              <Route path="/tracker" element={<GraduationTracker />} />
+              <Route path="/directory" element={<CampusDirectory />} />
+              <Route path="/calendar" element={<UniversityCalendar />} />
+              <Route path="/updates" element={<UpdateLog />} />
+              <Route path="/posts" element={<PostsPage />} />
+              <Route path="/admin" element={<AdminPanel />} />
+            </Routes>
+          </div>
+          <Toaster />
         </div>
-        <Toaster />
-      </div>
+      </AdBlockDetector> {/* 🎯 新增：AdBlock 檢測包裹器結束 */}
     </Router>
   );
 }

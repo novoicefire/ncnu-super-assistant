@@ -1,0 +1,216 @@
+/* frontend/src/components/AdBlockDetector.css */
+
+.adblock-checking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--background-primary);
+  color: var(--text-secondary);
+}
+
+.checking-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.adblock-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: var(--spacing-lg);
+}
+
+.adblock-modal {
+  background: var(--background-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xxl);
+  max-width: 600px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.adblock-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.adblock-modal h2 {
+  color: var(--primary-dark);
+  margin-bottom: var(--spacing-lg);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.adblock-modal > p {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.adblock-instructions {
+  background: var(--background-secondary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-xl);
+  text-align: left;
+}
+
+.adblock-instructions h3 {
+  color: var(--primary-dark);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.2rem;
+}
+
+.instruction-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.step-number {
+  background: var(--primary-color);
+  color: var(--text-white);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.step span:last-child {
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.adblock-notice {
+  background: #fff8e1;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border-left: 4px solid #ffc107;
+  margin-bottom: var(--spacing-xl);
+  text-align: left;
+}
+
+.adblock-notice p {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: #856404;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.adblock-notice p:last-child {
+  margin-bottom: 0;
+}
+
+.adblock-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.retry-btn, .continue-btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  min-width: 180px;
+}
+
+.retry-btn {
+  background: var(--primary-color);
+  color: var(--text-white);
+}
+
+.retry-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.continue-btn {
+  background: #6c757d;
+  color: var(--text-white);
+}
+
+.continue-btn:hover {
+  background: #545b62;
+  transform: translateY(-2px);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .adblock-modal {
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md);
+  }
+
+  .adblock-modal h2 {
+    font-size: 1.5rem;
+  }
+
+  .adblock-actions {
+    flex-direction: column;
+  }
+
+  .retry-btn, .continue-btn {
+    width: 100%;
+  }
+
+  .instruction-steps {
+    font-size: 0.9rem;
+  }
+}
+
+/* 測試用的廣告攔截器檢測元素 */
+.adsbox {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+}
