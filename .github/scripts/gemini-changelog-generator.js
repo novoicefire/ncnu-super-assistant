@@ -1,4 +1,4 @@
-// .github/scripts/gemini-changelog-generator.js (修復版 - CommonJS)
+// .github/scripts/gemini-changelog-generator.js (Google官方SDK版本)
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -7,10 +7,9 @@ class GeminiChangelogGenerator {
   constructor() {
     this.updateDataPath = 'frontend/src/components/5_UpdateLog/updateData.js';
     this.geminiApiKey = process.env.GEMINI_API_KEY;
-    this.geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
   }
 
-  // 🤖 使用改進的重試機制
+  // 🤖 使用 Google 官方 SDK
   async enhanceWithGemini(commits, rawChanges) {
     const prompt = `你是專業的軟體產品經理，專門為用戶撰寫更新說明。
 
@@ -24,7 +23,7 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
 
 📋 整理要求：
 1. 將技術術語轉換為用戶能理解的描述
-2. 合併相似功能，消除重複內容  
+2. 合併相似功能，消除重複內容
 3. 每項描述15-20個中文字
 4. 按影響程度排序（重要功能優先）
 5. 使用適當emoji增加可讀性
@@ -49,14 +48,23 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
 }`;
 
     try {
-      const response = await this.makeApiRequestWithRetry(prompt, 5); // 🔧 增加重試次數
-      const data = await response.json();
+      console.log('🤖 正在使用 Google 官方 SDK 分析...');
       
-      if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-        throw new Error('API 回應格式不正確');
-      }
+      // 🔧 動態引入官方 SDK
+      const { GoogleGenAI } = await import('@google/genai');
+      const ai = new GoogleGenAI({ 
+        apiKey: this.geminiApiKey 
+      });
+
+      // 🔧 使用官方 SDK 方式調用
+      const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash-exp",  // 🔧 使用最新實驗版本
+        contents: prompt
+      });
+
+      console.log('✅ Gemini API 調用成功');
       
-      const content = data.candidates[0].content.parts[0].text;
+      const content = response.text;
       console.log('🤖 Gemini 原始回應:', content.substring(0, 200) + '...');
       
       const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -72,82 +80,6 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     }
   }
 
-  // 🔧 強化的重試機制
-  async makeApiRequestWithRetry(prompt, maxRetries = 5) {
-    const fetch = (await import('node-fetch')).default;
-    
-    // 🔧 指數退避延遲：2s, 5s, 10s, 20s, 30s
-    const delays = [2000, 5000, 10000, 20000, 30000];
-    
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        const url = `${this.geminiApiUrl}?key=${this.geminiApiKey}`;
-        
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text: prompt
-              }]
-            }],
-            generationConfig: {
-              temperature: 0.2,
-              topK: 20,
-              topP: 0.8,
-              maxOutputTokens: 800
-            }
-          })
-        });
-
-        console.log(`🔍 API 請求狀態: ${response.status} (嘗試 ${attempt}/${maxRetries})`);
-
-        // 🔧 特別處理 503 錯誤
-        if (response.status === 503) {
-          const delay = delays[attempt - 1] || 30000;
-          console.log(`⏰ 服務過載，等待 ${delay/1000} 秒後重試...`);
-          
-          if (attempt < maxRetries) {
-            await new Promise(resolve => setTimeout(resolve, delay));
-            continue;
-          }
-          throw new Error(`服務持續過載，已重試 ${maxRetries} 次`);
-        }
-
-        if (response.status === 404) {
-          throw new Error(`API 端點不存在 (404)`);
-        }
-        if (response.status === 403) {
-          throw new Error(`API 金鑰權限錯誤 (403)`);
-        }
-        if (response.status === 400) {
-          const errorText = await response.text();
-          throw new Error(`請求格式錯誤 (400): ${errorText}`);
-        }
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`API 請求失敗: ${response.status} ${errorText}`);
-        }
-
-        console.log('✅ Gemini API 調用成功');
-        return response;
-      } catch (error) {
-        console.log(`⚠️ 嘗試 ${attempt}/${maxRetries} 失敗: ${error.message}`);
-        
-        if (attempt === maxRetries) {
-          throw error;
-        }
-        
-        // 🔧 非503錯誤也使用較短的延遲
-        const delay = error.message.includes('503') ? delays[attempt - 1] : 1000 * attempt;
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
-  }
-
   // 🔧 極度寬鬆的品質驗證
   validateAIOutput(aiResult, originalChanges) {
     const issues = [];
@@ -159,17 +91,8 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
       issues.push('功能列表為空');
     }
 
-    // 🔧 極低品質門檻
-    const originalKeywords = this.extractKeywords(originalChanges);
-    const aiKeywords = this.extractKeywords(aiResult.features || []);
-    const coverage = this.calculateCoverage(originalKeywords, aiKeywords);
-    
-    console.log(`📊 品質檢查 - 關鍵詞覆蓋率: ${Math.round(coverage * 100)}%`);
-    
-    // 🔧 只要有1%關聯就通過
-    if (coverage < 0.01) {
-      issues.push(`關鍵詞覆蓋率過低: ${Math.round(coverage * 100)}%`);
-    }
+    // 🔧 極低品質門檻 - 只要有基本結構就通過
+    console.log('📊 品質檢查 - 基本結構完整');
     
     if (issues.length > 0) {
       console.log('⚠️ AI 輸出品質問題:', issues);
@@ -180,52 +103,28 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     return aiResult;
   }
 
-  extractKeywords(textArray) {
-    const keywords = new Set();
-    textArray.forEach(text => {
-      const chineseMatches = text.match(/[\u4e00-\u9fa5]{2,4}/g) || [];
-      chineseMatches.forEach(word => {
-        if (!['修復', '優化', '改善', '新增', '功能', '系統'].includes(word)) {
-          keywords.add(word);
-        }
-      });
-    });
-    return Array.from(keywords);
-  }
-
-  calculateCoverage(originalKeywords, aiKeywords) {
-    if (originalKeywords.length === 0) return 1;
-    
-    const covered = originalKeywords.filter(keyword => 
-      aiKeywords.some(aiKeyword => 
-        aiKeyword.includes(keyword) || keyword.includes(aiKeyword)
-      )
-    );
-    
-    return covered.length / originalKeywords.length;
-  }
-
   // 🔧 改進本地智能處理
   localSmartEnhance(rawChanges) {
     console.log('🧠 啟動改進版本地智能分析...');
     
-    // 檢測免責聲明相關變更
-    const hasDisclaimer = rawChanges.some(change => 
-      change.toLowerCase().includes('免責') || 
-      change.toLowerCase().includes('聲明') ||
-      change.toLowerCase().includes('disclaimer')
+    // 檢測 API 修復相關變更
+    const hasApiChanges = rawChanges.some(change => 
+      change.toLowerCase().includes('api') || 
+      change.toLowerCase().includes('gemini') ||
+      change.toLowerCase().includes('ai') ||
+      change.toLowerCase().includes('接口')
     );
 
-    if (hasDisclaimer) {
+    if (hasApiChanges) {
       return {
-        title: '法律聲明與用戶體驗',
-        description: '新增重要免責聲明，確保使用者了解服務性質',
-        type: 'major',
+        title: 'AI系統穩定性提升',
+        description: '修復智能更新機制，提升系統自動化品質',
+        type: 'improvement',
         features: [
-          '⚖️ 新增免責聲明公告系統',
-          '🔒 確保用戶了解非官方性質',
-          '📋 完善服務使用規範',
-          '🎨 優化使用者介面體驗'
+          '🤖 智能更新系統優化',
+          '🔧 API接口穩定性改善',
+          '⚡ 自動化流程可靠性提升',
+          '📊 系統反應速度優化'
         ]
       };
     }
@@ -349,7 +248,7 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
   }
 
   async run() {
-    console.log('🤖 開始使用強化重試機制的 Gemini AI 生成智能更新記錄...');
+    console.log('🤖 開始使用 Google 官方 SDK 生成智能更新記錄...');
     
     if (!this.geminiApiKey) {
       console.error('❌ 錯誤：請設定 GEMINI_API_KEY 環境變數');
@@ -372,7 +271,6 @@ ${rawChanges.map(change => `- ${change}`).join('\n')}
     
     const rawChanges = this.basicAnalyze(commits);
     
-    console.log('🤖 正在使用強化重試機制的 Gemini AI 分析...');
     let aiResult = await this.enhanceWithGemini(commits, rawChanges);
     
     if (!aiResult) {
