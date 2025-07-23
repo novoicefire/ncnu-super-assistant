@@ -17,7 +17,6 @@ export const updateHistory = [
     ],
     technical: [
       "實作 DisclaimerModal 元件與完整樣式系統",
-    ]
   },
   {
     version: "v2.5.0",
