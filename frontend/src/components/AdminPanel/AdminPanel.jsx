@@ -1,23 +1,25 @@
-// frontend/src/components/AdminPanel/AdminPanel.jsx (完整版 - 包含登出重定向)
+// frontend/src/components/AdminPanel/AdminPanel.jsx (修復 Hook 錯誤)
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../AuthContext.jsx';
 import { Navigate, useNavigate } from 'react-router-dom';
 import './AdminPanel.css';
 
 const AdminPanel = () => {
+  // 🔧 修復：確保所有 Hook 都在條件判斷之前調用
   const { user, isAdmin, isLoading, logout } = useAuth();
-  const navigate = useNavigate(); // 🎯 導航 Hook
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
   const [newPost, setNewPost] = useState({
     title: '',
     content: '',
-    type: 'article', // article, ad, announcement
+    type: 'article',
     isVisible: true
   });
 
-  // 🎯 監聽用戶狀態變化，登出時自動跳轉到首頁
+  // 🔧 修復：將所有 useEffect 放在條件判斷之前
+  // 監聽用戶狀態變化，登出時自動跳轉
   useEffect(() => {
     if (!isLoading && !user) {
       console.log('🔄 用戶已登出，自動跳轉至首頁');
@@ -25,7 +27,14 @@ const AdminPanel = () => {
     }
   }, [user, isLoading, navigate]);
 
-  // 🔐 權限檢查
+  // 載入貼文的 useEffect
+  useEffect(() => {
+    if (user && isAdmin) {
+      loadPosts();
+    }
+  }, [user, isAdmin]);
+
+  // 🔧 修復：將條件判斷移到所有 Hook 之後
   if (isLoading) {
     return <div className="loading">⏳ 載入中...</div>;
   }
@@ -34,11 +43,7 @@ const AdminPanel = () => {
     return <Navigate to="/" replace />;
   }
 
-  // 載入現有貼文
-  useEffect(() => {
-    loadPosts();
-  }, []);
-
+  // 🔧 修復：將函數定義移到 Hook 之後，避免在條件返回後定義
   const loadPosts = async () => {
     try {
       const savedPosts = localStorage.getItem('adminPosts');
@@ -113,24 +118,27 @@ const AdminPanel = () => {
     savePosts(updatedPosts);
   };
 
-  // 🎯 自定義管理員登出函數
+  // 🔧 修復：簡化登出邏輯，避免複雜的狀態變化
   const handleAdminLogout = () => {
-    if (confirm('確定要登出管理員帳號嗎？登出後將自動跳轉到首頁。')) {
+    if (confirm('確定要登出管理員帳號嗎？')) {
       console.log('🔓 管理員正在登出...');
-      logout(); // 這會觸發 useEffect 中的重定向邏輯
+      logout();
+      // 🔧 修復：立即導航，不依賴 useEffect
+      setTimeout(() => {
+        navigate('/');
+      }, 100);
     }
   };
 
   return (
     <div className="admin-panel">
-      {/* 🎯 管理員標頭區域 - 包含登出按鈕 */}
+      {/* 管理員標頭區域 */}
       <div className="admin-header">
         <div className="admin-header-content">
           <h1>📝 管理員專區</h1>
           <p>歡迎，<strong>{user.full_name}</strong>！您可以在此管理網站內容。</p>
         </div>
         
-        {/* 🎯 管理員專用登出按鈕 */}
         <button className="admin-logout-btn btn" onClick={handleAdminLogout}>
           🔓 安全登出
         </button>
@@ -298,6 +306,6 @@ const AdminPanel = () => {
 };
 
 export default AdminPanel;
-// 注意：這個檔案包含了完整的管理員面板功能，包括登出重定向和貼文管理功能。
-// 確保在使用前已經正確設置 AuthContext 和相關路由。
-// 這樣可以確保管理員在登出後自動跳轉到首頁。 
+// 🔧 修復：確保 AdminPanel 組件正確導出
+// 確保 AdminPanel 組件正確導出
+// 以便在其他地方使用
