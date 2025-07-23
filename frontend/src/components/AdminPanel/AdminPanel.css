@@ -1,4 +1,4 @@
-/* frontend/src/components/AdminPanel/AdminPanel.css */
+/* frontend/src/components/AdminPanel/AdminPanel.css (修復相容性問題) */
 
 .admin-panel {
   max-width: 1200px;
@@ -8,30 +8,73 @@
   min-height: 100vh;
 }
 
+/* 🎯 管理員標頭區域 - 包含登出按鈕 */
 .admin-header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: var(--spacing-xxl);
   padding: var(--spacing-xl);
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: var(--text-white);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-header-content {
+  flex: 1;
 }
 
 .admin-header h1 {
   color: var(--text-white);
   margin-bottom: var(--spacing-sm);
   font-size: 2.5rem;
+  font-weight: 700;
 }
 
 .admin-header p {
   font-size: 1.1rem;
   opacity: 0.9;
+  margin: 0;
+}
+
+.admin-header p strong {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* 🎯 管理員登出按鈕 */
+.admin-logout-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text-white);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  /* 🔧 修復：正確的前綴順序 */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.admin-logout-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.admin-logout-btn:active {
+  transform: translateY(0);
 }
 
 /* 貼文編輯器 */
 .post-editor {
   margin-bottom: var(--spacing-xxl);
   padding: var(--spacing-xl);
+  border-left: 4px solid var(--primary-color);
 }
 
 .post-editor h2 {
@@ -40,6 +83,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  font-size: 1.5rem;
 }
 
 .form-group {
@@ -51,31 +95,63 @@
   margin-bottom: var(--spacing-sm);
   font-weight: 600;
   color: var(--text-primary);
+  font-size: 0.9rem;
 }
 
 .content-editor {
   width: 100%;
-  min-height: 200px;
+  min-height: 240px;
   padding: var(--spacing-md);
   border: 2px solid #e0e0e0;
   border-radius: var(--radius-md);
-  font-family: inherit;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.9rem;
   line-height: 1.6;
   resize: vertical;
   transition: all var(--transition-normal);
+  background: #fafafa;
 }
 
 .content-editor:focus {
   outline: none;
   border-color: var(--primary-color);
+  background: #ffffff;
   box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1);
+}
+
+.content-editor::placeholder {
+  color: #999;
+  line-height: 1.4;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox-label input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.checkbox-text {
+  color: var(--text-primary);
+  /* 🔧 修復：添加 Safari 相容性支援 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .editor-actions {
   display: flex;
   gap: var(--spacing-md);
   justify-content: flex-start;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid #e0e0e0;
 }
 
 /* 貼文列表 */
@@ -84,19 +160,30 @@
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-sm);
   border-bottom: 2px solid var(--primary-light);
+  font-size: 1.5rem;
+}
+
+.posts-grid {
+  display: grid;
+  gap: var(--spacing-lg);
 }
 
 .post-item {
-  margin-bottom: var(--spacing-lg);
   padding: var(--spacing-xl);
   position: relative;
   transition: all var(--transition-normal);
+  border-left: 4px solid var(--primary-color);
 }
 
 .post-item.hidden-post {
   opacity: 0.6;
   background: #f8f9fa;
-  border-left-color: var(--text-light);
+  border-left-color: #ccc;
+}
+
+.post-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .post-header {
@@ -117,9 +204,10 @@
 .post-type {
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-md);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .type-article {
@@ -139,28 +227,54 @@
 
 .post-status {
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  font-weight: 600;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+}
+
+.post-status.visible {
+  background: #d4edda;
+  color: #155724;
+}
+
+.post-status.hidden {
+  background: #f8d7da;
+  color: #721c24;
 }
 
 .post-actions {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
 }
 
 .btn-sm {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: 0.8rem;
+  min-width: 32px;
+  height: 32px;
 }
 
-.post-item h3 {
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #545b62;
+}
+
+.post-title {
   margin-bottom: var(--spacing-md);
   color: var(--primary-dark);
+  font-size: 1.25rem;
+  line-height: 1.4;
 }
 
 .post-content {
   margin-bottom: var(--spacing-lg);
   line-height: 1.7;
   color: var(--text-primary);
+  font-size: 0.95rem;
 }
 
 .post-content img {
@@ -179,26 +293,82 @@
 
 .post-content a:hover {
   border-bottom-color: var(--primary-color);
+  background: var(--primary-ultra-light);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.post-content strong {
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.post-content em {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.post-content ul, .post-content ol {
+  padding-left: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+}
+
+.post-content li {
+  margin-bottom: var(--spacing-xs);
 }
 
 .post-footer {
   display: flex;
-  gap: var(--spacing-lg);
+  flex-direction: column;
+  gap: var(--spacing-xs);
   font-size: 0.8rem;
   color: var(--text-secondary);
   padding-top: var(--spacing-sm);
   border-top: 1px solid #f0f0f0;
 }
 
+.post-author, .post-date, .post-updated {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* 空狀態 */
 .empty-state {
   text-align: center;
   padding: var(--spacing-xxl);
   color: var(--text-secondary);
+  background: var(--background-secondary);
+  border-radius: var(--radius-lg);
+  border: 2px dashed #ddd;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.empty-state h3 {
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.25rem;
 }
 
 .empty-state p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin: 0;
+  line-height: 1.6;
+}
+
+/* 載入動畫 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  background: var(--background-primary);
 }
 
 /* 響應式設計 */
@@ -207,8 +377,19 @@
     padding: var(--spacing-lg);
   }
 
+  .admin-header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+  }
+
   .admin-header h1 {
     font-size: 2rem;
+  }
+
+  .admin-logout-btn {
+    width: 100%;
+    order: -1;
   }
 
   .post-header {
@@ -226,18 +407,69 @@
     flex-direction: column;
   }
 
-  .post-footer {
-    flex-direction: column;
-    gap: var(--spacing-xs);
+  .content-editor {
+    font-size: 16px; /* 防止 iOS Safari 縮放 */
   }
 }
 
-/* 載入動畫 */
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  font-size: 1.1rem;
-  color: var(--text-secondary);
+@media (max-width: 480px) {
+  .admin-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .post-item {
+    padding: var(--spacing-lg);
+  }
+  
+  .btn-sm {
+    min-width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
 }
+
+/* 動畫效果 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-item {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* 🔧 修復：焦點可訪問性 - 添加完整的瀏覽器前綴支援 */
+.admin-logout-btn:focus,
+.btn:focus,
+.input:focus,
+.content-editor:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* 🔧 修復：為所有需要 user-select 的元素添加前綴支援 */
+.admin-header h1,
+.post-type,
+.post-status,
+.empty-state h3 {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 🔧 修復：為有 backdrop-filter 的元素確保正確順序 */
+.post-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  /* 如果需要毛玻璃效果可以取消註釋 */
+  /* -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px); */
+}
+/* 🔧 修復：確保所有按鈕在不同瀏覽器下的樣式一致 * /
