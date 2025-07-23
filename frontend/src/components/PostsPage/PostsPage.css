@@ -1,4 +1,4 @@
-/* frontend/src/components/PostsPage/PostsPage.css (完整版 - 修復廣告顯示問題) */
+/* frontend/src/components/PostsPage/PostsPage.css (反廣告攔截版本) */
 
 .posts-page {
   max-width: 1200px;
@@ -176,28 +176,28 @@
 }
 
 .post-card.post-ad {
-  border-left-color: #daa520;
+  border-left-color: #ffa500;
 }
 
-/* 🔧 修復：廣告貼文（精選內容）特殊樣式 */
-.post-card.ad-post {
-  background: linear-gradient(135deg, #faf7f0, #ffffff);
-  border: 2px solid #daa520;
-  border-left-color: #daa520;
+/* 🔧 精選貼文樣式（原廣告樣式，重新命名） */
+.post-card.featured-post {
+  background: linear-gradient(135deg, #fefdf8, #ffffff);
+  border: 2px solid #ffa500;
+  border-left-color: #ffa500;
   box-shadow: var(--shadow-md);
 }
 
-.post-card.ad-post:hover {
+.post-card.featured-post:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(218, 165, 32, 0.25);
+  box-shadow: 0 6px 20px rgba(255, 165, 0, 0.25);
 }
 
-/* 🔧 修復：精選橫幅樣式 */
-.ad-banner {
+/* 🔧 精選標籤（原廣告橫幅，重新命名） */
+.featured-label {
   position: absolute;
   top: 0;
   right: 0;
-  background: linear-gradient(135deg, #daa520, #b8860b);
+  background: linear-gradient(135deg, #ffa500, #ff8c00);
   color: #ffffff;
   padding: var(--spacing-xs) var(--spacing-md);
   font-size: 0.7rem;
@@ -218,7 +218,7 @@
   margin-top: var(--spacing-md);
 }
 
-.ad-post .post-card-header {
+.featured-post .post-card-header {
   margin-top: var(--spacing-lg);
 }
 
@@ -241,11 +241,11 @@
   color: #0c5460;
 }
 
-/* 🔧 修復：精選內容標籤樣式 */
+/* 🔧 精選內容標籤樣式（原廣告標籤） */
 .badge-ad {
-  background: rgba(218, 165, 32, 0.15);
-  color: #8b6914;
-  border: 1px solid rgba(218, 165, 32, 0.3);
+  background: rgba(255, 165, 0, 0.15);
+  color: #cc7a00;
+  border: 1px solid rgba(255, 165, 0, 0.3);
 }
 
 .post-date {
@@ -267,9 +267,9 @@
   line-height: 1.4;
 }
 
-/* 🔧 修復：精選內容標題樣式 */
-.ad-post .post-title {
-  color: #8b6914;
+/* 🔧 精選內容標題樣式 */
+.featured-post .post-title {
+  color: #cc7a00;
 }
 
 .post-excerpt {
@@ -564,8 +564,8 @@
   animation-delay: 0.2s;
 }
 
-/* 🔧 修復：精選內容保持基本動畫 */
-.ad-post {
+/* 🔧 精選內容基本動畫 */
+.featured-post {
   animation: fadeInUp 0.3s ease-out;
 }
 
@@ -579,101 +579,19 @@
   outline-offset: 2px;
 }
 
-/* 🔧 確保精選內容與一般內容適當區分但不過度突出 */
-.ad-post .post-excerpt {
+/* 🔧 確保精選內容與一般內容適當區分 */
+.featured-post .post-excerpt {
   color: var(--text-primary);
 }
 
-.ad-post .post-card-footer {
+.featured-post .post-card-footer {
   color: var(--text-secondary);
 }
 
-/* 🔧 精選內容的邊框保持一致性 */
-.post-card.ad-post {
-  border-left-width: 4px;
-  border-left-style: solid;
-}
-
-/* 🔧 精選橫幅不會太突兀 */
-.ad-banner {
-  opacity: 0.95;
-  font-size: 0.7rem;
-}
-
-/* 🔧 精選內容的用戶頭像和資訊保持一致 */
-.ad-post .post-author {
+.featured-post .post-author {
   color: var(--text-secondary);
 }
 
-.ad-post .post-date {
+.featured-post .post-date {
   color: var(--text-secondary);
-}
-
-/* 🔧 精選內容特殊邊框效果 */
-.ad-post::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(218, 165, 32, 0.05), rgba(218, 165, 32, 0.02));
-  pointer-events: none;
-  border-radius: var(--radius-lg);
-}
-
-/* 🔧 確保精選橫幅在最上層 */
-.ad-banner {
-  z-index: 10;
-  position: relative;
-}
-/* 🚨 緊急修復：強制顯示廣告並修復HTML問題 */
-.ad-post {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  min-height: 200px !important;
-  background: #fffacd !important; /* 淡黃色背景 */
-  border: 3px solid #ff4500 !important; /* 明顯的橘紅色邊框 */
-  margin: 20px 0 !important;
-  overflow: visible !important;
-  position: relative !important;
-  z-index: 1000 !important;
-}
-
-.ad-post * {
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-.ad-post strong {
-  display: inline !important;
-  font-weight: bold !important;
-  color: #333 !important;
-}
-
-.ad-post iframe {
-  max-width: 100% !important;
-  display: block !important;
-  margin: 10px 0 !important;
-}
-
-/* 修復可能的定位問題 */
-.posts-grid .ad-post {
-  order: 1 !important; /* 確保廣告顯示在前面 */
-}
-
-/* 調試用：給廣告加超明顯的標記 */
-.ad-post::after {
-  content: "🚨 這裡是廣告！" !important;
-  position: absolute !important;
-  top: -30px !important;
-  left: 0 !important;
-  background: red !important;
-  color: white !important;
-  padding: 5px 15px !important;
-  font-size: 14px !important;
-  font-weight: bold !important;
-  z-index: 9999 !important;
-  border-radius: 5px !important;
 }

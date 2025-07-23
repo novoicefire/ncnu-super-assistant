@@ -1,10 +1,10 @@
-// frontend/src/components/PostsPage/PostsPage.jsx (修復廣告顯示問題)
+// frontend/src/components/PostsPage/PostsPage.jsx (反廣告攔截版本)
 import React, { useState, useEffect } from 'react';
 import './PostsPage.css';
 
 const PostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);
-  const [adPosts, setAdPosts] = useState([]);
+  const [specialPosts, setSpecialPosts] = useState([]); // 🔧 改名：adPosts → specialPosts
   const [contentPosts, setContentPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [displayPosts, setDisplayPosts] = useState([]);
@@ -22,7 +22,7 @@ const PostsPage = () => {
     loadPosts();
   }, []);
 
-  // 篩選和搜尋功能（不影響廣告）
+  // 篩選和搜尋功能（不影響特色文章）
   useEffect(() => {
     let filtered = [...contentPosts];
 
@@ -56,46 +56,31 @@ const PostsPage = () => {
     setCurrentPage(1);
   }, [contentPosts, selectedType, searchTerm, sortBy]);
 
-  // 🔧 修復：分頁和廣告插入邏輯
+  // 🔧 分頁和特色文章插入邏輯
   useEffect(() => {
     const startIndex = (currentPage - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
     const paginatedContent = filteredPosts.slice(startIndex, endIndex);
     
-    // 🎯 確保廣告永遠顯示 - 修復插入邏輯
-    const mixedPosts = insertAdsIntoPosts(paginatedContent, adPosts);
+    // 🎯 將特色文章穿插到內容中（永遠顯示）
+    const mixedPosts = insertFeaturedIntoPosts(paginatedContent, specialPosts);
     setDisplayPosts(mixedPosts);
-    
-    // 🔧 調試信息
-    console.log('🔧 Debug Info:');
-    console.log('- 廣告數量:', adPosts.length);
-    console.log('- 內容數量:', paginatedContent.length);
-    console.log('- 最終顯示數量:', mixedPosts.length);
-    console.log('- 包含廣告的項目:', mixedPosts.filter(post => post.isAd));
-    console.log('- 所有項目詳情:', mixedPosts);
-  }, [filteredPosts, currentPage, adPosts, postsPerPage]);
+  }, [filteredPosts, currentPage, specialPosts, postsPerPage]);
 
   const loadPosts = async () => {
     try {
       const savedPosts = localStorage.getItem('adminPosts');
       if (savedPosts) {
         const posts = JSON.parse(savedPosts);
-        
-        // 🔧 修復：確保廣告被正確識別，不管 isVisible 狀態
         const allVisiblePosts = posts.filter(post => post.isVisible);
-        const ads = posts.filter(post => post.type === 'ad'); // 🔧 不過濾 isVisible
+        
+        // 🔧 將原來的廣告類型重新分類為特色文章
+        const featured = posts.filter(post => post.type === 'ad'); // 依然從 'ad' 類型載入
         const content = allVisiblePosts.filter(post => post.type !== 'ad');
         
-        console.log('🔧 載入詳情:');
-        console.log('- 所有貼文:', posts);
-        console.log('- 廣告貼文:', ads);
-        console.log('- 一般內容:', content);
-        
         setAllPosts(allVisiblePosts);
-        setAdPosts(ads); // 🔧 包含所有廣告，不管可見性
+        setSpecialPosts(featured);
         setContentPosts(content);
-      } else {
-        console.log('🔧 localStorage 中沒有找到 adminPosts');
       }
     } catch (error) {
       console.error('載入貼文失敗:', error);
@@ -104,66 +89,58 @@ const PostsPage = () => {
     }
   };
 
-  // 🔧 簡化廣告穿插邏輯
-  const insertAdsIntoPosts = (contentPosts, ads) => {
-    console.log('🔧 廣告插入開始 - 內容:', contentPosts.length, '廣告:', ads.length);
-    
-    // 如果沒有廣告，直接返回內容
-    if (ads.length === 0) {
-      console.log('🔧 沒有廣告，返回純內容');
+  // 🔧 特色文章穿插邏輯（重新命名以避開檢測）
+  const insertFeaturedIntoPosts = (contentPosts, featuredPosts) => {
+    if (featuredPosts.length === 0) {
       return contentPosts;
     }
     
     const result = [];
     
-    // 🔧 即使沒有內容也要顯示廣告
+    // 即使沒有內容也要顯示特色文章
     if (contentPosts.length === 0) {
-      console.log('🔧 沒有內容，只顯示廣告');
-      return ads.map((ad, index) => ({
-        ...ad,
-        isAd: true,
-        uniqueKey: `ad-only-${ad.id}-${index}`
+      return featuredPosts.map((featured, index) => ({
+        ...featured,
+        isSpecial: true, // 🔧 改名：isAd → isSpecial
+        uniqueKey: `featured-only-${featured.id}-${index}`
       }));
     }
     
-    // 🔧 簡化插入邏輯：在內容之間均勻插入廣告
-    const totalSlots = contentPosts.length + ads.length;
-    const interval = Math.ceil(totalSlots / ads.length);
+    // 計算插入間隔
+    const totalSlots = contentPosts.length + featuredPosts.length;
+    const interval = Math.ceil(totalSlots / featuredPosts.length);
     
-    let adIndex = 0;
-    let nextAdPosition = Math.min(interval - 1, 0); // 第一個廣告的位置
+    let featuredIndex = 0;
+    let nextFeaturedPosition = Math.min(interval - 1, 0);
     
     contentPosts.forEach((post, index) => {
       result.push(post);
       
-      // 檢查是否應該在此位置插入廣告
-      if (index === nextAdPosition && adIndex < ads.length) {
-        const adToInsert = {
-          ...ads[adIndex],
-          isAd: true,
-          uniqueKey: `ad-inserted-${ads[adIndex].id}-${index}`
+      // 檢查是否應該插入特色文章
+      if (index === nextFeaturedPosition && featuredIndex < featuredPosts.length) {
+        const featuredToInsert = {
+          ...featuredPosts[featuredIndex],
+          isSpecial: true,
+          uniqueKey: `featured-inserted-${featuredPosts[featuredIndex].id}-${index}`
         };
-        result.push(adToInsert);
-        console.log(`🔧 在位置 ${index + 1} 插入廣告:`, ads[adIndex].title);
+        result.push(featuredToInsert);
         
-        adIndex++;
-        nextAdPosition += interval;
+        featuredIndex++;
+        nextFeaturedPosition += interval;
       }
     });
     
-    // 🔧 確保所有剩餘廣告都被添加
-    while (adIndex < ads.length) {
-      const remainingAd = {
-        ...ads[adIndex],
-        isAd: true,
-        uniqueKey: `ad-remaining-${ads[adIndex].id}-${adIndex}`
+    // 確保所有剩餘特色文章都被添加
+    while (featuredIndex < featuredPosts.length) {
+      const remainingFeatured = {
+        ...featuredPosts[featuredIndex],
+        isSpecial: true,
+        uniqueKey: `featured-remaining-${featuredPosts[featuredIndex].id}-${featuredIndex}`
       };
-      result.push(remainingAd);
-      console.log('🔧 追加剩餘廣告:', ads[adIndex].title);
-      adIndex++;
+      result.push(remainingFeatured);
+      featuredIndex++;
     }
     
-    console.log('🔧 最終結果:', result.length, '項，其中廣告:', result.filter(r => r.isAd).length);
     return result;
   };
 
@@ -210,7 +187,7 @@ const PostsPage = () => {
       {/* 頁面標頭 */}
       <div className="posts-header">
         <h1>📰 最新資訊</h1>
-        <p>探索最新的文章、公告和相關資訊</p>
+        <p>探索最新的文章、公告和精選內容</p>
         <div className="posts-summary">
           <span>📄 {getTypeCount('article')} 篇文章</span>
           <span>📣 {getTypeCount('announcement')} 則公告</span>
@@ -265,20 +242,6 @@ const PostsPage = () => {
         </div>
       </div>
 
-      {/* 🔧 調試信息區域 */}
-      <div className="debug-info" style={{
-        background: '#f0f0f0', 
-        padding: '10px', 
-        margin: '10px 0', 
-        borderRadius: '5px',
-        fontSize: '12px'
-      }}>
-        <p><strong>調試信息：</strong></p>
-        <p>顯示項目數量: {displayPosts.length}</p>
-        <p>廣告項目數量: {displayPosts.filter(p => p.isAd).length}</p>
-        <p>一般內容數量: {displayPosts.filter(p => !p.isAd).length}</p>
-      </div>
-
       {/* 貼文列表 */}
       <div className="posts-container">
         {displayPosts.length === 0 ? (
@@ -305,84 +268,54 @@ const PostsPage = () => {
           </div>
         ) : (
           <div className="posts-grid">
-            {displayPosts.map((post, index) => {
-              console.log(`🔧 渲染項目 ${index}:`, {
-                id: post.id,
-                title: post.title,
-                type: post.type,
-                isAd: post.isAd,
-                uniqueKey: post.uniqueKey
-              });
-              
-              return (
-                <article 
-                  key={post.uniqueKey || `${post.id}-${index}`} 
-                  className={`post-card post-${post.type} ${post.isAd ? 'ad-post' : ''}`}
-                  style={{
-                    // 🔧 強制顯示所有項目
-                    display: 'block',
-                    visibility: 'visible',
-                    opacity: 1
-                  }}
-                >
-                  {/* 🔧 調試信息 */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '5px',
-                    left: '5px',
-                    background: 'red',
-                    color: 'white',
-                    padding: '2px 5px',
-                    fontSize: '10px',
-                    zIndex: 1000
-                  }}>
-                    {post.isAd ? 'AD' : 'CONTENT'}
+            {displayPosts.map((post, index) => (
+              <article 
+                key={post.uniqueKey || `${post.id}-${index}`} 
+                className={`post-card post-${post.type} ${post.isSpecial ? 'featured-post' : ''}`} // 🔧 改名：ad-post → featured-post
+              >
+                {/* 🔧 特色標記（避開檢測詞彙） */}
+                {post.isSpecial && (
+                  <div className="featured-label"> {/* 🔧 改名：ad-banner → featured-label */}
+                    <span>⭐ 精選</span>
                   </div>
+                )}
 
-                  {/* 廣告標記 */}
-                  {post.isAd && (
-                    <div className="ad-banner">
-                      <span>✨ 精選</span>
-                    </div>
+                {/* 貼文標頭 */}
+                <div className="post-card-header">
+                  <span className={`post-badge badge-${post.type}`}>
+                    {post.type === 'article' && '📄 文章'}
+                    {post.type === 'announcement' && '📣 公告'}
+                    {post.type === 'ad' && '⭐ 精選內容'} {/* 🔧 改用星星圖標 */}
+                  </span>
+                  <span className="post-date">
+                    📅 {new Date(post.createdAt).toLocaleDateString('zh-TW', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
+
+                {/* 貼文內容 */}
+                <div className="post-card-content">
+                  <h2 className="post-title">{post.title}</h2>
+                  <div 
+                    className="post-excerpt"
+                    dangerouslySetInnerHTML={{ __html: post.content }}
+                  />
+                </div>
+
+                {/* 貼文頁腳 */}
+                <div className="post-card-footer">
+                  <span className="post-author">👤 {post.author}</span>
+                  {post.updatedAt && (
+                    <span className="post-updated">
+                      ✏️ {new Date(post.updatedAt).toLocaleDateString('zh-TW')}
+                    </span>
                   )}
-
-                  {/* 貼文標頭 */}
-                  <div className="post-card-header">
-                    <span className={`post-badge badge-${post.type}`}>
-                      {post.type === 'article' && '📄 文章'}
-                      {post.type === 'announcement' && '📣 公告'}
-                      {post.type === 'ad' && '✨ 精選內容'}
-                    </span>
-                    <span className="post-date">
-                      📅 {new Date(post.createdAt).toLocaleDateString('zh-TW', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </span>
-                  </div>
-
-                  {/* 貼文內容 */}
-                  <div className="post-card-content">
-                    <h2 className="post-title">{post.title}</h2>
-                    <div 
-                      className="post-excerpt"
-                      dangerouslySetInnerHTML={{ __html: post.content }}
-                    />
-                  </div>
-
-                  {/* 貼文頁腳 */}
-                  <div className="post-card-footer">
-                    <span className="post-author">👤 {post.author}</span>
-                    {post.updatedAt && (
-                      <span className="post-updated">
-                        ✏️ {new Date(post.updatedAt).toLocaleDateString('zh-TW')}
-                      </span>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
+                </div>
+              </article>
+            ))}
           </div>
         )}
       </div>
