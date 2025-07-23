@@ -1,17 +1,25 @@
-// frontend/src/components/5_UpdateLog/updateData.js (統一合併版)
+// frontend/src/components/5_UpdateLog/updateData.js (手動維護版)
 
 export const updateHistory = [
   {
-    "version": "v2.5.1",
-    "date": "2025-07-22",
-    "type": "fix",
-    "title": "系統問題修復",
-    "description": "修復系統問題，提升服務穩定性",
-    "features": [
-      "📚 課程資訊完善",
-      "🎨 介面體驗優化",
-      "✨ 新功能上線",
-      "🔧 問題修復"
+    version: "v3.0.0",
+    date: "2025-07-23",
+    type: "major",
+    title: "免責聲明系統與AI更新優化",
+    description: "重大更新！新增法律保護機制，並全面優化智能更新系統，提供更穩定可靠的服務體驗",
+    features: [
+      "⚖️ 新增免責聲明公告系統，確保用戶了解服務性質",
+      "🔒 每次載入必讀聲明，強化法律保護機制", 
+      "🎨 專業公告欄設計，支援響應式全螢幕顯示",
+      "🤖 AI 更新日誌系統深度優化，提升生成品質",
+      "🔧 API 介面穩定性改善，減少服務中斷問題",
+      "📱 手機版免責聲明完美適配，確保所有設備正常顯示"
+    ],
+    technical: [
+      "實作 DisclaimerModal 元件與完整樣式系統",
+      "修復前端依賴衝突導致的部署緩慢問題", 
+      "改善 Gemini API 調用機制與錯誤處理邏輯",
+      "優化 GitHub Actions 工作流程配置"
     ]
   },
   {
@@ -28,13 +36,12 @@ export const updateHistory = [
       "📊 提升課程資訊準確性與完整性"
     ]
   },
-  // ✨ 新版本（AI 自動生成）
   {
     version: "v2.4.0",
     date: "2025-07-22",
     type: "improvement",
     title: "導航欄用戶體驗優化",
-    description: "全面改善用戶介面設計，提供更直覺的個人化功能顯示。",
+    description: "全面改善用戶介面設計，提供更直覺的個人化功能顯示",
     features: [
       "🎨 圓形用戶頭像設計優化",
       "📱 響應式顯示完美適配",
@@ -47,14 +54,12 @@ export const updateHistory = [
       "統一 hover 動畫效果"
     ]
   },
-  
-  // 🤖 AI 系統建立版本
   {
     version: "v2.3.0",
     date: "2025-07-22",
     type: "feature",
     title: "AI 智能更新記錄系統",
-    description: "導入 Google Gemini AI 自動分析程式變更，生成簡潔易懂的更新說明。",
+    description: "導入 Google Gemini AI 自動分析程式變更，生成簡潔易懂的更新說明",
     features: [
       "🤖 Google Gemini AI 內容分析",
       "📝 自動生成用戶友善更新說明",
@@ -67,14 +72,12 @@ export const updateHistory = [
       "優化 GitHub Actions 自動化流程"
     ]
   },
-
-  // 📚 舊版本記錄（重新整理）
   {
     version: "v2.2.0",
     date: "2025-07-22",
     type: "major",
     title: "全校系所畢業進度追蹤",
-    description: "重大功能擴展！支援全校所有系所的畢業進度查詢與自動化資料管理。",
+    description: "重大功能擴展！支援全校所有系所的畢業進度查詢與自動化資料管理",
     features: [
       "🎓 全校 100+ 系所畢業進度支援",
       "🤖 自動化課程資料爬取更新",
@@ -88,16 +91,15 @@ export const updateHistory = [
       "優化錯誤處理與用戶回饋"
     ]
   },
-
   {
     version: "v2.1.0",
     date: "2025-07-21",
-    type: "feature", 
+    type: "feature",
     title: "智能按鈕與通知系統",
-    description: "大幅提升課程操作體驗，新增即時反饋與動態視覺設計。",
+    description: "大幅提升課程操作體驗，新增即時反饋與動態視覺設計",
     features: [
       "🎨 動態加入移除課程按鈕",
-      "🔔 完整課表變動通知系統", 
+      "🔔 完整課表變動通知系統",
       "🎯 智能按鈕狀態切換功能",
       "🌐 Safari iOS 完整相容支援",
       "⚡ 課程熱度顯示邏輯優化"
@@ -108,17 +110,16 @@ export const updateHistory = [
       "優化按鈕動畫與視覺反饋"
     ]
   },
-
   {
-    version: "v2.0.0", 
+    version: "v2.0.0",
     date: "2025-07-21",
     type: "improvement",
-    title: "UI 版面全面優化", 
-    description: "解決關鍵版面問題，提供一致美觀的使用者介面體驗。",
+    title: "UI 版面全面優化",
+    description: "解決關鍵版面問題，提供一致美觀的使用者介面體驗",
     features: [
       "🔧 修復選單寬度變化問題",
       "📝 精簡班別選擇選項",
-      "📅 簡化畢業進度介面設計", 
+      "📅 簡化畢業進度介面設計",
       "🎯 統一輸入框選單寬度",
       "📱 大幅改善手機端操作"
     ],
@@ -128,13 +129,12 @@ export const updateHistory = [
       "優化 CSS box-sizing 一致性"
     ]
   },
-
   {
     version: "v1.5.0",
-    date: "2025-07-21", 
+    date: "2025-07-21",
     type: "feature",
     title: "雙系所畢業進度支援",
-    description: "擴展畢業進度追蹤功能，新增觀餐系觀光組學士班支援。",
+    description: "擴展畢業進度追蹤功能，新增觀餐系觀光組學士班支援",
     features: [
       "🎓 觀餐系觀光組學士班支援",
       "💾 獨立系所進度儲存機制",
@@ -146,18 +146,17 @@ export const updateHistory = [
       "獨立 localStorage 儲存邏輯"
     ]
   },
-
   {
     version: "v1.0.0",
     date: "2025-07-21",
-    type: "major", 
+    type: "major",
     title: "暨大生超級助理正式上線",
-    description: "🎉 系統正式發布！為暨南大學學生提供全方位校園服務平台。",
+    description: "🎉 系統正式發布！為暨南大學學生提供全方位校園服務平台",
     features: [
       "📚 智慧排課系統完整功能",
       "🎓 畢業進度追蹤管理系統",
       "📞 校園通訊錄整合服務",
-      "📅 暨大行事曆事件列表", 
+      "📅 暨大行事曆事件列表",
       "🔐 Google 登入雲端同步",
       "🔥 課程社群智慧推薦"
     ],
