@@ -4,7 +4,7 @@ export const updateHistory = [
   {
     version: "v3.0.0",
     date: "2025-07-23",
-    type: "major",
+    type: "major", 
     title: "免責聲明系統與AI更新優化",
     description: "重大更新！新增法律保護機制，並全面優化智能更新系統，提供更穩定可靠的服務體驗",
     features: [
