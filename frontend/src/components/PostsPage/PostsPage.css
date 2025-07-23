@@ -1,0 +1,591 @@
+/* frontend/src/components/PostsPage/PostsPage.css (完整功能版 - 包含分頁和廣告樣式) */
+
+.posts-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  background: var(--background-primary);
+  min-height: 100vh;
+}
+
+/* 頁面標頭 */
+.posts-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xxl);
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: var(--text-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.posts-header h1 {
+  color: var(--text-white);
+  margin-bottom: var(--spacing-sm);
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.posts-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: var(--spacing-md);
+}
+
+.posts-summary {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.posts-summary span {
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+/* 搜尋和篩選控制 */
+.posts-controls {
+  margin-bottom: var(--spacing-xxl);
+  background: var(--background-card);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.controls-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  align-items: center;
+}
+
+.search-box {
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: all var(--transition-normal);
+  background: var(--background-primary);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1);
+}
+
+.sort-box {
+  min-width: 160px;
+}
+
+.sort-select {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  background: var(--background-primary);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1);
+}
+
+.filter-tabs {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+}
+
+.filter-tab {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: 2px solid #e0e0e0;
+  background: var(--background-primary);
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.filter-tab:hover {
+  border-color: var(--primary-light);
+  background: var(--primary-ultra-light);
+  color: var(--primary-dark);
+}
+
+.filter-tab.active {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: var(--text-white);
+  box-shadow: var(--shadow-md);
+}
+
+/* 🎯 廣告說明 */
+.ad-notice {
+  background: #fff3cd;
+  color: #856404;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid #ffeaa7;
+  font-size: 0.85rem;
+}
+
+/* 貼文容器 */
+.posts-container {
+  margin-bottom: var(--spacing-xxl);
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+/* 貼文卡片 */
+.post-card {
+  background: var(--background-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  border-left: 4px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.post-card.post-article {
+  border-left-color: var(--primary-color);
+}
+
+.post-card.post-announcement {
+  border-left-color: #17a2b8;
+}
+
+.post-card.post-ad {
+  border-left-color: #ffc107;
+}
+
+/* 🎯 廣告貼文特殊樣式 */
+.post-card.ad-post {
+  background: linear-gradient(135deg, #fff9e6, #ffffff);
+  border: 2px solid #ffc107;
+  box-shadow: var(--shadow-md);
+}
+
+.post-card.ad-post:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+}
+
+.ad-banner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(135deg, #ffc107, #ff9800);
+  color: #000;
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom-left-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 貼文卡片標頭 */
+.post-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: var(--spacing-md); /* 為廣告橫幅留空間 */
+}
+
+.ad-post .post-card-header {
+  margin-top: var(--spacing-lg); /* 廣告需要更多空間 */
+}
+
+.post-badge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-article {
+  background: var(--primary-ultra-light);
+  color: var(--primary-dark);
+}
+
+.badge-announcement {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.badge-ad {
+  background: rgba(255, 193, 7, 0.2);
+  color: #856404;
+  border: 1px solid #ffc107;
+}
+
+.post-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* 貼文卡片內容 */
+.post-card-content {
+  margin-bottom: var(--spacing-lg);
+}
+
+.post-title {
+  color: var(--primary-dark);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.4;
+}
+
+.ad-post .post-title {
+  color: #b8860b; /* 廣告標題特殊顏色 */
+}
+
+.post-excerpt {
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.post-excerpt img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+}
+
+.post-excerpt a {
+  color: var(--primary-color);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-normal);
+}
+
+.post-excerpt a:hover {
+  border-bottom-color: var(--primary-color);
+  background: var(--primary-ultra-light);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.post-excerpt strong {
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.post-excerpt ul, .post-excerpt ol {
+  padding-left: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+}
+
+.post-excerpt li {
+  margin-bottom: var(--spacing-xs);
+}
+
+/* 貼文卡片頁腳 */
+.post-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid #f0f0f0;
+}
+
+.post-author, .post-updated {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* 🎯 分頁控制 */
+.pagination {
+  background: var(--background-card);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-xl);
+}
+
+.pagination-info {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid #e0e0e0;
+  background: var(--background-primary);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: 0.9rem;
+  min-width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  background: var(--primary-ultra-light);
+  color: var(--primary-dark);
+}
+
+.pagination-btn.active {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: var(--text-white);
+  font-weight: 600;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f5f5f5;
+  color: #999;
+}
+
+.pagination-ellipsis {
+  color: var(--text-secondary);
+  padding: 0 var(--spacing-xs);
+  font-weight: bold;
+}
+
+/* 載入狀態 */
+.posts-page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: var(--text-secondary);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 無貼文狀態 */
+.no-posts {
+  text-align: center;
+  padding: var(--spacing-xxl);
+  color: var(--text-secondary);
+  background: var(--background-secondary);
+  border-radius: var(--radius-lg);
+  border: 2px dashed #ddd;
+}
+
+.no-posts-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.no-posts h3 {
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.25rem;
+}
+
+.no-posts p {
+  font-size: 1rem;
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+/* 統計資訊 */
+.posts-stats {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: var(--background-secondary);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+}
+
+.posts-stats p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .posts-page {
+    padding: var(--spacing-lg);
+  }
+
+  .posts-header h1 {
+    font-size: 2rem;
+  }
+
+  .posts-summary {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .controls-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .filter-tabs {
+    justify-content: center;
+  }
+
+  .filter-tab {
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .post-card-footer {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    align-items: flex-start;
+  }
+
+  .pagination-controls {
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  .pagination-btn {
+    min-width: 40px;
+    height: 40px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .posts-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .post-card {
+    padding: var(--spacing-lg);
+  }
+
+  .search-input, .sort-select {
+    font-size: 16px; /* 防止 iOS Safari 縮放 */
+  }
+
+  .filter-tab {
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+/* 動畫效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.post-card:nth-child(2n) {
+  animation-delay: 0.1s;
+}
+
+.post-card:nth-child(3n) {
+  animation-delay: 0.2s;
+}
+
+/* 焦點可訪問性 */
+.search-input:focus,
+.sort-select:focus,
+.filter-tab:focus,
+.pagination-btn:focus,
+.btn:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* 🎯 廣告特殊動畫 */
+.ad-post {
+  animation: fadeInUp 0.3s ease-out, adGlow 3s ease-in-out infinite;
+}
+
+@keyframes adGlow {
+  0%, 100% {
+    box-shadow: var(--shadow-md);
+  }
+  50% {
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.2);
+  }
+}
