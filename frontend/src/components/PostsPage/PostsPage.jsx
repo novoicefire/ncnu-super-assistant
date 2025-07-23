@@ -1,4 +1,4 @@
-// frontend/src/components/PostsPage/PostsPage.jsx (完全反檢測版本)
+// frontend/src/components/PostsPage/PostsPage.jsx (釘選系統版本)
 import React, { useState, useEffect } from 'react';
 import './PostsPage.css';
 
@@ -24,26 +24,25 @@ const PostsPage = () => {
   useEffect(() => {
     let filtered = [...allPosts];
 
-    // 類型篩選（對所有類型生效，但特殊內容永遠顯示）
+    // 類型篩選（釘選貼文永遠顯示）
     if (selectedType !== 'all') {
-      // 保留特殊內容，只篩選指定類型的普通內容
       const regularFiltered = allPosts.filter(post => 
         post.type === selectedType || post.type === 'ad'
       );
       filtered = regularFiltered;
     }
 
-    // 搜尋篩選（特殊內容不受影響）
+    // 搜尋篩選（釘選貼文不受影響）
     if (searchTerm.trim()) {
       const searchFiltered = filtered.filter(post =>
-        post.type === 'ad' || // 特殊內容永遠顯示
+        post.type === 'ad' || // 釘選貼文永遠顯示
         post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         post.content.toLowerCase().includes(searchTerm.toLowerCase())
       );
       filtered = searchFiltered;
     }
 
-    // 排序（統一排序，特殊內容自然穿插）
+    // 排序（統一排序，釘選貼文自然穿插）
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'oldest':
@@ -70,7 +69,7 @@ const PostsPage = () => {
     const postsWithMeta = paginatedPosts.map((post, index) => ({
       ...post,
       renderKey: `post-${post.id}-${currentPage}-${index}`,
-      isPremium: post.type === 'ad' // 標記特殊內容
+      isPinned: post.type === 'ad' // 標記釘選貼文
     }));
     
     setDisplayPosts(postsWithMeta);
@@ -123,7 +122,7 @@ const PostsPage = () => {
       {/* 頁面標頭 */}
       <div className="posts-header">
         <h1>📰 最新資訊</h1>
-        <p>探索最新的文章、公告和精選內容</p>
+        <p>探索最新的文章、公告和重要內容</p>
         <div className="posts-summary">
           <span>📄 {getTypeCount('article')} 篇文章</span>
           <span>📣 {getTypeCount('announcement')} 則公告</span>
@@ -207,23 +206,23 @@ const PostsPage = () => {
             {displayPosts.map((post, index) => (
               <article 
                 key={post.renderKey} 
-                className={`content-card content-${post.type} ${post.isPremium ? 'premium-content' : ''}`}
+                className={`article-card article-${post.type} ${post.isPinned ? 'pinned-article' : ''}`}
               >
-                {/* 特殊內容標記 */}
-                {post.isPremium && (
-                  <div className="premium-badge">
-                    <span>⭐ 推薦</span>
+                {/* 釘選標記 */}
+                {post.isPinned && (
+                  <div className="pin-indicator">
+                    <span>📌 釘選</span>
                   </div>
                 )}
 
-                {/* 內容標頭 */}
-                <div className="content-header">
-                  <span className={`content-label label-${post.type}`}>
+                {/* 文章標頭 */}
+                <div className="article-header">
+                  <span className={`article-category category-${post.type}`}>
                     {post.type === 'article' && '📄 文章'}
                     {post.type === 'announcement' && '📣 公告'}
-                    {post.type === 'ad' && '⭐ 推薦內容'}
+                    {post.type === 'ad' && '📌 重要內容'}
                   </span>
-                  <span className="content-date">
+                  <span className="article-date">
                     📅 {new Date(post.createdAt).toLocaleDateString('zh-TW', {
                       year: 'numeric',
                       month: 'long',
@@ -232,20 +231,20 @@ const PostsPage = () => {
                   </span>
                 </div>
 
-                {/* 內容主體 */}
-                <div className="content-body">
-                  <h2 className="content-title">{post.title}</h2>
+                {/* 文章內容 */}
+                <div className="article-content">
+                  <h2 className="article-title">{post.title}</h2>
                   <div 
-                    className="content-text"
+                    className="article-text"
                     dangerouslySetInnerHTML={{ __html: post.content }}
                   />
                 </div>
 
-                {/* 內容頁腳 */}
-                <div className="content-footer">
-                  <span className="content-author">👤 {post.author}</span>
+                {/* 文章資訊 */}
+                <div className="article-info">
+                  <span className="article-author">👤 {post.author}</span>
                   {post.updatedAt && (
-                    <span className="content-updated">
+                    <span className="article-updated">
                       ✏️ {new Date(post.updatedAt).toLocaleDateString('zh-TW')}
                     </span>
                   )}
