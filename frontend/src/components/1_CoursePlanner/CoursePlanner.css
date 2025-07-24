@@ -1,4 +1,4 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (通知層級修復版) */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (Safari 相容性修復版 + 截圖功能) */
 
 .course-planner {
   display: flex;
@@ -6,7 +6,7 @@
   position: relative;
 }
 
-/* 🔔 通知系統樣式 - 修復層級問題 */
+/* 🔔 通知系統樣式 */
 .notifications-container {
   position: fixed;
   top: 20px;
@@ -16,7 +16,6 @@
   flex-direction: column;
   gap: 10px;
   max-width: 400px;
-  pointer-events: none; /* 🔧 讓容器本身無法點擊，但子元素可以 */
 }
 
 .notification {
@@ -34,8 +33,6 @@
   border-left: 4px solid;
   max-width: 100%;
   word-wrap: break-word;
-  pointer-events: auto; /* 🔧 恢復通知本身的點擊功能 */
-  position: relative; /* 🔧 確保定位正確 */
 }
 
 .notification-success {
@@ -168,8 +165,8 @@
   font-size: 0.8rem;
   font-weight: bold;
   color: #333;
-  gap: 1px;
-  padding: 0.2rem 0.5rem 0.2rem 0.1rem;
+  gap: 1px; /* 🔧 修改：從 4px 進一步縮小為 1px，幾乎無間距 */
+  padding: 0.2rem 0.5rem 0.2rem 0.1rem; /* 🔧 修改：減少左側 padding */
   border-radius: 6px;
   transition: all 0.2s ease;
   -webkit-user-select: none;
@@ -181,12 +178,12 @@
 }
 
 .conflict-checkbox {
-  width: 18px !important;
+  width: 18px !important; /* 🔧 加入 !important 確保優先級 */
   height: 18px !important;
   cursor: pointer;
   accent-color: #00796b;
   margin: 0 1px 0 0;
-  flex-shrink: 0;
+  flex-shrink: 0; /* 🔧 新增：防止被壓縮 */
 }
 
 .conflict-checkbox-text {
@@ -315,7 +312,7 @@
   flex: 2;
 }
 
-/* 🎯 課表標題區域樣式 */
+/* 🎯 新增：課表標題區域樣式 */
 .schedule-header {
   display: flex;
   justify-content: space-between;
@@ -330,7 +327,7 @@
   font-size: 1.3rem;
 }
 
-/* 🎯 保存圖片按鈕樣式 */
+/* 🎯 新增：保存圖片按鈕樣式 */
 .save-image-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -429,7 +426,7 @@
   font-size: 0.8rem;
 }
 
-/* RWD響應式設計 - 修復通知系統在不同螢幕的定位 */
+/* RWD響應式設計 */
 @media (max-width: 1024px) {
   .planner-content {
     flex-direction: column;
@@ -450,9 +447,7 @@
     max-width: 160px;
   }
 
-  /* 🔧 平板版通知系統位置調整 */
   .notifications-container {
-    top: 80px; /* 避開較高的 navbar */
     right: 15px;
     max-width: 350px;
   }
@@ -462,6 +457,7 @@
     width: 100%;
   }
 
+  /* 🎯 新增：平板版保存圖片按鈕 */
   .save-image-btn {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
@@ -475,7 +471,7 @@
     align-items: stretch;
   }
 
-  .filters input[type="text"],
+  .filters input[type="text"], /* 🔧 修改：明確指定類型 */
   .filters select {
     width: 100%;
     max-width: none;
@@ -502,9 +498,8 @@
     max-width: calc(100% - 50px);
   }
 
-  /* 🔧 手機版通知系統位置大幅調整 */
   .notifications-container {
-    top: 120px; /* 避開垂直布局的 navbar，約120px高度 */
+    top: 15px;
     right: 15px;
     left: 15px;
     max-width: none;
@@ -521,13 +516,13 @@
   }
 
   .conflict-filter-label {
-    padding: 0.2rem 0.4rem 0.2rem 0.05rem;
+    padding: 0.2rem 0.4rem 0.2rem 0.05rem; /* 🔧 修改：手機版更緊湊 */
     font-size: 0.75rem;
-    gap: 1px;
+    gap: 1px; /* 🔧 修改：保持 1px 間距 */
   }
 
   .conflict-checkbox {
-    width: 16px !important;
+    width: 16px !important; /* 🔧 手機版也加入 !important */
     height: 16px !important;
     margin: 0 1px 0 0;
   }
@@ -543,6 +538,7 @@
     font-size: 0.7rem;
   }
 
+  /* 🎯 新增：手機版課表標題區域 */
   .schedule-header {
     flex-direction: column;
     gap: 0.8rem;
@@ -555,6 +551,7 @@
     font-size: 1.2rem;
   }
 
+  /* 🎯 新增：手機版保存圖片按鈕 */
   .save-image-btn {
     padding: 0.8rem 1rem;
     font-size: 0.9rem;
@@ -573,11 +570,7 @@
     line-height: 1.3;
   }
 
-  /* 🔧 超小螢幕通知系統微調 */
-  .notifications-container {
-    top: 130px; /* 進一步避開更緊湊的 navbar */
-  }
-
+  /* 🎯 新增：超小螢幕保存圖片按鈕 */
   .save-image-btn {
     padding: 0.7rem;
     font-size: 0.8rem;
