@@ -2,6 +2,22 @@
 
 export const updateHistory = [
   {
+    version: "v3.1.0",
+    date: "2025-07-24",
+    type: "feature",
+    title: "智慧排課截圖功能與顯示優化",
+    description: "新增課表截圖下載功能，修復班級顯示與課程熱度問題",
+    features: [
+      "📷 新增課表截圖下載功能，一鍵保存PNG圖片",
+      "🔥 調整課程熱度指示器功能，僅在被加進課表的累計人數>0時才顯示",
+      "📱 截圖按鈕完美適配響應式設計，支援各種裝置"
+    ],
+    technical: [
+      "整合 html2canvas 套件實現高品質課表截圖",
+      "新增截圖狀態管理與使用者回饋機制"
+    ]
+  },
+  {
     version: "v3.0.0",
     date: "2025-07-23",
     type: "major",
