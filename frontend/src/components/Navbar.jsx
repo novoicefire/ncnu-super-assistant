@@ -1,5 +1,5 @@
-// frontend/src/components/Navbar.jsx (語法修復版)
-import React, { useEffect, useRef } from 'react';
+// frontend/src/components/Navbar.jsx (新增 SVG Logo 版)
+import React, { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
 import './Navbar.css';
@@ -39,12 +39,35 @@ const GoogleLoginButton = () => {
   return <div ref={buttonDiv}></div>;
 };
 
-const Navbar = () => {
+const Navbar = ({ disclaimerAccepted }) => {
   const { isLoggedIn, user, logout, isLoading } = useAuth();
+  const [showIBSAnimation, setShowIBSAnimation] = useState(false);
+
+  useEffect(() => {
+    if (disclaimerAccepted && !showIBSAnimation) {
+      const timer = setTimeout(() => {
+        setShowIBSAnimation(true);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [disclaimerAccepted, showIBSAnimation]);
 
   return (
     <nav className="navbar">
-      <div className="nav-brand">暨大生超級助理</div>
+      {/* 🎨 修改：品牌區域包含 logo 和文字 */}
+      <div className="nav-brand-container">
+        <img 
+          src="/logo.svg" 
+          alt="暨大生超級助理 Logo" 
+          className="nav-logo"
+          onError={(e) => {
+            // 如果 logo 載入失敗，隱藏圖片
+            e.target.style.display = 'none';
+          }}
+        />
+        <div className="nav-brand">暨大生超級助理</div>
+      </div>
       
       <div className="nav-links">
         <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}>
@@ -62,6 +85,18 @@ const Navbar = () => {
         <NavLink to="/updates" className={({ isActive }) => isActive ? 'active' : ''}>
           更新日誌
         </NavLink>
+        
+        <a 
+          href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`nav-external-link ibs-handbook ${showIBSAnimation ? 'animate' : ''}`}
+          title="國企系 IBS 學士班手冊（外部連結）"
+        >
+          <span className="link-icon">📚</span>
+          <span className="link-text">IBS專區</span>
+          <span className="external-indicator">↗</span>
+        </a>
       </div>
 
       <div className="auth-section">

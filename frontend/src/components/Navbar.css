@@ -1,4 +1,4 @@
-/* frontend/src/components/Navbar.css (前綴順序修復版) */
+/* frontend/src/components/Navbar.css (Logo增大100%完整版) */
 
 .navbar {
   display: flex;
@@ -12,11 +12,37 @@
   z-index: 1000;
 }
 
+/* 🎨 品牌區域容器 */
+.nav-brand-container {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.nav-brand-container:hover {
+  transform: translateY(-1px);
+}
+
+/* 🎨 Logo 樣式 - 增大100% */
+.nav-logo {
+  width: 64px;
+  height: 64px;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.nav-logo:hover {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
 .nav-brand {
   color: white;
   font-size: 1.5rem;
   font-weight: bold;
   text-decoration: none;
+  margin: 0;
 }
 
 .nav-links {
@@ -45,6 +71,157 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* 🎓 IBS 學士班手冊外部連結樣式 */
+.nav-external-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: white !important;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  box-shadow: 0 3px 6px rgba(255, 107, 107, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-external-link:hover {
+  background: linear-gradient(135deg, #ee5a24, #d63031);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+}
+
+.nav-external-link:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+}
+
+/* ✨ 免責聲明確認後的亮起動畫 */
+.nav-external-link.ibs-handbook.animate {
+  animation: disclaimerConfirmedGlow 3s ease-in-out;
+}
+
+@keyframes disclaimerConfirmedGlow {
+  0% {
+    box-shadow: 0 3px 6px rgba(255, 107, 107, 0.3);
+    transform: scale(1);
+  }
+  25% {
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.8), 0 0 30px rgba(255, 107, 107, 0.6), 0 3px 6px rgba(255, 107, 107, 0.3);
+    transform: scale(1.05);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 107, 107, 1), 0 0 35px rgba(255, 107, 107, 0.8), 0 6px 12px rgba(255, 107, 107, 0.5);
+    transform: scale(1.08);
+  }
+  75% {
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.8), 0 0 30px rgba(255, 107, 107, 0.6), 0 3px 6px rgba(255, 107, 107, 0.3);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 3px 6px rgba(255, 107, 107, 0.3);
+    transform: scale(1);
+  }
+}
+
+.nav-external-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nav-external-link:hover::before {
+  left: 100%;
+}
+
+.nav-external-link.ibs-handbook.animate::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: disclaimerConfirmedShine 3s ease-in-out 0.3s;
+}
+
+@keyframes disclaimerConfirmedShine {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.link-icon {
+  font-size: 1rem;
+  animation: bounce 2s infinite;
+}
+
+.nav-external-link.ibs-handbook.animate .link-icon {
+  animation: bounce 2s infinite, disclaimerConfirmedIconGlow 3s ease-in-out;
+}
+
+@keyframes disclaimerConfirmedIconGlow {
+  0%, 100% {
+    text-shadow: none;
+    transform: translateY(0);
+  }
+  25% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px) scale(1.1);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8);
+    transform: translateY(-3px) scale(1.15);
+  }
+  75% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px) scale(1.1);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
+.link-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.external-indicator {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.nav-external-link:hover .external-indicator {
+  opacity: 1;
+  transform: translateX(2px) translateY(-2px);
+}
+
 .auth-section {
   min-width: 200px;
   display: flex;
@@ -57,7 +234,6 @@
   font-size: 0.9rem;
 }
 
-/* 🔧 修復：正確的前綴順序 - WebKit 在前，標準在後 */
 .user-profile {
   display: flex;
   align-items: center;
@@ -66,8 +242,8 @@
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 25px;
   transition: all 0.3s ease;
-  -webkit-backdrop-filter: blur(10px);  /* ✅ WebKit 前綴在前 */
-  backdrop-filter: blur(10px);          /* ✅ 標準版本在後 */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .user-profile:hover {
@@ -133,6 +309,20 @@
     padding: 0.8rem 1.5rem;
   }
   
+  /* 🎨 平板版 Logo 調整 - 增大100% */
+  .nav-logo {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .nav-brand {
+    font-size: 1.3rem;
+  }
+  
+  .nav-brand-container {
+    gap: 1rem;
+  }
+  
   .nav-links {
     gap: 1.5rem;
   }
@@ -140,6 +330,23 @@
   .nav-links a {
     font-size: 0.9rem;
     padding: 0.4rem 0.8rem;
+  }
+  
+  .nav-external-link {
+    padding: 0.5rem 1rem;
+    gap: 0.3rem;
+  }
+  
+  .link-text {
+    font-size: 0.8rem;
+  }
+  
+  .link-icon {
+    font-size: 0.9rem;
+  }
+  
+  .external-indicator {
+    font-size: 0.7rem;
   }
   
   .user-name {
@@ -165,6 +372,20 @@
     padding: 1rem;
   }
   
+  /* 🎨 手機版 Logo 調整 - 增大100% */
+  .nav-logo {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .nav-brand {
+    font-size: 1.2rem;
+  }
+  
+  .nav-brand-container {
+    gap: 0.8rem;
+  }
+  
   .nav-links {
     gap: 1rem;
     flex-wrap: wrap;
@@ -174,6 +395,24 @@
   .nav-links a {
     font-size: 0.8rem;
     padding: 0.3rem 0.6rem;
+  }
+  
+  .nav-external-link {
+    padding: 0.4rem 0.8rem;
+    gap: 0.2rem;
+    border-radius: 20px;
+  }
+  
+  .link-text {
+    font-size: 0.75rem;
+  }
+  
+  .link-icon {
+    font-size: 0.8rem;
+  }
+  
+  .external-indicator {
+    font-size: 0.6rem;
   }
   
   .auth-section {
@@ -188,7 +427,7 @@
   }
   
   .user-name {
-    display: none; /* 手機版隱藏用戶名稱 */
+    display: none;
   }
   
   .avatar {
@@ -203,8 +442,18 @@
 }
 
 @media (max-width: 480px) {
+  /* 🎨 超小螢幕 Logo 調整 - 增大100% */
+  .nav-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
   .nav-brand {
-    font-size: 1.2rem;
+    font-size: 1rem;
+  }
+  
+  .nav-brand-container {
+    gap: 0.6rem;
   }
   
   .nav-links {
@@ -214,6 +463,23 @@
   .nav-links a {
     font-size: 0.75rem;
     padding: 0.2rem 0.4rem;
+  }
+  
+  .nav-external-link {
+    padding: 0.3rem 0.6rem;
+    gap: 0.1rem;
+  }
+  
+  .link-text {
+    font-size: 0.7rem;
+  }
+  
+  .link-icon {
+    font-size: 0.7rem;
+  }
+  
+  .external-indicator {
+    display: none;
   }
   
   .user-profile {
@@ -237,8 +503,6 @@
   align-items: center;
 }
 
-/* 確保 Google 登入按鈕與設計一致 */
 .auth-section iframe {
   border-radius: 25px !important;
 }
-
