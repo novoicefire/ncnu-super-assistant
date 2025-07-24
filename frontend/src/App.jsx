@@ -1,4 +1,4 @@
-// frontend/src/App.jsx (修復版)
+// frontend/src/App.jsx (傳遞免責聲明狀態版)
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -18,10 +18,12 @@ import './App.css';
 function App() {
   // 🎯 免責聲明狀態管理
   const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false); // 🎯 新增：免責聲明確認狀態
 
   // 🎯 處理免責聲明確認
   const handleAcceptDisclaimer = () => {
     setShowDisclaimer(false);
+    setDisclaimerAccepted(true); // 🎯 新增：設定已確認狀態
   };
 
   // 🎯 防止背景滾動
@@ -48,11 +50,11 @@ function App() {
 
       {/* 🎯 主應用程式內容 */}
       <div className="app-container">
-        <Navbar />
+        {/* 🎯 修改：傳遞免責聲明確認狀態到 Navbar */}
+        <Navbar disclaimerAccepted={disclaimerAccepted} />
         <div className="container">
           <Routes>
             <Route path="/" element={<CoursePlanner />} />
-            {/* 🔧 修復：使用正確的路由路徑 */}
             <Route path="/tracker" element={<GraduationTracker />} />
             <Route path="/directory" element={<CampusDirectory />} />
             <Route path="/calendar" element={<UniversityCalendar />} />
