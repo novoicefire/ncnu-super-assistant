@@ -2,6 +2,27 @@
 
 export const updateHistory = [
   {
+    version: "v3.2.0",
+    date: "2025-07-25",
+    type: "feature",
+    title: "導航欄新增LOGO與IBS專區整合",
+    description:"新增自訂Logo支援，國企系學士班手冊Notion連結按鈕"+
+                "\n"+
+                "(畢竟我是國企的，加個IBS資訊專區的按鈕方便系上學弟妹沒問題的吧)",
+    features: [
+      "🎨 新增自訂SVG Logo",
+      "🎓 整合國企系IBS學士班手冊專區連結",
+      "💫 Logo互動效果優化，hover時放大旋轉動畫"
+    ],
+    technical: [
+      "實作SVG Logo動態載入與錯誤處理機制",
+      "設計漸層色彩IBS專區按鈕，區別內外部連結",
+      "整合React狀態管理控制動畫觸發時機",
+      "優化導航欄品牌區域佈局與間距設計",
+      "新增多層次動畫效果：發光、光澤、圖示特效"
+    ]
+  },
+  {
     version: "v3.1.0",
     date: "2025-07-24",
     type: "feature",
