@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (修復課程資訊顯示格式問題)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (移除樣式衝突版)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
@@ -26,36 +26,166 @@ const CoursePlanner = () => {
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [notifications, setNotifications] = useState([]);
 
+  // 🎨 簡化的樣式注入（移除 CourseTable 相關樣式）
+  useEffect(() => {
+    const enhancementStyles = `
+      /* ✅ 只保留 CoursePlanner 頁面本身的樣式 */
+      .course-planner {
+        background: var(--theme-bg-primary);
+        color: var(--theme-text-primary);
+        border-radius: 16px;
+        transition: all 0.3s ease;
+      }
+      
+      .course-planner h1 {
+        color: #00796b !important;
+        font-weight: 700 !important;
+      }
+      
+      [data-theme="dark"] .course-planner h1 {
+        color: #48a999 !important;
+      }
+      
+      .filters {
+        background-color: var(--theme-bg-secondary);
+        border: 1px solid var(--theme-border-primary);
+        border-radius: 12px;
+        box-shadow: var(--theme-shadow-primary);
+      }
+      
+      .course-list-container {
+        background: var(--theme-bg-card);
+        border: 1px solid var(--theme-border-primary);
+        border-radius: 12px;
+        box-shadow: var(--theme-shadow-primary);
+      }
+      
+      .course-table {
+        background: var(--theme-bg-card);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--theme-shadow-primary);
+        border: 1px solid var(--theme-border-primary);
+      }
+      
+      /* ✅ 篩選器樣式 */
+      .filters label {
+        color: var(--theme-text-primary) !important;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+      
+      .filters input,
+      .filters select {
+        background: var(--theme-bg-secondary);
+        color: var(--theme-text-primary);
+        border: 1px solid var(--theme-border-primary);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+      
+      .filters input:focus,
+      .filters select:focus {
+        border-color: #00796b;
+        box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.2);
+      }
+      
+      .filters input::placeholder {
+        color: var(--theme-text-tertiary);
+      }
+      
+      .conflict-filter-label {
+        color: var(--theme-text-primary) !important;
+      }
+      
+      .conflict-checkbox-text {
+        color: var(--theme-text-primary) !important;
+      }
+      
+      .conflict-checkbox-text span {
+        color: var(--theme-text-primary) !important;
+      }
+      
+      .conflict-count {
+        color: var(--theme-text-secondary) !important;
+      }
+      
+      .filter-info {
+        color: var(--theme-text-secondary) !important;
+      }
+      
+      /* ✅ 課程列表樣式 */
+      .course-list li {
+        background: var(--theme-bg-secondary);
+        border-bottom: 1px solid var(--theme-border-secondary);
+        color: var(--theme-text-primary);
+        transition: background-color 0.3s ease;
+      }
+      
+      .course-list li:hover {
+        background: var(--theme-bg-hover);
+      }
+      
+      .course-info small {
+        color: var(--theme-text-secondary);
+      }
+      
+      /* ✅ 通知系統樣式 */
+      [data-theme="dark"] .notification-success {
+        background-color: rgba(40, 167, 69, 0.9);
+      }
+      
+      [data-theme="dark"] .notification-error {
+        background-color: rgba(220, 53, 69, 0.9);
+      }
+      
+      [data-theme="dark"] .notification-warning {
+        background-color: rgba(255, 193, 7, 0.9);
+        color: #000;
+      }
+      
+      [data-theme="dark"] .notification-info {
+        background-color: rgba(23, 162, 184, 0.9);
+      }
+    `;
+
+    const styleElement = document.createElement('style');
+    styleElement.id = 'course-planner-enhancements';
+    styleElement.textContent = enhancementStyles;
+    document.head.appendChild(styleElement);
+
+    return () => {
+      const existingStyle = document.getElementById('course-planner-enhancements');
+      if (existingStyle) {
+        document.head.removeChild(existingStyle);
+      }
+    };
+  }, []);
+
   // 課程資料清理與標準化函數
   const normalizeCourseDepartment = useCallback((course) => {
-    // 處理「中文思辨與表達」課程
     if (course.course_cname && course.course_cname.includes('中文思辨與表達')) {
       return { ...course, department: '通識領域課程' };
     }
 
-    // 處理其他空 department 的課程
     if (!course.department || course.department.trim() === '') {
-      // 根據課程名稱推斷所屬單位
       if (course.course_cname) {
         const courseName = course.course_cname;
-        // 通識課程關鍵詞檢測
         if (courseName.includes('通識') || courseName.includes('中文思辨') || 
             courseName.includes('跨域專業學術英文')) {
           return { ...course, department: '通識領域課程' };
         }
-        // 全校共同課程
         if (courseName.includes('服務學習') || courseName.includes('全校') || 
             courseName.includes('共同')) {
           return { ...course, department: '全校共同課程' };
         }
       }
-      // 預設分類
       return { ...course, department: '其他課程' };
     }
     return course;
   }, []);
 
-  // 🎯 新增：格式化課程資訊顯示函數
+  // 🎯 格式化課程資訊顯示函數
   const formatCourseInfo = useCallback((course) => {
     const info = [];
     
@@ -71,7 +201,7 @@ const CoursePlanner = () => {
 
   // 截圖功能
   const captureScheduleImage = useCallback(async () => {
-    const tableElement = document.getElementById('course-schedule-table');
+    const tableElement = document.getElementById('course-schedule-table-isolated');
     if (!tableElement) {
       showNotification('❌ 找不到課表元素，無法截圖', 'error');
       return;
@@ -117,19 +247,17 @@ const CoursePlanner = () => {
     }
   }, []);
 
+  // 🔄 載入真實課程資料
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // 載入課程資料
         console.log('🔄 開始載入課程資料...');
         const courseRes = await axios.get('/data/本學期開課資訊API.json');
         const rawCourses = courseRes.data?.course_ncnu?.item || [];
         
-        // 確保所有原始資料欄位都保留，包括 division
         const normalizedCourses = rawCourses.map(course => {
           const normalized = normalizeCourseDepartment(course);
-          // 確保 division 欄位存在且有預設值
           if (!normalized.division || normalized.division.trim() === '') {
             normalized.division = '一般班';
           }
@@ -137,13 +265,9 @@ const CoursePlanner = () => {
         });
         
         console.log('✅ 課程資料載入完成，共', normalizedCourses.length, '門課程');
-        console.log('🔍 Division 欄位檢查:', 
-          [...new Set(normalizedCourses.map(c => c.division))].filter(Boolean)
-        );
-        
         setStaticCourses(normalizedCourses);
 
-        // 改善課程熱度資料載入邏輯
+        // 課程熱度資料載入
         try {
           console.log('🔄 開始載入課程熱度資料...');
           const hotnessResult = await robustRequest('get', '/api/courses/hotness');
@@ -186,13 +310,22 @@ const CoursePlanner = () => {
     fetchData();
   }, [normalizeCourseDepartment]);
 
+  // 🔄 載入課表資料（登入用戶從雲端，未登入用戶從本地）
   useEffect(() => {
     if (isLoggedIn && user?.google_id) {
+      // 登入用戶：從雲端載入
       robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } })
         .then(data => setSchedule(data || {}))
-        .catch(err => setSchedule({}));
+        .catch(err => {
+          console.error('雲端課表載入失敗:', err);
+          // 雲端載入失敗時嘗試載入本地資料
+          const localSchedule = localStorage.getItem('course-schedule');
+          setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
+        });
     } else {
-      setSchedule({});
+      // 未登入用戶：從本地載入
+      const localSchedule = localStorage.getItem('course-schedule');
+      setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
     }
   }, [isLoggedIn, user]);
 
@@ -273,10 +406,15 @@ const CoursePlanner = () => {
     }, 4000);
   }, []);
 
+  // 🔄 儲存課表（登入用戶同步雲端，未登入用戶存本地）
   const saveSchedule = useCallback(async (newSchedule, actionType = 'update', courseName = '') => {
     setSchedule(newSchedule);
     
+    // 🔄 總是先儲存到本地（作為備份）
+    localStorage.setItem('course-schedule', JSON.stringify(newSchedule));
+    
     if (isLoggedIn && user?.google_id) {
+      // 🌐 登入用戶：同步到雲端
       setSaveStatus("saving");
       try {
         const response = await robustRequest('post', '/api/schedule', {
@@ -299,15 +437,16 @@ const CoursePlanner = () => {
       } catch (error) {
         setSaveStatus("error");
         console.error("Failed to save schedule to cloud:", error);
-        showNotification('❌ 儲存失敗，請檢查網路連線或稍後再試', 'error');
+        showNotification('❌ 雲端同步失敗，但已保存到本地。請檢查網路連線', 'warning');
       } finally {
         setTimeout(() => setSaveStatus("idle"), 3000);
       }
-    } else if (!isLoggedIn) {
+    } else {
+      // 💾 未登入用戶：只存本地
       if (actionType === 'add') {
-        showNotification(`📝 「${courseName}」已加入本地課表，登入後可同步至雲端`, 'warning');
+        showNotification(`✅ 「${courseName}」已加入課表，登入後可同步至雲端`, 'success');
       } else if (actionType === 'remove') {
-        showNotification(`📝 「${courseName}」已從本地課表移除`, 'warning');
+        showNotification(`🗑️ 「${courseName}」已從課表移除`, 'success');
       }
     }
   }, [isLoggedIn, user, showNotification]);
@@ -395,12 +534,12 @@ const CoursePlanner = () => {
   };
 
   const getSaveStatusMessage = () => {
-    if (!isLoggedIn) return "登入後即可將課表儲存至雲端";
+    if (!isLoggedIn) return "登入後即可將課表同步至雲端";
     
     switch (saveStatus) {
-      case "saving": return "儲存中...";
+      case "saving": return "同步中...";
       case "success": return "✔ 課表已同步至雲端！";
-      case "error": return "❌ 儲存失敗，請檢查網路或稍後再試。";
+      case "error": return "❌ 雲端同步失敗，已保存到本地";
       default: return "課表變動將自動同步";
     }
   };
@@ -518,7 +657,6 @@ const CoursePlanner = () => {
                         🔥 {hotnessData[course.course_id]}人
                       </span>
                     )}
-                    {/* 🔧 修正：使用新的格式化函數，避免空欄位產生多餘分隔符 */}
                     <small>
                       {formatCourseInfo(course)}
                     </small>
