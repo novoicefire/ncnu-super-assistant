@@ -2610,7 +2610,7 @@
 .announcement-card {
   background: var(--theme-bg-card);
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 0;
   box-shadow: var(--theme-shadow-primary);
   border: 1px solid var(--theme-border-primary);
   margin-bottom: 20px;
@@ -2623,9 +2623,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0;
-  border-bottom: none;
-  margin-bottom: 1.5rem;
+  padding: 20px 24px 0;
+  border-bottom: 1px solid var(--theme-border-secondary);
+  margin-bottom: 0;
 }
 
 .announcement-header .header-content {
@@ -2633,9 +2633,9 @@
 }
 
 .announcement-header .header-content h3 {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 8px 0;
   color: var(--theme-text-primary);
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
 }
 
@@ -2676,10 +2676,11 @@
   overflow-y: auto;
   overflow-x: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 600px;
+  max-height: 1000px;
   opacity: 1;
-  padding: 0;
+  padding: 20px 24px;
   
+  /* 🎨 美化滾動條樣式 */
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
 }
@@ -2707,7 +2708,7 @@
 .announcement-card .collapsible-content.collapsed {
   max-height: 0;
   opacity: 0;
-  padding: 0;
+  padding: 0 24px;
   overflow: hidden;
 }
 
@@ -3026,32 +3027,17 @@
   }
 
   .announcement-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-  border-bottom: none;
-  margin-bottom: 1.5rem;
-}
+    padding: 16px 20px 0;
+  }
 
   .announcement-card .collapsible-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 600px;
-  opacity: 1;
-  padding: 0;
-  
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
-}
+    max-height: 700px;
+    padding: 20px;
+  }
 
   .announcement-card .collapsible-content.collapsed {
-  max-height: 0;
-  opacity: 0;
-  padding: 0;
-  overflow: hidden;
-}
+    padding: 0 20px;
+  }
 
   .announcement-card .collapsible-content::-webkit-scrollbar {
     width: 4px;
@@ -3077,25 +3063,13 @@
 
 @media (max-width: 480px) {
   .announcement-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-  border-bottom: none;
-  margin-bottom: 1.5rem;
-}
+    padding: 12px 16px 0;
+  }
 
   .announcement-card .collapsible-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 600px;
-  opacity: 1;
-  padding: 0;
-  
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
-}
+    max-height: 450px;
+    padding: 16px;
+  }
 
   .announcement-item {
     padding: 0.75rem;
@@ -3113,25 +3087,11 @@
 /* 🌙 深色模式滾動條適配 */
 [data-theme="dark"] .announcement-card {
   background: var(--theme-bg-card);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: var(--theme-shadow-primary);
   border: 1px solid var(--theme-border-primary);
-  margin-bottom: 20px;
-  transition: all 0.3s ease;
-  overflow: hidden;
 }
 
 [data-theme="dark"] .announcement-card .collapsible-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 600px;
-  opacity: 1;
-  padding: 0;
-  
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+  scrollbar-color: var(--primary-color) var(--theme-bg-secondary);
 }
 
 [data-theme="dark"] .announcement-card .collapsible-content::-webkit-scrollbar-track {
