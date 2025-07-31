@@ -1,4 +1,4 @@
-// frontend/src/components/Navbar.jsx (新方案：IBS按鈕統一放置於右側區域)
+// frontend/src/components/Navbar.jsx (修復版：桌面版IBS按鈕恢復)
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
@@ -137,7 +137,7 @@ const Navbar = ({ disclaimerAccepted }) => {
         <div className="nav-brand">暨大生超級助理</div>
       </div>
       
-      {/* 導航連結區域 */}
+      {/* ✅ 修復：導航連結區域 - 桌面版恢復IBS按鈕 */}
       <div 
         ref={mobileMenuRef}
         className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}
@@ -161,9 +161,22 @@ const Navbar = ({ disclaimerAccepted }) => {
           📋 更新日誌
         </NavLink>
         
-        {/* 手機版專用：並排按鈕容器 */}
+        {/* ✅ 修復：桌面版IBS按鈕恢復 */}
+        <a 
+          href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`nav-external-link ibs-handbook desktop-ibs-link ${showIBSAnimation ? 'animate' : ''}`}
+          title="國企系 IBS 學士班手冊（外部連結）"
+        >
+          <span className="link-icon">📚</span>
+          <span className="link-text">IBS專區</span>
+          <span className="external-indicator">↗</span>
+        </a>
+        
+        {/* ✅ 手機版：並排按鈕容器 */}
         <div className="mobile-buttons-row">
-          {/* 🎓 手機版IBS專區連結（與深色模式並排） */}
+          {/* 🎓 手機版IBS專區連結 */}
           <a 
             href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
             target="_blank"
@@ -192,21 +205,8 @@ const Navbar = ({ disclaimerAccepted }) => {
         </div>
       </div>
 
-      {/* 🎨 右側區域：IBS專區 + 主題切換 + 認證 */}
+      {/* 🎨 右側區域：主題切換 + 認證 */}
       <div className="nav-right-section">
-        {/* ✅ 新增：IBS專區按鈕（放在主題按鈕左邊） */}
-        <a 
-          href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`nav-external-link ibs-handbook ${showIBSAnimation ? 'animate' : ''}`}
-          title="國企系 IBS 學士班手冊（外部連結）"
-        >
-          <span className="link-icon">📚</span>
-          <span className="link-text">IBS專區</span>
-          <span className="external-indicator">↗</span>
-        </a>
-
         {/* ✅ 桌面版主題切換按鈕 */}
         <button 
           className="theme-toggle desktop-theme-toggle"

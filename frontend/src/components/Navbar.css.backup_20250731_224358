@@ -289,6 +289,10 @@
   transform: translateY(0) rotate(0deg);
 }
 
+/* ✅ 桌面版主題切換按鈕 */
+.desktop-theme-toggle {
+  /* 繼承 .theme-toggle 的所有樣式 */
+}
 
 /* ✅ 手機版並排按鈕容器 */
 .mobile-buttons-row {
@@ -1345,6 +1349,10 @@
   transform: translateY(0) rotate(0deg);
 }
 
+/* ✅ 桌面版主題切換按鈕 */
+.desktop-theme-toggle {
+  /* 繼承 .theme-toggle 的所有樣式 */
+}
 
 /* ✅ 手機版並排按鈕容器 */
 .mobile-buttons-row {
@@ -2123,25 +2131,5 @@
 @media (max-width: 768px) {
   .desktop-only-ibs {
     display: none !important; /* 手機版完全隱藏 */
-  }
-}
-
-/* ===== 新增：桌面版專用導航區域 ===== */
-.desktop-nav-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* 📱 手機版隱藏桌面版導航區域 */
-@media (max-width: 768px) {
-  .desktop-nav-section {
-    display: none !important;
-  }
-}
-/* 🎯 手機版隱藏 nav-right-section 內的 IBS 按鈕 */
-@media (max-width: 768px) {
-  .nav-right-section .nav-external-link.ibs-handbook {
-    display: none !important;
   }
 }
