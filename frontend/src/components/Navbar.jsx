@@ -1,4 +1,4 @@
-// frontend/src/components/Navbar.jsx (IBS和主題按鈕並排版)
+// frontend/src/components/Navbar.jsx (修復版：桌面版IBS按鈕恢復)
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
@@ -21,7 +21,7 @@ const GoogleLoginButton = () => {
         currentButtonDiv,
         {
           theme: "outline",
-          size: "large", // 從 "large" 改為 "medium" 或 "small"
+          size: "large",
           shape: "pill",
           text: "signin_with"
         }
@@ -47,16 +47,15 @@ const Navbar = ({ disclaimerAccepted }) => {
   const [showIBSAnimation, setShowIBSAnimation] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // ✅ 選單和按鈕的 ref 引用
   const mobileMenuRef = useRef(null);
   const menuToggleRef = useRef(null);
 
-  // 🎯 路由變化時關閉手機選單
+  // 路由變化時關閉手機選單
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // 🎯 IBS 動畫邏輯
+  // IBS 動畫邏輯
   useEffect(() => {
     if (disclaimerAccepted && !showIBSAnimation) {
       const timer = setTimeout(() => {
@@ -67,12 +66,12 @@ const Navbar = ({ disclaimerAccepted }) => {
     }
   }, [disclaimerAccepted, showIBSAnimation]);
 
-  // 🎯 手機選單切換
+  // 手機選單切換
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // 🎯 防止背景滾動
+  // 防止背景滾動
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -85,33 +84,27 @@ const Navbar = ({ disclaimerAccepted }) => {
     };
   }, [isMobileMenuOpen]);
 
-  // ✅ 點擊外部區域關閉選單
+  // 點擊外部區域關閉選單
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // 如果選單沒有打開，不需要處理
       if (!isMobileMenuOpen) return;
 
-      // 如果點擊的是選單按鈕，不處理（由按鈕自己的點擊事件處理）
       if (menuToggleRef.current && menuToggleRef.current.contains(event.target)) {
         return;
       }
 
-      // 如果點擊的是選單內部，不關閉選單
       if (mobileMenuRef.current && mobileMenuRef.current.contains(event.target)) {
         return;
       }
 
-      // 如果點擊的是其他區域，關閉選單
       setIsMobileMenuOpen(false);
     };
 
-    // 只有在選單打開時才添加事件監聽器
     if (isMobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('touchstart', handleClickOutside);
     }
 
-    // 清理事件監聽器
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
@@ -144,7 +137,7 @@ const Navbar = ({ disclaimerAccepted }) => {
         <div className="nav-brand">暨大生超級助理</div>
       </div>
       
-      {/* ✅ 修改：導航連結區域 - IBS和主題按鈕並排 */}
+      {/* ✅ 修復：導航連結區域 - 桌面版恢復IBS按鈕 */}
       <div 
         ref={mobileMenuRef}
         className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}
@@ -168,14 +161,27 @@ const Navbar = ({ disclaimerAccepted }) => {
           📋 更新日誌
         </NavLink>
         
-        {/* ✅ 新增：並排按鈕容器 */}
+        {/* ✅ 修復：桌面版IBS按鈕恢復 */}
+        <a 
+          href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`nav-external-link ibs-handbook desktop-ibs-link ${showIBSAnimation ? 'animate' : ''}`}
+          title="國企系 IBS 學士班手冊（外部連結）"
+        >
+          <span className="link-icon">📚</span>
+          <span className="link-text">IBS專區</span>
+          <span className="external-indicator">↗</span>
+        </a>
+        
+        {/* ✅ 手機版：並排按鈕容器 */}
         <div className="mobile-buttons-row">
-          {/* 🎓 IBS專區連結 */}
+          {/* 🎓 手機版IBS專區連結 */}
           <a 
             href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
             target="_blank"
             rel="noopener noreferrer"
-            className={`nav-external-link ibs-handbook ${showIBSAnimation ? 'animate' : ''}`}
+            className={`nav-external-link ibs-handbook mobile-ibs-link ${showIBSAnimation ? 'animate' : ''}`}
             title="國企系 IBS 學士班手冊（外部連結）"
           >
             <span className="link-icon">📚</span>
@@ -201,7 +207,7 @@ const Navbar = ({ disclaimerAccepted }) => {
 
       {/* 🎨 右側區域：主題切換 + 認證 */}
       <div className="nav-right-section">
-        {/* ✅ 桌面版主題切換按鈕（手機版將隱藏） */}
+        {/* ✅ 桌面版主題切換按鈕 */}
         <button 
           className="theme-toggle desktop-theme-toggle"
           onClick={toggleTheme}
