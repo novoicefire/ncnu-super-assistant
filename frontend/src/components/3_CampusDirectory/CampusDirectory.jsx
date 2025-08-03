@@ -104,10 +104,6 @@ const CampusDirectory = () => {
           <span className="stat-number">{filteredContacts.length}</span>
           <span className="stat-label">搜尋結果</span>
         </div>
-        <div className="stat-item">
-          <span className="stat-number">{contacts.filter(c => c.web).length}</span>
-          <span className="stat-label">有官網</span>
-        </div>
       </div>
 
       {filteredContacts.length > 0 ? (
@@ -151,20 +147,6 @@ const CampusDirectory = () => {
                       className="contact-link contact-text"
                     >
                       {contact.email}
-                    </a>
-                  </div>
-                )}
-                
-                {contact.web && (
-                  <div className="contact-item">
-                    <span className="contact-icon">{getContactIcon('web')}</span>
-                    <a 
-                      href={contact.web} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="contact-link contact-text"
-                    >
-                      前往官網
                     </a>
                   </div>
                 )}

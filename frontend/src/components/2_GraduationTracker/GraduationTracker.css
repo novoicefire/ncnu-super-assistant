@@ -1,303 +1,531 @@
-/* frontend/src/components/2_GraduationTracker/GraduationTracker.css (寬度修復版) */
+/* frontend/src/components/2_GraduationTracker/GraduationTracker.css (深色模式完整適配版) */
 
 .tracker-container {
-    padding: 1rem;
+  padding: 1rem;
+  background: var(--theme-bg-primary);
+  min-height: 100vh;
+  transition: all 0.3s ease;
 }
 
 .tracker-controls {
-    margin-bottom: 2rem;
-    background-color: #e0f2f1;
-    padding: 1rem;
-    border-radius: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: center;
+  margin-bottom: 2rem;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  box-shadow: var(--theme-shadow-primary);
+  transition: all 0.3s ease;
 }
 
 /* 🔧 修復：為選單控制項添加統一樣式 */
 .tracker-controls label {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #333;
-    margin-right: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  margin-right: 8px;
+  transition: color 0.3s ease;
 }
 
 .tracker-controls select {
-    width: 180px;
-    max-width: 180px;
-    min-width: 140px;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    background-color: white;
-    cursor: pointer;
-    box-sizing: border-box;
-    
-    /* 🔧 修復：確保長選項文字正確顯示 */
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+  width: 180px;
+  max-width: 180px;
+  min-width: 140px;
+  padding: 0.5rem;
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  /* 🔧 修復：確保長選項文字正確顯示 */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.tracker-controls select:hover {
+  border-color: var(--primary-color);
+  background: var(--theme-bg-hover);
+}
+
+.tracker-controls select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.2);
 }
 
 /* 🔧 修復：選單選項的樣式控制 */
 .tracker-controls select option {
-    max-width: 180px;
-    word-wrap: break-word;
-    padding: 0.3rem;
+  max-width: 180px;
+  word-wrap: break-word;
+  padding: 0.3rem;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
 }
 
 /* 🔧 修復：控制項容器的群組樣式 */
 .control-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .progress-section {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .progress-section h3 {
-    margin-bottom: 1rem;
-    color: #333;
+  margin-bottom: 1rem;
+  color: var(--theme-text-primary);
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .progress-bar-container {
-    width: 100%;
-    background-color: #e0e0e0;
-    border-radius: 10px;
-    height: 30px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
+  width: 100%;
+  background: var(--theme-border-secondary);
+  border-radius: 12px;
+  height: 32px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .progress-bar {
-    background-color: #00796b;
-    height: 100%;
-    border-radius: 10px;
-    text-align: center;
-    line-height: 30px;
-    color: white;
-    transition: width 0.5s ease-in-out;
-    font-weight: bold;
-    font-size: 0.9rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  height: 100%;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 32px;
+  color: white;
+  transition: width 0.5s ease-in-out;
+  font-weight: 600;
+  font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 
 .courses-display {
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  gap: 2rem;
 }
 
 .course-column {
-    flex: 1;
-    background-color: white;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex: 1;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: var(--theme-shadow-primary);
+  transition: all 0.3s ease;
+}
+
+.course-column:hover {
+  box-shadow: var(--theme-shadow-hover);
+  transform: translateY(-2px);
 }
 
 .course-column h3 {
-    margin-top: 0;
-    color: #00796b;
-    border-bottom: 2px solid #e0f2f1;
-    padding-bottom: 0.5rem;
+  margin-top: 0;
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--theme-border-secondary);
+  padding-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .course-column ul {
-    list-style: none;
-    padding: 0;
-    max-height: 50vh;
-    overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+/* 🎨 自定義滾動條 */
+.course-column ul::-webkit-scrollbar {
+  width: 6px;
+}
+
+.course-column ul::-webkit-scrollbar-track {
+  background: var(--theme-border-secondary);
+  border-radius: 3px;
+}
+
+.course-column ul::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+.course-column ul::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
 }
 
 .course-column li {
-    padding: 0.8rem;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: background-color 0.2s;
-    /* 🔧 修復：課程項目的文字換行 */
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+  padding: 0.8rem;
+  border-bottom: 1px solid var(--theme-border-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  /* 🔧 修復：課程項目的文字換行 */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .course-column li:hover {
-    background-color: #f5f5f5;
+  background: var(--theme-bg-hover);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .course-column li:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .checkbox {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #00796b;
-    border-radius: 4px;
-    margin-right: 10px;
-    text-align: center;
-    line-height: 18px;
-    color: #00796b;
-    flex-shrink: 0;
-    transition: all 0.2s;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--primary-color);
+  border-radius: 6px;
+  margin-right: 10px;
+  text-align: center;
+  line-height: 18px;
+  color: var(--primary-color);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  font-weight: bold;
 }
 
 .checkbox.checked {
-    background-color: #00796b;
-    color: white;
+  background: var(--primary-color);
+  color: white;
+  transform: scale(1.05);
 }
 
 .checkbox:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.2);
 }
 
 .completed {
-    text-decoration: line-through;
-    color: #999;
+  text-decoration: line-through;
+  color: var(--theme-text-tertiary);
+  opacity: 0.7;
+  transition: all 0.3s ease;
 }
 
 /* 🔧 修復：課程資訊的文字樣式 */
 .course-info {
-    flex-grow: 1;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    line-height: 1.4;
+  flex-grow: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+  color: var(--theme-text-primary);
+  transition: color 0.3s ease;
 }
 
 .course-credit {
-    font-size: 0.8rem;
-    color: #666;
-    margin-left: auto;
-    flex-shrink: 0;
-    padding-left: 10px;
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  margin-left: auto;
+  flex-shrink: 0;
+  padding-left: 10px;
+  font-weight: 500;
+  background: var(--theme-bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 /* 🔧 修復：錯誤和載入訊息樣式 */
 .error-message {
-    background-color: #fff3e0;
-    color: #ef6c00;
-    padding: 1rem;
-    border-radius: 4px;
-    border-left: 4px solid #ff9800;
-    margin-bottom: 1rem;
+  background: rgba(255, 152, 0, 0.1);
+  color: #ef6c00;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #ff9800;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
 }
 
 .loading-message {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
-    font-style: italic;
+  text-align: center;
+  padding: 2rem;
+  color: var(--theme-text-secondary);
+  font-style: italic;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
 }
+
 /* 🎯 新增：狀態指示器樣式 */
 .data-status-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    border-left: 4px solid #28a745;
-    padding: 12px 16px;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    font-weight: 500;
+  background: rgba(40, 167, 69, 0.1);
+  color: #155724;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+  border-left: 4px solid #28a745;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .error-notice {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeaa7;
-    border-left: 4px solid #ffc107;
-    white-space: pre-line;
-    line-height: 1.6;
+  background: rgba(255, 193, 7, 0.1);
+  color: #856404;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-left: 4px solid #ffc107;
+  white-space: pre-line;
+  line-height: 1.6;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
 }
 
 .error-info {
-    background-color: #f8f9fa;
-    color: #6c757d;
-    border: 1px solid #dee2e6;
-    border-left: 4px solid #6c757d;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-secondary);
+  border: 1px solid var(--theme-border-primary);
+  border-left: 4px solid var(--theme-text-secondary);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
 }
 
+/* ✅ 深色模式適配 */
+[data-theme="dark"] .error-message {
+  background: rgba(255, 152, 0, 0.15);
+  color: #ffb74d;
+  border: 1px solid rgba(255, 152, 0, 0.4);
+}
+
+[data-theme="dark"] .data-status-success {
+  background: rgba(40, 167, 69, 0.15);
+  color: #81c784;
+  border: 1px solid rgba(40, 167, 69, 0.4);
+}
+
+[data-theme="dark"] .error-notice {
+  background: rgba(255, 193, 7, 0.15);
+  color: #fff176;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+[data-theme="dark"] .progress-bar-container {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .course-column ul::-webkit-scrollbar-track {
+  background: var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .course-column ul::-webkit-scrollbar-thumb {
+  background: rgba(0, 121, 107, 0.8);
+}
+
+/* 🎨 載入動畫增強 */
+.loading-message {
+  position: relative;
+}
+
+.loading-message::after {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--theme-text-secondary);
+  border-top: 2px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 🎯 進度統計區域增強 */
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.progress-text {
+  font-size: 0.9rem;
+  color: var(--theme-text-secondary);
+  font-weight: 500;
+}
+
+.progress-percentage {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
 
 /* --- RWD 響應式設計 --- */
 @media (max-width: 1024px) {
-    .courses-display {
-        gap: 1.5rem;
-    }
-    
-    /* 🔧 修復：平板尺寸下的選單調整 */
-    .tracker-controls select {
-        width: 160px;
-        max-width: 160px;
-    }
+  .courses-display {
+    gap: 1.5rem;
+  }
+
+  /* 🔧 修復：平板尺寸下的選單調整 */
+  .tracker-controls select {
+    width: 160px;
+    max-width: 160px;
+  }
 }
 
 @media (max-width: 768px) {
-    .tracker-container {
-        padding: 0.5rem;
-    }
-    
-    .tracker-controls {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-    }
-    
-    /* 🔧 修復：手機尺寸下的選單調整 */
-    .tracker-controls select {
-        width: 100%;
-        max-width: none;
-        min-width: unset;
-    }
-    
-    .control-group {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-    
-    .courses-display {
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-    
-    .progress-bar {
-        font-size: 0.8rem;
-    }
-    
-    .course-column {
-        padding: 0.8rem;
-    }
-    
-    .course-column li {
-        padding: 0.6rem;
-    }
+  .tracker-container {
+    padding: 0.5rem;
+  }
+
+  .tracker-controls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    padding: 1rem 0.8rem;
+  }
+
+  /* 🔧 修復：手機尺寸下的選單調整 */
+  .tracker-controls select {
+    width: 100%;
+    max-width: none;
+    min-width: unset;
+  }
+
+  .control-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .courses-display {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .progress-bar {
+    font-size: 0.8rem;
+    line-height: 28px;
+  }
+
+  .progress-bar-container {
+    height: 28px;
+  }
+
+  .course-column {
+    padding: 0.8rem;
+  }
+
+  .course-column li {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .progress-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
 }
 
 @media (max-width: 480px) {
-    .tracker-controls {
-        padding: 0.8rem;
-    }
-    
-    .progress-bar-container {
-        height: 25px;
-    }
-    
-    .progress-bar {
-        line-height: 25px;
-        font-size: 0.7rem;
-    }
-    
-    .course-column li {
-        font-size: 0.9rem;
-        padding: 0.5rem;
-    }
-    
-    .checkbox {
-        width: 18px;
-        height: 18px;
-        line-height: 16px;
-    }
+  .tracker-controls {
+    padding: 0.8rem;
+  }
+
+  .progress-bar-container {
+    height: 25px;
+  }
+
+  .progress-bar {
+    line-height: 25px;
+    font-size: 0.7rem;
+  }
+
+  .course-column li {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    line-height: 16px;
+  }
+
+  .course-credit {
+    font-size: 0.7rem;
+  }
+
+  .tracker-container {
+    padding: 0.25rem;
+  }
+}
+
+/* 🎨 新增：懸停效果增強 */
+.tracker-controls:hover {
+  box-shadow: var(--theme-shadow-hover);
+}
+
+.course-column h3:hover {
+  color: var(--primary-dark);
+}
+
+/* 🎯 新增：焦點可訪問性 */
+.course-column li:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.checkbox:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* 🎨 新增：選中狀態動畫 */
+.course-column li.completed {
+  animation: completeTask 0.5s ease-in-out;
+}
+
+@keyframes completeTask {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
 }

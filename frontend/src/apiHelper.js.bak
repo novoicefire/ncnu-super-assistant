@@ -134,18 +134,21 @@ export const getUserStats = async () => {
 };
 
 // 🎯 新增：獲取今日行事曆活動
-// 🎯 新增：獲取今日行事曆活動 (修正版)
 export const getTodayEvents = async () => {
   try {
-    // 修正點 1：呼叫正確的 API 路徑
-    const response = await robustRequest('get', '/api/events/today');
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const response = await robustRequest('get', '/api/calendar/events', {
+      params: { date: today }
+    });
     
-    // 修正點 2：後端已完成篩選，直接回傳 response 即可
-    return response || [];
+    return response?.events || [];
   } catch (error) {
     console.warn('無法載入今日活動:', error);
-    // 修正點 3：API 失敗時回傳空陣列，而不是模擬資料
-    return [];
+    // 返回模擬資料
+    return [
+      { name: '期中考試週開始', time: '全日', type: 'academic' },
+      { name: '學術演講：AI與教育', time: '14:00-16:00', type: 'event' }
+    ];
   }
 };
 

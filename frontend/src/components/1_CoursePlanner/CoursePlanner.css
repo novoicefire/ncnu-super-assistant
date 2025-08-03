@@ -1,9 +1,12 @@
-/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (Safari 相容性修復版 + 截圖功能) */
+/* frontend/src/components/1_CoursePlanner/CoursePlanner.css (深色模式完整修復版) */
 
 .course-planner {
   display: flex;
   flex-direction: column;
   position: relative;
+  background: var(--theme-bg-primary);
+  min-height: 100vh;
+  transition: all 0.3s ease;
 }
 
 /* 🔔 通知系統樣式 */
@@ -101,10 +104,12 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1rem;
+  padding: 1rem;
 }
 
 .filters {
-  background-color: #e0f2f1;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -112,6 +117,12 @@
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+  box-shadow: var(--theme-shadow-primary);
+  transition: all 0.3s ease;
+}
+
+.filters:hover {
+  box-shadow: var(--theme-shadow-hover);
 }
 
 .filters input[type="text"],
@@ -120,18 +131,27 @@
   max-width: 180px;
   min-width: 140px;
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--theme-border-primary);
   border-radius: 4px;
   font-size: 0.9rem;
   box-sizing: border-box;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  transition: all 0.3s ease;
+}
+
+.filters input[type="text"]:focus,
+.filters select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.2);
 }
 
 .filters select {
   cursor: pointer;
-  background-color: white;
 }
 
 .filters select option {
@@ -139,6 +159,8 @@
   word-wrap: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
 }
 
 .filter-group {
@@ -150,7 +172,8 @@
 .filter-group label {
   font-size: 0.8rem;
   font-weight: bold;
-  color: #333;
+  color: var(--theme-text-primary);
+  transition: color 0.3s ease;
 }
 
 /* 🎯 衝堂課程篩選開關樣式 */
@@ -164,9 +187,9 @@
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: bold;
-  color: #333;
-  gap: 1px; /* 🔧 修改：從 4px 進一步縮小為 1px，幾乎無間距 */
-  padding: 0.2rem 0.5rem 0.2rem 0.1rem; /* 🔧 修改：減少左側 padding */
+  color: var(--theme-text-primary);
+  gap: 1px;
+  padding: 0.2rem 0.5rem 0.2rem 0.1rem;
   border-radius: 6px;
   transition: all 0.2s ease;
   -webkit-user-select: none;
@@ -174,16 +197,16 @@
 }
 
 .conflict-filter-label:hover {
-  background-color: rgba(0, 121, 107, 0.1);
+  background-color: var(--theme-bg-hover);
 }
 
 .conflict-checkbox {
-  width: 18px !important; /* 🔧 加入 !important 確保優先級 */
+  width: 18px !important;
   height: 18px !important;
   cursor: pointer;
-  accent-color: #00796b;
+  accent-color: var(--primary-color);
   margin: 0 1px 0 0;
-  flex-shrink: 0; /* 🔧 新增：防止被壓縮 */
+  flex-shrink: 0;
 }
 
 .conflict-checkbox-text {
@@ -194,13 +217,13 @@
 
 .conflict-count {
   font-size: 0.7rem;
-  color: #666;
+  color: var(--theme-text-secondary);
   font-weight: normal;
 }
 
 .filter-info {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--theme-text-secondary);
   font-weight: normal;
   margin-left: 8px;
 }
@@ -208,6 +231,7 @@
 .planner-content {
   display: flex;
   gap: 1rem;
+  padding: 0 1rem;
 }
 
 .course-list-container {
@@ -215,10 +239,12 @@
   min-width: 300px;
   max-height: 70vh;
   overflow-y: auto;
-  border: 1px solid #ccc;
+  border: 1px solid var(--theme-border-primary);
   padding: 1rem;
   border-radius: 8px;
-  background-color: white;
+  background: var(--theme-bg-card);
+  box-shadow: var(--theme-shadow-primary);
+  transition: all 0.3s ease;
 }
 
 .course-list {
@@ -232,11 +258,17 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.8rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--theme-border-secondary);
+  transition: all 0.3s ease;
 }
 
 .course-list li:hover {
-  background-color: #f0f0f0;
+  background-color: var(--theme-bg-hover);
+  transform: translateX(2px);
+}
+
+.course-list li:last-child {
+  border-bottom: none;
 }
 
 .course-info {
@@ -244,25 +276,29 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
   max-width: calc(100% - 60px);
+  color: var(--theme-text-primary);
+  transition: color 0.3s ease;
 }
 
 .course-info small {
-  color: #666;
+  color: var(--theme-text-secondary);
   display: block;
   margin-top: 4px;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  transition: color 0.3s ease;
 }
 
 .hotness-indicator {
   display: inline-block;
-  background-color: #fff3e0;
+  background-color: rgba(255, 152, 0, 0.1);
   color: #ef6c00;
   padding: 2px 8px;
   border-radius: 10px;
   font-size: 0.8rem;
   font-weight: bold;
   margin-left: 10px;
+  border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
 .course-toggle-btn {
@@ -312,22 +348,34 @@
   flex: 2;
 }
 
-/* 🎯 新增：課表標題區域樣式 */
+/* ✅ 修復：課表標題區域樣式 - 深色模式適配 */
 .schedule-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
   padding: 0 0.5rem;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: var(--theme-shadow-primary);
+  transition: all 0.3s ease;
+}
+
+.schedule-header:hover {
+  box-shadow: var(--theme-shadow-hover);
 }
 
 .schedule-header h3 {
   margin: 0;
-  color: #333;
+  color: var(--theme-text-primary); /* ✅ 修復：使用主題變數替代硬編碼顏色 */
   font-size: 1.3rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
 
-/* 🎯 新增：保存圖片按鈕樣式 */
+/* 🎯 保存圖片按鈕樣式 */
 .save-image-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -385,45 +433,76 @@
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  background-color: white;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--theme-shadow-primary);
 }
 
 .course-table th, .course-table td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--theme-border-secondary);
   padding: 8px;
   text-align: center;
   height: 50px;
   font-size: 0.8rem;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  transition: all 0.3s ease;
 }
 
 .course-table th {
-  background-color: #e0f2f1;
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
+  font-weight: 600;
 }
 
 .course-cell {
-  background-color: #b2dfdb;
+  background: linear-gradient(135deg, #b2dfdb, #e0f2f1);
   color: #004d40;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
   vertical-align: middle !important;
   line-height: 1.4;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
+  font-weight: 500;
 }
 
 .course-cell:hover {
-  background-color: #ffcdd2;
+  background: linear-gradient(135deg, #ffcdd2, #ffebee);
   color: #c62828;
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .lunch-break {
-  background-color: #f0f0f0;
-  color: #aaa;
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-tertiary);
   font-style: italic;
   font-size: 0.8rem;
+}
+
+/* ✅ 深色模式適配 */
+[data-theme="dark"] .course-planner {
+  background: var(--theme-bg-primary);
+}
+
+[data-theme="dark"] .hotness-indicator {
+  background-color: rgba(255, 152, 0, 0.15);
+  color: #ffb74d;
+  border: 1px solid rgba(255, 152, 0, 0.4);
+}
+
+[data-theme="dark"] .course-cell {
+  background: linear-gradient(135deg, rgba(178, 223, 219, 0.3), rgba(224, 242, 241, 0.2));
+  color: #4db6ac;
+}
+
+[data-theme="dark"] .course-cell:hover {
+  background: linear-gradient(135deg, rgba(255, 205, 210, 0.3), rgba(255, 235, 238, 0.2));
+  color: #ef5350;
 }
 
 /* RWD響應式設計 */
@@ -457,7 +536,6 @@
     width: 100%;
   }
 
-  /* 🎯 新增：平板版保存圖片按鈕 */
   .save-image-btn {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
@@ -465,13 +543,25 @@
 }
 
 @media (max-width: 768px) {
+  .course-planner {
+    padding: 0.5rem;
+  }
+
+  .planner-header {
+    padding: 0.5rem;
+  }
+
+  .planner-content {
+    padding: 0 0.5rem;
+  }
+
   .filters {
     flex-direction: column;
     gap: 0.5rem;
     align-items: stretch;
   }
 
-  .filters input[type="text"], /* 🔧 修改：明確指定類型 */
+  .filters input[type="text"],
   .filters select {
     width: 100%;
     max-width: none;
@@ -516,13 +606,13 @@
   }
 
   .conflict-filter-label {
-    padding: 0.2rem 0.4rem 0.2rem 0.05rem; /* 🔧 修改：手機版更緊湊 */
+    padding: 0.2rem 0.4rem 0.2rem 0.05rem;
     font-size: 0.75rem;
-    gap: 1px; /* 🔧 修改：保持 1px 間距 */
+    gap: 1px;
   }
 
   .conflict-checkbox {
-    width: 16px !important; /* 🔧 手機版也加入 !important */
+    width: 16px !important;
     height: 16px !important;
     margin: 0 1px 0 0;
   }
@@ -538,7 +628,6 @@
     font-size: 0.7rem;
   }
 
-  /* 🎯 新增：手機版課表標題區域 */
   .schedule-header {
     flex-direction: column;
     gap: 0.8rem;
@@ -551,7 +640,6 @@
     font-size: 1.2rem;
   }
 
-  /* 🎯 新增：手機版保存圖片按鈕 */
   .save-image-btn {
     padding: 0.8rem 1rem;
     font-size: 0.9rem;
@@ -570,9 +658,16 @@
     line-height: 1.3;
   }
 
-  /* 🎯 新增：超小螢幕保存圖片按鈕 */
   .save-image-btn {
     padding: 0.7rem;
     font-size: 0.8rem;
+  }
+
+  .schedule-header {
+    padding: 0.8rem;
+  }
+
+  .schedule-header h3 {
+    font-size: 1.1rem;
   }
 }

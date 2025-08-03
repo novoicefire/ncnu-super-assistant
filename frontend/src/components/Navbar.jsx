@@ -1,7 +1,8 @@
-// frontend/src/components/Navbar.jsx (新增 SVG Logo 版)
+// frontend/src/components/Navbar.jsx (新方案：IBS按鈕統一放置於右側區域)
 import React, { useEffect, useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
+import { useTheme } from '../contexts/ThemeContext.jsx';
 import './Navbar.css';
 
 const GoogleLoginButton = () => {
@@ -20,7 +21,7 @@ const GoogleLoginButton = () => {
         currentButtonDiv,
         {
           theme: "outline",
-          size: "large", 
+          size: "large",
           shape: "pill",
           text: "signin_with"
         }
@@ -41,8 +42,20 @@ const GoogleLoginButton = () => {
 
 const Navbar = ({ disclaimerAccepted }) => {
   const { isLoggedIn, user, logout, isLoading } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
   const [showIBSAnimation, setShowIBSAnimation] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const mobileMenuRef = useRef(null);
+  const menuToggleRef = useRef(null);
+
+  // 路由變化時關閉手機選單
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // IBS 動畫邏輯
   useEffect(() => {
     if (disclaimerAccepted && !showIBSAnimation) {
       const timer = setTimeout(() => {
@@ -53,39 +66,135 @@ const Navbar = ({ disclaimerAccepted }) => {
     }
   }, [disclaimerAccepted, showIBSAnimation]);
 
+  // 手機選單切換
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // 防止背景滾動
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  // 點擊外部區域關閉選單
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!isMobileMenuOpen) return;
+
+      if (menuToggleRef.current && menuToggleRef.current.contains(event.target)) {
+        return;
+      }
+
+      if (mobileMenuRef.current && mobileMenuRef.current.contains(event.target)) {
+        return;
+      }
+
+      setIsMobileMenuOpen(false);
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <nav className="navbar">
-      {/* 🎨 修改：品牌區域包含 logo 和文字 */}
+      {/* 🎨 品牌區域 */}
       <div className="nav-brand-container">
+        <button 
+          ref={menuToggleRef}
+          className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
+          onClick={toggleMobileMenu}
+          aria-label="切換選單"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        
         <img 
           src="/logo.svg" 
           alt="暨大生超級助理 Logo" 
           className="nav-logo"
           onError={(e) => {
-            // 如果 logo 載入失敗，隱藏圖片
             e.target.style.display = 'none';
           }}
         />
         <div className="nav-brand">暨大生超級助理</div>
       </div>
       
-      <div className="nav-links">
+      {/* 導航連結區域 */}
+      <div 
+        ref={mobileMenuRef}
+        className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}
+      >
         <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}>
-          智慧排課
+          🏠 首頁
+        </NavLink>
+        <NavLink to="/course-planner" className={({ isActive }) => isActive ? 'active' : ''}>
+          📚 智慧排課
         </NavLink>
         <NavLink to="/tracker" className={({ isActive }) => isActive ? 'active' : ''}>
-          畢業進度
+          🎓 畢業進度
         </NavLink>
         <NavLink to="/directory" className={({ isActive }) => isActive ? 'active' : ''}>
-          校園通訊錄
+          📞 校園通訊錄
         </NavLink>
         <NavLink to="/calendar" className={({ isActive }) => isActive ? 'active' : ''}>
-          暨大行事曆
+          📅 暨大行事曆
         </NavLink>
         <NavLink to="/updates" className={({ isActive }) => isActive ? 'active' : ''}>
-          更新日誌
+          📋 更新日誌
         </NavLink>
         
+        {/* 手機版專用：並排按鈕容器 */}
+        <div className="mobile-buttons-row">
+          {/* 🎓 手機版IBS專區連結（與深色模式並排） */}
+          <a 
+            href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`nav-external-link ibs-handbook mobile-ibs-link ${showIBSAnimation ? 'animate' : ''}`}
+            title="國企系 IBS 學士班手冊（外部連結）"
+          >
+            <span className="link-icon">📚</span>
+            <span className="link-text">IBS專區</span>
+            <span className="external-indicator">↗</span>
+          </a>
+
+          {/* ✅ 主題切換按鈕 */}
+          <button 
+            className="mobile-theme-toggle-container"
+            onClick={toggleTheme}
+            title={`切換至${theme === 'light' ? '深色' : '明亮'}模式`}
+          >
+            <div className="mobile-theme-toggle-icon">
+              {theme === 'light' ? '🌙' : '☀️'}
+            </div>
+            <span className="mobile-theme-label">
+              {theme === 'light' ? '深色模式' : '明亮模式'}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* 🎨 右側區域：IBS專區 + 主題切換 + 認證 */}
+      <div className="nav-right-section">
+        {/* ✅ 新增：IBS專區按鈕（放在主題按鈕左邊） */}
         <a 
           href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
           target="_blank"
@@ -97,31 +206,41 @@ const Navbar = ({ disclaimerAccepted }) => {
           <span className="link-text">IBS專區</span>
           <span className="external-indicator">↗</span>
         </a>
-      </div>
 
-      <div className="auth-section">
-        {isLoading ? (
-          <div className="loading-text">載入中...</div>
-        ) : isLoggedIn && user ? (
-          <div className="user-profile">
-            <img 
-              src={user.avatar_url} 
-              alt={user.full_name} 
-              className="avatar"
-              title={user.full_name}
-            />
-            <span className="user-name">{user.full_name}</span>
-            <button 
-              onClick={logout} 
-              className="logout-button"
-              title="登出"
-            >
-              登出
-            </button>
-          </div>
-        ) : (
-          <GoogleLoginButton />
-        )}
+        {/* ✅ 桌面版主題切換按鈕 */}
+        <button 
+          className="theme-toggle desktop-theme-toggle"
+          onClick={toggleTheme}
+          title={`切換至${theme === 'light' ? '深色' : '明亮'}模式`}
+        >
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
+
+        {/* 🔐 認證區域 */}
+        <div className="auth-section">
+          {isLoading ? (
+            <div className="loading-text">載入中...</div>
+          ) : isLoggedIn && user ? (
+            <div className="user-profile">
+              <img 
+                src={user.avatar_url} 
+                alt={user.full_name} 
+                className="avatar"
+                title={user.full_name}
+              />
+              <span className="user-name">{user.full_name}</span>
+              <button 
+                onClick={logout} 
+                className="logout-button"
+                title="登出"
+              >
+                登出
+              </button>
+            </div>
+          ) : (
+            <GoogleLoginButton />
+          )}
+        </div>
       </div>
     </nav>
   );

@@ -1,121 +1,108 @@
-/* frontend/src/App.css (完整 RWD 版) */
+/* frontend/src/App.css (完全兼容版) */
+
+/* 🎯 應用程式初始化樣式 */
+.app-initializing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.init-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+  color: white;
+}
+
+.init-logo {
+  animation: float 3s ease-in-out infinite;
+}
+
+.init-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.init-subtext {
+  font-size: 1rem;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+/* 🎯 頁面載入樣式 */
+.page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  background: var(--theme-bg-primary);
+}
+
+.page-loading .loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.page-loading .loading-text {
+  font-size: 1.1rem;
+  color: var(--theme-text-secondary);
+  font-weight: 500;
+}
+
+/* 🚨 導航欄錯誤樣式 */
+.navbar-error {
+  background: #dc3545;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.navbar-error button {
+  background: white;
+  color: #dc3545;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* 🎯 基礎應用程式樣式 */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f4f7f6;
-  color: #333;
+  background: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
   margin: 0;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.navbar {
-  background-color: #004c40;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.navbar a {
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  transition: background-color 0.3s;
-}
-
-.navbar a:hover, .navbar a.active {
-  background-color: #00796b;
-  border-radius: 4px;
-}
-
-.nav-brand {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.nav-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.container {
-  padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-h1, h2, h3 {
-  color: #004c40;
-}
-
-button {
-  background-color: #00796b;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #005a4f;
-}
-
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-input, select {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  margin: 0 5px;
-  font-size: 1rem;
-}
-
-/* --- RWD 新增樣式 --- */
-/* 當螢幕寬度小於或等於 768px 時套用 */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 1rem; /* 縮小邊距 */
-    flex-direction: column; /* 改為垂直排列 */
-    gap: 0.5rem;
-  }
-
-  .nav-brand {
-    font-size: 1.2rem; /* 縮小品牌字體 */
-    margin-bottom: 0.5rem;
-  }
-
-  .nav-links {
-    gap: 0.2rem; /* 縮小連結間距 */
-    flex-wrap: wrap; /* 允許換行 */
-    justify-content: center;
-  }
-
-  .nav-links a {
-    padding: 0.4rem 0.6rem; /* 縮小連結內邊距 */
-    font-size: 0.9rem;
-  }
-
-  .container {
-    padding: 1rem; /* 縮小內容區邊距 */
-  }
-
-  h1 {
-    font-size: 1.5rem;
-  }
-}
-/* 🎯 免責聲明相關樣式 */
 .app-container {
-  transition: filter var(--transition-normal);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: filter 0.3s ease;
 }
 
 .app-blur {
@@ -123,19 +110,299 @@ input, select {
   pointer-events: none;
 }
 
-/* 確保免責聲明在最高層級 */
-body.disclaimer-active {
-  overflow: hidden;
-}
-
-/* 🔧 修復可能的 z-index 衝突 */
-.navbar {
-  position: relative;
-  z-index: 100;
-}
-
 .container {
-  position: relative;
-  z-index: 50;
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* 🎨 通用元素樣式 */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--theme-text-primary);
+  margin-top: 0;
+  transition: color 0.3s ease;
+}
+
+button {
+  transition: all 0.3s ease;
+}
+
+input, select, textarea {
+  transition: all 0.3s ease;
+}
+
+/* 🔧 滾動條樣式 - 完全兼容版本 */
+
+/* ✅ 使用 @supports 查詢只在支援的瀏覽器中應用 Firefox 樣式 */
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+  }
+}
+
+@supports (scrollbar-color: auto) {
+  * {
+    scrollbar-color: var(--primary-color) var(--theme-bg-secondary);
+  }
+}
+
+/* ✅ WebKit 瀏覽器滾動條樣式 (Chrome, Safari, Edge) - 主要樣式 */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--theme-bg-secondary);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--theme-bg-secondary);
+}
+
+/* ✅ IE/Edge 傳統支援 */
+@supports (-ms-overflow-style: auto) {
+  * {
+    -ms-overflow-style: auto;
+  }
+}
+
+/* ✅ 深色主題滾動條適配 */
+[data-theme="dark"] *::-webkit-scrollbar-track {
+  background: var(--theme-bg-tertiary);
+}
+
+[data-theme="dark"] *::-webkit-scrollbar-corner {
+  background: var(--theme-bg-tertiary);
+}
+
+/* 使用 @supports 確保只在支援的瀏覽器中應用 */
+@supports (scrollbar-color: auto) {
+  [data-theme="dark"] * {
+    scrollbar-color: var(--primary-light) var(--theme-bg-tertiary);
+  }
+}
+
+/* 🎯 特定組件滾動條樣式 */
+.dashboard::-webkit-scrollbar,
+.course-preview::-webkit-scrollbar,
+.today-status::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.dashboard::-webkit-scrollbar-track,
+.course-preview::-webkit-scrollbar-track,
+.today-status::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dashboard::-webkit-scrollbar-thumb,
+.course-preview::-webkit-scrollbar-thumb,
+.today-status::-webkit-scrollbar-thumb {
+  background: rgba(0, 121, 107, 0.6);
+  border-radius: 6px;
+}
+
+.dashboard::-webkit-scrollbar-thumb:hover,
+.course-preview::-webkit-scrollbar-thumb:hover,
+.today-status::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 121, 107, 0.8);
+}
+
+/* 使用 @supports 為特定組件應用 Firefox 樣式 */
+@supports (scrollbar-width: thin) {
+  .dashboard,
+  .course-preview,
+  .today-status {
+    scrollbar-width: thin;
+  }
+}
+
+@supports (scrollbar-color: auto) {
+  .dashboard,
+  .course-preview,
+  .today-status {
+    scrollbar-color: rgba(0, 121, 107, 0.8) transparent;
+  }
+}
+
+/* 🎯 手機版滾動條處理 */
+@media (max-width: 768px) {
+  /* 使用 @supports 確保只在支援的瀏覽器中隱藏 */
+  @supports (scrollbar-width: none) {
+    * {
+      scrollbar-width: none;
+    }
+  }
+  
+  @supports (-ms-overflow-style: none) {
+    * {
+      -ms-overflow-style: none;
+    }
+  }
+  
+  /* WebKit 瀏覽器隱藏滾動條 */
+  *::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 🎯 選取文字樣式 */
+::selection {
+  background: var(--primary-color);
+  color: white;
+}
+
+::-moz-selection {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* 📱 響應式基礎 */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .init-text {
+    font-size: 1.5rem;
+  }
+  
+  .init-subtext {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+  
+  .navbar-error {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .init-loading {
+    gap: 1rem;
+  }
+  
+  .init-text {
+    font-size: 1.3rem;
+  }
+}
+
+/* 🎯 無障礙優化 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .init-logo {
+    animation: none;
+  }
+}
+
+/* 🎨 焦點樣式優化 */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 🔄 載入狀態全域樣式 */
+.loading-state {
+  opacity: 0.7;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.loading-state * {
+  cursor: wait !important;
+}
+
+/* 🎯 印刷媒體優化 */
+@media print {
+  .navbar,
+  .performance-monitor,
+  .loading-overlay,
+  .error-boundary {
+    display: none !important;
+  }
+  
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+  
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+  
+  /* 印刷時隱藏所有滾動條 */
+  *::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  @supports (scrollbar-width: none) {
+    * {
+      scrollbar-width: none !important;
+    }
+  }
+  
+  @supports (-ms-overflow-style: none) {
+    * {
+      -ms-overflow-style: none !important;
+    }
+  }
+}
+
+/* 🔧 瀏覽器特定優化 */
+
+/* Safari 特定優化 */
+@supports (-webkit-appearance: none) {
+  *::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+  }
+}
+
+/* Chrome 特定優化 */
+@supports (background: -webkit-named-image(i)) {
+  *::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  }
+}

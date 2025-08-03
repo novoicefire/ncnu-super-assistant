@@ -1,0 +1,440 @@
+/* frontend/src/styles/apple-ui.css (Safari 兼容性修復版) */
+
+/* 🍎 蘋果風格基礎重構 */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+:root {
+  /* 🎨 蘋果風格毛玻璃變數 */
+  --glass-bg-light: rgba(255, 255, 255, 0.8);
+  --glass-bg-dark: rgba(255, 255, 255, 0.1);
+  --glass-border-light: rgba(255, 255, 255, 0.3);
+  --glass-border-dark: rgba(255, 255, 255, 0.15);
+  --glass-blur: blur(20px);
+  
+  /* 🌈 動態漸變色系 */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-success: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  --gradient-warning: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+  --gradient-error: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  --gradient-info: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  
+  /* ✨ 動畫彈性曲線 */
+  --spring-easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --smooth-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --apple-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 🎨 毛玻璃效果系統 - 修復前綴順序 */
+.glass-effect {
+  background: var(--glass-bg-light);
+  -webkit-backdrop-filter: var(--glass-blur);  /* ✅ WebKit 前綴在前 */
+  backdrop-filter: var(--glass-blur);          /* ✅ 標準版本在後 */
+  border: 1px solid var(--glass-border-light);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+}
+
+[data-theme="dark"] .glass-effect {
+  background: var(--glass-bg-dark);
+  border: 1px solid var(--glass-border-dark);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* 🔘 蘋果風格按鈕系統 - 修復 user-select */
+.apple-button {
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s var(--apple-easing);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  font-size: 0.9rem;
+  -webkit-user-select: none;  /* ✅ Safari 兼容性 */
+  -moz-user-select: none;     /* Firefox */
+  -ms-user-select: none;      /* IE/Edge */
+  user-select: none;          /* 標準版本 */
+}
+
+.apple-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s var(--apple-easing);
+}
+
+.apple-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.apple-button:hover::before {
+  left: 100%;
+}
+
+.apple-button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+}
+
+.apple-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 🎯 蘋果風格輸入框系統 */
+.apple-input {
+  background: var(--theme-bg-secondary);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 16px;
+  transition: all 0.3s var(--apple-easing);
+  outline: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.apple-input::placeholder {
+  color: var(--theme-text-tertiary);
+  transition: all 0.3s ease;
+}
+
+.apple-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(0, 121, 107, 0.1), 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* 📱 現代化卡片系統 */
+.apple-card {
+  background: var(--theme-bg-card);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s var(--spring-easing);
+  border: 1px solid var(--theme-border-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.apple-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.apple-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.apple-card:hover::before {
+  opacity: 1;
+}
+
+/* ✨ 浮動動畫系統 */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-10px) rotate(1deg); }
+  66% { transform: translateY(-5px) rotate(-1deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+@keyframes shimmer {
+  0% { 
+    background-position: -200% 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% { 
+    background-position: 200% 0;
+    opacity: 0;
+  }
+}
+
+.floating-element {
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-element:nth-child(2) {
+  animation-delay: -2s;
+}
+
+.floating-element:nth-child(3) {
+  animation-delay: -4s;
+}
+
+/* 🔄 載入動畫系統 */
+.loading-skeleton {
+  background: linear-gradient(90deg, 
+    var(--theme-border-secondary) 25%, 
+    var(--theme-border-primary) 50%, 
+    var(--theme-border-secondary) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 12px;
+  animation: shimmer 2s infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* 🎨 漸變文字系統 */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.gradient-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--gradient-success);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-text:hover::after {
+  opacity: 1;
+}
+
+/* 🎯 狀態指示器系統 */
+.status-indicator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  border: 2px solid var(--theme-bg-card);
+  animation: pulse 2s infinite;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 0, 0, 0.1);
+  color: #dc3545;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  -webkit-user-select: none;  /* ✅ Safari 兼容性 */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background: #dc3545;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+}
+
+.upcoming-indicator {
+  background: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  -webkit-user-select: none;  /* ✅ Safari 兼容性 */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 📐 蘋果風格間距系統 */
+.spacing-xs { margin: 4px; padding: 4px; }
+.spacing-sm { margin: 8px; padding: 8px; }
+.spacing-md { margin: 16px; padding: 16px; }
+.spacing-lg { margin: 24px; padding: 24px; }
+.spacing-xl { margin: 32px; padding: 32px; }
+
+.m-xs { margin: 4px; }
+.m-sm { margin: 8px; }
+.m-md { margin: 16px; }
+.m-lg { margin: 24px; }
+.m-xl { margin: 32px; }
+
+.p-xs { padding: 4px; }
+.p-sm { padding: 8px; }
+.p-md { padding: 16px; }
+.p-lg { padding: 24px; }
+.p-xl { padding: 32px; }
+
+/* 🌊 波紋效果 */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.ripple-effect:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* 🎨 現代化滾動條 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-bg-secondary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
+  transform: scale(1.1);
+}
+
+/* 🔍 搜尋高亮效果 */
+.search-highlight {
+  background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+  color: var(--theme-text-primary);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: 600;
+  animation: pulse 1s ease-in-out;
+  -webkit-user-select: none;  /* ✅ Safari 兼容性 */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 📱 觸控友善設計 */
+@media (hover: none) and (pointer: coarse) {
+  .apple-button:hover {
+    transform: none;
+  }
+  
+  .apple-card:hover {
+    transform: none;
+  }
+  
+  .apple-button:active {
+    transform: scale(0.95);
+  }
+}
+
+/* 🎯 無障礙設計增強 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 🌓 系統主題偵測 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass-bg-light: rgba(255, 255, 255, 0.05);
+    --glass-border-light: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* 🔧 額外的 Safari 特定優化 */
+@supports (-webkit-backdrop-filter: blur(20px)) {
+  .glass-effect {
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+  }
+}
+
+/* 🎯 文字選取優化 */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.select-all {
+  -webkit-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
+}
+
+.select-text {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
