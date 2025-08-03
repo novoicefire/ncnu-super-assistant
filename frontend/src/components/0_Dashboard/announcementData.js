@@ -14,8 +14,8 @@ export const announcementData = [
     images: [
       {
         src: "/images/dark-mode-preview.jpg",
-        alt: "深色模式預覽圖",
-        caption: "全新深色模式界面"
+        alt: "",
+        caption: "新增公告區功能，可放置圖、文、影"
       }
     ],
     embeds: [
@@ -27,7 +27,7 @@ export const announcementData = [
     ],
     buttons: [
       {
-        text: "立即體驗",
+        text: "點擊選單裡的按鈕🌙立即體驗",
         url: "/",
         style: "primary",
         icon: "✨",
@@ -35,7 +35,7 @@ export const announcementData = [
       },
       {
         text: "查看更新日誌",
-        url: "/update-log",
+        url: "/updates",
         style: "secondary", 
         icon: "📖",
         external: false
@@ -44,29 +44,32 @@ export const announcementData = [
   },
   {
     id: 2,
-    title: "📚 期中考週系統維護通知",
+    title: "📚 8/26~28 為選課週時間",
     date: "2025-07-28",
     priority: "normal",
-    content: `親愛的同學們，為了提供更穩定的服務，我們將在期中考週進行系統例行維護。
+    content: `親愛的同學們，為了您自己的權益，請記得要預先安排好課程規劃，並於校方公告時間前往校務系統選課。
 
-**維護時間：** 7月30日 凌晨2:00-6:00
-**影響範圍：** 課程規劃功能可能短暫無法使用
-**建議：** 請提前備份您的課表資料`,
+**選課時間：**
+8月26日 上午11:00 ~ 8月28日 上午10:00
+**選課範圍：**
+大學部學生選填通識課程及特色運動志願
+**公布時間：**
+8月28日 下午03:00`,
     images: [],
     embeds: [],
     buttons: [
       {
         text: "了解詳情",
-        url: "#maintenance-info",
+        url: "https://curriculum.ncnu.edu.tw/p/404-1049-28076.php?Lang=zh-tw",
         style: "warning",
         icon: "🔧",
-        external: false
+        external: true
       }
     ]
   },
   {
     id: 3,
-    title: "🎓 畢業生感謝回饋",
+    title: "🎓 暨大生使用回饋",
     date: "2025-07-27", 
     priority: "low",
     content: `感謝所有使用暨大生超級助理的同學們！您的支持是我們持續改進的動力。
@@ -76,26 +79,19 @@ export const announcementData = [
     embeds: [
       {
         type: "link",
-        url: "https://forms.google.com/feedback",
-        title: "用戶滿意度調查",
-        description: "幫助我們改進服務品質"
+        url: "https://www.dcard.tw/f/ncnu/p/259365158",
+        title: "Dcard 網站介紹貼文",
+        description: "在下方留言或回報幫助我修復BUG與改進服務品質"
       }
     ],
     buttons: [
       {
-        text: "填寫問卷",
-        url: "https://forms.google.com/feedback", 
+        text: "追蹤IG",
+        url: "https://www.instagram.com/ncnu_super_assistant/", 
         style: "success",
         icon: "💬",
         external: true
       },
-      {
-        text: "加入社群",
-        url: "https://line.me/community",
-        style: "secondary",
-        icon: "👥", 
-        external: true
-      }
     ]
   }
 ];
