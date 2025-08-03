@@ -1,32 +1,10 @@
 // frontend/src/components/0_Dashboard/TodayStatus.jsx (錯誤修復版)
-import React, { useState, useEffect, useCallback, useRef } from 'react'; // [新增] useRef
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../AuthContext.jsx';
 import StatusCard from './StatusCard.jsx';
 import { robustRequest, getTodayEvents } from '../../apiHelper.js';
 
 const TodayStatus = () => {
-  // [新增] 點擊觸發狀態管理
-  const [activeCard, setActiveCard] = useState(null);
-  const todayStatusRef = useRef(null);
-
-  // [新增] 點擊外部關閉功能
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (todayStatusRef.current && !todayStatusRef.current.contains(event.target)) {
-        setActiveCard(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  // [新增] 處理卡片點擊
-  const handleCardClick = (cardId) => {
-    setActiveCard(prevActiveCard => (prevActiveCard === cardId ? null : cardId));
-  };
-
   const { user, isLoggedIn } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [todayData, setTodayData] = useState({
@@ -91,7 +69,6 @@ const TodayStatus = () => {
     return () => clearInterval(intervalId);
   }, [loadTodayData]);
 
-  // [保持其他所有函數不變 - getTodayCourses, getTimeFromPeriods, etc.]
   // 🎯 獲取今日課程
   const getTodayCourses = (schedule) => {
     if (!schedule) return [];
@@ -267,7 +244,6 @@ const TodayStatus = () => {
     }
   };
 
-  // [保持所有 render 函數不變]
   // 🎯 渲染今日課程卡片內容
   const renderCoursesCard = () => {
     if (todayData.courses.length === 0) {
@@ -508,7 +484,7 @@ const TodayStatus = () => {
   };
 
   return (
-    <div className="today-status glass-effect" ref={todayStatusRef}> {/* [新增] ref */}
+    <div className="today-status glass-effect">
       {/* ✅ 標題列 + 折疊按鈕 */}
       <div className="today-status-header">
         <div className="header-content">
@@ -545,9 +521,6 @@ const TodayStatus = () => {
               value={`${todayData.courses.length} 堂課`}
               status={todayData.courses.length > 0 ? 'active' : 'empty'}
               cardContent={renderCoursesCard()}
-              isClickable={true} // [新增]
-              isOpen={activeCard === 'courses'} // [新增]
-              onClick={() => handleCardClick('courses')} // [新增]
               animationDelay={100}
             />
             
@@ -557,9 +530,6 @@ const TodayStatus = () => {
               value={`${todayData.events.length} 項活動`}
               status={todayData.events.length > 0 ? 'active' : 'empty'}
               cardContent={renderEventsCard()}
-              isClickable={true} // [新增]
-              isOpen={activeCard === 'events'} // [新增]
-              onClick={() => handleCardClick('events')} // [新增]
               animationDelay={200}
             />
             
@@ -569,9 +539,6 @@ const TodayStatus = () => {
               value={`${todayData.totalCredits} 學分`}
               status={todayData.totalCredits > 0 ? 'active' : 'empty'}
               cardContent={renderCreditsCard()}
-              isClickable={true} // [新增]
-              isOpen={activeCard === 'credits'} // [新增]
-              onClick={() => handleCardClick('credits')} // [新增]
               animationDelay={300}
             />
           </div>

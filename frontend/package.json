@@ -14,6 +14,9 @@
     "optimize": "npm run clean:cache && npm run build && npm run analyze"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
     "axios": "^1.10.0",
     "html2canvas": "^1.4.1",
     "ical.js": "^2.2.0",

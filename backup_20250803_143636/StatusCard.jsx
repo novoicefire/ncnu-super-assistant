@@ -9,11 +9,10 @@ const StatusCard = ({
   status, 
   cardContent, 
   onClick, 
-  isOpen = false,  // [新增] 接收外部控制的開啟狀態
   isClickable = false, 
   animationDelay = 0 
 }) => {
-  // [刪除] const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
@@ -56,19 +55,22 @@ const StatusCard = ({
     });
   };
 
-  // [新增] 當 isOpen 改變時重新計算位置
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(calculatePopupPosition, 10);
-    }
-  }, [isOpen]);
+  // 🎯 滑鼠進入處理
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setTimeout(calculatePopupPosition, 10);
+  };
 
-  // [刪除] handleMouseEnter 和 handleMouseLeave 函數
+  // 🎯 滑鼠離開處理
+  const handleMouseLeave = () => {
+    setTimeout(() => {
+      setIsHovered(false);
+    }, 100);
+  };
 
-  // 🎯 點擊處理 [修改]
-  const handleClick = (e) => {
-    e.stopPropagation(); // [新增] 阻止事件冒泡
-    if (onClick) {  // [修改] 移除 isClickable 檢查
+  // 🎯 點擊處理
+  const handleClick = () => {
+    if (isClickable && onClick) {
       onClick();
     }
   };
@@ -93,7 +95,7 @@ const StatusCard = ({
     }
   };
 
-  // 🎯 毛玻璃彈出卡片組件 [修改] 移除滑鼠事件
+  // 🎯 毛玻璃彈出卡片組件
   const PopupCard = () => (
     <div
       ref={popupRef}
@@ -104,7 +106,8 @@ const StatusCard = ({
         top: `${cardPosition.y}px`,
         zIndex: 9999
       }}
-      onClick={(e) => e.stopPropagation()} // [修改] 只保留點擊阻止冒泡
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="popup-arrow-glass"></div>
       <div className="popup-content-glass">
@@ -319,9 +322,9 @@ const StatusCard = ({
     <>
       <div
         ref={cardRef}
-        className={`status-card ${getStatusClass()} ${isClickable ? 'clickable' : ''} ${isVisible ? 'card-visible' : 'card-hidden'} ${isOpen ? 'is-open' : ''}`} // [新增] is-open class
-        // [刪除] onMouseEnter={handleMouseEnter}
-        // [刪除] onMouseLeave={handleMouseLeave}
+        className={`status-card ${getStatusClass()} ${isClickable ? 'clickable' : ''} ${isVisible ? 'card-visible' : 'card-hidden'}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         onClick={handleClick}
         style={{
           '--status-color': getStatusColor(),
@@ -349,8 +352,8 @@ const StatusCard = ({
         <div className="card-glow"></div>
       </div>
 
-      {/* ✅ 使用 Portal 渲染毛玻璃彈出卡片 [修改] 條件從 isHovered 改為 isOpen */}
-      {isOpen && cardContent && typeof document !== 'undefined' && 
+      {/* ✅ 使用 Portal 渲染毛玻璃彈出卡片 */}
+      {isHovered && cardContent && typeof document !== 'undefined' && 
         createPortal(<PopupCard />, document.body)
       }
     </>

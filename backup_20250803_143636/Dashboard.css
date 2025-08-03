@@ -104,13 +104,11 @@
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* [腳本修改] 原始懸浮樣式已註解
 .status-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--theme-shadow-secondary);
   border-color: var(--primary-color);
 }
-*/
 
 .status-card-main {
   display: flex;
@@ -577,11 +575,9 @@
   pointer-events: none;
 }
 
-/* [腳本修改] 原始懸浮樣式已註解
 .status-card:hover .card-glow {
   opacity: 0.1;
 }
-*/
 
 /* 💫 圖示容器動畫 */
 .status-icon-container {
@@ -3167,38 +3163,3 @@
 [data-theme="dark"] .image-caption {
   background: var(--theme-bg-tertiary);
 }
-
-/* ===== 點擊觸發樣式 (由腳本自動加入) ===== */
-
-/* 卡片開啟狀態樣式 */
-.status-card.is-open {
-  transform: translateY(-2px);
-  box-shadow: var(--theme-shadow-secondary);
-  border-color: var(--primary-color) !important;
-  z-index: 1001;
-}
-
-/* 可點擊卡片的懸浮效果 */
-.status-card.clickable:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--theme-shadow-primary);
-}
-
-/* 確保開啟狀態在懸浮時保持不變 */
-.status-card.clickable.is-open:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--theme-shadow-secondary);
-}
-
-/* 開啟狀態的箭頭動畫 */
-.status-card.is-open .card-arrow {
-  transform: translateX(4px);
-  opacity: 1;
-}
-
-/* 可點擊卡片的游標 */
-.status-card.clickable {
-  cursor: pointer;
-}
-
-/* ===== 點擊觸發樣式結束 ===== */
