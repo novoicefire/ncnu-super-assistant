@@ -117,7 +117,7 @@ const TodayStatus = () => {
           startTime: timeInfo.start,
           endTime: timeInfo.end,
           timeRange: `${timeInfo.start}-${timeInfo.end}`,
-          classroom: course.classroom || '未指定教室',
+          classroom: course.location || '未指定教室',
           periods,
           isUpcoming: isUpcomingCourse(timeInfo.start),
           isInProgress: isInProgressCourse(timeInfo.start, timeInfo.end)
