@@ -71,15 +71,18 @@
 啟動開發伺服器
 npm run dev
 
-text
+
 
 ### 環境變數設置
 
-創建 `.env` 檔案並設置以下變數：
-VITE_API_BASE_URL=your_backend_api_url
-VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
-
-text
+直接寫在了vercel跟render的環境變數設定中
+- **Vercel**：
+    1.VITE_GOOGLE_CLIENT_ID
+    2.VITE_API_URL
+- **Render**：
+    1.PYTHON_VERSION = 3.11.9
+    2.SUPABASE_KEY
+    3.SUPABASE_URL
 
 ## 📈 版本管理
 
@@ -143,7 +146,6 @@ refactor: 重構
 test: 測試相關
 chore: 其他修改
 
-text
 
 ## 📞 聯絡資訊
 
