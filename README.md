@@ -71,18 +71,18 @@
 啟動開發伺服器
 npm run dev
 
-
-
 ### 環境變數設置
 
-直接寫在了vercel跟render的環境變數設定中
+- **直接寫在了vercel跟render的環境變數設定中**
+
 - **Vercel**：
-    1.VITE_GOOGLE_CLIENT_ID
-    2.VITE_API_URL
+- 1.VITE_GOOGLE_CLIENT_ID
+- 2.VITE_API_URL
+
 - **Render**：
-    1.PYTHON_VERSION = 3.11.9
-    2.SUPABASE_KEY
-    3.SUPABASE_URL
+- 1.PYTHON_VERSION = 3.11.9
+- 2.SUPABASE_KEY
+- 3.SUPABASE_URL
 
 ## 📈 版本管理
 
@@ -145,7 +145,6 @@ style: 程式碼格式
 refactor: 重構
 test: 測試相關
 chore: 其他修改
-
 
 ## 📞 聯絡資訊
 
