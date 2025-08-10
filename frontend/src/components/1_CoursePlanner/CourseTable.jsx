@@ -240,11 +240,11 @@ const CourseTable = ({ schedule, onRemove }) => {
           key={`${day}-${period}`} 
           className="course-cell-filled"
           onClick={() => onRemove && onRemove(course.course_id, course.time)}
-          title={`課程：${course.course_cname}\n教師：${course.teacher}\n教室：${course.classroom}\n學分：${course.course_credit}`}
+          title={`課程：${course.course_cname}\n教師：${course.teacher}\n教室：${course.location}\n學分：${course.course_credit}`}
         >
           <div className="course-name">{course.course_cname}</div>
           <div className="course-teacher">{course.teacher}</div>
-          <div className="course-room">{course.classroom}</div>
+          <div className="course-room">{course.location}</div>
         </td>
       );
     }
