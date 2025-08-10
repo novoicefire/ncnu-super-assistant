@@ -193,7 +193,7 @@ const CoursePlanner = () => {
     if (course.department) info.push(course.department);
     if (course.division) info.push(course.division);
     if (course.time) info.push(course.time);
-    if (course.classroom && course.classroom.trim() !== '') info.push(course.classroom);
+    if (course.location && course.location.trim() !== '') info.push(course.location);
     if (course.course_credit) info.push(`${course.course_credit}學分`);
     
     return info.join(' | ');

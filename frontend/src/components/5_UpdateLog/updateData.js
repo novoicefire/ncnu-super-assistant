@@ -2,6 +2,17 @@
 
 export const updateHistory = [
   {
+    version: "v4.0.1",
+    date: "2025-08-10",
+    type: "fix", 
+    title: "修復課程資料顯示",
+    description: "修復「智慧選課」課程教室位置沒有顯示出來的問題",
+    features: [
+      "🔧 修復「智慧選課」分頁的課程教室資訊的class-room讀取函數，將course.classroom改為course.location",
+      "📚 順便再次更新了本學期開課資料，課程總數從1456更新至1469門課程",
+    ]
+  },
+  {
     version: "v4.0.0",
     date: "2025-08-03",
     type: "major", 
@@ -23,7 +34,7 @@ export const updateHistory = [
       "新增響應式滾動條樣式，提升跨裝置一致性",
       "修復多處UI細節問題，提升整體使用體驗",
     ]
-},
+  },
   {
     version: "v3.2.0",
     date: "2025-07-25",
