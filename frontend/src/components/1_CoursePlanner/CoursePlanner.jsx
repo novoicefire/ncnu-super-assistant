@@ -600,12 +600,102 @@ const CoursePlanner = () => {
         
         <div className="filter-group">
           <label>開課單位</label>
-          <select name="department" value={filters.department} onChange={handleFilterChange}>
-            <option value="">所有單位</option>
-            {uniqueDepartments.map(dept => (
-              <option key={dept} value={dept}>{dept}</option>
-            ))}
-          </select>
+          <input 
+            type="text" 
+            name="department" 
+            list="department-list"
+            value={filters.department} 
+            onChange={handleFilterChange}
+            placeholder="輸入或選擇開課單位"
+            autoComplete="off"
+          />
+          <datalist id="department-list">
+            <option value="">所有開課單位</option>
+            
+            {/* 人文學院 */}
+            <option value="中國語文學系">人文學院 - 中國語文學系</option>
+            <option value="外國語文學系">人文學院 - 外國語文學系</option>
+            <option value="歷史學系">人文學院 - 歷史學系</option>
+            <option value="社會政策與社會工作學系">人文學院 - 社會政策與社會工作學系</option>
+            <option value="公共行政與政策學系">人文學院 - 公共行政與政策學系</option>
+            <option value="東南亞學系">人文學院 - 東南亞學系</option>
+            <option value="國際文教與比較教育學系">人文學院 - 國際文教與比較教育學系</option>
+            <option value="原住民文化產業與社會工作學士學位學程原住民族專班">人文學院 - 原住民文化產業與社會工作學士學位學程原住民族專班</option>
+            <option value="東南亞學系人類學">人文學院 - 東南亞學系人類學</option>
+            <option value="東南亞學系碩士在職專班">人文學院 - 東南亞學系碩士在職專班</option>
+            <option value="社會政策與社會工作學系二年制在職專班">人文學院 - 社會政策與社會工作學系二年制在職專班</option>
+            <option value="公共行政與政策學系碩士在職專班">人文學院 - 公共行政與政策學系碩士在職專班</option>
+            <option value="華語文教學碩士學位學程">人文學院 - 華語文教學碩士學位學程</option>
+            <option value="非營利組織經營管理碩士學位學程在職專班">人文學院 - 非營利組織經營管理碩士學位學程在職專班</option>
+            <option value="國際文教管理人才博士學位學程">人文學院 - 國際文教管理人才博士學位學程</option>
+            <option value="文化創意與社會行銷碩士學位學程">人文學院 - 文化創意與社會行銷碩士學位學程</option>
+
+            {/* 管理學院 */}
+            <option value="經濟學系">管理學院 - 經濟學系</option>
+            <option value="國際企業學系">管理學院 - 國際企業學系</option>
+            <option value="資訊管理學系">管理學院 - 資訊管理學系</option>
+            <option value="財務金融學系">管理學院 - 財務金融學系</option>
+            <option value="觀光休閒與餐旅管理學系">管理學院 - 觀光休閒與餐旅管理學系</option>
+            <option value="管理學院學士班">管理學院 - 管理學院學士班</option>
+            <option value="國際企業學系碩士在職專班">管理學院 - 國際企業學系碩士在職專班</option>
+            <option value="資訊管理學系碩士在職專班">管理學院 - 資訊管理學系碩士在職專班</option>
+            <option value="財務金融學系碩士在職專班">管理學院 - 財務金融學系碩士在職專班</option>
+            <option value="高階經營管理碩士學位學程">管理學院 - 高階經營管理碩士學位學程</option>
+            <option value="新興產業策略與發展博士學位學程">管理學院 - 新興產業策略與發展博士學位學程</option>
+            <option value="新興產業策略與發展碩士學位學程">管理學院 - 新興產業策略與發展碩士學位學程</option>
+            <option value="區域發展重點產業碩士專班">管理學院 - 區域發展重點產業碩士專班</option>
+            <option value="兩岸高階主管經營管理境外碩士在職學位學程">管理學院 - 兩岸高階主管經營管理境外碩士在職學位學程</option>
+            <option value="管理學院商業管理及資訊科技創新應用全英語碩士學位學程">管理學院 - 管理學院商業管理及資訊科技創新應用全英語碩士學位學程</option>
+
+            {/* 科技學院 */}
+            <option value="資訊工程學系">科技學院 - 資訊工程學系</option>
+            <option value="土木工程學系">科技學院 - 土木工程學系</option>
+            <option value="電機工程學系">科技學院 - 電機工程學系</option>
+            <option value="應用化學系">科技學院 - 應用化學系</option>
+            <option value="應用材料及光電工程學系">科技學院 - 應用材料及光電工程學系</option>
+            <option value="科技學院學士班">科技學院 - 科技學院學士班</option>
+            <option value="電機工程學系通訊工程">科技學院 - 電機工程學系通訊工程</option>
+            <option value="地震與防災工程研究所">科技學院 - 地震與防災工程研究所</option>
+            <option value="應用化學系生物醫學">科技學院 - 應用化學系生物醫學</option>
+            <option value="光電科技碩士學位學程">科技學院 - 光電科技碩士學位學程</option>
+            <option value="人工智慧與機器人碩士學位學程">科技學院 - 人工智慧與機器人碩士學位學程</option>
+            <option value="光電材料產業碩士專班">科技學院 - 光電材料產業碩士專班</option>
+            <option value="智慧精準農業產學研發博士學位學程">科技學院 - 智慧精準農業產學研發博士學位學程</option>
+            <option value="智慧暨永續農業學士學位學程">科技學院 - 智慧暨永續農業學士學位學程</option>
+
+            {/* 教育學院 */}
+            <option value="教育政策與行政學系">教育學院 - 教育政策與行政學系</option>
+            <option value="諮商心理與人力資源發展學系">教育學院 - 諮商心理與人力資源發展學系</option>
+            <option value="教育學院學士班">教育學院 - 教育學院學士班</option>
+            <option value="諮商心理與人力資源發展學系終身學習與人力資源發展">教育學院 - 諮商心理與人力資源發展學系終身學習與人力資源發展</option>
+            <option value="課程教學與科技研究所">教育學院 - 課程教學與科技研究所</option>
+            <option value="終身學習與人力資源發展碩士學位學程碩士在職專班">教育學院 - 終身學習與人力資源發展碩士學位學程碩士在職專班</option>
+            <option value="諮商心理與人力資源發展學系輔導與諮商新加坡境外碩士在職專班">教育學院 - 諮商心理與人力資源發展學系輔導與諮商新加坡境外碩士在職專班</option>
+            <option value="心理健康與諮詢碩士學位學程在職專班">教育學院 - 心理健康與諮詢碩士學位學程在職專班</option>
+            <option value="心理健康與輔導諮商碩士在職進修新加坡境外專班">教育學院 - 心理健康與輔導諮商碩士在職進修新加坡境外專班</option>
+
+            {/* 水沙連學院 */}
+            <option value="地方創生與跨域治理碩士學位學程">水沙連學院 - 地方創生與跨域治理碩士學位學程</option>
+
+            {/* 護理暨健康福祉學院 */}
+            <option value="護理學系">護理暨健康福祉學院 - 護理學系</option>
+            <option value="護理學系原住民族專班">護理暨健康福祉學院 - 護理學系原住民族專班</option>
+            <option value="高齡健康與長期照顧管理學士學位學程原住民族專班">護理暨健康福祉學院 - 高齡健康與長期照顧管理學士學位學程原住民族專班</option>
+            <option value="長期照顧經營管理碩士在職學位學程在職專班">護理暨健康福祉學院 - 長期照顧經營管理碩士在職學位學程在職專班</option>
+
+            {/* 通識 */}
+            <option value="通識領域課程">通識 - 通識領域課程</option>
+            <option value="全校英文">通識 - 全校英文</option>
+
+            {/* 不分學院 */}
+            <option value="體育室">不分學院 - 體育室</option>
+            <option value="軍訓室">不分學院 - 軍訓室</option>
+            <option value="共同科">不分學院 - 共同科</option>
+            <option value="教育學程">不分學院 - 教育學程</option>
+            <option value="遠距教學中心">不分學院 - 遠距教學中心</option>
+            <option value="全校共同選修">不分學院 - 全校共同選修</option>
+            <option value="全校共同基本必修">不分學院 - 全校共同基本必修</option>
+          </datalist>
         </div>
         
         <div className="filter-group">
