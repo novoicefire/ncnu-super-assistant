@@ -1,13 +1,11 @@
-# .github/workflows/daily_data_sync.yml (權限修正版)
-
-name: Daily Sync Course Data
+name: Weekly Sync Course Data
 
 on:
   schedule:
-    - cron: '0 18 * * *'
+    # 每週日 18:00 UTC 執行 (台灣時間週一凌晨 2:00)
+    - cron: '0 18 * * 0'
   workflow_dispatch:
 
-# [核心修正] 明確給予此工作流程寫入倉庫的權限
 permissions:
   contents: write
 
@@ -15,31 +13,55 @@ jobs:
   sync-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Check if should run
+        id: check_date
+        run: |
+          CURRENT_MONTH=$(date +%m | sed 's/^0*//')
+          echo "Current month: $CURRENT_MONTH"
+          
+          # 停止更新的月份：10-12月和3-6月
+          if [[ $CURRENT_MONTH -ge 10 ]] || [[ $CURRENT_MONTH -ge 3 && $CURRENT_MONTH -le 6 ]]; then
+            echo "should_skip=true" >> $GITHUB_OUTPUT
+            echo "🚫 當前月份 ($CURRENT_MONTH) 在停止更新期間，跳過執行"
+          else
+            echo "should_skip=false" >> $GITHUB_OUTPUT
+            echo "✅ 當前月份 ($CURRENT_MONTH) 允許更新"
+          fi
+
       - name: Checkout repository
+        if: steps.check_date.outputs.should_skip == 'false'
         uses: actions/checkout@v4
 
       - name: Set up Python
+        if: steps.check_date.outputs.should_skip == 'false'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install Python dependencies
+        if: steps.check_date.outputs.should_skip == 'false'
         run: pip install requests
 
       - name: Fetch course data from NCNU API
+        if: steps.check_date.outputs.should_skip == 'false'
         run: python scripts/fetch_course_data.py
 
-      - name: Commit and push if data changed
+      - name: Commit and push unconditionally
+        if: steps.check_date.outputs.should_skip == 'false'
         run: |
+          FILE="frontend/public/data/本學期開課資訊API.json"
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add frontend/public/data/本學期開課資訊API.json
-          
-          # 使用 git status 檢查是否有變更，更可靠
-          if git status --porcelain | grep -q "frontend/public/data/本學期開課資訊API.json"; then
-            git commit -m "Data: 自動同步最新課程資料"
-            git push
-            echo "✔ 成功推送更新的課程資料到倉庫！"
-          else
-            echo "課程資料無變更，無需推送。"
-          fi
+          git config --global core.quotepath false
+
+          git add "$FILE"
+          git commit -m "Data: 週期性同步課程資料 ($(date '+%Y-%m-%d %H:%M'))"
+          git push
+          echo "✔ 課程資料已更新並推送到倉庫！"
+
+      - name: Skip notification
+        if: steps.check_date.outputs.should_skip == 'true'
+        run: |
+          echo "🔄 工作流程已跳過，將於下次允許的時間點執行"
+          echo "📅 執行月份：1-2月、7-9月"
+          echo "🚫 停止月份：3-6月、10-12月"
