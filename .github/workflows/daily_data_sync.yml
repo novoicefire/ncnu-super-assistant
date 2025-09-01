@@ -2,7 +2,6 @@ name: Weekly Sync Course Data
 
 on:
   schedule:
-    # 每週日 18:00 UTC 執行 (台灣時間週一凌晨 2:00)
     - cron: '0 18 * * 0'
   workflow_dispatch:
 
@@ -19,7 +18,6 @@ jobs:
           CURRENT_MONTH=$(date +%m | sed 's/^0*//')
           echo "Current month: $CURRENT_MONTH"
           
-          # 停止更新的月份：10-12月和3-6月
           if [[ $CURRENT_MONTH -ge 10 ]] || [[ $CURRENT_MONTH -ge 3 && $CURRENT_MONTH -le 6 ]]; then
             echo "should_skip=true" >> $GITHUB_OUTPUT
             echo "🚫 當前月份 ($CURRENT_MONTH) 在停止更新期間，跳過執行"
@@ -28,9 +26,11 @@ jobs:
             echo "✅ 當前月份 ($CURRENT_MONTH) 允許更新"
           fi
 
-      - name: Checkout repository
+      - name: Checkout main branch
         if: steps.check_date.outputs.should_skip == 'false'
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up Python
         if: steps.check_date.outputs.should_skip == 'false'
@@ -46,22 +46,36 @@ jobs:
         if: steps.check_date.outputs.should_skip == 'false'
         run: python scripts/fetch_course_data.py
 
-      - name: Commit and push unconditionally
+      - name: Commit and push to main
         if: steps.check_date.outputs.should_skip == 'false'
         run: |
-          FILE="frontend/public/data/本學期開課資訊API.json"
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git config --global core.quotepath false
 
+          FILE="frontend/public/data/本學期開課資訊API.json"
           git add "$FILE"
           git commit -m "Data: 週期性同步課程資料 ($(date '+%Y-%m-%d %H:%M'))"
-          git push
-          echo "✔ 課程資料已更新並推送到倉庫！"
+          git push origin main
+          echo "✔ main 分支資料已更新！"
+
+      - name: Update develop branch
+        if: steps.check_date.outputs.should_skip == 'false'
+        run: |
+          # 切換到 develop 分支
+          git fetch origin develop
+          git checkout develop
+          
+          # 複製更新的檔案到 develop 分支
+          git checkout main -- "frontend/public/data/本學期開課資訊API.json"
+          
+          # 提交到 develop 分支
+          git add "frontend/public/data/本學期開課資訊API.json"
+          git commit -m "Data: 同步課程資料到 develop 分支 ($(date '+%Y-%m-%d %H:%M'))"
+          git push origin develop
+          echo "✔ develop 分支資料已同步！"
 
       - name: Skip notification
         if: steps.check_date.outputs.should_skip == 'true'
         run: |
           echo "🔄 工作流程已跳過，將於下次允許的時間點執行"
-          echo "📅 執行月份：1-2月、7-9月"
-          echo "🚫 停止月份：3-6月、10-12月"
