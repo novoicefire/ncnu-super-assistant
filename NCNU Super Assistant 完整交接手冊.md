@@ -1,5 +1,3 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" class="logo" width="120"/>
-
 # NCNU Super Assistant 完整交接手冊
 
 ## 一、專案概覽
@@ -11,7 +9,6 @@
 - 資料庫：Supabase（PostgreSQL，儲存使用者排課資料）
 - 自動化：GitHub Actions（定時同步 NCNU API 課程資料）
 - 版本管理：Git (main 與 develop 分支)
-
 
 ## 二、完整專案檔案結構
 
@@ -45,7 +42,6 @@ ncnu-super-assistant/
 ├─ .gitignore  
 └─ vercel.json               # 前端 SPA rewrites 配置
 ```
-
 
 ## 三、系統架構與流程
 
@@ -133,21 +129,23 @@ export SUPABASE_KEY=…
 flask run
 ```
 
-
 ## 五、運維與後續開發指南
 
 - **資料更新**
     - 手動：執行 `python scripts/fetchcoursedata.py` → commit→push → 前端自動重建。
     - 自動：由 GitHub Actions 及時觸發，請勿變更 `.github/workflows/dailydatasync.yml` 內容。
+
 - **部署驗證**
 
 1. 後端健康檢查：GET `https://<render-backend>.onrender.com/` → `“Backend is alive!”`
 2. 課程 API：GET `/apicourses` → 回傳課程 JSON
 3. 前端驗證：在瀏覽器開啟 Vercel 網址，功能應能正常使用。
+
 - **常見問題排除**
     - **CORS 錯誤**：確認後端 `ALLOWED_ORIGINS` 包含所有 Vercel 網域與 localhost；
     - **資料不同步**：檢查 GitHub Actions 執行紀錄與 `API.json` 最新時間；
     - **Google 登入失敗**：檢查 OAuth Client ID 是否對應 `VITE_GOOGLE_CLIENT_ID`。
+
 - **未來開發規劃**
 
 1. 深色主題（Dark Mode）切換
@@ -155,7 +153,6 @@ flask run
 3. 課程圖示化排程
 4. GitHub Actions：新增 Excel 轉換腳本
 5. 單元測試與 CI/CD 增強
-
 
 ## 六、關鍵設計與決策
 
@@ -167,38 +164,9 @@ flask run
 
 本手冊涵蓋專案核心架構、設計思路、檔案結構、部署與運維要點，供接手開發或維運人員快速上手並持續迭代。祝專案推行順利。
 
-<div style="text-align: center">⁂</div>
-
-[^1_1]: Cheng-Shi-Ma-Fen-Duan-Chu-Li-Gong-Ju-Bao.md
-
-[^1_2]: Wang-Zhan-Jian-Zhi-Ji-Lu-1.txt
-
-[^1_3]: Wang-Zhan-Jian-Zhi-Ji-Lu-2.txt
-
-[^1_4]: ncnu-super-assistantZi-Liao-Jia-Nei-Bu-Jie-Gou-Gai-Yao.txt
-
-[^1_5]: vercel.json
-
-[^1_6]: Wang-Zhan-She-Ji-Yu-APIJi-Ben-Zi-Xun.txt
-
-[^1_7]: Ben-Xue-Qi-Kai-Ke-Zi-Xun-API.json
-
-[^1_8]: Xing-Zheng-Jiao-Xue-Dan-Wei-Dai-Ma-API.json
-
-[^1_9]: Kai-Ke-Dan-Wei-Dai-Ma-API.json
-
-[^1_10]: Xiao-Yuan-Lian-Luo-Zi-Xun-API.json
-
-[^1_11]: Wang-Zhan-Jian-Zhi-Ji-Lu-1.txt
-
-[^1_12]: Wang-Zhan-Jian-Zhi-Ji-Lu-2.txt
-
-[^1_13]: Ben-Xue-Qi-Kai-Ke-Zi-Xun-API.json
-
-
 ---
 
-# NCNU Super Assistant 交接手冊（最終完整版）
+## NCNU Super Assistant 交接手冊（最終完整版）
 
 > 本手冊以「**全景式系統設計圖 + 實務運維流程 + 擴充開發藍圖**」三層結構編寫，包含完整檔案樹、環境變數、CI/CD、資料同步、故障排除、資安備援、未來 Roadmap 及治理流程。針對每一模組皆附「核心職責」「關鍵程式」「測試腳本」「常見地雷」四欄說明，確保接手者零斷點。
 
@@ -246,7 +214,6 @@ ncnu-super-assistant/
 │  └─ dailydatasync.yml         # 定時 Job + Push → 觸發 Vercel
 └─ README.md / LICENSE
 ```
-
 
 ## 3. 後端 API 詳表
 
@@ -304,7 +271,6 @@ ncnu-super-assistant/
 - **監控**：免費 pingdom or Freshping 指向 `/`；500 ms 即視為 Down。
 - **日誌**：Render 提供 1000 lines；必要時接 Logtail。
 
-
 ## 8. 安全與備援
 
 | 項目 | 防護措施 |
@@ -339,15 +305,9 @@ ncnu-super-assistant/
 7. [ ] 在 Jira / Notion 建立 Roadmap 里程碑，對應本文件第 9 節。
 
 > **結語**：本手冊已涵蓋 **架構設計 → 環境配置 → 流程自動化 → 安全治理 → 未來擴充** 全生命週期細節，足以支援 0-Day 交接與長期維運。若有疑問，請先查此文，再於 GitHub Issues 標註 `@maintainers`。祝開發順利。
-
-<div style="text-align: center">⁂</div>
-
-[^2_1]: README.md
-
-
 ---
 
-# NCNU Super Assistant 完整交接手冊（含AI維護指南）
+## NCNU Super Assistant 完整交接手冊（含AI維護指南）
 
 > 本手冊專為**非資訊科技背景**的維護者設計，讓國企系、管理系等商學院學生也能輕鬆使用AI工具維護網站。
 
@@ -362,7 +322,6 @@ ncnu-super-assistant/
     - 會描述問題
     - 會複製貼上
     - 會按照步驟操作
-
 
 ### AI在網站維護中的角色
 
@@ -802,10 +761,3 @@ AI方案：[貼上完整對話]
 4. 用戶反饋整理和回應策略
 
 **🎉 結語**：透過AI的協助，網站維護不再是技術人員的專利。只要有耐心學習、勇於嘗試，每個人都能成為優秀的網站管理員。記住：AI是你的技術夥伴，但你才是決策者和品質把關者！
-
-<div style="text-align: center">⁂</div>
-
-[^3_1]: https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/bcf173fa8e0722d9e72b72baeec40bee/fd1a0cf6-7795-4978-aa2d-f335b7f040a9/ede19920.md
-
-[^3_2]: https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/bcf173fa8e0722d9e72b72baeec40bee/a21538d0-70da-4f8b-9f71-27ca818f626b/59c60e83.md
-
