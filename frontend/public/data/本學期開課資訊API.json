@@ -12125,7 +12125,7 @@
                 "class": "0",
                 "course_cname": "Web程式設計",
                 "course_ename": "Web Programming",
-                "time": "4fgh",
+                "time": "3efg",
                 "location": "科三208",
                 "teacher": "林宣華",
                 "eteacher": "Shian-Hua  Lin",
@@ -12485,7 +12485,7 @@
                 "class": "0",
                 "course_cname": "量子資訊科學導論",
                 "course_ename": "Introduction to Quantum Information Science",
-                "time": "4hij",
+                "time": "3hij",
                 "location": "科三119",
                 "teacher": "周耀新",
                 "eteacher": "Yao-Hsin  Chou",
@@ -12617,6 +12617,24 @@
                 "eteacher": "Yuh-Ming  Huang",
                 "division": "碩士班",
                 "edivision": "Master",
+                "course_credit": "3.0"
+            },
+            {
+                "faculty": "科技學院",
+                "year": "114",
+                "semester": "1",
+                "department": "資工系",
+                "edepartment": "Computer Science and Information Engineering",
+                "course_id": "219181",
+                "class": "0",
+                "course_cname": "人工智慧導論",
+                "course_ename": "Introduction to Artificial Intelligence",
+                "time": "4fgh",
+                "location": "教師研究室",
+                "teacher": "周信宏",
+                "eteacher": "",
+                "division": "博士班",
+                "edivision": "Doctor",
                 "course_credit": "3.0"
             },
             {
@@ -19291,8 +19309,8 @@
                 "course_ename": "Life and Death Studies",
                 "time": "4cd",
                 "location": "人106",
-                "teacher": "張遠萍",
-                "eteacher": "",
+                "teacher": "張遠萍,雷若莉",
+                "eteacher": ";",
                 "division": "學士班",
                 "edivision": "Bachelor",
                 "course_credit": "2.0"
@@ -19343,7 +19361,7 @@
                 "class": "0",
                 "course_cname": "兒科護理學",
                 "course_ename": "Pediatric Nursing",
-                "time": "2efg",
+                "time": "1efg",
                 "location": "B302",
                 "teacher": "雷若莉",
                 "eteacher": "",
@@ -19597,8 +19615,8 @@
                 "course_ename": "Introduction to Nursing",
                 "time": "4ab",
                 "location": "人106",
-                "teacher": "張遠萍",
-                "eteacher": "",
+                "teacher": "廖靜珠,張遠萍",
+                "eteacher": ";",
                 "division": "學士班",
                 "edivision": "Bachelor",
                 "course_credit": "2.0"
@@ -19739,7 +19757,7 @@
                 "class": "0",
                 "course_cname": "產科護理學",
                 "course_ename": "Maternal nursing",
-                "time": "1efg",
+                "time": "2efg",
                 "location": "B302",
                 "teacher": "田惠姜,黃貞惠",
                 "eteacher": ";",
@@ -19937,8 +19955,8 @@
                 "class": "0",
                 "course_cname": "失智症照顧",
                 "course_ename": "Dementia Care",
-                "time": "2cd",
-                "location": "R127",
+                "time": "2fg",
+                "location": "管R127",
                 "teacher": "劉美吟",
                 "eteacher": "",
                 "division": "學士班",
@@ -25050,7 +25068,7 @@
                 "course_cname": "壓力與情緒管理",
                 "course_ename": "Stress and Emotion Management",
                 "time": "2ef",
-                "location": "A001",
+                "location": "A401-1",
                 "teacher": "顏雅卉",
                 "eteacher": "",
                 "division": "學士班",
@@ -25184,5 +25202,7 @@
                 "course_credit": "2.0"
             }
         ]
-    }
+    },
+    "_last_updated": "2025-09-01T18:26:41.709104",
+    "_update_source": "weekly_auto_sync"
 }
