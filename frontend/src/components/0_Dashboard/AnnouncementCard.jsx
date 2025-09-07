@@ -216,7 +216,12 @@ const AnnouncementCard = () => {
                 </h4>
                 
                 <div className="announcement-content">
-                  {renderContent(announcement.content)}
+                  {/* 判斷內容是否為 iframe，若是則直接渲染 HTML，否則使用原有的 renderContent */}
+                  {announcement.content.trim().startsWith('<iframe') ? (
+                    <div dangerouslySetInnerHTML={{ __html: announcement.content }} />
+                  ) : (
+                    renderContent(announcement.content)
+                  )}
                 </div>
                 
                 {renderImages(announcement.images)}

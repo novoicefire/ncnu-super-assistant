@@ -2,6 +2,16 @@
 export const announcementData = [
   {
     id: 1,
+    title: "開學了，但一切尚未結束",
+    date: "2025-09-07",
+    priority: "normal",
+    content: "<iframe src=\"https://embed.dcard.tw/post/259732091\" style='border:none' width=\"100%\" height=\"372px\"></iframe>",
+    images: [],
+    embeds: [],
+    buttons: []
+  },
+  {
+    id: 1,
     title: "友情提示🫶不是廣告",
     date: "2025-09-01",
     priority: "normal",
@@ -18,7 +28,8 @@ export const announcementData = [
       }
     ]
   },
-  {
+/*
+ {
     id: 2,
     title: "📚 9/1~9/5 為二階選課選課週時間",
     date: "2025-09-01",
@@ -74,4 +85,5 @@ export const announcementData = [
       },
     ]
   }
+*/
 ];
