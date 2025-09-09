@@ -1,61 +1,56 @@
-/* frontend/src/components/4_UniversityCalendar/UniversityCalendar.css (現代化版) */
+/* frontend/src/components/4_UniversityCalendar/UniversityCalendar.css (主題適配版) */
 
 .calendar-container {
   padding: var(--spacing-xl);
-  background: linear-gradient(135deg, #f9f9f9, #e8f5e8);
+  background: var(--calendar-bg);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  max-width: 900px;
+  box-shadow: var(--theme-shadow-lg);
+  max-width: 1200px;
   margin: var(--spacing-xl) auto;
   height: 85vh;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
-}
-
-.calendar-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-  opacity: 0.05;
-  border-radius: 50%;
-  z-index: 0;
+  border: 1px solid var(--calendar-border);
 }
 
 .calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-lg);
-  border-bottom: 3px solid var(--primary-ultra-light);
+  border-bottom: 2px solid var(--calendar-list-border);
   position: relative;
   z-index: 1;
 }
 
+.header-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-md);
+}
+
 .calendar-header h2 {
   margin: 0;
-  color: var(--primary-dark);
+  color: var(--theme-text-primary);
   font-size: 2rem;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
 }
 
-.calendar-header h2::before {
-  content: '📅';
-  font-size: 1.5rem;
+.fallback-notice {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent-warning-dark);
+  background-color: var(--accent-warning-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
 }
 
-.go-to-today-btn {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-  color: var(--text-white);
+.view-toggle-btn {
+  background: var(--primary-color);
+  color: white;
   border: none;
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: 0.9rem;
@@ -63,211 +58,226 @@
   border-radius: var(--radius-xl);
   cursor: pointer;
   transition: all var(--transition-normal);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--theme-shadow-sm);
 }
 
-.go-to-today-btn:hover {
-  background: linear-gradient(135deg, var(--primary-dark), #003d32);
+.view-toggle-btn:hover {
+  background: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--theme-shadow-md);
 }
 
-.go-to-today-btn:active {
-  transform: translateY(0);
-}
-
-.events-list-container {
-  overflow-y: auto;
-  padding-right: var(--spacing-md);
+.calendar-main-content {
+  display: flex;
   flex-grow: 1;
-  position: relative;
-  z-index: 1;
-}
-
-/* 🎨 現代化事件項目設計 */
-.event-item {
-  background: var(--background-card);
-  border: 2px solid rgba(0, 121, 107, 0.1);
-  border-left: 6px solid var(--text-light);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  margin-bottom: var(--spacing-lg);
-  transition: all var(--transition-normal);
-  position: relative;
+  gap: var(--spacing-xl);
   overflow: hidden;
 }
 
-.event-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-  transition: width var(--transition-normal);
+.calendar-grid-container {
+  flex: 1;
+  min-width: 400px;
+}
+
+.events-list-container {
+  flex: 0 0 40%;
+  overflow-y: auto;
+  padding-left: var(--spacing-lg);
+  border-left: 1px solid var(--calendar-list-border);
+}
+
+.events-list-header {
+  color: var(--theme-text-secondary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--calendar-list-border);
+}
+
+/* --- react-calendar Overrides --- */
+.react-calendar {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: var(--font-family-sans-serif);
+  color: var(--theme-text-primary);
+}
+
+.react-calendar__navigation button {
+  color: var(--calendar-nav-text);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.react-calendar__navigation button:hover,
+.react-calendar__navigation button:focus {
+  background-color: var(--calendar-tile-bg-hover) !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  color: var(--calendar-weekday-text);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.react-calendar__tile {
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  background: var(--calendar-tile-bg);
+  color: var(--theme-text-primary);
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background: var(--calendar-tile-bg-hover);
+}
+
+.react-calendar__tile--now {
+  background: var(--calendar-tile-bg-now);
+  font-weight: bold;
+}
+
+.react-calendar__tile--active {
+  background: var(--calendar-tile-bg-active) !important;
+  color: var(--calendar-tile-text-active) !important;
+  font-weight: bold;
+}
+
+.event-marker {
+  width: 6px;
+  height: 6px;
+  background-color: var(--calendar-event-marker-bg);
+  border-radius: 50%;
+  margin: 2px auto 0;
+}
+
+.react-calendar__tile--active .event-marker {
+  background-color: var(--calendar-tile-text-active);
+}
+
+/* --- Event Item Styles --- */
+.event-item {
+  background: var(--theme-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  border-left: 5px solid var(--calendar-event-item-border);
+  transition: all var(--transition-normal);
 }
 
 .event-item:hover {
-  border-color: var(--primary-light);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-3px);
-}
-
-.event-item:hover::before {
-  width: 8px;
-}
-
-/* 🎯 今日事件特殊樣式 */
-.event-item.today-marker {
-  border-left: 6px solid var(--primary-color);
-  background: linear-gradient(135deg, var(--background-card), var(--primary-ultra-light));
-  box-shadow: var(--shadow-md);
-}
-
-.event-item.today-marker::before {
-  background: linear-gradient(135deg, var(--accent-success), var(--primary-color));
-  width: 8px;
-}
-
-.event-item.today-marker:hover {
-  border-left-color: var(--accent-success);
-  background: linear-gradient(135deg, var(--primary-ultra-light), rgba(40, 167, 69, 0.1));
-}
-
-/* 📝 事件內容樣式 */
-.event-content {
-  position: relative;
-  z-index: 1;
+  transform: translateX(5px);
+  box-shadow: var(--theme-shadow-md);
 }
 
 .event-summary {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin: 0 0 var(--spacing-sm) 0;
-  color: var(--primary-dark);
-  line-height: 1.4;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.event-item.today-marker .event-summary {
-  color: var(--accent-success);
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--theme-text-primary);
 }
 
 .event-date {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  margin: 0;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.event-date::before {
-  content: '🕒';
   font-size: 0.9rem;
+  color: var(--theme-text-secondary);
 }
 
-.event-item.today-marker .event-date {
-  color: var(--primary-color);
-  font-weight: 600;
-}
-
-/* 📱 美化滾動條 */
-.events-list-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.events-list-container::-webkit-scrollbar-track {
-  background: var(--primary-ultra-light);
-  border-radius: var(--radius-sm);
-}
-
-.events-list-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-  border-radius: var(--radius-sm);
-}
-
-.events-list-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
-}
-
-/* 🔍 無事件狀態 */
 .no-events {
   text-align: center;
-  padding: var(--spacing-xxl);
-  color: var(--text-secondary);
+  padding: var(--spacing-xl);
+  color: var(--theme-text-tertiary);
 }
 
-.no-events h3 {
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-md);
+/* --- Skeleton Loading Styles --- */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
 }
 
-/* 📱 響應式設計 */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.skeleton {
+  background-color: var(--theme-bg-tertiary);
+  background-image: linear-gradient(90deg, var(--theme-bg-tertiary), var(--theme-bg-secondary), var(--theme-bg-tertiary));
+  background-size: 2000px 100%;
+  background-repeat: no-repeat;
+  border-radius: var(--radius-md);
+  animation: shimmer 2s infinite linear, pulse 2.2s infinite ease-in-out !important;
+}
+
+.skeleton-container .skeleton-title { width: 200px; height: 36px; }
+.skeleton-container .skeleton-button { width: 150px; height: 40px; }
+.skeleton-container .skeleton-subtitle { width: 250px; height: 28px; margin-bottom: var(--spacing-lg); }
+
+.skeleton-calendar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.skeleton-calendar-header {
+  width: 60%;
+  height: 30px;
+  align-self: center;
+  background-color: var(--theme-bg-tertiary);
+  border-radius: var(--radius-md);
+}
+
+.skeleton-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-sm);
+  flex-grow: 1;
+}
+
+.skeleton-calendar-day {
+  width: 100%;
+  padding-bottom: 100%; /* Creates square aspect ratio */
+  background-color: var(--theme-bg-tertiary);
+  border-radius: var(--radius-md);
+}
+
+.skeleton-event-item {
+  width: 100%;
+  height: 70px;
+  margin-bottom: var(--spacing-lg);
+  background-color: var(--theme-bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--theme-border-primary);
+}
+
+/* --- Responsive Design --- */
 @media (max-width: 1024px) {
-  .calendar-container {
-    height: 80vh;
-    margin: var(--spacing-lg) auto;
-    padding: var(--spacing-lg);
+  .calendar-main-content {
+    flex-direction: column;
   }
-  
-  .calendar-header h2 {
-    font-size: 1.7rem;
+  .events-list-container {
+    flex: 1;
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--calendar-list-border);
+    padding-top: var(--spacing-lg);
   }
 }
 
 @media (max-width: 768px) {
   .calendar-container {
     padding: var(--spacing-lg);
-    height: 75vh;
+    height: auto;
   }
-  
   .calendar-header {
     flex-direction: column;
     gap: var(--spacing-lg);
-    text-align: center;
+    align-items: stretch;
   }
-  
-  .calendar-header h2 {
-    font-size: 1.5rem;
+  .header-title-group {
+    justify-content: center;
   }
-  
-  .go-to-today-btn {
+  .view-toggle-btn {
     width: 100%;
-    padding: var(--spacing-md);
-  }
-  
-  .event-item {
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-  }
-  
-  .event-summary {
-    font-size: 1.1rem;
-  }
-  
-  .events-list-container {
-    padding-right: var(--spacing-sm);
-  }
-}
-
-@media (max-width: 480px) {
-  .calendar-header h2 {
-    font-size: 1.3rem;
-  }
-  
-  .event-summary {
-    font-size: 1rem;
-  }
-  
-  .event-date {
-    font-size: 0.85rem;
-  }
-  
-  .event-item {
-    padding: var(--spacing-sm) var(--spacing-md);
   }
 }

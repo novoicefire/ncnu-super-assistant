@@ -24,6 +24,20 @@
   --theme-shadow-secondary: 0 4px 16px rgba(0, 0, 0, 0.15);
   --theme-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.2);
   --theme-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+
+  /* 📅 行事曆專用變數 */
+  --calendar-bg: linear-gradient(135deg, #f9f9f9, #e8f5e8);
+  --calendar-border: #e0e0e0;
+  --calendar-tile-bg: transparent;
+  --calendar-tile-bg-hover: #e0f2f1;
+  --calendar-tile-bg-active: var(--primary-color);
+  --calendar-tile-text-active: #ffffff;
+  --calendar-tile-bg-now: #e0f2f1;
+  --calendar-nav-text: var(--primary-color);
+  --calendar-weekday-text: var(--primary-dark);
+  --calendar-event-marker-bg: var(--accent-success);
+  --calendar-event-item-border: var(--primary-color);
+  --calendar-list-border: var(--primary-ultra-light);
 }
 
 /* 🌙 深色模式變數 */
@@ -50,6 +64,20 @@
   --theme-shadow-secondary: 0 4px 16px rgba(0, 0, 0, 0.4);
   --theme-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
   --theme-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
+
+  /* 📅 行事曆專用變數 */
+  --calendar-bg: linear-gradient(135deg, #1a1a1a, #212b21);
+  --calendar-border: #404040;
+  --calendar-tile-bg: transparent;
+  --calendar-tile-bg-hover: #3a3a3a;
+  --calendar-tile-bg-active: var(--primary-light);
+  --calendar-tile-text-active: #1a1a1a;
+  --calendar-tile-bg-now: #3a3a3a;
+  --calendar-nav-text: var(--primary-light);
+  --calendar-weekday-text: #cccccc;
+  --calendar-event-marker-bg: var(--accent-success-light);
+  --calendar-event-item-border: var(--primary-light);
+  --calendar-list-border: #404040;
 }
 
 /* 🎨 主題切換動畫 */
