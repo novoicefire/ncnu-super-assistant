@@ -1,15 +1,12 @@
-// frontend/src/components/4_UniversityCalendar/UniversityCalendar.jsx (新增載入動畫)
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+// frontend/src/components/4_UniversityCalendar/UniversityCalendar.jsx (Refactored with Hook)
+import React, { useState, useMemo } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import ICAL from 'ical.js';
 import { useTheme } from '../../contexts/ThemeContext';
-import { robustRequest } from '../../apiHelper';
+import { useCalendarEvents } from '../../hooks/useCalendarEvents'; // 導入新的 Hook
 import './UniversityCalendar.css';
 
-const MAX_RETRIES = 3;
-
-// 骨架屏載入動畫元件
+// 骨架屏載入動畫元件 (保持不變)
 const CalendarSkeleton = () => (
   <div className="calendar-container skeleton-container">
     <div className="calendar-header">
@@ -41,65 +38,10 @@ const CalendarSkeleton = () => (
 
 const UniversityCalendar = () => {
   const { theme } = useTheme();
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { events, loading, error, isFallback } = useCalendarEvents(); // 使用 Hook 獲取資料
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState('day');
-  const [isFallback, setIsFallback] = useState(false);
-  const retryCount = useRef(0);
-
-  const fetchLocalCalendar = useCallback(async () => {
-    try {
-      const response = await fetch('/data/calendar.ics');
-      if (!response.ok) throw new Error(`無法載入本地備援檔案: ${response.statusText}`);
-      const icsText = await response.text();
-      const jcalData = ICAL.parse(icsText);
-      const vcalendar = new ICAL.Component(jcalData);
-      const vevents = vcalendar.getAllSubcomponents('vevent');
-      const parsedEvents = vevents.map(vevent => {
-        const event = new ICAL.Event(vevent);
-        return {
-          summary: event.summary,
-          start: event.startDate.toJSDate().toISOString(),
-          end: event.endDate.toJSDate().toISOString(),
-        };
-      });
-      setEvents(parsedEvents);
-      setIsFallback(true);
-      setError(null);
-    } catch (localErr) {
-      setError(`API 及本地備援檔案均載入失敗: ${localErr.message}`);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const fetchCalendar = useCallback(async () => {
-    try {
-      const data = await robustRequest('get', '/api/calendar');
-      if (Array.isArray(data)) {
-        setEvents(data);
-        setError(null);
-        setLoading(false);
-      } else {
-        throw new Error('無法識別的行事曆資料格式');
-      }
-    } catch (err) {
-      retryCount.current += 1;
-      if (retryCount.current >= MAX_RETRIES) {
-        await fetchLocalCalendar();
-      } else {
-        setTimeout(() => fetchCalendar(), 1000);
-      }
-    }
-  }, [fetchLocalCalendar]);
-
-  useEffect(() => {
-    setLoading(true);
-    retryCount.current = 0;
-    fetchCalendar();
-  }, [fetchCalendar]);
 
   const eventDates = useMemo(() => {
     const dates = new Set();
@@ -167,7 +109,7 @@ const UniversityCalendar = () => {
       <div className="calendar-main-content">
         <div className="calendar-grid-container">
           <Calendar
-            key={theme} // 確保主題切換時能重新渲染
+            key={theme}
             onChange={setSelectedDate}
             value={selectedDate}
             locale="zh-TW"

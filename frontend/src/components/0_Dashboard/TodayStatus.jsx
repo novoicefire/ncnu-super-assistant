@@ -1,15 +1,26 @@
-// frontend/src/components/0_Dashboard/TodayStatus.jsx (錯誤修復版)
-import React, { useState, useEffect, useCallback, useRef } from 'react'; // [新增] useRef
+// frontend/src/components/0_Dashboard/TodayStatus.jsx (Refactored with Hook)
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '../../AuthContext.jsx';
 import StatusCard from './StatusCard.jsx';
-import { robustRequest, getTodayEvents } from '../../apiHelper.js';
+import { robustRequest } from '../../apiHelper.js';
+import { useCalendarEvents } from '../../hooks/useCalendarEvents'; // 導入新的 Hook
 
 const TodayStatus = () => {
-  // [新增] 點擊觸發狀態管理
+  const { user, isLoggedIn } = useAuth();
+  const { events: allCalendarEvents, loading: calendarLoading } = useCalendarEvents(); // 使用 Hook
+
   const [activeCard, setActiveCard] = useState(null);
   const todayStatusRef = useRef(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [todayData, setTodayData] = useState({
+    courses: [],
+    events: [],
+    totalCredits: 0,
+    creditDetails: {},
+    isLoading: true,
+    lastUpdate: null
+  });
 
-  // [新增] 點擊外部關閉功能
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (todayStatusRef.current && !todayStatusRef.current.contains(event.target)) {
@@ -22,77 +33,10 @@ const TodayStatus = () => {
     };
   }, []);
 
-  // [新增] 處理卡片點擊
   const handleCardClick = (cardId) => {
     setActiveCard(prevActiveCard => (prevActiveCard === cardId ? null : cardId));
   };
 
-  const { user, isLoggedIn } = useAuth();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [todayData, setTodayData] = useState({
-    courses: [],
-    events: [],
-    totalCredits: 0,
-    creditDetails: {
-      totalCredits: 0,
-      courseCount: 0,
-      categories: {},
-      recommendedMin: 18,
-      recommendedMax: 25
-    }, // ✅ 修復：提供預設值
-    isLoading: true,
-    lastUpdate: null
-  });
-
-  // 🎯 載入今日資料
-  const loadTodayData = useCallback(async () => {
-    if (!isLoggedIn || !user?.google_id) {
-      setTodayData(prev => ({
-        ...prev,
-        isLoading: false,
-        lastUpdate: new Date()
-      }));
-      return;
-    }
-
-    try {
-      // 並行載入課表和活動資料
-      const [schedule, events] = await Promise.all([
-        robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } }),
-        getTodayEvents()
-      ]);
-
-      const todayCourses = getTodayCourses(schedule);
-      const totalCredits = calculateTotalCredits(schedule);
-      const creditDetails = calculateCreditDetails(schedule);
-
-      setTodayData({
-        courses: todayCourses,
-        events: events || [],
-        totalCredits,
-        creditDetails,
-        isLoading: false,
-        lastUpdate: new Date()
-      });
-    } catch (error) {
-      console.error('Failed to load today data:', error);
-      setTodayData(prev => ({
-        ...prev,
-        isLoading: false,
-        lastUpdate: new Date()
-      }));
-    }
-  }, [isLoggedIn, user]);
-
-  useEffect(() => {
-    loadTodayData();
-    // 每 5 分鐘自動更新
-    const intervalId = setInterval(loadTodayData, 300000);
-    return () => clearInterval(intervalId);
-  }, [loadTodayData]);
-
-  // [保持其他所有函數不變 - getTodayCourses, getTimeFromPeriods, etc.]
-  // 🎯 獲取今日課程
   const getTodayCourses = (schedule) => {
     if (!schedule) return [];
     const today = new Date();
@@ -128,7 +72,6 @@ const TodayStatus = () => {
     return todayCourses.sort((a, b) => a.startTime.localeCompare(b.startTime));
   };
 
-  // 🎯 節次轉換為時間範圍
   const getTimeFromPeriods = (periods) => {
     const timeMap = {
       'a': { start: '08:00', end: '09:00' },
@@ -159,7 +102,6 @@ const TodayStatus = () => {
     };
   };
 
-  // 🎯 判斷是否為即將開始的課程
   const isUpcomingCourse = (startTime) => {
     const now = new Date();
     const [hours, minutes] = startTime.split(':').map(Number);
@@ -169,7 +111,6 @@ const TodayStatus = () => {
     return timeDiff > 0 && timeDiff <= 30 * 60 * 1000; // 30分鐘內
   };
 
-  // 🎯 判斷是否為進行中的課程
   const isInProgressCourse = (startTime, endTime) => {
     const now = new Date();
     const [startHours, startMinutes] = startTime.split(':').map(Number);
@@ -183,7 +124,6 @@ const TodayStatus = () => {
     return now >= courseStart && now <= courseEnd;
   };
 
-  // 🎯 計算總學分
   const calculateTotalCredits = (schedule) => {
     if (!schedule) return 0;
     const uniqueCourses = [...new Map(
@@ -194,9 +134,7 @@ const TodayStatus = () => {
     );
   };
 
-  // ✅ 修復：計算學分詳細資訊，添加防護檢查
   const calculateCreditDetails = (schedule) => {
-    // ✅ 返回預設值結構
     const defaultResult = {
       totalCredits: 0,
       courseCount: 0,
@@ -232,7 +170,6 @@ const TodayStatus = () => {
         const credits = parseFloat(course.course_credit || 0);
         const courseName = course.course_cname || '';
         
-        // 根據課程名稱或類型判斷類別
         let category = '其他';
         if (courseName.includes('必修') || course.course_type === 'required') {
           category = '必修';
@@ -267,8 +204,53 @@ const TodayStatus = () => {
     }
   };
 
-  // [保持所有 render 函數不變]
-  // 🎯 渲染今日課程卡片內容
+  // 載入課表資料
+  const loadScheduleData = useCallback(async () => {
+    if (!isLoggedIn || !user?.google_id) {
+      setTodayData(prev => ({ ...prev, isLoading: false, lastUpdate: new Date() }));
+      return;
+    }
+    try {
+      const schedule = await robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } });
+      const todayCourses = getTodayCourses(schedule);
+      const totalCredits = calculateTotalCredits(schedule);
+      const creditDetails = calculateCreditDetails(schedule);
+      setTodayData(prev => ({
+        ...prev,
+        courses: todayCourses,
+        totalCredits,
+        creditDetails,
+        isLoading: calendarLoading, // Loading state now depends on calendar events too
+        lastUpdate: new Date()
+      }));
+    } catch (error) {
+      console.error('Failed to load schedule data:', error);
+      setTodayData(prev => ({ ...prev, isLoading: false }));
+    }
+  }, [isLoggedIn, user, calendarLoading]);
+
+  // 當從 Hook 拿到行事曆資料後，篩選出今天的活動
+  useEffect(() => {
+    if (!calendarLoading) {
+      const today = new Date();
+      const todayStart = new Date(new Date().setHours(0, 0, 0, 0));
+      const todayEnd = new Date(new Date().setHours(23, 59, 59, 999));
+
+      const todaysEvents = allCalendarEvents.filter(event => {
+        const eventStart = new Date(event.start);
+        const eventEnd = new Date(event.end);
+        return (eventStart >= todayStart && eventStart <= todayEnd) || (eventEnd >= todayStart && eventStart < todayStart);
+      });
+      setTodayData(prev => ({ ...prev, events: todaysEvents }));
+    }
+  }, [allCalendarEvents, calendarLoading]);
+
+  useEffect(() => {
+    loadScheduleData();
+    const intervalId = setInterval(loadScheduleData, 300000);
+    return () => clearInterval(intervalId);
+  }, [loadScheduleData]);
+
   const renderCoursesCard = () => {
     if (todayData.courses.length === 0) {
       return (
@@ -305,7 +287,6 @@ const TodayStatus = () => {
     );
   };
 
-  // 🎯 渲染活動卡片內容
   const renderEventsCard = () => {
     if (todayData.events.length === 0) {
       return (
@@ -321,10 +302,8 @@ const TodayStatus = () => {
       <div className="events-list">
         {todayData.events.map((event, index) => (
           <div key={index} className="event-item">
-            <div className="event-time">{event.time}</div>
             <div className="event-content">
-              <h4 className="event-title">{event.title}</h4>
-              <p className="event-location">{event.location}</p>
+              <h4 className="event-title">{event.summary}</h4>
             </div>
           </div>
         ))}
@@ -332,9 +311,7 @@ const TodayStatus = () => {
     );
   };
 
-  // ✅ 修復：渲染總學分卡片內容，添加完整的防護檢查
   const renderCreditsCard = () => {
-    // ✅ 防護檢查：確保 creditDetails 存在
     if (!todayData.creditDetails) {
       return (
         <div className="empty-state">
@@ -357,7 +334,6 @@ const TodayStatus = () => {
       );
     }
 
-    // 計算學分狀態
     const getCreditsStatus = () => {
       if (totalCredits < recommendedMin) {
         return { type: 'low', message: '學分偏少，建議增加課程', color: '#ffc107' };
@@ -373,7 +349,6 @@ const TodayStatus = () => {
 
     return (
       <div className="credits-overview">
-        {/* 學分總覽 */}
         <div className="credits-summary">
           <div className="credits-main">
             <div className="credits-number">{totalCredits}</div>
@@ -387,7 +362,6 @@ const TodayStatus = () => {
           </div>
         </div>
 
-        {/* 學分進度條 */}
         <div className="credits-progress">
           <div className="progress-header">
             <span className="progress-label">學分進度</span>
@@ -416,13 +390,11 @@ const TodayStatus = () => {
           </div>
         </div>
 
-        {/* ✅ 修復：學分分類統計，添加防護檢查 */}
         <div className="credits-breakdown">
           <h5 className="breakdown-title">學分分佈</h5>
           <div className="category-list">
             {categories && typeof categories === 'object' ? 
               Object.entries(categories).map(([categoryName, categoryData]) => {
-                // ✅ 防護檢查：確保 categoryData 存在且有 credits 屬性
                 if (!categoryData || !categoryData.credits || categoryData.credits === 0) {
                   return null;
                 }
@@ -459,7 +431,6 @@ const TodayStatus = () => {
           </div>
         </div>
 
-        {/* 學分建議 */}
         <div className="credits-recommendations">
           <h5 className="rec-title">💡 學分建議</h5>
           <div className="rec-content">
@@ -508,8 +479,7 @@ const TodayStatus = () => {
   };
 
   return (
-    <div className="today-status glass-effect" ref={todayStatusRef}> {/* [新增] ref */}
-      {/* ✅ 標題列 + 折疊按鈕 */}
+    <div className="today-status glass-effect" ref={todayStatusRef}>
       <div className="today-status-header">
         <div className="header-content">
           <h3 className="gradient-text">📅 今日狀態</h3>
@@ -528,7 +498,6 @@ const TodayStatus = () => {
         </button>
       </div>
 
-      {/* ✅ 可折疊內容區域 */}
       <div className={`collapsible-content ${isCollapsed ? 'collapsed' : ''}`}>
         {todayData.isLoading ? (
           <div className="loading-state">
@@ -545,9 +514,9 @@ const TodayStatus = () => {
               value={`${todayData.courses.length} 堂課`}
               status={todayData.courses.length > 0 ? 'active' : 'empty'}
               cardContent={renderCoursesCard()}
-              isClickable={true} // [新增]
-              isOpen={activeCard === 'courses'} // [新增]
-              onClick={() => handleCardClick('courses')} // [新增]
+              isClickable={true}
+              isOpen={activeCard === 'courses'}
+              onClick={() => handleCardClick('courses')}
               animationDelay={100}
             />
             
@@ -557,9 +526,9 @@ const TodayStatus = () => {
               value={`${todayData.events.length} 項活動`}
               status={todayData.events.length > 0 ? 'active' : 'empty'}
               cardContent={renderEventsCard()}
-              isClickable={true} // [新增]
-              isOpen={activeCard === 'events'} // [新增]
-              onClick={() => handleCardClick('events')} // [新增]
+              isClickable={true}
+              isOpen={activeCard === 'events'}
+              onClick={() => handleCardClick('events')}
               animationDelay={200}
             />
             
@@ -569,16 +538,15 @@ const TodayStatus = () => {
               value={`${todayData.totalCredits} 學分`}
               status={todayData.totalCredits > 0 ? 'active' : 'empty'}
               cardContent={renderCreditsCard()}
-              isClickable={true} // [新增]
-              isOpen={activeCard === 'credits'} // [新增]
-              onClick={() => handleCardClick('credits')} // [新增]
+              isClickable={true}
+              isOpen={activeCard === 'credits'}
+              onClick={() => handleCardClick('credits')}
               animationDelay={300}
             />
           </div>
         )}
       </div>
 
-      {/* ✅ 手機版折疊樣式 */}
       <style jsx>{`
         .today-status {
           margin-bottom: 20px;
@@ -636,7 +604,6 @@ const TodayStatus = () => {
           padding-bottom: 0;
         }
 
-        /* ✅ 手機版樣式 */
         @media (max-width: 768px) {
           .collapse-toggle {
             display: block;
