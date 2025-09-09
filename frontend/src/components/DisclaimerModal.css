@@ -1,6 +1,5 @@
-/* frontend/src/components/DisclaimerModal.css (修復版 - 無CSS變數依賴) */
+/* frontend/src/components/DisclaimerModal.css (深色模式完整修復版) */
 
-/* 🔧 修復：使用具體數值，避免CSS變數衝突 */
 .disclaimer-overlay {
   position: fixed;
   top: 0;
@@ -17,16 +16,18 @@
   backdrop-filter: blur(3px);
 }
 
+/* ✅ 修復：使用CSS變數，添加深色模式支援 */
 .disclaimer-modal {
-  background: #ffffff;
+  background: var(--theme-bg-card);
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   max-width: 600px;
   width: 100%;
   max-height: 80vh;
   overflow-y: auto;
-  border: 3px solid #ffc107;
+  border: 3px solid var(--warning-color);
   animation: disclaimerSlideIn 0.4s ease-out;
+  color: var(--theme-text-primary);
 }
 
 @keyframes disclaimerSlideIn {
@@ -40,9 +41,10 @@
   }
 }
 
+/* ✅ 修復：響應主題的標題區域 */
 .disclaimer-header {
-  background: linear-gradient(135deg, #ffc107, #e0a800);
-  color: #333;
+  background: linear-gradient(135deg, var(--warning-color), #e0a800);
+  color: var(--theme-text-primary);
   padding: 1.5rem;
   text-align: center;
   border-radius: 12px 12px 0 0;
@@ -52,41 +54,45 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #333;
+  color: #333; /* 警告背景上保持深色文字以確保對比度 */
 }
 
+/* ✅ 修復：內容區域使用主題變數 */
 .disclaimer-content {
   padding: 2rem;
+  background: var(--theme-bg-card);
 }
 
 .disclaimer-text {
   line-height: 1.8;
   font-size: 1rem;
-  color: #333;
+  color: var(--theme-text-primary);
 }
 
 .disclaimer-text p {
   margin-bottom: 1.5rem;
   font-weight: 500;
+  color: var(--theme-text-primary);
 }
 
 .disclaimer-text strong {
-  color: #dc3545;
+  color: var(--error-color);
   font-weight: 700;
 }
 
+/* ✅ 修復：提示框區域主題適配 */
 .disclaimer-note {
-  background: #e8f4fd;
+  background: var(--theme-bg-tertiary);
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #007bff;
+  border-left: 4px solid var(--info-color);
   margin-top: 1.5rem;
 }
 
 .disclaimer-note p {
   margin: 0 0 0.5rem 0;
   font-weight: 600;
-  color: #0056b3;
+  color: var(--primary-dark);
 }
 
 .disclaimer-note ul {
@@ -96,17 +102,19 @@
 
 .disclaimer-note li {
   margin-bottom: 0.25rem;
-  color: #495057;
+  color: var(--theme-text-secondary);
 }
 
+/* ✅ 修復：底部區域主題適配 */
 .disclaimer-footer {
   padding: 1.5rem 2rem 2rem;
   text-align: center;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--theme-border-primary);
+  background: var(--theme-bg-card);
 }
 
 .disclaimer-accept-btn {
-  background: linear-gradient(135deg, #28a745, #218838);
+  background: linear-gradient(135deg, var(--success-color), #218838);
   color: #ffffff;
   border: none;
   padding: 1rem 3rem;
@@ -130,47 +138,108 @@
   box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
 }
 
+/* ✅ 新增：深色模式專用適配 */
+[data-theme="dark"] .disclaimer-overlay {
+  background-color: rgba(0, 0, 0, 0.9); /* 深色模式下更深的背景 */
+}
+
+[data-theme="dark"] .disclaimer-modal {
+  background: var(--theme-bg-card);
+  border: 3px solid var(--warning-color);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .disclaimer-header {
+  background: linear-gradient(135deg, var(--warning-color), #e0a800);
+  color: #333; /* 在黃色背景上保持深色文字 */
+}
+
+[data-theme="dark"] .disclaimer-content,
+[data-theme="dark"] .disclaimer-footer {
+  background: var(--theme-bg-card);
+}
+
+[data-theme="dark"] .disclaimer-text,
+[data-theme="dark"] .disclaimer-text p {
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .disclaimer-note {
+  background: var(--theme-bg-secondary);
+  border-left: 4px solid var(--primary-light);
+}
+
+[data-theme="dark"] .disclaimer-note p {
+  color: var(--primary-light);
+}
+
+[data-theme="dark"] .disclaimer-note li {
+  color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .disclaimer-footer {
+  border-top: 1px solid var(--theme-border-primary);
+}
+
+/* ✅ 深色模式下的滾動條美化 */
+[data-theme="dark"] .disclaimer-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+[data-theme="dark"] .disclaimer-modal::-webkit-scrollbar-track {
+  background: var(--theme-bg-tertiary);
+}
+
+[data-theme="dark"] .disclaimer-modal::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+[data-theme="dark"] .disclaimer-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
 /* 🔧 修復：body滾動控制 */
 body.disclaimer-showing {
   overflow: hidden !important;
 }
 
-/* 📱 響應式設計 - 修復手機版問題 */
+/* 📱 響應式設計 - 深色模式適配 */
 @media (max-width: 768px) {
   .disclaimer-overlay {
     padding: 0.5rem;
   }
-  
+
   .disclaimer-modal {
     max-height: 90vh;
     border-width: 2px;
   }
-  
+
   .disclaimer-header {
     padding: 1rem;
   }
-  
+
   .disclaimer-header h2 {
     font-size: 1.3rem;
   }
-  
+
   .disclaimer-content {
     padding: 1.5rem;
   }
-  
+
   .disclaimer-text {
     font-size: 0.9rem;
     line-height: 1.6;
   }
-  
+
   .disclaimer-note {
     padding: 1rem;
   }
-  
+
   .disclaimer-footer {
     padding: 1rem 1.5rem 1.5rem;
   }
-  
+
   .disclaimer-accept-btn {
     font-size: 1rem;
     padding: 1rem 1.5rem;
@@ -182,9 +251,41 @@ body.disclaimer-showing {
   .disclaimer-text {
     font-size: 0.85rem;
   }
-  
+
   .disclaimer-accept-btn {
     font-size: 0.9rem;
     min-width: 200px;
+  }
+
+  /* 小螢幕深色模式優化 */
+  [data-theme="dark"] .disclaimer-overlay {
+    background-color: rgba(0, 0, 0, 0.95);
+  }
+}
+
+/* ✅ 高對比度模式支援 */
+@media (prefers-contrast: high) {
+  .disclaimer-modal {
+    border-width: 4px;
+  }
+  
+  [data-theme="dark"] .disclaimer-text,
+  [data-theme="dark"] .disclaimer-text p {
+    color: #ffffff;
+  }
+  
+  [data-theme="dark"] .disclaimer-note {
+    border-left-width: 6px;
+  }
+}
+
+/* ✅ 減少動畫偏好支援 */
+@media (prefers-reduced-motion: reduce) {
+  .disclaimer-modal {
+    animation: none;
+  }
+  
+  .disclaimer-accept-btn {
+    transition: none;
   }
 }

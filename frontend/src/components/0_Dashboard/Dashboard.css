@@ -1,0 +1,3204 @@
+/* frontend/src/components/0_Dashboard/Dashboard.css (Safari 兼容性完整修復版) */
+
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🎨 歡迎橫幅 */
+.welcome-banner {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  margin-bottom: 1rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--theme-shadow-secondary);
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.welcome-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin: 0;
+  font-weight: 400;
+}
+
+.welcome-decoration {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  opacity: 0.3;
+}
+
+.floating-element {
+  font-size: 2rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* 📊 主要內容區域 */
+.dashboard-main {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* 📅 今日狀態側邊欄 */
+.dashboard-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.today-status {
+  background: var(--theme-bg-card);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: var(--theme-shadow-primary);
+  border: 1px solid var(--theme-border-primary);
+}
+
+.today-status-title {
+  margin: 0 0 1rem 0;
+  color: var(--theme-text-primary);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* 📋 狀態卡片 */
+.status-card {
+  position: relative;
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* [腳本修改] 原始懸浮樣式已註解
+.status-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--theme-shadow-secondary);
+  border-color: var(--primary-color);
+}
+*/
+
+.status-card-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  text-align: center;
+}
+
+.status-content {
+  flex: 1;
+}
+
+.status-title {
+  font-size: 0.9rem;
+  color: var(--theme-text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.status-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+}
+
+/* 🎯 狀態指示器 */
+.status-active { border-left: 4px solid #28a745; }
+.status-warning { border-left: 4px solid #ffc107; }
+.status-error { border-left: 4px solid #dc3545; }
+.status-info { border-left: 4px solid #17a2b8; }
+.status-empty { border-left: 4px solid #6c757d; }
+
+/* 💬 懸停卡片 */
+.status-card-popup {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 1rem;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: var(--theme-shadow-secondary);
+  z-index: 1000;
+  min-width: 250px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-50%) translateX(-10px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+.status-card-popup-arrow {
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid var(--theme-border-primary);
+}
+
+.status-card-popup-arrow::after {
+  content: '';
+  position: absolute;
+  left: 1px;
+  top: -5px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid var(--theme-bg-card);
+}
+
+/* 📚 課程/活動項目 */
+.course-item, .event-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--theme-border-secondary);
+}
+
+.course-item:last-child, .event-item:last-child {
+  border-bottom: none;
+}
+
+.course-name, .event-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--theme-text-primary);
+}
+
+.course-details, .event-time {
+  font-size: 0.85rem;
+  color: var(--theme-text-secondary);
+}
+
+.no-data-message {
+  text-align: center;
+  color: var(--theme-text-secondary);
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+/* 🎯 學分進度條 */
+.credit-progress {
+  text-align: center;
+}
+
+.credit-bar {
+  background: var(--theme-border-secondary);
+  border-radius: 10px;
+  height: 8px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+}
+
+.credit-fill {
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+
+.credit-text {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  margin: 0.5rem 0 0 0;
+}
+
+/* 📋 課表預覽 */
+.course-preview {
+  background: var(--theme-bg-card);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: var(--theme-shadow-primary);
+  border: 1px solid var(--theme-border-primary);
+  position: relative;
+  z-index: 1; /* 降低課表預覽的層級 */
+}
+
+.course-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.course-preview-header h3 {
+  margin: 0;
+  color: var(--theme-text-primary);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.preview-action-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.preview-action-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+/* 📅 課表樣式 */
+.course-table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--theme-border-primary);
+  position: relative;
+  z-index: 1; /* 確保課表不會擋到彈出卡片 */
+}
+
+.course-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--theme-bg-secondary);
+}
+
+.course-table th {
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 1px solid var(--theme-border-primary);
+}
+
+.course-table td {
+  padding: 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--theme-border-secondary);
+  border-right: 1px solid var(--theme-border-secondary);
+  min-height: 50px;
+  vertical-align: middle;
+}
+
+.period-header {
+  background: var(--theme-bg-tertiary);
+  font-weight: 600;
+  color: var(--theme-text-primary);
+}
+
+.course-cell {
+  background: var(--primary-ultra-light);
+  color: var(--primary-dark);
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.course-name {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.course-room {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.lunch-break {
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-secondary);
+  font-size: 1.2rem;
+}
+
+.empty-cell {
+  background: var(--theme-bg-secondary);
+}
+
+/* 🎯 佔位符狀態 */
+.preview-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  text-align: center;
+}
+
+.placeholder-content h4 {
+  color: var(--theme-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.placeholder-content p {
+  color: var(--theme-text-secondary);
+  margin-bottom: 1rem;
+}
+
+.placeholder-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.placeholder-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+/* ⚙️ 系統狀態 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 🔄 載入狀態 */
+.preview-loading, .today-status.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.table-skeleton {
+  width: 100%;
+  height: 200px;
+}
+
+.loading-skeleton {
+  border-radius: 8px;
+  height: 20px;
+  margin-bottom: 1rem;
+}
+
+
+
+.loading-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  animation: pulse 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+/* TodayStatus 區域層級設定 */
+.today-status {
+  position: relative;
+  z-index: 2; /* 稍微提高今日狀態區的層級 */
+}
+
+/* 追加到 frontend/src/components/0_Dashboard/Dashboard.css */
+/* ⚙️ 系統狀態增強樣式 */
+
+
+.last-update {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  opacity: 0.8;
+}
+
+
+
+.status-item:hover {
+  transform: translateY(-2px);
+}
+
+
+
+.status-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--theme-bg-secondary);
+}
+
+.status-icon {
+  font-size: 1.2rem;
+}
+
+.status-sub {
+  font-size: 0.7rem;
+  color: var(--theme-text-tertiary);
+  margin-top: 0.25rem;
+}
+
+/* 🔄 載入動畫優化 */
+.loading-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.loading-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  animation: bounce-loading 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce-loading {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* 📱 手機版系統狀態優化 */
+@media (max-width: 768px) {
+  
+
+  .last-update {
+    font-size: 0.75rem;
+  }
+
+  
+
+  
+
+  
+
+  .status-sub {
+    font-size: 0.65rem;
+  }
+}
+
+/* 追加到 frontend/src/components/0_Dashboard/Dashboard.css */
+/* 🎨 狀態卡片進階動畫 */
+.status-card {
+  position: relative;
+  overflow: hidden;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideInUp 0.6s var(--spring-easing) forwards;
+}
+
+.status-card.card-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.status-card.card-hidden {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 🌟 卡片光暈效果 */
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, var(--status-color, var(--primary-color)) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* [腳本修改] 原始懸浮樣式已註解
+.status-card:hover .card-glow {
+  opacity: 0.1;
+}
+*/
+
+/* 💫 圖示容器動畫 */
+.status-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--status-color, var(--primary-color));
+  opacity: 0;
+  animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* 🌊 波紋效果 */
+.card-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.6s ease;
+  pointer-events: none;
+}
+
+.status-card:active .card-ripple {
+  width: 200px;
+  height: 200px;
+}
+
+/* 🎯 可點擊卡片樣式 */
+.status-card.clickable {
+  cursor: pointer;
+}
+
+.status-card.clickable:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.status-card.clickable .card-arrow {
+  color: var(--theme-text-secondary);
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.status-card.clickable:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+/* 💬 懸停卡片增強 */
+.status-card-popup {
+  min-width: 280px;
+  max-width: 400px;
+  border-radius: 16px;
+  padding: 0;
+  animation: popupSlideIn 0.3s var(--spring-easing);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.popup-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  border: inherit;
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+.popup-content {
+  padding: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* 📊 內容樣式增強 */
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--theme-border-secondary);
+}
+
+.content-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.update-time {
+  font-size: 0.7rem;
+  color: var(--theme-text-tertiary);
+  opacity: 0.8;
+}
+
+/* 📚 課程列表增強 */
+.courses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.course-item {
+  background: var(--theme-bg-secondary);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--theme-border-secondary);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.course-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.course-item.in-progress {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.05);
+}
+
+.course-item.upcoming {
+  border-color: #ffc107;
+  background: rgba(255, 193, 7, 0.05);
+}
+
+.course-time-badge {
+  display: inline-block;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.course-details {
+  margin-bottom: 0.5rem;
+}
+
+.course-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  color: var(--theme-text-primary);
+}
+
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.course-teacher, .course-location {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+}
+
+/* 🎊 空狀態增強 */
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-message {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-submessage {
+  font-size: 0.9rem;
+  color: var(--theme-text-secondary);
+  margin: 0;
+}
+
+/* 🎯 學分進度增強 */
+.credits-display {
+  text-align: center;
+}
+
+.credits-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.credits-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.credits-unit {
+  font-size: 1rem;
+  color: var(--theme-text-secondary);
+  font-weight: 500;
+}
+
+.credits-progress {
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  height: 12px;
+  background: var(--theme-border-secondary);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--gradient-success);
+  border-radius: 10px;
+  transition: width 0.8s var(--spring-easing);
+  position: relative;
+}
+
+.progress-fill.overload {
+  background: var(--gradient-warning);
+}
+
+.progress-overflow {
+  height: 100%;
+  background: var(--gradient-error);
+  position: absolute;
+  top: 0;
+  left: 100%;
+  transition: width 0.8s var(--spring-easing);
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--theme-text-tertiary);
+  position: relative;
+}
+
+.overload-label {
+  position: absolute;
+  right: 0;
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.credits-recommendation {
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.rec-good {
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+}
+
+.rec-warning {
+  color: #ffc107;
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.rec-overload {
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+/* 🔄 載入狀態增強 */
+.today-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.refresh-btn {
+  background: none;
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--theme-text-secondary);
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.refresh-btn:hover {
+  background: var(--theme-bg-secondary);
+  color: var(--primary-color);
+  transform: rotate(180deg);
+}
+
+.loading-header {
+  margin-bottom: 1.5rem;
+}
+
+.title-skeleton {
+  height: 1.5rem;
+  width: 60%;
+}
+
+.loading-card {
+  margin-bottom: 1rem;
+}
+
+.card-skeleton {
+  height: 4rem;
+  border-radius: 12px;
+}
+
+/* 📋 課表預覽增強 */
+.course-preview-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--theme-border-secondary);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.current-time {
+  font-size: 0.9rem;
+  color: var(--theme-text-secondary);
+  font-weight: 500;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.schedule-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--theme-text-secondary);
+}
+
+/* 📅 現代化課表 */
+.modern-table {
+  border-collapse: separate;
+  border-spacing: 2px;
+  background: transparent;
+}
+
+.modern-table th {
+  background: var(--theme-bg-tertiary);
+  padding: 1rem 0.5rem;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  position: relative;
+}
+
+.modern-table th.current-day {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+}
+
+.time-header {
+  min-width: 80px;
+}
+
+.period-header {
+  background: var(--theme-bg-tertiary);
+  border-radius: 8px;
+  padding: 0.75rem 0.5rem;
+}
+
+.period-info {
+  text-align: center;
+}
+
+.period-name {
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.period-time {
+  font-size: 0.7rem;
+  color: var(--theme-text-secondary);
+}
+
+/* 🎯 課程格子增強 */
+.course-cell-container {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-height: 60px;
+}
+
+.course-cell-container.has-course {
+  background: linear-gradient(135deg, var(--primary-ultra-light), rgba(0, 121, 107, 0.1));
+  border: 1px solid var(--primary-color);
+}
+
+.course-cell-container.empty-cell {
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-secondary);
+}
+
+.course-cell-container.current-period {
+  border-color: #ffc107;
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.3);
+}
+
+.course-cell-container.highlighted {
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.course-content {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.course-name {
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+
+.course-teacher {
+  font-size: 0.7rem;
+  color: var(--theme-text-secondary);
+  margin-bottom: 0.125rem;
+}
+
+.course-room {
+  font-size: 0.7rem;
+  color: var(--theme-text-tertiary);
+}
+
+.course-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.course-cell-container:hover .course-overlay {
+  opacity: 1;
+}
+
+.lunch-break {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--theme-bg-tertiary);
+}
+
+.lunch-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.lunch-text {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+}
+
+.empty-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+}
+
+.free-time {
+  font-size: 0.8rem;
+  color: var(--theme-text-tertiary);
+  opacity: 0.7;
+}
+
+/* 📊 課表圖例 */
+.table-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--theme-border-secondary);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot.current {
+  background: #ffc107;
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
+}
+
+.legend-dot.course {
+  background: var(--primary-color);
+}
+
+.legend-dot.empty {
+  background: var(--theme-border-secondary);
+}
+
+/* 📱 響應式增強 */
+@media (max-width: 768px) {
+  .course-preview-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .header-right {
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .schedule-stats {
+    justify-content: space-around;
+  }
+
+  .status-card-popup {
+    position: fixed !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    max-width: none !important;
+    width: auto !important;
+  }
+
+  .popup-arrow {
+    display: none;
+  }
+
+  .modern-table th,
+  .modern-table td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.7rem;
+  }
+
+  .course-name {
+    font-size: 0.7rem;
+  }
+
+  .course-teacher,
+  .course-room {
+    font-size: 0.6rem;
+  }
+
+  .table-legend {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+/* 追加到 frontend/src/components/0_Dashboard/Dashboard.css */
+/* 🌙 Dashboard 深色模式修復 */
+[data-theme="dark"] .dashboard {
+  background: var(--theme-bg-primary);
+}
+
+[data-theme="dark"] .welcome-banner {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+}
+
+[data-theme="dark"] .today-status,
+[data-theme="dark"] .course-preview,
+[data-theme="dark"] 
+
+[data-theme="dark"] .course-table {
+  background: var(--theme-bg-secondary);
+}
+
+[data-theme="dark"] .course-table th {
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .course-table td {
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  border-color: var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .course-cell-container.has-course {
+  background: linear-gradient(135deg, rgba(0, 121, 107, 0.2), rgba(0, 121, 107, 0.1));
+}
+
+[data-theme="dark"] .course-cell-container.empty-cell {
+  background: var(--theme-bg-secondary);
+  border-color: var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .lunch-break {
+  background: var(--theme-bg-tertiary);
+}
+
+[data-theme="dark"] .preview-placeholder {
+  background: var(--theme-bg-secondary);
+}
+
+[data-theme="dark"] .placeholder-content h4 {
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .placeholder-content p {
+  color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .status-card-popup {
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+}
+
+[data-theme="dark"] .course-item,
+[data-theme="dark"] .event-item {
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .empty-state {
+  color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .credits-display {
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .table-legend {
+  border-top: 1px solid var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .legend-item {
+  color: var(--theme-text-secondary);
+}
+
+/* 追加到 frontend/src/components/0_Dashboard/Dashboard.css */
+/* ✅ 修復：課程格子淺綠色背景 */
+.course-cell-container.has-course {
+  background: linear-gradient(135deg, #b2dfdb, #e0f2f1) !important;
+  border: 2px solid var(--primary-color) !important;
+  color: var(--primary-dark) !important;
+}
+
+[data-theme="dark"] .course-cell-container.has-course {
+  background: linear-gradient(135deg, rgba(178, 223, 219, 0.3), rgba(224, 242, 241, 0.2)) !important;
+  border: 2px solid var(--primary-light) !important;
+  color: var(--primary-light) !important;
+}
+
+.course-content {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+
+.course-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+  color: inherit;
+}
+
+.course-teacher {
+  font-size: 0.7rem;
+  margin-bottom: 0.125rem;
+  opacity: 0.8;
+  color: inherit;
+}
+
+.course-room {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  color: inherit;
+}
+
+/* ✅ 修復：午休時間樣式 */
+.lunch-period .lunch-break {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.5rem;
+  background: var(--theme-bg-tertiary) !important;
+  border-radius: 8px;
+  margin: 2px;
+}
+
+.lunch-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.lunch-text {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  font-weight: 500;
+}
+
+/* ✅ 修復：空堂格子樣式 */
+.course-cell-container.empty-cell {
+  background: var(--theme-bg-secondary) !important;
+  border: 1px solid var(--theme-border-secondary) !important;
+}
+
+.empty-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  color: var(--theme-text-tertiary);
+}
+
+.free-time {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* ✅ 修復：懸停效果 */
+.course-cell-container:hover {
+  transform: scale(1.02);
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.course-cell-container.highlighted {
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ✅ 修復：當前時段高亮 */
+.course-cell-container.current-period {
+  border-color: #ffc107 !important;
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.3) !important;
+}
+
+.current-period-row {
+  background: rgba(255, 193, 7, 0.05) !important;
+}
+
+/* ✅ 修復：進行中指示器 */
+.live-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  z-index: 3;
+}
+
+.live-dot {
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ✅ SystemStatus 按鈕位置完全修復 */
+
+
+/* ✅ 確保 header 結構與 TodayStatus 完全一致 */
+
+
+
+
+
+
+
+
+/* ✅ 折疊按鈕樣式與 TodayStatus 完全一致 */
+
+
+
+
+
+
+
+
+/* ✅ 可折疊內容區域 */
+
+
+
+
+/* ✅ 載入動畫 */
+
+
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ✅ 系統動作按鈕 */
+
+
+
+
+
+
+
+
+/* ✅ 手機版樣式 */
+@media (max-width: 768px) {
+  
+
+  
+
+  
+
+  
+
+  
+}
+
+@media (max-width: 480px) {
+  
+
+  
+
+  
+
+  
+}
+
+/* ✅ StatusCard 彈出卡片完整樣式 */
+.status-card-popup {
+  position: fixed;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 16px;
+  min-width: 280px;
+  max-width: 400px;
+  padding: 0;
+  animation: popupSlideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.popup-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  transform: rotate(45deg);
+  z-index: -1;
+  left: -6px;
+  top: 50%;
+  margin-top: -6px;
+}
+
+.popup-content {
+  padding: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--theme-border-secondary);
+}
+
+.content-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+}
+
+.update-time {
+  font-size: 0.7rem;
+  color: var(--theme-text-tertiary);
+  opacity: 0.8;
+}
+
+.popup-body {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* 課程時間軸樣式 */
+.courses-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.course-item {
+  background: var(--theme-bg-secondary);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--theme-border-secondary);
+  transition: all 0.3s ease;
+}
+
+.course-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.course-item.in-progress {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.05);
+}
+
+.course-item.upcoming {
+  border-color: #ffc107;
+  background: rgba(255, 193, 7, 0.05);
+}
+
+.course-time {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.time-range {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 0.8rem;
+}
+
+.live-badge {
+  background: #dc3545;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.upcoming-badge {
+  background: #ffc107;
+  color: #000;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.course-details {
+  margin-bottom: 0.5rem;
+}
+
+.course-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  color: var(--theme-text-primary);
+}
+
+.course-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+}
+
+.teacher, .classroom {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+}
+
+/* 活動列表樣式 */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.event-item {
+  background: var(--theme-bg-secondary);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--theme-border-secondary);
+  transition: all 0.3s ease;
+}
+
+.event-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-time {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0 0 0.25rem 0;
+  color: var(--theme-text-primary);
+}
+
+.event-location {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  margin: 0;
+}
+
+/* 空狀態樣式 */
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+  color: var(--theme-text-secondary);
+  margin: 0;
+}
+
+/* 深色模式適配 */
+[data-theme="dark"] .status-card-popup {
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .popup-arrow {
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+}
+
+[data-theme="dark"] .course-item,
+[data-theme="dark"] .event-item {
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-secondary);
+}
+
+/* 手機版彈出卡片適配 */
+@media (max-width: 768px) {
+  .status-card-popup {
+    position: fixed !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    max-width: none !important;
+    width: auto !important;
+  }
+
+  .popup-arrow {
+    display: none;
+  }
+}
+
+/* ===== 以下為 Safari 兼容性修復的毛玻璃效果樣式 ===== */
+
+/* ✅ 毛玻璃彈出卡片內容樣式 - Safari 兼容性修復 */
+.popup-body-glass .courses-timeline {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+}
+
+.popup-body-glass .course-item {
+  /* ✅ 毛玻璃課程項目 - Safari 兼容性修復 */
+  background: rgba(255, 255, 255, 0.15) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.popup-body-glass .course-item:hover {
+  transform: translateY(-2px) !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.popup-body-glass .course-item.in-progress {
+  border-color: rgba(220, 53, 69, 0.5) !important;
+  background: rgba(220, 53, 69, 0.1) !important;
+  box-shadow: 0 0 12px rgba(220, 53, 69, 0.2) !important;
+}
+
+.popup-body-glass .course-item.upcoming {
+  border-color: rgba(255, 193, 7, 0.5) !important;
+  background: rgba(255, 193, 7, 0.1) !important;
+  box-shadow: 0 0 12px rgba(255, 193, 7, 0.2) !important;
+}
+
+.popup-body-glass .course-time {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.popup-body-glass .time-range {
+  font-weight: 600 !important;
+  color: rgba(0, 121, 107, 0.9) !important;
+  font-size: 0.8rem !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5) !important;
+}
+
+.popup-body-glass .live-badge {
+  background: rgba(220, 53, 69, 0.9) !important;
+  color: white !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  backdrop-filter: blur(5px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.popup-body-glass .upcoming-badge {
+  background: rgba(255, 193, 7, 0.9) !important;
+  color: #000 !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  backdrop-filter: blur(5px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.popup-body-glass .course-name {
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 0.25rem !important;
+  color: rgba(51, 51, 51, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.popup-body-glass .course-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.25rem !important;
+  margin: 0 !important;
+}
+
+.popup-body-glass .teacher, 
+.popup-body-glass .classroom {
+  font-size: 0.8rem !important;
+  color: rgba(108, 117, 125, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ✅ 活動列表毛玻璃樣式 - Safari 兼容性修復 */
+.popup-body-glass .events-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+}
+
+.popup-body-glass .event-item {
+  background: rgba(255, 255, 255, 0.15) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.popup-body-glass .event-item:hover {
+  transform: translateY(-2px) !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.popup-body-glass .event-time {
+  font-weight: 600 !important;
+  color: rgba(0, 121, 107, 0.9) !important;
+  font-size: 0.8rem !important;
+  margin-bottom: 0.5rem !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5) !important;
+}
+
+.popup-body-glass .event-title {
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  margin: 0 0 0.25rem 0 !important;
+  color: rgba(51, 51, 51, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.popup-body-glass .event-location {
+  font-size: 0.8rem !important;
+  color: rgba(108, 117, 125, 0.9) !important;
+  margin: 0 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ✅ 空狀態毛玻璃樣式 - Safari 兼容性修復 */
+.popup-body-glass .empty-state {
+  text-align: center !important;
+  padding: 2rem 1rem !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.popup-body-glass .empty-icon {
+  font-size: 3rem !important;
+  margin-bottom: 1rem !important;
+  opacity: 0.6 !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) !important;
+}
+
+.popup-body-glass .empty-state h4 {
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: rgba(51, 51, 51, 0.9) !important;
+  margin: 0 0 0.5rem 0 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.popup-body-glass .empty-state p {
+  font-size: 0.9rem !important;
+  color: rgba(108, 117, 125, 0.9) !important;
+  margin: 0 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ✅ 深色模式毛玻璃內容適配 - Safari 兼容性修復 */
+[data-theme="dark"] .popup-body-glass .course-item,
+[data-theme="dark"] .popup-body-glass .event-item {
+  background: rgba(74, 85, 104, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .course-item:hover,
+[data-theme="dark"] .popup-body-glass .event-item:hover {
+  background: rgba(74, 85, 104, 0.3) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .course-name,
+[data-theme="dark"] .popup-body-glass .event-title {
+  color: rgba(247, 250, 252, 0.9) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .teacher,
+[data-theme="dark"] .popup-body-glass .classroom,
+[data-theme="dark"] .popup-body-glass .event-location {
+  color: rgba(160, 174, 192, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .time-range,
+[data-theme="dark"] .popup-body-glass .event-time {
+  color: rgba(72, 169, 153, 0.9) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .empty-state {
+  background: rgba(74, 85, 104, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .empty-state h4 {
+  color: rgba(247, 250, 252, 0.9) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .empty-state p {
+  color: rgba(160, 174, 192, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ✅ Safari 不支援 backdrop-filter 時的降級方案 */
+@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .popup-body-glass .course-item,
+  .popup-body-glass .event-item {
+    background: rgba(255, 255, 255, 0.9) !important;
+  }
+  
+  [data-theme="dark"] .popup-body-glass .course-item,
+  [data-theme="dark"] .popup-body-glass .event-item {
+    background: rgba(74, 85, 104, 0.9) !important;
+  }
+  
+  .popup-body-glass .live-badge,
+  .popup-body-glass .upcoming-badge {
+    background: rgba(220, 53, 69, 1) !important;
+  }
+  
+  .popup-body-glass .upcoming-badge {
+    background: rgba(255, 193, 7, 1) !important;
+  }
+}
+
+/* SystemStatus 手機版佈局 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 手機版樣式 */
+@media (max-width: 768px) {
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+}
+
+@media (max-width: 480px) {
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+}
+
+/* 📱 響應式設計 */
+@media (max-width: 1024px) {
+  .dashboard-main {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .welcome-title {
+    font-size: 2rem;
+  }
+
+  .welcome-subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 0.5rem;
+  }
+
+  .welcome-banner {
+    padding: 1rem 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .welcome-title {
+    font-size: 1.5rem;
+  }
+
+  .welcome-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .welcome-decoration {
+    display: none;
+  }
+
+  .dashboard-main {
+    gap: 0.25rem;
+  }
+
+  .status-card-popup {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0;
+    z-index: 1001;
+  }
+
+  
+
+  .course-table {
+    font-size: 0.8rem;
+  }
+
+  .course-table th,
+  .course-table td {
+    padding: 0.4rem 0.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-banner {
+    padding: 1.5rem 1rem;
+  }
+
+  .welcome-title {
+    font-size: 1.3rem;
+  }
+
+  .today-status,
+  .course-preview,
+  
+
+  .course-table {
+    font-size: 0.7rem;
+  }
+
+  .course-name {
+    font-size: 0.7rem;
+  }
+
+  .course-room {
+    font-size: 0.6rem;
+  }
+}
+
+/* 🌙 深色模式適配 */
+[data-theme="dark"] .dashboard {
+  background: var(--theme-bg-primary);
+}
+
+[data-theme="dark"] .welcome-banner {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+}
+
+[data-theme="dark"] .today-status,
+[data-theme="dark"] .course-preview,
+[data-theme="dark"] 
+
+[data-theme="dark"] .course-table {
+  background: var(--theme-bg-secondary);
+}
+
+[data-theme="dark"] .course-table th {
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .course-table td {
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  border-color: var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .course-cell-container.has-course {
+  background: linear-gradient(135deg, rgba(0, 121, 107, 0.2), rgba(0, 121, 107, 0.1));
+}
+
+[data-theme="dark"] .course-cell-container.empty-cell {
+  background: var(--theme-bg-secondary);
+  border-color: var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .lunch-break {
+  background: var(--theme-bg-tertiary);
+}
+
+[data-theme="dark"] .preview-placeholder {
+  background: var(--theme-bg-secondary);
+}
+
+[data-theme="dark"] .placeholder-content h4 {
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .placeholder-content p {
+  color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .status-card-popup {
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+}
+
+[data-theme="dark"] .course-item,
+[data-theme="dark"] .event-item {
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .empty-state {
+  color: var(--theme-text-secondary);
+}
+
+[data-theme="dark"] .credits-display {
+  color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .table-legend {
+  border-top: 1px solid var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .legend-item {
+  color: var(--theme-text-secondary);
+}
+/* ===== 總學分彈出卡片樣式 ===== */
+
+/* ✅ 學分概覽容器 - Safari 兼容性毛玻璃效果 */
+.popup-body-glass .credits-overview {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+}
+
+/* ✅ 學分總覽 */
+.popup-body-glass .credits-summary {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+  padding: 1.5rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.popup-body-glass .credits-main {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 0.5rem !important;
+}
+
+.popup-body-glass .credits-number {
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+  color: rgba(0, 121, 107, 0.9) !important;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5) !important;
+}
+
+.popup-body-glass .credits-unit {
+  font-size: 1rem !important;
+  color: rgba(108, 117, 125, 0.9) !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+}
+
+.popup-body-glass .credits-info {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.25rem !important;
+}
+
+.popup-body-glass .course-count {
+  font-size: 0.9rem !important;
+  color: rgba(51, 51, 51, 0.8) !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.popup-body-glass .credits-status {
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* ✅ 學分進度條 */
+.popup-body-glass .credits-progress {
+  background: rgba(255, 255, 255, 0.1) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.popup-body-glass .progress-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.popup-body-glass .progress-label {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: rgba(51, 51, 51, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.popup-body-glass .progress-range {
+  font-size: 0.75rem !important;
+  color: rgba(108, 117, 125, 0.8) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.popup-body-glass .progress-bar {
+  height: 12px !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  margin-bottom: 0.5rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.popup-body-glass .progress-fill {
+  height: 100% !important;
+  border-radius: 10px !important;
+  transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  position: relative !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.popup-body-glass .progress-overflow {
+  height: 100% !important;
+  background: rgba(220, 53, 69, 0.8) !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 100% !important;
+  transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.popup-body-glass .progress-markers {
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.popup-body-glass .marker {
+  font-size: 0.7rem !important;
+  color: rgba(108, 117, 125, 0.8) !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ✅ 學分分類統計 */
+.popup-body-glass .credits-breakdown {
+  background: rgba(255, 255, 255, 0.1) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.popup-body-glass .breakdown-title {
+  margin: 0 0 0.75rem 0 !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: rgba(51, 51, 51, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.popup-body-glass .category-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+}
+
+.popup-body-glass .category-item {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  padding: 0.75rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.popup-body-glass .category-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.popup-body-glass .category-name {
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  color: rgba(51, 51, 51, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.popup-body-glass .category-credits {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  color: rgba(0, 121, 107, 0.8) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+.popup-body-glass .category-courses {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.25rem !important;
+}
+
+.popup-body-glass .course-summary {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.popup-body-glass .course-summary-name {
+  font-size: 0.75rem !important;
+  color: rgba(108, 117, 125, 0.9) !important;
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.popup-body-glass .course-summary-credits {
+  font-size: 0.7rem !important;
+  color: rgba(108, 117, 125, 0.7) !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.popup-body-glass .more-courses {
+  font-size: 0.7rem !important;
+  color: rgba(108, 117, 125, 0.6) !important;
+  font-style: italic !important;
+  text-align: center !important;
+  margin-top: 0.25rem !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ✅ 學分建議 */
+.popup-body-glass .credits-recommendations {
+  background: rgba(255, 255, 255, 0.1) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.popup-body-glass .rec-title {
+  margin: 0 0 0.75rem 0 !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: rgba(51, 51, 51, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+.popup-body-glass .rec-content {
+  font-size: 0.8rem !important;
+  color: rgba(51, 51, 51, 0.8) !important;
+  line-height: 1.4 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+.popup-body-glass .rec-content p {
+  margin: 0 0 0.5rem 0 !important;
+  font-weight: 500 !important;
+}
+
+.popup-body-glass .rec-content ul {
+  margin: 0 !important;
+  padding-left: 1.2rem !important;
+}
+
+.popup-body-glass .rec-content li {
+  margin-bottom: 0.25rem !important;
+}
+
+/* ✅ 深色模式適配 */
+[data-theme="dark"] .popup-body-glass .credits-summary,
+[data-theme="dark"] .popup-body-glass .credits-progress,
+[data-theme="dark"] .popup-body-glass .credits-breakdown,
+[data-theme="dark"] .popup-body-glass .credits-recommendations {
+  background: rgba(74, 85, 104, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .category-item {
+  background: rgba(74, 85, 104, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .progress-bar {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .credits-number {
+  color: rgba(72, 169, 153, 0.9) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .credits-unit,
+[data-theme="dark"] .popup-body-glass .course-count,
+[data-theme="dark"] .popup-body-glass .progress-label,
+[data-theme="dark"] .popup-body-glass .breakdown-title,
+[data-theme="dark"] .popup-body-glass .rec-title,
+[data-theme="dark"] .popup-body-glass .category-name {
+  color: rgba(247, 250, 252, 0.9) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .progress-range,
+[data-theme="dark"] .popup-body-glass .course-summary-name,
+[data-theme="dark"] .popup-body-glass .course-summary-credits,
+[data-theme="dark"] .popup-body-glass .more-courses,
+[data-theme="dark"] .popup-body-glass .rec-content,
+[data-theme="dark"] .popup-body-glass .marker {
+  color: rgba(160, 174, 192, 0.9) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .popup-body-glass .category-credits {
+  color: rgba(72, 169, 153, 0.8) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ✅ Safari 降級方案 */
+@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .popup-body-glass .credits-summary,
+  .popup-body-glass .credits-progress,
+  .popup-body-glass .credits-breakdown,
+  .popup-body-glass .credits-recommendations {
+    background: rgba(255, 255, 255, 0.9) !important;
+  }
+  
+  [data-theme="dark"] .popup-body-glass .credits-summary,
+  [data-theme="dark"] .popup-body-glass .credits-progress,
+  [data-theme="dark"] .popup-body-glass .credits-breakdown,
+  [data-theme="dark"] .popup-body-glass .credits-recommendations {
+    background: rgba(74, 85, 104, 0.9) !important;
+  }
+}
+
+
+/* ===== 新增：AnnouncementCard 公告區樣式（滾輪滾動版） ===== */
+
+/* 🎨 公告卡片主容器 */
+.announcement-card {
+  background: var(--theme-bg-card);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: var(--theme-shadow-primary);
+  border: 1px solid var(--theme-border-primary);
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* 📋 公告卡片標題區域 */
+.announcement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  border-bottom: none;
+  margin-bottom: 1.5rem;
+}
+
+.announcement-header .header-content {
+  flex: 1;
+}
+
+.announcement-header .header-content h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--theme-text-primary);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.announcement-header .last-update {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  font-weight: 400;
+}
+
+/* 🔽 折疊按鈕 */
+.announcement-card .collapse-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  color: var(--theme-text-primary);
+}
+
+.announcement-card .collapse-toggle:hover {
+  background: var(--theme-bg-hover);
+}
+
+.announcement-card .toggle-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  font-size: 14px;
+}
+
+.announcement-card .toggle-icon.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* 📑 可折疊內容區域（滾輪滾動版） */
+.announcement-card .collapsible-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 600px;
+  opacity: 1;
+  padding: 0;
+  
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+}
+
+/* 🎨 Webkit 瀏覽器滾動條美化 */
+.announcement-card .collapsible-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.announcement-card .collapsible-content::-webkit-scrollbar-track {
+  background: var(--theme-bg-tertiary);
+  border-radius: 3px;
+}
+
+.announcement-card .collapsible-content::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.announcement-card .collapsible-content::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+.announcement-card .collapsible-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 📰 公告列表 */
+.announcements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* 📄 單則公告項目 */
+.announcement-item {
+  background: var(--theme-bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--theme-border-secondary);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.announcement-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 🎯 優先級樣式 */
+.announcement-item.announcement-high {
+  border-left: 4px solid #dc3545;
+  background: rgba(220, 53, 69, 0.02);
+}
+
+.announcement-item.announcement-normal {
+  border-left: 4px solid var(--primary-color);
+  background: rgba(0, 121, 107, 0.02);
+}
+
+.announcement-item.announcement-low {
+  border-left: 4px solid #6c757d;
+  background: rgba(108, 117, 125, 0.02);
+}
+
+/* 📅 公告元資料 */
+.announcement-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.priority-indicator {
+  font-size: 1.2rem;
+}
+
+.announcement-date {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  background: var(--theme-bg-tertiary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* 📝 公告標題 */
+.announcement-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+/* 📖 公告內容 */
+.announcement-content {
+  margin-bottom: 1rem;
+}
+
+.announcement-text {
+  color: var(--theme-text-primary);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.announcement-highlight {
+  color: var(--theme-text-primary);
+  font-weight: 600;
+  margin: 0.75rem 0;
+  padding: 0.5rem;
+  background: var(--theme-bg-tertiary);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.announcement-list-item {
+  color: var(--theme-text-primary);
+  margin: 0.25rem 0 0.25rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* 🖼️ 圖片區域 */
+.announcement-images {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.image-container {
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--theme-bg-tertiary);
+}
+
+.announcement-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.image-caption {
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  text-align: center;
+  margin: 0;
+  background: var(--theme-bg-tertiary);
+}
+
+/* 🎬 嵌入媒體區域 */
+.announcement-embeds {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.embed-container {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.youtube-embed {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+}
+
+.youtube-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.link-embed {
+  display: block;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.link-embed:hover {
+  transform: translateY(-1px);
+}
+
+.link-preview {
+  background: var(--theme-bg-tertiary);
+  border: 1px solid var(--theme-border-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.link-preview h5 {
+  margin: 0 0 0.5rem 0;
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.link-preview p {
+  margin: 0 0 0.5rem 0;
+  color: var(--theme-text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.link-url {
+  font-size: 0.7rem;
+  color: var(--theme-text-tertiary);
+  opacity: 0.8;
+}
+
+/* 🎯 按鈕區域 */
+.announcement-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--theme-border-secondary);
+}
+
+/* 🎨 按鈕樣式 */
+.announcement-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.announcement-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-secondary {
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
+  border: 1px solid var(--theme-border-primary);
+}
+
+.btn-secondary:hover {
+  background: var(--theme-bg-hover);
+}
+
+.btn-success {
+  background: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #218838;
+}
+
+.btn-warning {
+  background: #ffc107;
+  color: #000;
+}
+
+.btn-warning:hover {
+  background: #e0a800;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.btn-icon {
+  font-size: 0.9rem;
+}
+
+.btn-text {
+  font-weight: 500;
+}
+
+.external-indicator {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+/* 📭 空狀態 */
+.empty-announcements {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.empty-announcements .empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-announcements h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-announcements p {
+  font-size: 0.9rem;
+  color: var(--theme-text-secondary);
+  margin: 0;
+}
+
+/* 📱 手機版滾動適配 */
+@media (max-width: 768px) {
+  .announcement-card .collapse-toggle {
+    display: block;
+  }
+
+  .announcement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  border-bottom: none;
+  margin-bottom: 1.5rem;
+}
+
+  .announcement-card .collapsible-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 600px;
+  opacity: 1;
+  padding: 0;
+  
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+}
+
+  .announcement-card .collapsible-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+  .announcement-card .collapsible-content::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .announcement-item {
+    padding: 1rem;
+  }
+
+  .announcement-buttons {
+    flex-direction: column;
+  }
+
+  .announcement-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .youtube-embed {
+    padding-bottom: 60%;
+  }
+}
+
+@media (max-width: 480px) {
+  .announcement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  border-bottom: none;
+  margin-bottom: 1.5rem;
+}
+
+  .announcement-card .collapsible-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 600px;
+  opacity: 1;
+  padding: 0;
+  
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+}
+
+  .announcement-item {
+    padding: 0.75rem;
+  }
+
+  .announcement-title {
+    font-size: 1rem;
+  }
+
+  .announcement-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* 🌙 深色模式滾動條適配 */
+[data-theme="dark"] .announcement-card {
+  background: var(--theme-bg-card);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--theme-shadow-primary);
+  border: 1px solid var(--theme-border-primary);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .announcement-card .collapsible-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 600px;
+  opacity: 1;
+  padding: 0;
+  
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+}
+
+[data-theme="dark"] .announcement-card .collapsible-content::-webkit-scrollbar-track {
+  background: var(--theme-bg-secondary);
+}
+
+[data-theme="dark"] .announcement-item {
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .announcement-item.announcement-high {
+  background: rgba(220, 53, 69, 0.05);
+}
+
+[data-theme="dark"] .announcement-item.announcement-normal {
+  background: rgba(0, 121, 107, 0.05);
+}
+
+[data-theme="dark"] .announcement-item.announcement-low {
+  background: rgba(108, 117, 125, 0.05);
+}
+
+[data-theme="dark"] .link-preview {
+  background: var(--theme-bg-tertiary);
+  border: 1px solid var(--theme-border-secondary);
+}
+
+[data-theme="dark"] .image-caption {
+  background: var(--theme-bg-tertiary);
+}
+
+/* ===== 點擊觸發樣式 (由腳本自動加入) ===== */
+
+/* 卡片開啟狀態樣式 */
+.status-card.is-open {
+  transform: translateY(-2px);
+  box-shadow: var(--theme-shadow-secondary);
+  border-color: var(--primary-color) !important;
+  z-index: 1001;
+}
+
+/* 可點擊卡片的懸浮效果 */
+.status-card.clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--theme-shadow-primary);
+}
+
+/* 確保開啟狀態在懸浮時保持不變 */
+.status-card.clickable.is-open:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--theme-shadow-secondary);
+}
+
+/* 開啟狀態的箭頭動畫 */
+.status-card.is-open .card-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+/* 可點擊卡片的游標 */
+.status-card.clickable {
+  cursor: pointer;
+}
+
+/* ===== 點擊觸發樣式結束 ===== */

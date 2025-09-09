@@ -1,45 +1,94 @@
-# .github/workflows/daily_data_sync.yml (權限修正版)
+# .github/workflows/weekly_data_sync.yml (修改版)
 
-name: Daily Sync Course Data
+name: Weekly Course Data Sync
 
 on:
+  # 每週一 18:00 UTC (台灣時間週二凌晨 2:00) 執行
   schedule:
-    - cron: '0 18 * * *'
+    - cron: '0 18 * * 1'
+  # 保留手動觸發功能
   workflow_dispatch:
 
-# [核心修正] 明確給予此工作流程寫入倉庫的權限
 permissions:
   contents: write
 
 jobs:
-  sync-and-deploy:
+  check-update-schedule:
+    runs-on: ubuntu-latest
+    outputs:
+      should-update: ${{ steps.date-check.outputs.should-update }}
+    steps:
+      - name: Check if should update
+        id: date-check
+        run: |
+          month=$(date +%m)
+          echo "當前月份: $month"
+          
+          # 10-12月和3-6月停止更新
+          if [[ $month -ge 10 ]] || [[ $month -ge 3 && $month -le 6 ]]; then
+            echo "should-update=false" >> $GITHUB_OUTPUT
+            echo "⏸️ 當前月份 ($month) 在停止更新期間，跳過執行"
+          else
+            echo "should-update=true" >> $GITHUB_OUTPUT
+            echo "✅ 當前月份 ($month) 允許更新"
+          fi
+
+  sync-main-branch:
+    needs: check-update-schedule
+    if: needs.check-update-schedule.outputs.should-update == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout main branch
         uses: actions/checkout@v4
-
+        with:
+          ref: main
+          
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
+          
       - name: Install Python dependencies
         run: pip install requests
-
+        
       - name: Fetch course data from NCNU API
         run: python scripts/fetch_course_data.py
-
-      - name: Commit and push if data changed
+        
+      - name: Force commit and push to main
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add frontend/public/data/本學期開課資訊API.json
+          git commit -m "Data: 週期性同步課程資料 (main分支) - $(date +'%Y-%m-%d %H:%M')" || echo "無新變更"
+          git push origin main
+          echo "✔ Main分支課程資料同步完成！"
+
+  sync-develop-branch:
+    needs: check-update-schedule
+    if: needs.check-update-schedule.outputs.should-update == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout develop branch
+        uses: actions/checkout@v4
+        with:
+          ref: develop
           
-          # 使用 git status 檢查是否有變更，更可靠
-          if git status --porcelain | grep -q "frontend/public/data/本學期開課資訊API.json"; then
-            git commit -m "Data: 自動同步最新課程資料"
-            git push
-            echo "✔ 成功推送更新的課程資料到倉庫！"
-          else
-            echo "課程資料無變更，無需推送。"
-          fi
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install Python dependencies
+        run: pip install requests
+        
+      - name: Fetch course data from NCNU API
+        run: python scripts/fetch_course_data.py
+        
+      - name: Force commit and push to develop
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add frontend/public/data/本學期開課資訊API.json
+          git commit -m "Data: 週期性同步課程資料 (develop分支) - $(date +'%Y-%m-%d %H:%M')" || echo "無新變更"
+          git push origin develop
+          echo "✔ Develop分支課程資料同步完成！"
