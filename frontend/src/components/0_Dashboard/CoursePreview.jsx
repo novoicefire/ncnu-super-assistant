@@ -55,10 +55,15 @@ const CoursePreview = () => {
 
   // 🎯 獲取課表統計
   const getScheduleStats = () => {
-    const courses = Object.values(schedule).filter(Boolean);
+    // ✅ 修復：過濾掉 is_demo 鍵，只計算真實的課程資料
+    const courses = Object.entries(schedule)
+      .filter(([key, value]) => key !== 'is_demo' && value)
+      .map(([, value]) => value);
+
     const uniqueCourses = [...new Map(courses.map(c => [c.course_id, c])).values()];
     const totalCredits = uniqueCourses.reduce((sum, c) => sum + parseFloat(c.course_credit || 0), 0);
-    const totalHours = courses.length;
+    // ✅ 修復：總時數應該基於過濾後的課程數量
+    const totalHours = courses.length; 
 
     return { courseCount: uniqueCourses.length, totalCredits, totalHours };
   };
