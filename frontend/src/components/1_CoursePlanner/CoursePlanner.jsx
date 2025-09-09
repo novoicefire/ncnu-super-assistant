@@ -13,6 +13,7 @@ const CoursePlanner = () => {
   const [staticCourses, setStaticCourses] = useState([]);
   const [hotnessData, setHotnessData] = useState({});
   const [schedule, setSchedule] = useState({});
+  const [timelessCourses, setTimelessCourses] = useState([]); // ✅ 新增：無時間課程的狀態
   const [totalCredits, setTotalCredits] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [saveStatus, setSaveStatus] = useState("idle");
@@ -316,25 +317,38 @@ const CoursePlanner = () => {
     if (isLoggedIn && user?.google_id) {
       // 登入用戶：從雲端載入
       robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } })
-        .then(data => setSchedule(data || {}))
+        .then(data => {
+          // ✅ 更新：同時設定 schedule 和 timelessCourses
+          setSchedule(data?.schedule || {});
+          setTimelessCourses(data?.timelessCourses || []);
+        })
         .catch(err => {
           console.error('雲端課表載入失敗:', err);
           // 雲端載入失敗時嘗試載入本地資料
-          const localSchedule = localStorage.getItem('course-schedule');
-          setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
+          const localData = localStorage.getItem('course-schedule');
+          if (localData) {
+            const parsedData = JSON.parse(localData);
+            setSchedule(parsedData.schedule || {});
+            setTimelessCourses(parsedData.timelessCourses || []);
+          }
         });
     } else {
       // 未登入用戶：從本地載入
-      const localSchedule = localStorage.getItem('course-schedule');
-      setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
+      const localData = localStorage.getItem('course-schedule');
+      if (localData) {
+        const parsedData = JSON.parse(localData);
+        setSchedule(parsedData.schedule || {});
+        setTimelessCourses(parsedData.timelessCourses || []);
+      }
     }
   }, [isLoggedIn, user]);
 
   useEffect(() => {
     const uniqueCourses = [...new Map(Object.values(schedule).map(item => [item['course_id'], item])).values()];
-    const total = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
-    setTotalCredits(total);
-  }, [schedule]);
+    const scheduleCredits = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
+    const timelessCredits = timelessCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
+    setTotalCredits(scheduleCredits + timelessCredits);
+  }, [schedule, timelessCourses]);
 
   const hasTimeConflict = useCallback((course) => {
     if (!course.time || Object.keys(schedule).length === 0) return false;
@@ -408,20 +422,24 @@ const CoursePlanner = () => {
   }, []);
 
   // 🔄 儲存課表（登入用戶同步雲端，未登入用戶存本地）
-  const saveSchedule = useCallback(async (newSchedule, actionType = 'update', courseName = '') => {
-    setSchedule(newSchedule);
+  const saveSchedule = useCallback(async (newSchedule, newTimelessCourses, actionType = 'update', courseName = '') => {
+    setSchedule(newSchedule); // 更新有時間的課表狀態
+    setTimelessCourses(newTimelessCourses); // 更新無時間的課程狀態
+    
+    // 準備要儲存的完整資料結構
+    const dataToSave = {
+      schedule: newSchedule,
+      timelessCourses: newTimelessCourses,
+    };
     
     // 🔄 總是先儲存到本地（作為備份）
-    localStorage.setItem('course-schedule', JSON.stringify(newSchedule));
+    localStorage.setItem('course-schedule', JSON.stringify(dataToSave));
     
     if (isLoggedIn && user?.google_id) {
       // 🌐 登入用戶：同步到雲端
       setSaveStatus("saving");
       try {
-        const response = await robustRequest('post', '/api/schedule', {
-          params: { user_id: user.google_id },
-          data: newSchedule
-        });
+        const response = await robustRequest('post', '/api/schedule', { params: { user_id: user.google_id }, data: dataToSave });
         
         if (response && response.success) {
           setSaveStatus("success");
@@ -472,8 +490,18 @@ const CoursePlanner = () => {
   const addToSchedule = (course) => {
     const slots = parseTimeSlots(course.time);
     if (slots.length === 0) {
-      showNotification('⚠️ 此課程無時間資訊，無法加入課表', 'warning');
+      // ✅ 處理無時間課程
+      if (timelessCourses.some(c => c.course_id === course.course_id && c.class === course.class)) {
+        showNotification(`⚠️ 「${course.course_cname}」已在無時間課程列表中`, 'warning');
+        return;
+      }
+      const newTimelessCourses = [...timelessCourses, course];
+      saveSchedule(schedule, newTimelessCourses, 'add', course.course_cname);
       return;
+    }
+
+    if (isCourseInSchedule(course)) {
+      showNotification(`⚠️ 「${course.course_cname}」已在課表中`, 'warning');
     }
 
     for (let slot of slots) {
@@ -491,7 +519,7 @@ const CoursePlanner = () => {
       newSchedule[slot] = course;
     });
 
-    saveSchedule(newSchedule, 'add', course.course_cname);
+    saveSchedule(newSchedule, timelessCourses, 'add', course.course_cname);
   };
 
   const removeFromSchedule = (courseId, time) => {
@@ -506,16 +534,28 @@ const CoursePlanner = () => {
       }
     });
 
-    saveSchedule(newSchedule, 'remove', courseName);
+    saveSchedule(newSchedule, timelessCourses, 'remove', courseName);
+  };
+
+  // ✅ 新增：從無時間課程列表中移除
+  const removeFromTimeless = (courseId, courseClass) => {
+    const courseToRemove = timelessCourses.find(c => c.course_id === courseId && c.class === courseClass);
+    const newTimelessCourses = timelessCourses.filter(c => !(c.course_id === courseId && c.class === courseClass));
+    saveSchedule(schedule, newTimelessCourses, 'remove', courseToRemove?.course_cname || '課程');
   };
 
   const isCourseInSchedule = (course) => {
     const slots = parseTimeSlots(course.time);
-    return slots.some(slot => 
-      schedule[slot] && 
-      schedule[slot].course_id === course.course_id && 
-      schedule[slot].time === course.time
-    );
+    if (slots.length > 0) {
+      return slots.some(slot => 
+        schedule[slot] && 
+        schedule[slot].course_id === course.course_id && 
+        schedule[slot].time === course.time
+      );
+    } else {
+      // ✅ 檢查是否在無時間課程列表中
+      return timelessCourses.some(c => c.course_id === course.course_id && c.class === course.class);
+    }
   };
 
   const handleCourseToggle = (course) => {
@@ -785,6 +825,38 @@ const CoursePlanner = () => {
             schedule={schedule} 
             onRemove={removeFromSchedule} 
           />
+        </div>
+
+        {/* ✅ 新增：無時間課程列表 */}
+        <div className="timeless-courses-container">
+          <div className="schedule-header">
+            <h3>無時間課程</h3>
+          </div>
+          <div className="course-list-container timeless-list">
+            {timelessCourses.length > 0 ? (
+              <ul className="course-list">
+                {timelessCourses.map((course, index) => (
+                  <li key={`${course.course_id}-${index}`}>
+                    <div className="course-info">
+                      <strong>{course.course_cname}</strong>
+                      <small>
+                        {formatCourseInfo(course)}
+                      </small>
+                    </div>
+                    <button 
+                      className="course-toggle-btn remove"
+                      onClick={() => removeFromTimeless(course.course_id, course.class)}
+                      title={`移除 ${course.course_cname}`}
+                    >
+                      −
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="empty-timeless-msg">此處會顯示您加入的無固定時間課程，例如專題、實習等。</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
