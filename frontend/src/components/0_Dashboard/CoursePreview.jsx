@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
-import { robustRequest } from '../../apiHelper.js';
+import { robustRequest } from '../../apiHelper.js'; // 確保 robustRequest 已引入
 import CourseTable from '../1_CoursePlanner/CourseTable.jsx';
 
 const CoursePreview = () => {
@@ -10,7 +10,7 @@ const CoursePreview = () => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [schedule, setSchedule] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // 初始設為 true
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // 🎯 即時時間更新
@@ -24,17 +24,18 @@ const CoursePreview = () => {
 
   // 🎯 載入課表資料
   const loadSchedule = useCallback(async () => {
+    setIsLoading(true); // 開始載入時設定
     // 🔐 正常模式：登入用戶載入真實資料
     if (!isLoggedIn || !user?.google_id) {
       setIsLoading(false);
       return;
     }
-
+  
     try {
       const data = await robustRequest('get', '/api/schedule', { 
         params: { user_id: user.google_id } 
       });
-      setSchedule(data || {});
+      setSchedule(data?.schedule || {}); // ✅ 只取 schedule 物件
     } catch (error) {
       console.error('Failed to load schedule:', error);
       setSchedule({});
@@ -42,7 +43,7 @@ const CoursePreview = () => {
       setIsLoading(false);
     }
   }, [isLoggedIn, user]);
-
+  
   useEffect(() => {
     loadSchedule();
   }, [loadSchedule]);
@@ -55,7 +56,7 @@ const CoursePreview = () => {
 
   // 🎯 獲取課表統計
   const getScheduleStats = () => {
-    const courses = Object.values(schedule).filter(Boolean);
+    const courses = Object.values(schedule || {}).filter(Boolean); // ✅ 增加保護
     const uniqueCourses = [...new Map(courses.map(c => [c.course_id, c])).values()];
     const totalCredits = uniqueCourses.reduce((sum, c) => sum + parseFloat(c.course_credit || 0), 0);
     const totalHours = courses.length;
@@ -133,7 +134,7 @@ const CoursePreview = () => {
                   onClick={() => window.location.reload()}
                 >
                   立即登入
-                </button>
+                </button> 
               </div>
             </div>
           ) : Object.keys(schedule).length === 0 ? (
@@ -154,7 +155,7 @@ const CoursePreview = () => {
             <div className="course-table-container">
               {/* ✅ 直接使用 CourseTable 組件 */}
               <CourseTable 
-                schedule={schedule} 
+                schedule={schedule}
                 onRemove={handleCourseRemove}
               />
             </div>
