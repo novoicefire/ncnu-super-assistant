@@ -202,6 +202,7 @@ const CourseTable = ({ schedule, onRemove }) => {
     };
   }, []);
 
+  
   const days = ['一', '二', '三', '四', '五'];
   const periods = ['a', 'b', 'c', 'd', 'z', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'];
   
