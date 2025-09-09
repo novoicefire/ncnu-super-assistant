@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 import CourseTable from './CourseTable.jsx';
 import './CoursePlanner.css';
 import { useAuth } from '../../AuthContext.jsx';
+import SpecialBanner from '../0_Dashboard/SpecialBanner.jsx'; // ✅ 新增：引入特殊橫幅組件
 import { robustRequest } from '../../apiHelper.js';
 
 const CoursePlanner = () => {
@@ -551,6 +552,9 @@ const CoursePlanner = () => {
 
   return (
     <div className="course-planner">
+      {/* ✅ 新增：在頁面頂部顯示特殊橫幅 */}
+      <SpecialBanner />
+
       {/* 通知系統 */}
       <div className="notifications-container">
         {notifications.map(notification => (
