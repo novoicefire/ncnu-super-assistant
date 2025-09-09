@@ -22,9 +22,9 @@ const SpecialBanner = () => {
       <div className="special-banner-content">
         <span className="banner-icon">🫶</span>
         <p className="banner-text">
-          <span dangerouslySetInnerHTML={{ __html: '<strong>友情提示不是廣告</strong>有需要' }} />
+          <span dangerouslySetInnerHTML={{ __html: '<strong>友情提示</strong>  有需要' }} />
           {' '}
-          <a href="https://www.instagram.com/ncnu_super_assistant/" className="banner-link">【免費諮詢升學或職涯規劃】</a>
+          <a href="https://www.instagram.com/ncnu_super_assistant/" className="banner-link">【免費諮詢升學或職涯規劃】(點我)</a>
           {' '}
           的人可以找我要聯繫方式，而且他們在學校也有駐點，有興趣可以去問問看，反正問不用錢，祝大家學業順利💪大展鴻圖😎
         </p>
