@@ -205,8 +205,11 @@ const StatusCard = ({
         .popup-body-glass {
           max-height: 300px !important;
           overflow-y: auto !important;
-          /* ✅ 滾動條毛玻璃樣式 */
+          /* ✅ 滾動條毛玻璃樣式 (Firefox) */
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
         }
+
 
         .popup-body-glass::-webkit-scrollbar {
           width: 6px !important;
@@ -261,6 +264,11 @@ const StatusCard = ({
         [data-theme="dark"] .update-time-glass {
           color: rgba(160, 174, 192, 0.8) !important;
           text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        [data-theme="dark"] .popup-body-glass {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
         }
 
         [data-theme="dark"] .popup-body-glass::-webkit-scrollbar-track {
