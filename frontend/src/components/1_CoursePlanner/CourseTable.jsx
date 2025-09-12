@@ -239,7 +239,11 @@ const CourseTable = ({ schedule, onRemove }) => {
         <td 
           key={`${day}-${period}`} 
           className="course-cell-filled"
-          onClick={() => onRemove && onRemove(course.course_id, course.time)}
+          onClick={() => {
+            if (onRemove && window.confirm(`您確定要從課表中移除「${course.course_cname}」嗎？`)) {
+              onRemove(course.course_id, course.time);
+            }
+          }}
           title={`課程：${course.course_cname}\n教師：${course.teacher}\n教室：${course.location}\n學分：${course.course_credit}`}
         >
           <div className="course-name">{course.course_cname}</div>

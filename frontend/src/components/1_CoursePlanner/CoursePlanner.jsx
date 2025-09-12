@@ -767,7 +767,12 @@ const CoursePlanner = () => {
         {/* 課表顯示區域 */}
         <div className="schedule-container">
           <div className="schedule-header">
-            <h3>我的課表</h3>
+            <div>
+              <h3>我的課表</h3>
+              <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
+                點擊課表中的課程方塊即可移除
+              </p>
+            </div>
             <button 
               className="save-image-btn"
               onClick={captureScheduleImage}
