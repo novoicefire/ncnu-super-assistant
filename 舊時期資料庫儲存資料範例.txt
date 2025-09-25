@@ -1,0 +1,17 @@
+{
+  "1e": {
+    "time": "1ef",
+    "year": "114",
+    "class": 0,
+    "faculty": "",
+    "teacher": "陳建良",
+    "division": "學士班",
+    "location": "管268",
+    "semester": "1",
+    "course_id": "992062",
+    "department": "通識領域課程",
+    "course_cname": "從經濟學看世界",
+    "course_ename": "Economics",
+    "course_credit": 2
+    },
+}
