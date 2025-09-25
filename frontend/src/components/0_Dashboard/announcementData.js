@@ -2,7 +2,7 @@
 export const announcementData = [
   {
     id: 1,
-    title: "開學了，但一切尚未結束!",
+    title: "開學了，但一切尚未結束~",
     date: "2025-09-07",
     priority: "high",
     content: "<iframe src=\"https://embed.dcard.tw/post/259732091\" style='border:none' width=\"100%\" height=\"372px\"></iframe>",
