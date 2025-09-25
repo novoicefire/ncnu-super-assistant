@@ -1,55 +1,152 @@
-// frontend/src/apiHelper.js (完整版)
-
+// frontend/src/apiHelper.js (擴展系統狀態監控版)
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL;
-const MAX_RETRIES = 5; // 最多重試 5 次
-const RETRY_DELAY = 2000; // 每次重試間隔 2 秒
+const API_BASE_URL = import.meta.env.VITE_API_URL || (
+  import.meta.env.DEV ? 'http://localhost:5000' : 'https://your-backend-url.com'
+);
 
-// 一個簡單的延遲函數
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// 🎯 建立 axios 實例
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-/**
- * 健壯的 API 請求函數，會先嘗試喚醒後端，並帶有重試機制
- * @param {'get' | 'post'} method - HTTP 方法
- * @param {string} endpoint - API 端點，例如 '/api/schedule'
- * @param {object} [options] - 包含 data (POST) 或 params (GET) 的物件
- * @returns {Promise<any>}
- */
-export const robustRequest = async (method, endpoint, options = {}) => {
-    const { data, params } = options;
-    console.log(`Starting robust request to: ${endpoint}`);
+// 🎯 請求攔截器
+apiClient.interceptors.request.use(
+  (config) => {
+    console.log(`🔄 API 請求: ${config.method?.toUpperCase()} ${config.url}`);
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-    // 1. 先發送一個簡單的喚醒請求到根目錄
+// 🎯 回應攔截器
+apiClient.interceptors.response.use(
+  (response) => {
+    console.log(`✅ API 成功: ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    console.error(`❌ API 錯誤: ${error.config?.url}`, error.message);
+    return Promise.reject(error);
+  }
+);
+
+// 🔧 健壯的請求函數
+export const robustRequest = async (method, url, options = {}) => {
+  const maxRetries = 3;
+  const baseDelay = 1000;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-        console.log("Pinging backend to wake it up...");
-        await axios.get(API_URL, { timeout: 30000 }); // 給 30 秒的超時時間
-        console.log("Backend is awake or was already awake.");
-    } catch (wakeError) {
-        // 即使喚醒請求失敗 (例如超時)，我們仍然繼續嘗試主請求
-        console.warn("Backend ping failed, but proceeding anyway:", wakeError.message);
-    }
+      const config = {
+        method,
+        url,
+        ...options,
+      };
 
-    // 2. 執行帶有重試機制的主請求
-    for (let i = 0; i < MAX_RETRIES; i++) {
-        try {
-            const response = await axios({
-                method,
-                url: `${API_URL}${endpoint}`,
-                data,
-                params,
-                timeout: 15000, // 主請求給 15 秒超時
-            });
-            console.log(`Request to ${endpoint} successful.`);
-            return response.data; // 成功則返回資料
-        } catch (error) {
-            console.error(`Attempt ${i + 1} failed for ${endpoint}:`, error.message);
-            if (i === MAX_RETRIES - 1) {
-                // 如果是最後一次重試，則拋出錯誤
-                throw error;
-            }
-            // 等待一段時間再重試
-            await delay(RETRY_DELAY);
-        }
+      const response = await apiClient(config);
+      return response.data;
+    } catch (error) {
+      const isLastAttempt = attempt === maxRetries;
+      const shouldRetry = shouldRetryRequest(error);
+
+      if (isLastAttempt || !shouldRetry) {
+        throw new APIError(error, url, method);
+      }
+
+      const delay = baseDelay * Math.pow(2, attempt - 1);
+      console.warn(`🔄 重試 ${attempt}/${maxRetries} (${delay}ms 後): ${url}`);
+      await sleep(delay);
     }
+  }
 };
+
+// 🎯 判斷是否應該重試
+const shouldRetryRequest = (error) => {
+  if (!error.response) return true; // 網路錯誤
+  
+  const status = error.response.status;
+  return status >= 500 || status === 429; // 伺服器錯誤或限流
+};
+
+// 🎯 延遲函數
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// 🎯 自定義錯誤類別
+class APIError extends Error {
+  constructor(originalError, url, method) {
+    super(originalError.message);
+    this.name = 'APIError';
+    this.originalError = originalError;
+    this.url = url;
+    this.method = method;
+    this.status = originalError.response?.status;
+    this.data = originalError.response?.data;
+  }
+}
+
+// 🎯 新增：系統狀態檢查
+export const checkSystemHealth = async () => {
+  try {
+    const startTime = Date.now();
+    const response = await apiClient.get('/api/health', { timeout: 5000 });
+    const responseTime = Date.now() - startTime;
+    
+    return {
+      status: 'online',
+      responseTime,
+      timestamp: new Date(),
+      details: response.data
+    };
+  } catch (error) {
+    return {
+      status: 'error',
+      responseTime: null,
+      timestamp: new Date(),
+      error: error.message
+    };
+  }
+};
+
+// 🎯 新增：獲取用戶註冊統計
+export const getUserStats = async () => {
+  try {
+    const response = await robustRequest('get', '/api/users/stats');
+    return {
+      totalUsers: response?.total_users || 0,
+      activeUsers: response?.active_users || 0,
+      newUsersToday: response?.new_users_today || 0
+    };
+  } catch (error) {
+    console.warn('無法載入用戶統計:', error);
+    return {
+      totalUsers: 0,
+      activeUsers: 0,
+      newUsersToday: 0
+    };
+  }
+};
+
+// 🎯 新增：獲取今日行事曆活動
+// 🎯 新增：獲取今日行事曆活動 (修正版)
+export const getTodayEvents = async () => {
+  try {
+    // 修正點 1：呼叫正確的 API 路徑
+    const response = await robustRequest('get', '/api/events/today');
+    
+    // 修正點 2：後端已完成篩選，直接回傳 response 即可
+    return response || [];
+  } catch (error) {
+    console.warn('無法載入今日活動:', error);
+    // 修正點 3：API 失敗時回傳空陣列，而不是模擬資料
+    return [];
+  }
+};
+
+export { APIError };

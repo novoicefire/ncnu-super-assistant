@@ -1,129 +1,141 @@
-// frontend/src/components/4_UniversityCalendar/UniversityCalendar.jsx (現代化版)
-import React, { useState, useEffect, useRef } from 'react';
-import { robustRequest } from '../../apiHelper';
+// frontend/src/components/4_UniversityCalendar/UniversityCalendar.jsx (Refactored with Hook)
+import React, { useState, useMemo } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useCalendarEvents } from '../../hooks/useCalendarEvents'; // 導入新的 Hook
 import './UniversityCalendar.css';
 
+// 骨架屏載入動畫元件 (保持不變)
+const CalendarSkeleton = () => (
+  <div className="calendar-container skeleton-container">
+    <div className="calendar-header">
+      <div className="header-title-group">
+        <div className="skeleton skeleton-title"></div>
+      </div>
+      <div className="skeleton skeleton-button"></div>
+    </div>
+    <div className="calendar-main-content">
+      <div className="calendar-grid-container">
+        <div className="skeleton-calendar">
+          <div className="skeleton-calendar-header"></div>
+          <div className="skeleton-calendar-grid">
+            {Array.from({ length: 35 }).map((_, i) => (
+              <div key={i} className="skeleton-calendar-day"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="events-list-container">
+        <div className="skeleton skeleton-subtitle"></div>
+        <div className="skeleton-event-item"></div>
+        <div className="skeleton-event-item"></div>
+        <div className="skeleton-event-item"></div>
+      </div>
+    </div>
+  </div>
+);
+
 const UniversityCalendar = () => {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [todayMarker, setTodayMarker] = useState(null);
+  const { theme } = useTheme();
+  const { events, loading, error, isFallback } = useCalendarEvents(); // 使用 Hook 獲取資料
 
-  const eventRefs = useRef({});
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [viewMode, setViewMode] = useState('day');
 
-  useEffect(() => {
-    const fetchCalendar = async () => {
-      try {
-        setLoading(true);
-        const data = await robustRequest('get', '/api/calendar');
-        
-        if (Array.isArray(data)) {
-          setEvents(data);
-          
-          // 找到第一個未來或當天的事件
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          
-          const firstUpcomingEvent = data.find(event => new Date(event.start) >= today);
-          if (firstUpcomingEvent) {
-            setTodayMarker(firstUpcomingEvent.start);
-          }
-        } else {
-          setError('無法識別的行事曆資料格式');
-        }
-      } catch (err) {
-        setError(`讀取行事曆失敗: ${err.message}`);
-      } finally {
-        setLoading(false);
+  const eventDates = useMemo(() => {
+    const dates = new Set();
+    events.forEach(event => {
+      const start = new Date(event.start);
+      const end = new Date(event.end);
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        dates.add(new Date(d).toDateString());
       }
-    };
+    });
+    return dates;
+  }, [events]);
 
-    fetchCalendar();
-  }, []);
-
-  const scrollToToday = () => {
-    if (todayMarker && eventRefs.current[todayMarker]) {
-      eventRefs.current[todayMarker].scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    }
-  };
-  
   const formatDate = (start, end) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
-
     if (endDate.getHours() === 0 && endDate.getMinutes() === 0) {
       endDate.setDate(endDate.getDate() - 1);
     }
-
-    const options = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric',
-      weekday: 'short'
-    };
-    
+    const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
     const formattedStart = startDate.toLocaleDateString('zh-TW', options);
     const formattedEnd = endDate.toLocaleDateString('zh-TW', options);
-
-    if (formattedStart === formattedEnd) {
-      return formattedStart;
-    }
-    return `${formattedStart} - ${formattedEnd}`;
+    return formattedStart === formattedEnd ? formattedStart : `${formattedStart} - ${formattedEnd}`;
   };
 
-  if (loading) {
-    return (
-      <div className="calendar-container">
-        <div className="loading">
-          正在載入暨大行事曆...
-        </div>
-      </div>
-    );
-  }
+  const filteredEvents = useMemo(() => {
+    if (viewMode === 'all') {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return events.filter(event => new Date(event.end) >= today);
+    }
+    return events.filter(event => {
+      const eventStart = new Date(event.start);
+      eventStart.setHours(0, 0, 0, 0);
+      const eventEnd = new Date(event.end);
+      eventEnd.setHours(0, 0, 0, 0);
+      const selected = new Date(selectedDate);
+      selected.setHours(0, 0, 0, 0);
+      return selected >= eventStart && selected <= eventEnd;
+    });
+  }, [events, selectedDate, viewMode]);
 
-  if (error) {
-    return (
-      <div className="calendar-container">
-        <div className="error-message">
-          <h3>❌ 載入失敗</h3>
-          <p>{error}</p>
-        </div>
-      </div>
-    );
-  }
+  const renderTileContent = ({ date, view }) => {
+    if (view === 'month' && eventDates.has(date.toDateString())) {
+      return <div className="event-marker"></div>;
+    }
+    return null;
+  };
+
+  if (loading) return <CalendarSkeleton />;
+  if (error) return <div className="calendar-container"><div className="error-message"><h3>❌ 載入失敗</h3><p>{error}</p></div></div>;
 
   return (
     <div className="calendar-container">
       <div className="calendar-header">
-        <h2>暨大行事曆</h2>
-        <button onClick={scrollToToday} className="go-to-today-btn">
-          📍 定位回當日
+        <div className="header-title-group">
+          <h2>暨大行事曆</h2>
+          {isFallback && <div className="fallback-notice">⚠️ 目前為離線備份資料</div>}
+        </div>
+        <button onClick={() => setViewMode(viewMode === 'day' ? 'all' : 'day')} className="view-toggle-btn">
+          {viewMode === 'day' ? '📅 顯示所有事件' : '📄 僅顯示當日'}
         </button>
       </div>
-      
-      <div className="events-list-container">
-        {events.length > 0 ? (
-          events.map(event => (
-            <div
-              key={event.start + event.summary}
-              ref={el => (eventRefs.current[event.start] = el)}
-              className={`event-item ${todayMarker === event.start ? 'today-marker' : ''}`}
-            >
-              <div className="event-content">
-                <h3 className="event-summary">{event.summary}</h3>
-                <p className="event-date">{formatDate(event.start, event.end)}</p>
+
+      <div className="calendar-main-content">
+        <div className="calendar-grid-container">
+          <Calendar
+            key={theme}
+            onChange={setSelectedDate}
+            value={selectedDate}
+            locale="zh-TW"
+            tileContent={renderTileContent}
+          />
+        </div>
+        
+        <div className="events-list-container">
+          <h3 className="events-list-header">
+            {viewMode === 'day' ? selectedDate.toLocaleDateString('zh-TW', { month: 'long', day: 'numeric' }) : '所有即將到來的事件'}
+          </h3>
+          {filteredEvents.length > 0 ? (
+            filteredEvents.map(event => (
+              <div key={event.start + event.summary} className="event-item">
+                <div className="event-content">
+                  <h4 className="event-summary">{event.summary}</h4>
+                  <p className="event-date">{formatDate(event.start, event.end)}</p>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="no-events">
+              <p>{viewMode === 'day' ? '本日無任何事件' : '沒有即將到來的事件'}</p>
             </div>
-          ))
-        ) : (
-          <div className="no-events">
-            <h3>📭 暫無行事曆事件</h3>
-            <p>目前沒有任何行事曆事件資料</p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

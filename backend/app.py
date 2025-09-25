@@ -70,6 +70,7 @@ def load_static_data_if_needed():
             response.raise_for_status()
             calendar = icalendar.Calendar.from_ical(response.content)
             temp_events = []
+            CALENDAR_EVENTS.clear()
             for component in calendar.walk():
                 if component.name == "VEVENT":
                     dtstart, dtend = component.get('dtstart'), component.get('dtend')
@@ -167,3 +168,23 @@ def get_calendar():
 # --- 應用程式啟動區塊 ---
 with app.app_context():
     initialize_app()
+
+@app.route('/api/events/today')
+def get_today_events():
+    """
+    篩選並回傳今天的行事曆活動。
+    """
+    from datetime import datetime
+    load_static_data_if_needed()
+    
+    today_str = datetime.now().strftime('%Y-%m-%d')
+    today_events = []
+
+    for event in CALENDAR_EVENTS:
+        # 確保 event['start'] 是字串且至少有10個字元 (YYYY-MM-DD)
+        if isinstance(event.get('start'), str) and len(event['start']) >= 10:
+            event_date_str = event['start'][:10]
+            if event_date_str == today_str:
+                today_events.append(event)
+    
+    return jsonify(today_events)

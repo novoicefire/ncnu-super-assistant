@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首頁公告編輯器</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .panel-content {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .priority-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .priority-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .priority-option:hover {
+            background: #e3f2fd;
+            border-color: #4facfe;
+        }
+
+        .priority-option.active {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .priority-option input {
+            display: none;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .toolbar-btn:hover {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .content-editor {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .media-section {
+            border-top: 2px solid #e9ecef;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .media-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .media-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .media-btn.image { background: #e3f2fd; color: #1976d2; }
+        .media-btn.video { background: #fce4ec; color: #c2185b; }
+        .media-btn.link { background: #e8f5e8; color: #388e3c; }
+        .media-btn.button { background: #fff3e0; color: #f57c00; }
+
+        .media-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .media-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .media-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 5px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .media-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .preview-content {
+            min-height: 600px;
+            max-height: 800px;
+            overflow-y: auto;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .announcement-preview {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .announcement-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .announcement-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .priority-icon {
+            font-size: 1.5em;
+        }
+
+        .announcement-title h3 {
+            margin: 0;
+            font-size: 1.4em;
+        }
+
+        .announcement-date {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .announcement-content {
+            padding: 20px;
+        }
+
+        .announcement-content p {
+            margin-bottom: 15px;
+        }
+
+        .announcement-content h2 {
+            color: #4facfe;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .announcement-content ul {
+            margin: 10px 0 15px 20px;
+        }
+
+        .announcement-content strong {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .announcement-content em {
+            color: #6f42c1;
+            font-style: italic;
+        }
+
+        .announcement-content code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            border: 1px solid #e9ecef;
+        }
+
+        .media-preview {
+            margin: 20px 0;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .image-caption {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 8px;
+        }
+
+        .video-preview, .link-preview {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .video-preview a, .link-preview a {
+            color: #4facfe;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .video-preview a:hover, .link-preview a:hover {
+            text-decoration: underline;
+        }
+
+        .buttons-preview {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .preview-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .preview-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary { background: #007bff; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-danger { background: #dc3545; color: white; }
+
+        .priority-high { color: #dc3545; }
+        .priority-normal { color: #007bff; }
+        .priority-low { color: #6c757d; }
+
+        .bottom-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .toolbar-section {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-load { background: #17a2b8; color: white; }
+        .btn-save { background: #28a745; color: white; }
+        .btn-clear { background: #6c757d; color: white; }
+        .btn-copy { background: #fd7e14; color: white; }
+        .btn-export { background: #e83e8c; color: white; }
+        .btn-preview { background: #6f42c1; color: white; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #4facfe;
+        }
+
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .json-preview {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .bottom-toolbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .toolbar-section {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        .file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 標題區 -->
+        <header class="header">
+            <h1><i class="fas fa-bullhorn"></i> 首頁公告編輯器</h1>
+            <p>像臉書一樣編輯介面，即時預覽，一鍵匯出JSON</p>
+        </header>
+
+        <!-- 主內容區 -->
+        <div class="main-content">
+            <!-- 編輯面板 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <i class="fas fa-edit"></i> 公告編輯區
+                </div>
+                <div class="panel-content">
+                    <!-- 基本資訊 -->
+                    <div class="form-group">
+                        <label for="title"><i class="fas fa-heading"></i> 公告標題</label>
+                        <input type="text" id="title" class="form-control" placeholder="請輸入公告標題...">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-flag"></i> 優先級設定</label>
+                        <div class="priority-options">
+                            <label class="priority-option active">
+                                <input type="radio" name="priority" value="high">
+                                <span>🔥 高優先級</span>
+                            </label>
+                            <label class="priority-option">
+                                <input type="radio" name="priority" value="normal" checked>
+                                <span>📢 一般</span>
+                            </label>
+                            <label class="priority-option">
+                                <input type="radio" name="priority" value="low">
+                                <span>💬 低優先級</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 內容編輯 -->
+                    <div class="form-group">
+                        <label><i class="fas fa-align-left"></i> 公告內容</label>
+                        <div class="toolbar">
+                            <button class="toolbar-btn" onclick="insertFormat('**', '**')" title="粗體">
+                                <i class="fas fa-bold"></i> 粗體
+                            </button>
+                            <button class="toolbar-btn" onclick="insertFormat('*', '*')" title="斜體">
+                                <i class="fas fa-italic"></i> 斜體
+                            </button>
+                            <button class="toolbar-btn" onclick="insertFormat('`', '`')" title="程式碼">
+                                <i class="fas fa-code"></i> 程式碼
+                            </button>
+                            <button class="toolbar-btn" onclick="insertFormat('[', '](url)')" title="連結">
+                                <i class="fas fa-link"></i> 連結
+                            </button>
+                            <button class="toolbar-btn" onclick="insertFormat('- ', '')" title="列表">
+                                <i class="fas fa-list"></i> 列表
+                            </button>
+                            <button class="toolbar-btn" onclick="insertFormat('## ', '')" title="標題">
+                                <i class="fas fa-heading"></i> 標題
+                            </button>
+                        </div>
+                        <textarea id="content" class="content-editor" placeholder="開始輸入您的公告內容...支援Markdown語法"></textarea>
+                    </div>
+
+                    <!-- 多媒體區域 -->
+                    <div class="media-section">
+                        <label><i class="fas fa-images"></i> 多媒體內容</label>
+                        <div class="media-buttons">
+                            <button class="media-btn image" onclick="addImage()">
+                                <i class="fas fa-image"></i> 添加圖片
+                            </button>
+                            <button class="media-btn video" onclick="addVideo()">
+                                <i class="fas fa-video"></i> 添加影片
+                            </button>
+                            <button class="media-btn link" onclick="addLink()">
+                                <i class="fas fa-external-link-alt"></i> 添加連結
+                            </button>
+                            <button class="media-btn button" onclick="addButton()">
+                                <i class="fas fa-mouse-pointer"></i> 添加按鈕
+                            </button>
+                        </div>
+                        <div id="mediaList" class="media-list">
+                            <div style="text-align: center; color: #6c757d; padding: 20px;">
+                                <i class="fas fa-plus-circle" style="font-size: 2em; margin-bottom: 10px;"></i>
+                                <p>尚未添加任何多媒體內容</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 預覽面板 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <i class="fas fa-eye"></i> 即時預覽
+                </div>
+                <div class="panel-content">
+                    <div id="previewContent" class="preview-content">
+                        <!-- 預覽內容將在這裡顯示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部工具列 -->
+        <div class="bottom-toolbar">
+            <div class="toolbar-section">
+                <button class="action-btn btn-load" onclick="loadFile()">
+                    <i class="fas fa-folder-open"></i> 載入檔案
+                </button>
+                <button class="action-btn btn-save" onclick="saveFile()">
+                    <i class="fas fa-save"></i> 儲存檔案
+                </button>
+                <button class="action-btn btn-clear" onclick="clearAll()">
+                    <i class="fas fa-trash"></i> 清空內容
+                </button>
+            </div>
+            <div class="toolbar-section">
+                <button class="action-btn btn-copy" onclick="copyJSON()">
+                    <i class="fas fa-copy"></i> 複製JSON
+                </button>
+                <button class="action-btn btn-export" onclick="exportJSON()">
+                    <i class="fas fa-download"></i> 匯出JSON
+                </button>
+                <button class="action-btn btn-preview" onclick="previewJSON()">
+                    <i class="fas fa-code"></i> 預覽JSON
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 檔案輸入 -->
+    <input type="file" id="fileInput" class="file-input" accept=".json" onchange="handleFileLoad(event)">
+    <input type="file" id="imageInput" class="file-input" accept="image/*" onchange="handleImageLoad(event)">
+
+    <!-- JSON預覽模態框 -->
+    <div id="jsonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-code"></i> JSON資料預覽</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="jsonPreview" class="json-preview"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="action-btn btn-copy" onclick="copyJSONFromModal()">
+                    <i class="fas fa-copy"></i> 複製到剪貼板
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 公告資料結構
+        let announcementData = {
+            id: 1,
+            title: "",
+            date: new Date().toISOString().split('T')[0],
+            priority: "normal",
+            content: "",
+            images: [],
+            embeds: [],
+            buttons: []
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+            
+            // 事件監聽
+            document.getElementById('title').addEventListener('input', updatePreview);
+            document.getElementById('content').addEventListener('input', updatePreview);
+            
+            // 優先級選擇
+            document.querySelectorAll('input[name="priority"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('.priority-option').forEach(option => {
+                        option.classList.remove('active');
+                    });
+                    this.parentElement.classList.add('active');
+                    updatePreview();
+                });
+            });
+        });
+
+        // 格式化文字插入
+        function insertFormat(prefix, suffix) {
+            const textarea = document.getElementById('content');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selected = textarea.value.substring(start, end);
+            const replacement = prefix + (selected || '文字') + suffix;
+            
+            textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + prefix.length, start + prefix.length + (selected || '文字').length);
+            
+            updatePreview();
+        }
+
+        // 添加圖片
+        function addImage() {
+            document.getElementById('imageInput').click();
+        }
+
+        function handleImageLoad(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const caption = prompt('請輸入圖片說明文字:') || '';
+                    
+                    const imageData = {
+                        src: e.target.result,
+                        alt: file.name,
+                        caption: caption
+                    };
+                    
+                    announcementData.images.push(imageData);
+                    updateMediaList();
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 添加影片
+        function addVideo() {
+            const url = prompt('請輸入YouTube影片網址:');
+            if (url) {
+                const title = prompt('請輸入影片標題:') || 'YouTube影片';
+                const videoId = extractYouTubeId(url);
+                
+                if (videoId) {
+                    const embedData = {
+                        type: "youtube",
+                        id: videoId,
+                        title: title,
+                        url: url
+                    };
+                    
+                    announcementData.embeds.push(embedData);
+                    updateMediaList();
+                    updatePreview();
+                } else {
+                    alert('無效的YouTube網址');
+                }
+            }
+        }
+
+        // 添加連結
+        function addLink() {
+            const url = prompt('請輸入連結網址:');
+            if (url) {
+                const title = prompt('請輸入連結標題:') || url;
+                const description = prompt('請輸入連結描述:') || '';
+                
+                const linkData = {
+                    type: "link",
+                    url: url,
+                    title: title,
+                    description: description
+                };
+                
+                announcementData.embeds.push(linkData);
+                updateMediaList();
+                updatePreview();
+            }
+        }
+
+        // 添加按鈕
+        function addButton() {
+            const text = prompt('請輸入按鈕文字:');
+            if (text) {
+                const url = prompt('請輸入按鈕連結:');
+                if (url) {
+                    const style = prompt('請選擇按鈕樣式 (primary/secondary/success/warning/danger):', 'primary');
+                    const external = confirm('是否為外部連結？');
+                    
+                    const buttonData = {
+                        text: text,
+                        url: url,
+                        style: style || 'primary',
+                        external: external
+                    };
+                    
+                    announcementData.buttons.push(buttonData);
+                    updateMediaList();
+                    updatePreview();
+                }
+            }
+        }
+
+        // 提取YouTube ID
+        function extractYouTubeId(url) {
+            const patterns = [
+                /youtube\.com\/watch\?v=([^&]+)/,
+                /youtu\.be\/([^?]+)/,
+                /youtube\.com\/embed\/([^?]+)/
+            ];
+            
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        // 更新多媒體列表
+        function updateMediaList() {
+            const mediaList = document.getElementById('mediaList');
+            const items = [];
+            
+            // 添加圖片
+            announcementData.images.forEach((img, index) => {
+                items.push({
+                    type: 'image',
+                    index: index,
+                    text: `🖼️ 圖片: ${img.alt}`,
+                    data: img
+                });
+            });
+            
+            // 添加嵌入內容
+            announcementData.embeds.forEach((embed, index) => {
+                const icon = embed.type === 'youtube' ? '🎥' : '🔗';
+                items.push({
+                    type: 'embed',
+                    index: index,
+                    text: `${icon} ${embed.title}`,
+                    data: embed
+                });
+            });
+            
+            // 添加按鈕
+            announcementData.buttons.forEach((btn, index) => {
+                items.push({
+                    type: 'button',
+                    index: index,
+                    text: `🔘 按鈕: ${btn.text}`,
+                    data: btn
+                });
+            });
+            
+            if (items.length === 0) {
+                mediaList.innerHTML = `
+                    <div style="text-align: center; color: #6c757d; padding: 20px;">
+                        <i class="fas fa-plus-circle" style="font-size: 2em; margin-bottom: 10px;"></i>
+                        <p>尚未添加任何多媒體內容</p>
+                    </div>
+                `;
+            } else {
+                mediaList.innerHTML = items.map((item, idx) => `
+                    <div class="media-item">
+                        <span>${item.text}</span>
+                        <button class="delete-btn" onclick="deleteMediaItem('${item.type}', ${item.index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 刪除多媒體項目
+        function deleteMediaItem(type, index) {
+            if (confirm('確定要刪除這個項目嗎？')) {
+                switch(type) {
+                    case 'image':
+                        announcementData.images.splice(index, 1);
+                        break;
+                    case 'embed':
+                        announcementData.embeds.splice(index, 1);
+                        break;
+                    case 'button':
+                        announcementData.buttons.splice(index, 1);
+                        break;
+                }
+                updateMediaList();
+                updatePreview();
+            }
+        }
+
+        // 更新預覽
+        function updatePreview() {
+            // 更新資料
+            announcementData.title = document.getElementById('title').value;
+            announcementData.content = document.getElementById('content').value;
+            announcementData.priority = document.querySelector('input[name="priority"]:checked').value;
+            announcementData.date = new Date().toISOString().split('T')[0];
+            
+            // 渲染預覽
+            const previewContent = document.getElementById('previewContent');
+            previewContent.innerHTML = renderPreview(announcementData);
+        }
+
+        // 渲染預覽內容
+        function renderPreview(data) {
+            const priorityIcons = { high: '🔥', normal: '📢', low: '💬' };
+            const priorityClasses = { high: 'priority-high', normal: 'priority-normal', low: 'priority-low' };
+            
+            let html = `
+                <div class="announcement-preview">
+                    <div class="announcement-header">
+                        <div class="announcement-title">
+                            <span class="priority-icon">${priorityIcons[data.priority]}</span>
+                            <h3 class="${priorityClasses[data.priority]}">${data.title || '（無標題）'}</h3>
+                        </div>
+                        <div class="announcement-date">${data.date}</div>
+                    </div>
+                    <div class="announcement-content">
+            `;
+            
+            // 渲染內容
+            if (data.content) {
+                html += renderMarkdown(data.content);
+            }
+            
+            // 渲染圖片
+            data.images.forEach(img => {
+                html += `
+                    <div class="media-preview">
+                        <img src="${img.src}" alt="${img.alt}" class="image-preview">
+                        ${img.caption ? `<div class="image-caption">${img.caption}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            // 渲染嵌入內容
+            data.embeds.forEach(embed => {
+                if (embed.type === 'youtube') {
+                    html += `
+                        <div class="media-preview">
+                            <div class="video-preview">
+                                <strong>🎥 ${embed.title}</strong><br>
+                                <a href="${embed.url}" target="_blank">${embed.url}</a>
+                            </div>
+                        </div>
+                    `;
+                } else if (embed.type === 'link') {
+                    html += `
+                        <div class="media-preview">
+                            <div class="link-preview">
+                                <strong>🔗 ${embed.title}</strong><br>
+                                ${embed.description ? `<p>${embed.description}</p>` : ''}
+                                <a href="${embed.url}" target="_blank">${embed.url}</a>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            // 渲染按鈕
+            if (data.buttons.length > 0) {
+                html += '<div class="buttons-preview">';
+                data.buttons.forEach(btn => {
+                    const externalIcon = btn.external ? ' <i class="fas fa-external-link-alt"></i>' : '';
+                    html += `
+                        <a href="${btn.url}" class="preview-button btn-${btn.style}" 
+                           ${btn.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                            ${btn.text}${externalIcon}
+                        </a>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            return html;
+        }
+
+        // 簡單的Markdown渲染
+        function renderMarkdown(text) {
+            let html = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/^## (.*?)$/gm, '<h2>$1</h2>')
+                .replace(/^- (.*?)$/gm, '<ul><li>$1</li></ul>')
+                .replace(/\n/g, '<br>')
+                .replace(/<\/ul><br><ul>/g, '')
+                .replace(/<ul><li>/g, '<ul><li>')
+                .replace(/<\/li><\/ul>/g, '</li></ul>');
+            
+            return `<div>${html}</div>`;
+        }
+
+        // 生成JSON
+        function generateJSON() {
+            return JSON.stringify(announcementData, null, 2);
+        }
+
+        // 複製JSON
+        function copyJSON() {
+            const jsonData = generateJSON();
+            navigator.clipboard.writeText(jsonData).then(() => {
+                alert('JSON資料已複製到剪貼板！');
+            }).catch(() => {
+                alert('複製失敗，請手動複製');
+            });
+        }
+
+        // 匯出JSON
+        function exportJSON() {
+            const jsonData = generateJSON();
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `announcement_${announcementData.date}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // 預覽JSON
+        function previewJSON() {
+            const jsonData = generateJSON();
+            document.getElementById('jsonPreview').textContent = jsonData;
+            document.getElementById('jsonModal').style.display = 'block';
+        }
+
+        // 從模態框複製JSON
+        function copyJSONFromModal() {
+            const jsonData = document.getElementById('jsonPreview').textContent;
+            navigator.clipboard.writeText(jsonData).then(() => {
+                alert('JSON資料已複製到剪貼板！');
+            });
+        }
+
+        // 關閉模態框
+        function closeModal() {
+            document.getElementById('jsonModal').style.display = 'none';
+        }
+
+        // 載入檔案
+        function loadFile() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleFileLoad(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        // 載入資料到介面
+                        announcementData = data;
+                        document.getElementById('title').value = data.title || '';
+                        document.getElementById('content').value = data.content || '';
+                        
+                        // 設定優先級
+                        document.querySelector(`input[name="priority"][value="${data.priority || 'normal'}"]`).checked = true;
+                        document.querySelectorAll('.priority-option').forEach(option => option.classList.remove('active'));
+                        document.querySelector(`input[name="priority"][value="${data.priority || 'normal'}"]`).parentElement.classList.add('active');
+                        
+                        updateMediaList();
+                        updatePreview();
+                        alert('檔案載入成功！');
+                        
+                    } catch (error) {
+                        alert('檔案格式錯誤，請確認是有效的JSON檔案');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // 儲存檔案
+        function saveFile() {
+            exportJSON();
+        }
+
+        // 清空所有內容
+        function clearAll() {
+            if (confirm('確定要清空所有內容嗎？')) {
+                announcementData = {
+                    id: 1,
+                    title: "",
+                    date: new Date().toISOString().split('T')[0],
+                    priority: "normal",
+                    content: "",
+                    images: [],
+                    embeds: [],
+                    buttons: []
+                };
+                
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                document.querySelector('input[name="priority"][value="normal"]').checked = true;
+                document.querySelectorAll('.priority-option').forEach(option => option.classList.remove('active'));
+                document.querySelector('input[name="priority"][value="normal"]').parentElement.classList.add('active');
+                
+                updateMediaList();
+                updatePreview();
+            }
+        }
+
+        // 點擊模態框外部關閉
+        window.onclick = function(event) {
+            const modal = document.getElementById('jsonModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

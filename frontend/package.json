@@ -6,11 +6,19 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "analyze": "npx vite-bundle-analyzer",
+    "test:performance": "lighthouse http://localhost:4173 --output html --output-path ./performance-report.html",
+    "test:lighthouse": "lhci autorun",
+    "clean:cache": "rm -rf node_modules/.vite && rm -rf dist",
+    "optimize": "npm run clean:cache && npm run build && npm run analyze"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
     "axios": "^1.10.0",
+    "html2canvas": "^1.4.1",
     "ical.js": "^2.2.0",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
@@ -28,6 +36,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "terser": "^5.43.1",
     "vite": "^7.0.4"
   }
 }
