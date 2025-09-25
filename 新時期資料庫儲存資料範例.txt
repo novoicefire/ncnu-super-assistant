@@ -1,0 +1,20 @@
+{
+  "1e": {
+    "time": "1ef",
+    "year": "114",
+    "class": "0",
+    "faculty": "水沙連學院",
+    "teacher": "陳建良",
+    "division": "學士班",
+    "eteacher": "Chien-Liang  Chen",
+    "location": "管268",
+    "semester": "1",
+    "course_id": "992062",
+    "edivision": "Bachelor",
+    "department": "通識",
+    "edepartment": "0",
+    "course_cname": "從經濟學看世界",
+    "course_ename": "Economics",
+    "course_credit": "2.0"
+  },
+}
