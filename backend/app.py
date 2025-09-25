@@ -133,40 +133,28 @@ def handle_schedule():
 
 @app.route("/api/courses/hotness")
 def get_course_hotness():
-    print("--- DEBUG: /api/courses/hotness endpoint called ---")
     try:
         response = supabase.table('schedules').select('schedule_data').execute()
-        
-        data_len = len(response.data) if response.data else 0
-        print(f"--- DEBUG: Supabase response received. Number of records: {data_len} ---")
-
         if not response.data:
-            print("--- DEBUG: No data returned from Supabase. Returning empty JSON. ---")
             return jsonify({})
 
         all_schedules = [item['schedule_data'] for item in response.data if item and item.get('schedule_data')]
-        print(f"--- DEBUG: Found {len(all_schedules)} schedules containing 'schedule_data'. ---")
-
+        
         course_counts = Counter()
-        for i, schedule in enumerate(all_schedules):
-            try:
-                if isinstance(schedule, dict) and schedule:
-                    unique_course_ids_in_schedule = {
-                        course['course_id'] 
-                        for course in schedule.values() 
-                        if isinstance(course, dict) and 'course_id' in course
-                    }
-                    course_counts.update(unique_course_ids_in_schedule)
-            except (TypeError, KeyError) as inner_e:
-                print(f"--- DEBUG: Error processing a schedule at index {i}. Error: {inner_e}. Schedule data: {schedule} ---")
-
-        print(f"--- DEBUG: Final calculated course counts: {dict(course_counts)} ---")
+        for schedule in all_schedules:
+            # Robustly handle different data formats in the schedule_data
+            if isinstance(schedule, dict) and schedule:
+                unique_course_ids_in_schedule = {
+                    course['course_id'] 
+                    for course in schedule.values() 
+                    if isinstance(course, dict) and 'course_id' in course
+                }
+                course_counts.update(unique_course_ids_in_schedule)
+                
         return jsonify(dict(course_counts))
     except Exception as e:
-        import traceback
-        print(f"--- FATAL ERROR in get_course_hotness: {e} ---")
-        traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
+        print(f"ERROR in get_course_hotness: {e}")
+        return jsonify({"error": "An error occurred while calculating course hotness."}), 500
 
 @app.route('/api/departments')
 def get_departments():
