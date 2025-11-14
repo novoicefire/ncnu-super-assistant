@@ -210,6 +210,19 @@
             padding: 10px;
         }
 
+        .media-list-placeholder {
+            text-align: center;
+            color: #6c757d;
+            padding: 20px;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        .media-list-placeholder-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
         .media-item {
             display: flex;
             justify-content: space-between;
@@ -487,6 +500,11 @@
             line-height: 1.4;
         }
 
+        .modal-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -592,8 +610,8 @@
                             </button>
                         </div>
                         <div id="mediaList" class="media-list">
-                            <div style="text-align: center; color: #6c757d; padding: 20px;">
-                                <i class="fas fa-plus-circle" style="font-size: 2em; margin-bottom: 10px;"></i>
+                            <div class="media-list-placeholder">
+                                <i class="fas fa-plus-circle media-list-placeholder-icon"></i>
                                 <p>尚未添加任何多媒體內容</p>
                             </div>
                         </div>
@@ -653,7 +671,7 @@
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
             <div id="jsonPreview" class="json-preview"></div>
-            <div style="text-align: center; margin-top: 20px;">
+            <div class="modal-actions">
                 <button class="action-btn btn-copy" onclick="copyJSONFromModal()">
                     <i class="fas fa-copy"></i> 複製到剪貼板
                 </button>
@@ -855,8 +873,8 @@
             
             if (items.length === 0) {
                 mediaList.innerHTML = `
-                    <div style="text-align: center; color: #6c757d; padding: 20px;">
-                        <i class="fas fa-plus-circle" style="font-size: 2em; margin-bottom: 10px;"></i>
+                    <div class="media-list-placeholder">
+                        <i class="fas fa-plus-circle media-list-placeholder-icon"></i>
                         <p>尚未添加任何多媒體內容</p>
                     </div>
                 `;
