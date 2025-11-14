@@ -2,7 +2,24 @@
 export const announcementData = [
   {
     id: 1,
-    title: "開學了，但一切尚未結束!",
+    title: "🎁限時5天抽獎🎁租屋情況大調查！！！",
+    date: "2025-11-14",
+    priority: "high",
+    content: "<iframe src=\"https://embed.dcard.tw/post/260266739\" style='border:none' width=\"100%\" height=\"471px\"></iframe>",
+    images: [],
+    embeds: [],
+    buttons: [
+      {
+        text: "填寫問卷並抽獎!",
+        url: "https://docs.google.com/forms/d/e/1FAIpQLScgNASW27yjvVqKQT-1lcZgaeBqn-FCnu51B0L_1fRbjdFbFw/viewform",
+        style: "primary",
+        external: true
+      }
+    ]
+  },
+  {
+    id: 1,
+    title: "開學了，但一切尚未結束~",
     date: "2025-09-07",
     priority: "high",
     content: "<iframe src=\"https://embed.dcard.tw/post/259732091\" style='border:none' width=\"100%\" height=\"372px\"></iframe>",
