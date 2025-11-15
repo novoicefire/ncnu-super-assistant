@@ -1,7 +1,8 @@
-// frontend/src/App.jsx (完整效能優化版)
+// frontend/src/App.jsx (完整效能優化版 + Google Analytics)
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'; // ✅ 新增 useLocation
 import { Toaster } from 'react-hot-toast';
+import ReactGA from 'react-ga4'; // ✅ 新增 Google Analytics
 
 // 核心組件直接導入
 import { ThemeProvider } from './contexts/ThemeContext.jsx';
@@ -38,6 +39,27 @@ const PageLoadingFallback = ({ pageName }) => (
     </div>
   </div>
 );
+
+// ✅ 新增：Google Analytics 路由追蹤組件
+function RouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    // 追蹤頁面瀏覽
+    ReactGA.send({ 
+      hitType: "pageview", 
+      page: location.pathname + location.search,
+      title: document.title
+    });
+
+    // 記錄開發環境日誌
+    if (import.meta.env.DEV) {
+      console.log('📊 GA Page View:', location.pathname);
+    }
+  }, [location]);
+
+  return null;
+}
 
 function App() {
   const [showDisclaimer, setShowDisclaimer] = useState(true);
@@ -83,6 +105,13 @@ function App() {
   const handleAcceptDisclaimer = () => {
     setShowDisclaimer(false);
     setDisclaimerAccepted(true);
+    
+    // ✅ 新增：追蹤免責聲明接受事件
+    ReactGA.event({
+      category: 'User Interaction',
+      action: 'Accept Disclaimer',
+      label: 'Initial Visit'
+    });
   };
 
   // 🎯 防止背景滾動
@@ -100,8 +129,18 @@ function App() {
 
   // 🎯 效能監控回調
   const handlePerformanceMetrics = (metrics) => {
-    // 這裡可以發送到分析服務
-    if (process.env.NODE_ENV === 'development') {
+    // ✅ 新增：發送效能數據到 GA
+    if (metrics && metrics.lcp) {
+      ReactGA.event({
+        category: 'Performance',
+        action: 'Core Web Vitals',
+        label: `LCP: ${Math.round(metrics.lcp)}ms`,
+        value: Math.round(metrics.lcp)
+      });
+    }
+
+    // 開發環境日誌
+    if (import.meta.env.DEV) {
       console.log('Performance Metrics:', metrics);
     }
   };
@@ -131,6 +170,9 @@ function App() {
       <ThemeProvider>
         <LoadingProvider>
           <Router>
+            {/* ✅ 新增：路由追蹤組件 */}
+            <RouteTracker />
+
             {/* 🎯 免責聲明 */}
             <DisclaimerModal 
               isVisible={showDisclaimer} 
@@ -139,7 +181,7 @@ function App() {
 
             {/* 🎯 效能監控 */}
             <PerformanceMonitor 
-              isEnabled={process.env.NODE_ENV === 'development'}
+              isEnabled={import.meta.env.DEV} // ✅ 修改：使用 Vite 環境變數
               onMetrics={handlePerformanceMetrics}
             />
 
