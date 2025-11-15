@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "react-ga4": "^2.1.0",
     "react-select": "^5.10.2"
   }
 }
