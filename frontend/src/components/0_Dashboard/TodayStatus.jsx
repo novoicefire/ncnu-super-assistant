@@ -387,6 +387,19 @@ const TodayStatus = () => {
                 }}
               ></div>
             )}
+            {/* 🎯 新增：建議學分範圍標記 */}
+            <div
+              className="suggestion-marker"
+              style={{ left: `${(recommendedMin / PROGRESS_BAR_MAX_CREDITS) * 100}%` }}
+              title={`建議最低學分: ${recommendedMin}`}
+            >
+            </div>
+            <div
+              className="suggestion-marker"
+              style={{ left: `${(recommendedMax / PROGRESS_BAR_MAX_CREDITS) * 100}%` }}
+              title={`建議最高學分: ${recommendedMax}`}
+            >
+            </div>
           </div>
           <div className="progress-markers">
             <span className="marker min-marker">0</span>
@@ -641,6 +654,21 @@ const TodayStatus = () => {
 
           .collapsible-content {
             padding: 0 16px 16px;
+          }
+
+          /* 🎯 新增：建議標記樣式 */
+          .progress-bar {
+            position: relative; /* 讓標記可以相對於它定位 */
+          }
+
+          .suggestion-marker {
+            position: absolute;
+            top: -4px; /* 向上偏移一點，使其突出 */
+            bottom: -4px; /* 向下偏移一點，使其突出 */
+            width: 2px;
+            background-color: rgba(108, 117, 125, 0.5); /* 半透明灰色 */
+            transform: translateX(-50%); /* 將標記置中於其 left 位置 */
+            z-index: 1; /* 確保在進度條填充色的上方 */
           }
 
           .header-content h3 {
