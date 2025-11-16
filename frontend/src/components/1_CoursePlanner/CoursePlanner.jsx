@@ -26,6 +26,9 @@ const CoursePlanner = () => {
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [flexibleCourses, setFlexibleCourses] = useState([]);
+  const [scheduledCredits, setScheduledCredits] = useState(0);
+  const [flexibleCredits, setFlexibleCredits] = useState(0);
+  const [flexibleSort, setFlexibleSort] = useState({ key: 'added_time', order: 'asc' });
 
   // 🎨 簡化的樣式注入（移除 CourseTable 相關樣式）
   useEffect(() => {
@@ -340,13 +343,15 @@ const CoursePlanner = () => {
   useEffect(() => {
     // 計算固定時間課程學分（去重）
     const uniqueCourses = [...new Map(Object.values(schedule).map(item => [item['course_id'], item])).values()];
-    const scheduledCredits = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
+    const scheduledCreditsValue = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
     
     // 計算彈性課程學分
-    const flexibleCredits = flexibleCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
+    const flexibleCreditsValue = flexibleCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
     
     // 總學分 = 固定時間課程學分 + 彈性課程學分
-    setTotalCredits(scheduledCredits + flexibleCredits);
+    setTotalCredits(scheduledCreditsValue + flexibleCreditsValue);
+    setScheduledCredits(scheduledCreditsValue);
+    setFlexibleCredits(flexibleCreditsValue);
   }, [schedule, flexibleCourses]);
 
   const hasTimeConflict = useCallback((course) => {
@@ -588,6 +593,31 @@ const CoursePlanner = () => {
     }));
   };
 
+  const handleFlexibleSort = (key) => {
+    setFlexibleSort(prev => {
+      if (prev.key === key) {
+        return { ...prev, order: prev.order === 'asc' ? 'desc' : 'asc' };
+      }
+      return { key, order: 'asc' };
+    });
+  };
+
+  const sortedFlexibleCourses = useMemo(() => {
+    let sortable = [...flexibleCourses];
+    if (flexibleSort.key === 'course_credit') {
+      sortable.sort((a, b) => {
+        const creditA = parseFloat(a.course_credit || 0);
+        const creditB = parseFloat(b.course_credit || 0);
+        return flexibleSort.order === 'asc' ? creditA - creditB : creditB - creditA;
+      });
+    } else if (flexibleSort.key === 'course_cname') {
+      sortable.sort((a, b) => flexibleSort.order === 'asc' ? a.course_cname.localeCompare(b.course_cname, 'zh-Hant') : b.course_cname.localeCompare(a.course_cname, 'zh-Hant'));
+    } else if (flexibleSort.key === 'added_time' && flexibleSort.order === 'desc') {
+      sortable.reverse();
+    }
+    return sortable;
+  }, [flexibleCourses, flexibleSort]);
+
   const getSaveStatusMessage = () => {
     if (!isLoggedIn) return "登入後即可將課表同步至雲端";
     
@@ -624,7 +654,10 @@ const CoursePlanner = () => {
       <div className="planner-header">
         <h1>智慧排課系統</h1>
         <div className="header-info">
-          <span>已選學分: {totalCredits} 學分</span>
+          <span>
+            已選學分: {totalCredits} 學分
+            {totalCredits > 0 && `（固定 ${scheduledCredits} + 彈性 ${flexibleCredits}）`}
+          </span>
           <span>{getSaveStatusMessage()}</span>
         </div>
       </div>
@@ -796,8 +829,11 @@ const CoursePlanner = () => {
             <ul className="course-list">
               {filteredCourses.map((course, index) => (
                 <li key={`${course.course_id}-${course.time}-${index}`}>
-                  <div className="course-info">
-                    <strong>{course.course_cname}</strong>
+                  <div className="course-info"> 
+                    <div className="course-title-container">
+                      <strong>{course.course_cname}</strong>
+                      {!course.time && <span className="course-type-badge flexible">彈性</span>}
+                    </div>
                     {hotnessData && hotnessData[course.course_id] && (
                       <span className="hotness-indicator">
                         🔥 {hotnessData[course.course_id]}人
@@ -848,19 +884,32 @@ const CoursePlanner = () => {
 
       {/* 彈性/無固定時間課程區 */}
       <div className="flexible-courses-container">
-        <div className="schedule-header">
-          <h3>彈性/無固定時間課程</h3>
-          <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
-            包含專題、實習、線上非同步等課程
-          </p>
+        <div className="schedule-header flexible-header">
+          <div className="flexible-header-title">
+            <h3>彈性/無固定時間課程</h3>
+            <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
+              包含專題、實習、線上非同步等課程
+            </p>
+          </div>
+          <div className="flexible-sort-buttons">
+            <button onClick={() => handleFlexibleSort('course_credit')} className={flexibleSort.key === 'course_credit' ? 'active' : ''}>
+              學分 {flexibleSort.key === 'course_credit' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+            </button>
+            <button onClick={() => handleFlexibleSort('course_cname')} className={flexibleSort.key === 'course_cname' ? 'active' : ''}>
+              名稱 {flexibleSort.key === 'course_cname' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+            </button>
+            <button onClick={() => handleFlexibleSort('added_time')} className={flexibleSort.key === 'added_time' ? 'active' : ''}>
+              加入時間 {flexibleSort.key === 'added_time' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+            </button>
+          </div>
         </div>
         {flexibleCourses.length === 0 ? (
-          <p style={{ textAlign: 'center', color: 'var(--theme-text-tertiary)', padding: '20px' }}>
-            尚未加入彈性課程
+          <p style={{ textAlign: 'center', color: 'var(--theme-text-tertiary)', padding: '20px', lineHeight: '1.6' }}>
+            尚未加入彈性課程。專題、實習等無固定時間的課程會顯示在此。
           </p>
         ) : (
           <ul className="flexible-course-list">
-            {flexibleCourses.map(fc => (
+            {sortedFlexibleCourses.map(fc => (
               <li key={fc.course_id}>
                 <div className="course-info">
                   <strong>{fc.course_cname}</strong>

@@ -280,6 +280,29 @@
   transition: color 0.3s ease;
 }
 
+.course-title-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 4px;
+}
+
+/* 🆕 課程類型標籤 */
+.course-type-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.course-type-badge.flexible {
+  color: #00796b;
+  background-color: rgba(0, 121, 107, 0.1);
+  border-color: rgba(0, 121, 107, 0.3);
+}
+
 .course-info small {
   color: var(--theme-text-secondary);
   display: block;
@@ -758,6 +781,45 @@
   background: linear-gradient(135deg, #ff5252 0%, #e04856 100%);
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+/* 🆕 彈性課程區塊標頭與排序按鈕 */
+.flexible-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flexible-sort-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.flexible-sort-buttons button {
+  background-color: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-secondary);
+  color: var(--theme-text-secondary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flexible-sort-buttons button:hover {
+  background-color: var(--theme-bg-hover);
+  border-color: var(--theme-border-primary);
+  color: var(--theme-text-primary);
+}
+
+.flexible-sort-buttons button.active {
+  background-color: var(--primary-color-light);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  font-weight: 600;
 }
 
 /* 🆕 響應式設計 */
