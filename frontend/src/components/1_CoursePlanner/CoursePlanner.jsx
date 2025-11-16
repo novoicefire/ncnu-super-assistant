@@ -25,6 +25,7 @@ const CoursePlanner = () => {
   });
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [flexibleCourses, setFlexibleCourses] = useState([]);
 
   // 🎨 簡化的樣式注入（移除 CourseTable 相關樣式）
   useEffect(() => {
@@ -315,25 +316,38 @@ const CoursePlanner = () => {
     if (isLoggedIn && user?.google_id) {
       // 登入用戶：從雲端載入
       robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } })
-        .then(data => setSchedule(data || {}))
+        .then(data => {
+          setSchedule(data?.schedule_data || {});
+          setFlexibleCourses(data?.flexible_courses || []);
+        })
         .catch(err => {
           console.error('雲端課表載入失敗:', err);
           // 雲端載入失敗時嘗試載入本地資料
           const localSchedule = localStorage.getItem('course-schedule');
+          const localFlexible = localStorage.getItem('flexible-courses');
           setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
+          setFlexibleCourses(localFlexible ? JSON.parse(localFlexible) : []);
         });
     } else {
       // 未登入用戶：從本地載入
       const localSchedule = localStorage.getItem('course-schedule');
+      const localFlexible = localStorage.getItem('flexible-courses');
       setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
+      setFlexibleCourses(localFlexible ? JSON.parse(localFlexible) : []);
     }
   }, [isLoggedIn, user]);
 
   useEffect(() => {
+    // 計算固定時間課程學分（去重）
     const uniqueCourses = [...new Map(Object.values(schedule).map(item => [item['course_id'], item])).values()];
-    const total = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
-    setTotalCredits(total);
-  }, [schedule]);
+    const scheduledCredits = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
+    
+    // 計算彈性課程學分
+    const flexibleCredits = flexibleCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
+    
+    // 總學分 = 固定時間課程學分 + 彈性課程學分
+    setTotalCredits(scheduledCredits + flexibleCredits);
+  }, [schedule, flexibleCourses]);
 
   const hasTimeConflict = useCallback((course) => {
     if (!course.time || Object.keys(schedule).length === 0) return false;
@@ -407,11 +421,13 @@ const CoursePlanner = () => {
   }, []);
 
   // 🔄 儲存課表（登入用戶同步雲端，未登入用戶存本地）
-  const saveSchedule = useCallback(async (newSchedule, actionType = 'update', courseName = '') => {
+  const saveSchedule = useCallback(async (newSchedule, newFlexibleCourses, actionType = 'update', courseName = '') => {
     setSchedule(newSchedule);
+    setFlexibleCourses(newFlexibleCourses);
     
     // 🔄 總是先儲存到本地（作為備份）
     localStorage.setItem('course-schedule', JSON.stringify(newSchedule));
+    localStorage.setItem('flexible-courses', JSON.stringify(newFlexibleCourses));
     
     if (isLoggedIn && user?.google_id) {
       // 🌐 登入用戶：同步到雲端
@@ -419,7 +435,10 @@ const CoursePlanner = () => {
       try {
         const response = await robustRequest('post', '/api/schedule', {
           params: { user_id: user.google_id },
-          data: newSchedule
+          data: {
+            schedule_data: newSchedule,
+            flexible_courses: newFlexibleCourses
+          }
         });
         
         if (response && response.success) {
@@ -451,6 +470,24 @@ const CoursePlanner = () => {
     }
   }, [isLoggedIn, user, showNotification]);
 
+  // 新增彈性課程
+  const addFlexibleCourse = useCallback((course) => {
+    if (flexibleCourses.some(fc => fc.course_id === course.course_id)) {
+      showNotification('⚠️ 此課程已在彈性課程區', 'warning');
+      return;
+    }
+    const newFlexible = [...flexibleCourses, course];
+    saveSchedule(schedule, newFlexible, 'add', course.course_cname);
+  }, [flexibleCourses, schedule, saveSchedule, showNotification]);
+
+  // 移除彈性課程
+  const removeFlexibleCourse = useCallback((courseId) => {
+    const course = flexibleCourses.find(fc => fc.course_id === courseId);
+    const courseName = course ? course.course_cname : '';
+    const newFlexible = flexibleCourses.filter(fc => fc.course_id !== courseId);
+    saveSchedule(schedule, newFlexible, 'remove', courseName);
+  }, [flexibleCourses, schedule, saveSchedule]);
+
   const parseTimeSlots = (timeString) => {
     if (!timeString || typeof timeString !== 'string') return [];
     
@@ -471,7 +508,8 @@ const CoursePlanner = () => {
   const addToSchedule = (course) => {
     const slots = parseTimeSlots(course.time);
     if (slots.length === 0) {
-      showNotification('⚠️ 此課程無時間資訊，無法加入課表', 'warning');
+      // 無時間資訊，加入彈性課程區
+      addFlexibleCourse(course);
       return;
     }
 
@@ -490,7 +528,7 @@ const CoursePlanner = () => {
       newSchedule[slot] = course;
     });
 
-    saveSchedule(newSchedule, 'add', course.course_cname);
+    saveSchedule(newSchedule, flexibleCourses, 'add', course.course_cname);
   };
 
   const removeFromSchedule = (courseId, time) => {
@@ -505,7 +543,7 @@ const CoursePlanner = () => {
       }
     });
 
-    saveSchedule(newSchedule, 'remove', courseName);
+    saveSchedule(newSchedule, flexibleCourses, 'remove', courseName);
   };
 
   const isCourseInSchedule = (course) => {
@@ -517,7 +555,24 @@ const CoursePlanner = () => {
     );
   };
 
+  const isCourseInFlexible = useCallback((course) => {
+    return flexibleCourses.some(fc => fc.course_id === course.course_id);
+  }, [flexibleCourses]);
+
   const handleCourseToggle = (course) => {
+    const slots = parseTimeSlots(course.time);
+    
+    // 無時間課程的處理
+    if (slots.length === 0) {
+      if (isCourseInFlexible(course)) {
+        removeFlexibleCourse(course.course_id);
+      } else {
+        addFlexibleCourse(course);
+      }
+      return;
+    }
+    
+    // 有時間課程的處理
     if (isCourseInSchedule(course)) {
       removeFromSchedule(course.course_id, course.time);
     } else {
@@ -752,11 +807,13 @@ const CoursePlanner = () => {
                       {formatCourseInfo(course)}
                     </small>
                   </div>
-                  <button 
-                    className={`course-toggle-btn ${isCourseInSchedule(course) ? 'remove' : 'add'}`}
+                  <button
+                    className={`course-toggle-btn ${
+                      isCourseInSchedule(course) || isCourseInFlexible(course) ? 'remove' : 'add'
+                    }`}
                     onClick={() => handleCourseToggle(course)}
                   >
-                    {isCourseInSchedule(course) ? '−' : '+'}
+                    {isCourseInSchedule(course) || isCourseInFlexible(course) ? '−' : '+'}
                   </button>
                 </li>
               ))}
@@ -787,6 +844,40 @@ const CoursePlanner = () => {
             onRemove={removeFromSchedule} 
           />
         </div>
+      </div>
+
+      {/* 彈性/無固定時間課程區 */}
+      <div className="flexible-courses-container">
+        <div className="schedule-header">
+          <h3>彈性/無固定時間課程</h3>
+          <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
+            包含專題、實習、線上非同步等課程
+          </p>
+        </div>
+        {flexibleCourses.length === 0 ? (
+          <p style={{ textAlign: 'center', color: 'var(--theme-text-tertiary)', padding: '20px' }}>
+            尚未加入彈性課程
+          </p>
+        ) : (
+          <ul className="flexible-course-list">
+            {flexibleCourses.map(fc => (
+              <li key={fc.course_id}>
+                <div className="course-info">
+                  <strong>{fc.course_cname}</strong>
+                  <small>
+                    {fc.teacher} | {fc.department} | {fc.course_credit}學分
+                  </small>
+                </div>
+                <button
+                  className="course-toggle-btn remove"
+                  onClick={() => removeFlexibleCourse(fc.course_id)}
+                >
+                  −
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
