@@ -19,6 +19,7 @@ const TodayStatus = () => {
     courses: [],
     events: [],
     totalCredits: 0,
+    creditsStatus: { type: 'empty', message: '', color: '#6c757d' }, // 🎯 新增
     creditDetails: {},
     isLoading: true,
     lastUpdate: null
@@ -207,6 +208,60 @@ const TodayStatus = () => {
     }
   };
 
+  // 🎯 新增：顏色插值輔助函式 (移至元件頂層)
+  const interpolateColor = (color1, color2, factor) => {
+    const result = color1.slice();
+    for (let i = 0; i < 3; i++) {
+      result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+    }
+    return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
+  };
+
+  // 🎯 修改：將 getCreditsStatus 移至元件頂層
+  const getCreditsStatus = (totalCredits, recommendedMin, recommendedMax) => {
+    const COLORS = {
+      good: [40, 167, 69],    // Green: #28a745
+      warn: [255, 193, 7],   // Yellow: #ffc107
+      danger: [220, 53, 69],   // Red: #dc3545
+      empty: [108, 117, 125] // Gray: #6c757d
+    };
+
+    if (totalCredits === 0) {
+      return { type: 'empty', message: '尚未選修課程', color: `rgb(${COLORS.empty.join(',')})` };
+    }
+
+    if (totalCredits < recommendedMin) {
+      let message = '學分偏少，建議增加課程';
+      const range = recommendedMin - 1;
+      const distance = recommendedMin - totalCredits;
+      const factor = Math.min(distance / range, 1.0);
+      
+      let color;
+      if (factor <= 0.5) {
+        color = interpolateColor(COLORS.good, COLORS.warn, factor * 2);
+      } else {
+        color = interpolateColor(COLORS.warn, COLORS.danger, (factor - 0.5) * 2);
+      }
+      return { type: 'low', message, color };
+
+    } else if (totalCredits > recommendedMax) {
+      let message = '學分較多，注意學習負擔';
+      const PROGRESS_BAR_MAX_CREDITS = 25;
+      const range = PROGRESS_BAR_MAX_CREDITS - recommendedMax;
+      const distance = totalCredits - recommendedMax;
+      const factor = Math.min(distance / range, 1.0);
+
+      let color;
+      if (factor <= 0.5) {
+        color = interpolateColor(COLORS.good, COLORS.warn, factor * 2);
+      } else {
+        color = interpolateColor(COLORS.warn, COLORS.danger, (factor - 0.5) * 2);
+      }
+      return { type: 'high', message, color };
+    }
+    return { type: 'good', message: '學分安排合理', color: `rgb(${COLORS.good.join(',')})` };
+  };
+
   // 載入課表資料
   const loadScheduleData = useCallback(async () => {
     if (!isLoggedIn || !user?.google_id) {
@@ -217,10 +272,12 @@ const TodayStatus = () => {
       const schedule = await robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } });
       const todayCourses = getTodayCourses(schedule);
       const totalCredits = calculateTotalCredits(schedule);
+      const creditsStatus = getCreditsStatus(totalCredits, RECOMMENDED_MIN_CREDITS, RECOMMENDED_MAX_CREDITS); // 🎯 計算狀態
       const creditDetails = calculateCreditDetails(schedule);
       setTodayData(prev => ({
         ...prev,
         courses: todayCourses,
+        creditsStatus, // 🎯 儲存狀態
         totalCredits,
         creditDetails,
         isLoading: calendarLoading, // Loading state now depends on calendar events too
@@ -337,64 +394,7 @@ const TodayStatus = () => {
       );
     }
 
-    // 🎯 新增：顏色插值輔助函式
-    const interpolateColor = (color1, color2, factor) => {
-      const result = color1.slice();
-      for (let i = 0; i < 3; i++) {
-        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-      }
-      return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
-    };
-
-    const getCreditsStatus = () => {
-      const COLORS = {
-        good: [40, 167, 69],    // Green: #28a745
-        warn: [255, 193, 7],   // Yellow: #ffc107
-        danger: [220, 53, 69]    // Red: #dc3545
-      };
-
-      if (totalCredits < recommendedMin) {
-        let message = '學分偏少，建議增加課程';
-        // 從 (建議最低 - 1) 到 0 的範圍內計算顏色
-        // 越接近 0，越偏向紅色
-        const range = recommendedMin - 1;
-        const distance = recommendedMin - totalCredits;
-        const factor = Math.min(distance / range, 1.0);
-        
-        let color;
-        if (factor <= 0.5) {
-          // 從綠色到黃色
-          color = interpolateColor(COLORS.good, COLORS.warn, factor * 2);
-        } else {
-          // 從黃色到紅色
-          color = interpolateColor(COLORS.warn, COLORS.danger, (factor - 0.5) * 2);
-        }
-
-        return { type: 'low', message, color };
-
-      } else if (totalCredits > recommendedMax) {
-        let message = '學分較多，注意學習負擔';
-        // 從 (建議最高 + 1) 到 25 的範圍內計算顏色
-        // 越接近 25，越偏向紅色
-        const range = PROGRESS_BAR_MAX_CREDITS - recommendedMax;
-        const distance = totalCredits - recommendedMax;
-        const factor = Math.min(distance / range, 1.0);
-
-        let color;
-        if (factor <= 0.5) {
-          // 從綠色到黃色
-          color = interpolateColor(COLORS.good, COLORS.warn, factor * 2);
-        } else {
-          // 從黃色到紅色
-          color = interpolateColor(COLORS.warn, COLORS.danger, (factor - 0.5) * 2);
-        }
-        return { type: 'high', message, color };
-      } else {
-        return { type: 'good', message: '學分安排合理', color: `rgb(${COLORS.good.join(',')})` };
-      }
-    };
-
-    const status = getCreditsStatus();
+    const status = todayData.creditsStatus; // 🎯 直接使用已計算好的狀態
     const PROGRESS_BAR_MAX_CREDITS = 25; // 定義進度條的滿格為 25 學分
     const progressPercentage = Math.min((totalCredits / PROGRESS_BAR_MAX_CREDITS) * 100, 100);
 
@@ -600,7 +600,7 @@ const TodayStatus = () => {
               icon="⭐"
               title="總學分"
               value={`${todayData.totalCredits} 學分`}
-              status={todayData.totalCredits > 0 ? 'active' : 'empty'}
+              status={todayData.creditsStatus.type}
               cardContent={renderCreditsCard()}
               isClickable={true}
               isOpen={activeCard === 'credits'}
