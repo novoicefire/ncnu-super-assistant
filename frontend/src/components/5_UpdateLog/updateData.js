@@ -2,6 +2,17 @@
 
 export const updateHistory = [
   {
+    version: "v4.2.2",
+    date: "2025-11-16",
+    type: "fix", 
+    title: "修復行事曆在手機上被切掉一部分的問題",
+    description: "🔧解決大學行事曆組件在行動裝置上顯示不完整的問題。透過調整 CSS 樣式，特別是在小螢幕尺寸下，確保行事曆內容能夠完整呈現並提供更佳的視覺體驗。",
+    features: [
+      "行事曆顯示優化: 針對行動裝置螢幕，移除了 calendar-grid-container 的最小寬度限制，以避免內容溢出。",
+      "字體大小調整: 在小螢幕上，將 react-calendar 的字體大小縮小至 0.9em，提升排版舒適度。"
+    ]
+  },
+  {
     version: "v4.2.1",
     date: "2025-11-16",
     type: "improvement", 
@@ -14,8 +25,7 @@ export const updateHistory = [
       ],
     technical: [
       "StatusCard 組件重構: StatusCard 組件現在直接接收 statusColor 屬性，將顏色邏輯從組件內部移至父組件 TodayStatus.jsx 進行集中管理，提升了組件的靈活性。"
-      ],
-
+    ]
   },
   {
     version: "v4.2.0",
@@ -32,8 +42,7 @@ export const updateHistory = [
     technical: [
       "✨新增骨架式結構與",
       "🎨加上微光與脈衝效果載入動畫"
-      ],
-
+    ]
   },
   {
     version: "v4.1.0",
