@@ -420,11 +420,13 @@ const TodayStatus = () => {
           </div>
           <div className="progress-bar">
             <div 
-              className="progress-fill" 
+              className="progress-fill"
+              // 🎯 修改：使用 !important 強制覆蓋外部樣式
               style={{ 
-                width: `${progressPercentage}%`,
-                backgroundColor: status.color 
+                '--progress-width': `${progressPercentage}%`,
+                '--progress-color': status.color
               }}
+              // The style tag below will use the CSS variables to apply the style with !important
             ></div>
             {totalCredits > recommendedMax && (
               <div 
@@ -682,6 +684,13 @@ const TodayStatus = () => {
           background-color: rgba(108, 117, 125, 0.5); /* 半透明灰色 */
           transform: translateX(-50%); /* 將標記置中於其 left 位置 */
           z-index: 1; /* 確保在進度條填充色的上方 */
+        }
+
+        /* 🎯 新增：使用 CSS 變數並加上 !important */
+        .progress-fill {
+          width: var(--progress-width, 0%) !important;
+          background-color: var(--progress-color, #28a745) !important;
+          /* The rest of the .progress-fill styles from Dashboard.css should be here if any */
         }
 
         @media (max-width: 768px) {
