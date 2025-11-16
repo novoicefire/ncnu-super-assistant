@@ -2,12 +2,11 @@ name: Keep Render Alive
 
 on:
   schedule:
-    # 每 10 分鐘執行一次，僅在台灣白天時段 (UTC 時間需減 8 小時)
-    # 台灣 07:00-02:59 = UTC 23:00(前一天)-18:59
+    # 每 10 分鐘執行一次，僅在台灣白天時段
     - cron: '*/10 23 * * *'      # UTC 23:00-23:59 → 台灣 07:00-07:59
     - cron: '*/10 0-18 * * *'    # UTC 00:00-18:59 → 台灣 08:00-02:59
   
-  workflow_dispatch:  # 允許手動觸發測試
+  workflow_dispatch:  # 允許手動觸發
 
 jobs:
   # 檢查是否在台灣白天時段
@@ -23,7 +22,6 @@ jobs:
           echo "當前台灣時間: $(TZ='Asia/Taipei' date)"
           echo "當前小時: $current_hour"
           
-          # 台灣時間 07:00-02:59 執行 (排除 03:00-06:59)
           if [ "$current_hour" -ge 7 ] || [ "$current_hour" -lt 3 ]; then
             echo "在執行時段內，繼續執行"
             echo "should_run=true" >> $GITHUB_OUTPUT
@@ -39,19 +37,60 @@ jobs:
     if: needs.check-time.outputs.should_run == 'true'
     steps:
       - name: Ping Render Service
+        id: ping
+        continue-on-error: true
         run: |
           echo "正在喚醒 Render 服務..."
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             --max-time 30 \
-            https://your-app-name.onrender.com/ping)
+            https://wrong-url-for-testing.onrender.com/ping)
           
           if [ "$response" -eq 200 ]; then
             echo "✅ 服務正常運行 (HTTP $response)"
+            echo "status=success" >> $GITHUB_OUTPUT
+            exit 0
           else
             echo "⚠️ 服務回應異常 (HTTP $response)"
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "response_code=$response" >> $GITHUB_OUTPUT
+            exit 1
           fi
+      
+      # 發送 Discord 通知（僅在失敗時）
+      - name: Send Discord Alert on Failure
+        if: failure()
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: 'Failure'
+          title: '🚨 Render 服務異常警報'
+          description: |
+            **服務無法正常回應**
+            
+            **HTTP 狀態碼**: `${{ steps.ping.outputs.response_code }}`
+            **時間**: ${{ github.event.head_commit.timestamp }}
+            **倉庫**: `${{ github.repository }}`
+          color: 0xff0000
+          username: Render 監控機器人
+          avatar_url: https://avatars.githubusercontent.com/u/44036562?s=200&v=4
+      
+      # 每天早上 8 點發送成功摘要（可選）
+      - name: Send Daily Summary
+        if: success() && github.event.schedule == '0 0 * * *'
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: 'Success'
+          title: '✅ Render 服務運行正常'
+          description: |
+            **服務狀態**: 正常運行
+            **監控週期**: 過去 24 小時
+            **倉庫**: `${{ github.repository }}`
+          color: 0x00ff00
+          username: Render 監控機器人
+          nodetail: true
 
-  # 防止 Workflow 在 60 天後被停用
+  # 防止 Workflow 失效
   keep-workflow-alive:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
@@ -60,7 +99,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Check and Create Keepalive Commit
         run: |
@@ -75,9 +113,9 @@ jobs:
           
           if [ $days_since_commit -gt 50 ]; then
             echo "⚠️ 超過 50 天未提交，建立 keepalive commit"
-            git commit --allow-empty -m "chore: keepalive commit to prevent workflow disable [skip ci]"
+            git commit --allow-empty -m "chore: keepalive [skip ci]"
             git push
             echo "✅ Keepalive commit 已推送"
           else
-            echo "✅ 無需 keepalive commit（距離上次提交 $days_since_commit 天）"
+            echo "✅ 無需 keepalive commit"
           fi
