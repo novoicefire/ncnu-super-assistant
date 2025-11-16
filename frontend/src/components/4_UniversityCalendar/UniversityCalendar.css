@@ -280,4 +280,13 @@
   .view-toggle-btn {
     width: 100%;
   }
+
+  .calendar-grid-container {
+    min-width: 0; /* 移除最小寬度限制，避免在小螢幕上溢出 */
+  }
+
+  .react-calendar {
+    /* 在小螢幕上稍微縮小字體，讓排版更舒適 */
+    font-size: 0.9em;
+  }
 }
