@@ -601,6 +601,7 @@ const TodayStatus = () => {
               title="總學分"
               value={`${todayData.totalCredits} 學分`}
               status={todayData.creditsStatus.type}
+              statusColor={todayData.creditsStatus.color}
               cardContent={renderCreditsCard()}
               isClickable={true}
               isOpen={activeCard === 'credits'}

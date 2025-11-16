@@ -5,7 +5,8 @@ import { createPortal } from 'react-dom';
 const StatusCard = ({ 
   icon, 
   title, 
-  value, 
+  value,
+  statusColor, // [新增] 直接接收顏色
   status, 
   cardContent, 
   onClick, 
@@ -80,16 +81,6 @@ const StatusCard = ({
       case 'warning': return 'status-warning';
       case 'error': return 'status-error';
       default: return 'status-info';
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (status) {
-      case 'active': return '#28a745';
-      case 'warning': return '#ffc107';
-      case 'error': return '#dc3545';
-      case 'empty': return '#6c757d';
-      default: return '#17a2b8';
     }
   };
 
@@ -324,7 +315,7 @@ const StatusCard = ({
         // [刪除] onMouseLeave={handleMouseLeave}
         onClick={handleClick}
         style={{
-          '--status-color': getStatusColor(),
+          '--status-color': statusColor || '#6c757d', // [修改] 使用傳入的顏色
           animationDelay: `${animationDelay}ms`
         }}
       >
