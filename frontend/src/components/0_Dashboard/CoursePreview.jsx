@@ -10,6 +10,7 @@ const CoursePreview = () => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [schedule, setSchedule] = useState({});
+  const [flexibleCourses, setFlexibleCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -34,10 +35,12 @@ const CoursePreview = () => {
       const data = await robustRequest('get', '/api/schedule', { 
         params: { user_id: user.google_id } 
       });
-      setSchedule(data || {});
+      setSchedule(data?.schedule_data || {});
+      setFlexibleCourses(data?.flexible_courses || []);
     } catch (error) {
       console.error('Failed to load schedule:', error);
       setSchedule({});
+      setFlexibleCourses([]);
     } finally {
       setIsLoading(false);
     }
@@ -55,17 +58,23 @@ const CoursePreview = () => {
 
   // 🎯 獲取課表統計
   const getScheduleStats = () => {
-    // ✅ 修復：過濾掉 is_demo 鍵，只計算真實的課程資料
+    // 固定課表
     const courses = Object.entries(schedule)
       .filter(([key, value]) => key !== 'is_demo' && value)
       .map(([, value]) => value);
-
     const uniqueCourses = [...new Map(courses.map(c => [c.course_id, c])).values()];
-    const totalCredits = uniqueCourses.reduce((sum, c) => sum + parseFloat(c.course_credit || 0), 0);
-    // ✅ 修復：總時數應該基於過濾後的課程數量
-    const totalHours = courses.length; 
-
-    return { courseCount: uniqueCourses.length, totalCredits, totalHours };
+    
+    // 彈性課程
+    const flexibleUnique = [...new Map(flexibleCourses.map(fc => [fc.course_id, fc])).values()];
+    
+    // 合併
+    const allCourses = [...uniqueCourses, ...flexibleUnique];
+    const allCourseCount = allCourses.length;
+    const totalCredits = allCourses.reduce((sum, c) => sum + parseFloat(c.course_credit || 0), 0);
+    // 固定課表時數不變
+    const totalHours = courses.length;
+    
+    return { courseCount: allCourseCount, totalCredits, totalHours };
   };
 
   const stats = getScheduleStats();
