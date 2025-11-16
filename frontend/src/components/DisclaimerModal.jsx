@@ -31,8 +31,8 @@ const DisclaimerModal = ({ isVisible, onAccept }) => {
             <p>
               暨大生超級助理為<strong>「非校方」</strong>維護的網頁，
               所有資訊以學校新教務系統公告為準，
-              暨大生超級助理不負責任何選課、課程資訊、
-              畢業必修進度追蹤、校園行事曆等相關問題。
+              本網站與所有權人不負責任何與選課、課程資訊、
+              畢業必修進度追蹤、校園通訊錄、校園行事曆等工具所衍生的相關問題。
             </p>
             
             <div className="disclaimer-note">
@@ -41,6 +41,8 @@ const DisclaimerModal = ({ isVisible, onAccept }) => {
                 <li>本網站僅供參考，不代表學校官方立場</li>
                 <li>如有疑問請以學校正式公告為準</li>
                 <li>使用本網站即表示您同意上述聲明</li>
+                <li>建議以<strong>最新版chrome、Edge瀏覽器</strong>使用本網站，以獲得最佳體驗</li>
+                <li><strong>問題回報請至IG私訊「暨大生超級助理」(ncnu_super_assistant)</strong></li>
               </ul>
             </div>
           </div>
