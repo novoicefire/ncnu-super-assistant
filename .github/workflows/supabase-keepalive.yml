@@ -1,0 +1,36 @@
+name: Supabase Keepalive (多環境)
+
+on:
+  schedule:
+    - cron: '0 9 * * 1,4'  # 每週一和週四 UTC 早上 9 點執行
+  workflow_dispatch:  # 允許手動觸發
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        environment: [production, staging]
+      fail-fast: false  # 即使其中一個環境失敗，仍繼續執行其他環境
+    
+    steps:
+      - name: Ping Supabase - ${{ matrix.environment }}
+        env:
+          SUPABASE_URL: ${{ matrix.environment == 'production' && secrets.SUPABASE_URL_PROD || secrets.SUPABASE_URL_STAGING }}
+          SUPABASE_KEY: ${{ matrix.environment == 'production' && secrets.SUPABASE_KEY_PROD || secrets.SUPABASE_KEY_STAGING }}
+        run: |
+          echo "正在 ping ${{ matrix.environment }} 環境..."
+          
+          response=$(curl -s \
+            -X GET "${SUPABASE_URL}/rest/v1/" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}")
+          
+          if [ -z "$response" ]; then
+            echo "❌ 錯誤：${{ matrix.environment }} 環境 Ping 失敗，無回應" >&2
+            exit 1
+          fi
+          
+          echo "✅ ${{ matrix.environment }} 環境 Ping 成功"
+          echo "回應: $response"
