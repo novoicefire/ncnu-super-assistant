@@ -5,6 +5,9 @@ import StatusCard from './StatusCard.jsx';
 import { robustRequest } from '../../apiHelper.js';
 import { useCalendarEvents } from '../../hooks/useCalendarEvents'; // 導入新的 Hook
 
+const RECOMMENDED_MIN_CREDITS = 16; // 建議最低學分
+const RECOMMENDED_MAX_CREDITS = 22; // 建議最高學分
+
 const TodayStatus = () => {
   const { user, isLoggedIn } = useAuth();
   const { events: allCalendarEvents, loading: calendarLoading } = useCalendarEvents(); // 使用 Hook
@@ -144,8 +147,8 @@ const TodayStatus = () => {
         '通識': { credits: 0, courses: [] },
         '其他': { credits: 0, courses: [] }
       },
-      recommendedMin: 18,
-      recommendedMax: 25
+      recommendedMin: RECOMMENDED_MIN_CREDITS,
+      recommendedMax: RECOMMENDED_MAX_CREDITS
     };
 
     if (!schedule || typeof schedule !== 'object') {
@@ -195,8 +198,8 @@ const TodayStatus = () => {
         totalCredits,
         courseCount: uniqueCourses.length,
         categories,
-        recommendedMin: 18,
-        recommendedMax: 25
+        recommendedMin: RECOMMENDED_MIN_CREDITS,
+        recommendedMax: RECOMMENDED_MAX_CREDITS
       };
     } catch (error) {
       console.error('計算學分詳情時發生錯誤:', error);
