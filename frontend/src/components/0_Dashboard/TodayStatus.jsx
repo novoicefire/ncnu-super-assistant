@@ -348,7 +348,8 @@ const TodayStatus = () => {
     };
 
     const status = getCreditsStatus();
-    const progressPercentage = Math.min((totalCredits / recommendedMax) * 100, 100);
+    const PROGRESS_BAR_MAX_CREDITS = 25; // 定義進度條的滿格為 25 學分
+    const progressPercentage = Math.min((totalCredits / PROGRESS_BAR_MAX_CREDITS) * 100, 100);
 
     return (
       <div className="credits-overview">
@@ -388,8 +389,8 @@ const TodayStatus = () => {
             )}
           </div>
           <div className="progress-markers">
-            <span className="marker min-marker">{recommendedMin}</span>
-            <span className="marker max-marker">{recommendedMax}</span>
+            <span className="marker min-marker">0</span>
+            <span className="marker max-marker">{PROGRESS_BAR_MAX_CREDITS}</span>
           </div>
         </div>
 
