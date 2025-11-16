@@ -42,7 +42,11 @@ const DisclaimerModal = ({ isVisible, onAccept }) => {
                 <li>如有疑問請以學校正式公告為準</li>
                 <li>使用本網站即表示您同意上述聲明</li>
                 <li>建議以<strong>最新版chrome、Edge瀏覽器</strong>使用本網站，以獲得最佳體驗</li>
-                <li><strong>問題回報請至IG私訊「暨大生超級助理」(ncnu_super_assistant)</strong></li>
+                <li>
+                  <a href="https://www.instagram.com/ncnu_super_assistant/" target="_blank" rel="noopener noreferrer">
+                    <strong>問題回報請至IG私訊「暨大生超級助理」(ncnu_super_assistant)</strong>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
