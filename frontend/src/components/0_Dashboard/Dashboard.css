@@ -851,6 +851,7 @@
 .progress-fill {
   height: 100%;
   background: var(--gradient-success);
+  /* ✅ 移除：背景顏色將由 TodayStatus.jsx 動態提供 */
   border-radius: 10px;
   transition: width 0.8s var(--spring-easing);
   position: relative;

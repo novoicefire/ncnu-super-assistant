@@ -5,6 +5,9 @@ import StatusCard from './StatusCard.jsx';
 import { robustRequest } from '../../apiHelper.js';
 import { useCalendarEvents } from '../../hooks/useCalendarEvents'; // 導入新的 Hook
 
+const RECOMMENDED_MIN_CREDITS = 16; // 建議最低學分
+const RECOMMENDED_MAX_CREDITS = 22; // 建議最高學分
+
 const TodayStatus = () => {
   const { user, isLoggedIn } = useAuth();
   const { events: allCalendarEvents, loading: calendarLoading } = useCalendarEvents(); // 使用 Hook
@@ -16,6 +19,7 @@ const TodayStatus = () => {
     courses: [],
     events: [],
     totalCredits: 0,
+    creditsStatus: { type: 'empty', message: '', color: '#6c757d' }, // 🎯 新增
     creditDetails: {},
     isLoading: true,
     lastUpdate: null
@@ -144,8 +148,8 @@ const TodayStatus = () => {
         '通識': { credits: 0, courses: [] },
         '其他': { credits: 0, courses: [] }
       },
-      recommendedMin: 18,
-      recommendedMax: 25
+      recommendedMin: RECOMMENDED_MIN_CREDITS,
+      recommendedMax: RECOMMENDED_MAX_CREDITS
     };
 
     if (!schedule || typeof schedule !== 'object') {
@@ -195,13 +199,67 @@ const TodayStatus = () => {
         totalCredits,
         courseCount: uniqueCourses.length,
         categories,
-        recommendedMin: 18,
-        recommendedMax: 25
+        recommendedMin: RECOMMENDED_MIN_CREDITS,
+        recommendedMax: RECOMMENDED_MAX_CREDITS
       };
     } catch (error) {
       console.error('計算學分詳情時發生錯誤:', error);
       return defaultResult;
     }
+  };
+
+  // 🎯 新增：顏色插值輔助函式 (移至元件頂層)
+  const interpolateColor = (color1, color2, factor) => {
+    const result = color1.slice();
+    for (let i = 0; i < 3; i++) {
+      result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+    }
+    return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
+  };
+
+  // 🎯 修改：將 getCreditsStatus 移至元件頂層
+  const getCreditsStatus = (totalCredits, recommendedMin, recommendedMax) => {
+    const COLORS = {
+      good: [40, 167, 69],    // Green: #28a745
+      warn: [255, 193, 7],   // Yellow: #ffc107
+      danger: [220, 53, 69],   // Red: #dc3545
+      empty: [108, 117, 125] // Gray: #6c757d
+    };
+
+    if (totalCredits === 0) {
+      return { type: 'empty', message: '尚未選修課程', color: `rgb(${COLORS.empty.join(',')})` };
+    }
+
+    if (totalCredits < recommendedMin) {
+      let message = '學分偏少，建議增加課程';
+      const range = recommendedMin - 1;
+      const distance = recommendedMin - totalCredits;
+      const factor = Math.min(distance / range, 1.0);
+      
+      let color;
+      if (factor <= 0.5) {
+        color = interpolateColor(COLORS.good, COLORS.warn, factor * 2);
+      } else {
+        color = interpolateColor(COLORS.warn, COLORS.danger, (factor - 0.5) * 2);
+      }
+      return { type: 'low', message, color };
+
+    } else if (totalCredits > recommendedMax) {
+      let message = '學分較多，注意學習負擔';
+      const PROGRESS_BAR_MAX_CREDITS = 25;
+      const range = PROGRESS_BAR_MAX_CREDITS - recommendedMax;
+      const distance = totalCredits - recommendedMax;
+      const factor = Math.min(distance / range, 1.0);
+
+      let color;
+      if (factor <= 0.5) {
+        color = interpolateColor(COLORS.good, COLORS.warn, factor * 2);
+      } else {
+        color = interpolateColor(COLORS.warn, COLORS.danger, (factor - 0.5) * 2);
+      }
+      return { type: 'high', message, color };
+    }
+    return { type: 'good', message: '學分安排合理', color: `rgb(${COLORS.good.join(',')})` };
   };
 
   // 載入課表資料
@@ -214,10 +272,12 @@ const TodayStatus = () => {
       const schedule = await robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } });
       const todayCourses = getTodayCourses(schedule);
       const totalCredits = calculateTotalCredits(schedule);
+      const creditsStatus = getCreditsStatus(totalCredits, RECOMMENDED_MIN_CREDITS, RECOMMENDED_MAX_CREDITS); // 🎯 計算狀態
       const creditDetails = calculateCreditDetails(schedule);
       setTodayData(prev => ({
         ...prev,
         courses: todayCourses,
+        creditsStatus, // 🎯 儲存狀態
         totalCredits,
         creditDetails,
         isLoading: calendarLoading, // Loading state now depends on calendar events too
@@ -334,18 +394,9 @@ const TodayStatus = () => {
       );
     }
 
-    const getCreditsStatus = () => {
-      if (totalCredits < recommendedMin) {
-        return { type: 'low', message: '學分偏少，建議增加課程', color: '#ffc107' };
-      } else if (totalCredits > recommendedMax) {
-        return { type: 'high', message: '學分較多，注意學習負擔', color: '#dc3545' };
-      } else {
-        return { type: 'good', message: '學分安排合理', color: '#28a745' };
-      }
-    };
-
-    const status = getCreditsStatus();
-    const progressPercentage = Math.min((totalCredits / recommendedMax) * 100, 100);
+    const status = todayData.creditsStatus; // 🎯 直接使用已計算好的狀態
+    const PROGRESS_BAR_MAX_CREDITS = 25; // 定義進度條的滿格為 25 學分
+    const progressPercentage = Math.min((totalCredits / PROGRESS_BAR_MAX_CREDITS) * 100, 100);
 
     return (
       <div className="credits-overview">
@@ -369,11 +420,13 @@ const TodayStatus = () => {
           </div>
           <div className="progress-bar">
             <div 
-              className="progress-fill" 
+              className="progress-fill"
+              // 🎯 修改：使用 !important 強制覆蓋外部樣式
               style={{ 
-                width: `${progressPercentage}%`,
-                backgroundColor: status.color 
+                '--progress-width': `${progressPercentage}%`,
+                '--progress-color': status.color
               }}
+              // The style tag below will use the CSS variables to apply the style with !important
             ></div>
             {totalCredits > recommendedMax && (
               <div 
@@ -383,10 +436,23 @@ const TodayStatus = () => {
                 }}
               ></div>
             )}
+            {/* 🎯 新增：建議學分範圍標記 */}
+            <div
+              className="suggestion-marker"
+              style={{ left: `${(recommendedMin / PROGRESS_BAR_MAX_CREDITS) * 100}%` }}
+              title={`建議最低學分: ${recommendedMin}`}
+            >
+            </div>
+            <div
+              className="suggestion-marker"
+              style={{ left: `${(recommendedMax / PROGRESS_BAR_MAX_CREDITS) * 100}%` }}
+              title={`建議最高學分: ${recommendedMax}`}
+            >
+            </div>
           </div>
           <div className="progress-markers">
-            <span className="marker min-marker">{recommendedMin}</span>
-            <span className="marker max-marker">{recommendedMax}</span>
+            <span className="marker min-marker">0</span>
+            <span className="marker max-marker">{PROGRESS_BAR_MAX_CREDITS}</span>
           </div>
         </div>
 
@@ -536,7 +602,8 @@ const TodayStatus = () => {
               icon="⭐"
               title="總學分"
               value={`${todayData.totalCredits} 學分`}
-              status={todayData.totalCredits > 0 ? 'active' : 'empty'}
+              status={todayData.creditsStatus.type}
+              statusColor={todayData.creditsStatus.color}
               cardContent={renderCreditsCard()}
               isClickable={true}
               isOpen={activeCard === 'credits'}
@@ -602,6 +669,28 @@ const TodayStatus = () => {
           opacity: 0;
           padding-top: 0;
           padding-bottom: 0;
+        }
+
+        /* 🎯 新增：建議標記樣式 (移至全域範圍) */
+        .progress-bar {
+          position: relative; /* 讓標記可以相對於它定位 */
+        }
+
+        .suggestion-marker {
+          position: absolute;
+          top: -4px; /* 向上偏移一點，使其突出 */
+          bottom: -4px; /* 向下偏移一點，使其突出 */
+          width: 2px;
+          background-color: rgba(108, 117, 125, 0.5); /* 半透明灰色 */
+          transform: translateX(-50%); /* 將標記置中於其 left 位置 */
+          z-index: 1; /* 確保在進度條填充色的上方 */
+        }
+
+        /* 🎯 新增：使用 CSS 變數並加上 !important */
+        .progress-fill {
+          width: var(--progress-width, 0%);
+          /* ✅ 修正：直接覆蓋 background 屬性 */
+          background: var(--progress-color, #28a745) !important;
         }
 
         @media (max-width: 768px) {
