@@ -90,7 +90,7 @@ def load_static_data_if_needed():
 # --- API 端點 ---
 @app.route("/")
 def index():
-    return "NCNU Super Assistant Backend is alive! (v12 - Final Secure CORS)"
+    return "NCNU Super Assistant Backend is alive! (v13 - Flexible Courses Support)"
 
 @app.route("/api/auth/google", methods=['POST'])
 def google_auth():
@@ -106,43 +106,81 @@ def google_auth():
         print(f"ERROR in google_auth: {e}")
         return jsonify({"error": str(e)}), 500
 
+# 🔄 修改：支援 flexible_courses 欄位
 @app.route("/api/schedule", methods=['GET', 'POST'])
 def handle_schedule():
     user_id = request.args.get('user_id')
-    if not user_id: return jsonify({"error": "User ID is required"}), 400
+    if not user_id: 
+        return jsonify({"error": "User ID is required"}), 400
+    
     if request.method == 'POST':
-        schedule_data = request.json
+        # 🆕 接收兩種資料：schedule_data 和 flexible_courses
+        data = request.json
+        
+        # 兼容舊版前端（直接傳 schedule_data 物件）
+        if isinstance(data, dict) and 'schedule_data' not in data and 'flexible_courses' not in data:
+            # 舊版格式：直接傳課表物件
+            schedule_data = data
+            flexible_courses = []
+        else:
+            # 新版格式：包含 schedule_data 和 flexible_courses
+            schedule_data = data.get('schedule_data', {})
+            flexible_courses = data.get('flexible_courses', [])
+        
         try:
             response = supabase.table('schedules').select('id').eq('user_id', user_id).limit(1).execute()
             if response.data:
-                update_response = supabase.table('schedules').update({'schedule_data': schedule_data}).eq('user_id', user_id).execute()
+                # 更新現有記錄
+                update_response = supabase.table('schedules').update({
+                    'schedule_data': schedule_data,
+                    'flexible_courses': flexible_courses  # 🆕 同時更新彈性課程
+                }).eq('user_id', user_id).execute()
                 return jsonify({"success": True, "action": "updated", "data": update_response.data[0]})
             else:
-                insert_response = supabase.table('schedules').insert({'user_id': user_id, 'schedule_data': schedule_data}).execute()
+                # 新增記錄
+                insert_response = supabase.table('schedules').insert({
+                    'user_id': user_id,
+                    'schedule_data': schedule_data,
+                    'flexible_courses': flexible_courses  # 🆕 同時插入彈性課程
+                }).execute()
                 return jsonify({"success": True, "action": "inserted", "data": insert_response.data[0]})
         except Exception as e:
             print(f"!!!!!! FATAL ERROR during POST /api/schedule for user {user_id} !!!!!!")
             import traceback
             traceback.print_exc()
             return jsonify({"error": str(e)}), 500
+    
     if request.method == 'GET':
         try:
-            response = supabase.table('schedules').select('schedule_data').eq('user_id', user_id).limit(1).execute()
-            return jsonify(response.data[0]['schedule_data'] if response.data else {})
-        except Exception as e: return jsonify({"error": str(e)}), 500
+            # 🆕 同時查詢 schedule_data 和 flexible_courses
+            response = supabase.table('schedules').select('schedule_data, flexible_courses').eq('user_id', user_id).limit(1).execute()
+            
+            if response.data:
+                return jsonify({
+                    'schedule_data': response.data[0].get('schedule_data', {}),
+                    'flexible_courses': response.data[0].get('flexible_courses', [])  # 🆕 回傳彈性課程
+                })
+            else:
+                # 無資料時回傳預設值
+                return jsonify({
+                    'schedule_data': {},
+                    'flexible_courses': []
+                })
+        except Exception as e: 
+            return jsonify({"error": str(e)}), 500
 
 @app.route("/api/courses/hotness")
 def get_course_hotness():
     try:
-        response = supabase.table('schedules').select('schedule_data').execute()
+        response = supabase.table('schedules').select('schedule_data, flexible_courses').execute()  # 🆕 也查詢 flexible_courses
         if not response.data:
             return jsonify({})
 
-        all_schedules = [item['schedule_data'] for item in response.data if item and item.get('schedule_data')]
-        
         course_counts = Counter()
+        
+        # 計算固定時間課程熱度
+        all_schedules = [item['schedule_data'] for item in response.data if item and item.get('schedule_data')]
         for schedule in all_schedules:
-            # Robustly handle different data formats in the schedule_data
             if isinstance(schedule, dict) and schedule:
                 unique_course_ids_in_schedule = {
                     course['course_id'] 
@@ -150,6 +188,17 @@ def get_course_hotness():
                     if isinstance(course, dict) and 'course_id' in course
                 }
                 course_counts.update(unique_course_ids_in_schedule)
+        
+        # 🆕 計算彈性課程熱度
+        all_flexible = [item['flexible_courses'] for item in response.data if item and item.get('flexible_courses')]
+        for flexible_list in all_flexible:
+            if isinstance(flexible_list, list):
+                unique_flexible_ids = {
+                    course['course_id']
+                    for course in flexible_list
+                    if isinstance(course, dict) and 'course_id' in course
+                }
+                course_counts.update(unique_flexible_ids)
                 
         return jsonify(dict(course_counts))
     except Exception as e:
