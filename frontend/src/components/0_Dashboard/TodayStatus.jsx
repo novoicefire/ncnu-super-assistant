@@ -688,9 +688,9 @@ const TodayStatus = () => {
 
         /* 🎯 新增：使用 CSS 變數並加上 !important */
         .progress-fill {
-          width: var(--progress-width, 0%) !important;
-          background-color: var(--progress-color, #28a745) !important;
-          /* The rest of the .progress-fill styles from Dashboard.css should be here if any */
+          width: var(--progress-width, 0%);
+          /* ✅ 修正：直接覆蓋 background 屬性 */
+          background: var(--progress-color, #28a745) !important;
         }
 
         @media (max-width: 768px) {
