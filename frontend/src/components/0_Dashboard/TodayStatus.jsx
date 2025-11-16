@@ -337,13 +337,60 @@ const TodayStatus = () => {
       );
     }
 
+    // 🎯 新增：顏色插值輔助函式
+    const interpolateColor = (color1, color2, factor) => {
+      const result = color1.slice();
+      for (let i = 0; i < 3; i++) {
+        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+      }
+      return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
+    };
+
     const getCreditsStatus = () => {
+      const COLORS = {
+        good: [40, 167, 69],    // Green: #28a745
+        warn: [255, 193, 7],   // Yellow: #ffc107
+        danger: [220, 53, 69]    // Red: #dc3545
+      };
+
       if (totalCredits < recommendedMin) {
-        return { type: 'low', message: '學分偏少，建議增加課程', color: '#ffc107' };
+        let message = '學分偏少，建議增加課程';
+        // 從 (建議最低 - 1) 到 0 的範圍內計算顏色
+        // 越接近 0，越偏向紅色
+        const range = recommendedMin - 1;
+        const distance = recommendedMin - totalCredits;
+        const factor = Math.min(distance / range, 1.0);
+        
+        let color;
+        if (factor <= 0.5) {
+          // 從綠色到黃色
+          color = interpolateColor(COLORS.good, COLORS.warn, factor * 2);
+        } else {
+          // 從黃色到紅色
+          color = interpolateColor(COLORS.warn, COLORS.danger, (factor - 0.5) * 2);
+        }
+
+        return { type: 'low', message, color };
+
       } else if (totalCredits > recommendedMax) {
-        return { type: 'high', message: '學分較多，注意學習負擔', color: '#dc3545' };
+        let message = '學分較多，注意學習負擔';
+        // 從 (建議最高 + 1) 到 25 的範圍內計算顏色
+        // 越接近 25，越偏向紅色
+        const range = PROGRESS_BAR_MAX_CREDITS - recommendedMax;
+        const distance = totalCredits - recommendedMax;
+        const factor = Math.min(distance / range, 1.0);
+
+        let color;
+        if (factor <= 0.5) {
+          // 從綠色到黃色
+          color = interpolateColor(COLORS.good, COLORS.warn, factor * 2);
+        } else {
+          // 從黃色到紅色
+          color = interpolateColor(COLORS.warn, COLORS.danger, (factor - 0.5) * 2);
+        }
+        return { type: 'high', message, color };
       } else {
-        return { type: 'good', message: '學分安排合理', color: '#28a745' };
+        return { type: 'good', message: '學分安排合理', color: `rgb(${COLORS.good.join(',')})` };
       }
     };
 
