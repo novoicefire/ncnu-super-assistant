@@ -13,6 +13,8 @@ const TodayStatus = () => {
   const { events: allCalendarEvents, loading: calendarLoading } = useCalendarEvents(); // 使用 Hook
 
   const [activeCard, setActiveCard] = useState(null);
+  const [schedule, setSchedule] = useState({});
+  const [flexibleCourses, setFlexibleCourses] = useState([]);
   const todayStatusRef = useRef(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [todayData, setTodayData] = useState({
@@ -128,17 +130,24 @@ const TodayStatus = () => {
     return now >= courseStart && now <= courseEnd;
   };
 
-  const calculateTotalCredits = (schedule) => {
-    if (!schedule) return 0;
-    const uniqueCourses = [...new Map(
-      Object.values(schedule).map(item => [item.course_id, item])
-    ).values()];
-    return uniqueCourses.reduce((sum, course) => 
-      sum + parseFloat(course.course_credit || 0), 0
-    );
+  const calculateTotalCredits = (schedule, flexibleCourses = []) => {
+    if (!schedule && (!flexibleCourses || flexibleCourses.length === 0)) return 0;
+
+    // 固定課表部分
+    const courses = Object.values(schedule || {});
+    const uniqueCourses = [...new Map(courses.map(item => item && [item.course_id, item])).values()].filter(Boolean);
+
+    // 彈性課程
+    const flexibleUnique = [...new Map((flexibleCourses || []).map(fc => fc && [fc.course_id, fc])).values()].filter(Boolean);
+
+    // 合併，並再次去重以防萬一
+    const allCourses = [...uniqueCourses, ...flexibleUnique];
+    const finalUniqueCourses = [...new Map(allCourses.map(c => [c.course_id, c])).values()];
+
+    return finalUniqueCourses.reduce((sum, c) => sum + parseFloat(c.course_credit || 0), 0);
   };
 
-  const calculateCreditDetails = (schedule) => {
+  const calculateCreditDetails = (schedule, flexibleCourses = []) => {
     const defaultResult = {
       totalCredits: 0,
       courseCount: 0,
@@ -152,15 +161,22 @@ const TodayStatus = () => {
       recommendedMax: RECOMMENDED_MAX_CREDITS
     };
 
-    if (!schedule || typeof schedule !== 'object') {
+    if ((!schedule || typeof schedule !== 'object') && (!flexibleCourses || flexibleCourses.length === 0)) {
       return defaultResult;
     }
 
     try {
-      const uniqueCourses = [...new Map(
-        Object.values(schedule).map(item => [item.course_id, item])
-      ).values()];
+      // 固定課表部分
+      const courses = Object.values(schedule || {});
+      const uniqueCourses = [...new Map(courses.map(item => item && [item.course_id, item])).values()].filter(Boolean);
 
+      // 彈性課程
+      const flexibleUnique = [...new Map((flexibleCourses || []).map(fc => fc && [fc.course_id, fc])).values()].filter(Boolean);
+
+      // 合併，並再次去重
+      const allUniqueCourses = [...new Map([...uniqueCourses, ...flexibleUnique].map(c => [c.course_id, c])).values()];
+
+      // 分類計算
       const categories = {
         '必修': { credits: 0, courses: [] },
         '選修': { credits: 0, courses: [] },
@@ -168,7 +184,7 @@ const TodayStatus = () => {
         '其他': { credits: 0, courses: [] }
       };
 
-      uniqueCourses.forEach(course => {
+      allUniqueCourses.forEach(course => {
         if (!course) return;
         
         const credits = parseFloat(course.course_credit || 0);
@@ -191,13 +207,13 @@ const TodayStatus = () => {
         });
       });
 
-      const totalCredits = uniqueCourses.reduce((sum, course) => 
+      const totalCredits = allUniqueCourses.reduce((sum, course) => 
         sum + parseFloat(course.course_credit || 0), 0
       );
 
       return {
         totalCredits,
-        courseCount: uniqueCourses.length,
+        courseCount: allUniqueCourses.length,
         categories,
         recommendedMin: RECOMMENDED_MIN_CREDITS,
         recommendedMax: RECOMMENDED_MAX_CREDITS
@@ -269,11 +285,15 @@ const TodayStatus = () => {
       return;
     }
     try {
-      const schedule = await robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } });
-      const todayCourses = getTodayCourses(schedule);
-      const totalCredits = calculateTotalCredits(schedule);
+      const data = await robustRequest('get', '/api/schedule', {
+        params: { user_id: user.google_id }
+      });
+      setSchedule(data?.schedule_data || {});
+      setFlexibleCourses(data?.flexible_courses || []);
+      const todayCourses = getTodayCourses(data?.schedule_data);
+      const totalCredits = calculateTotalCredits(data?.schedule_data, data?.flexible_courses);
       const creditsStatus = getCreditsStatus(totalCredits, RECOMMENDED_MIN_CREDITS, RECOMMENDED_MAX_CREDITS); // 🎯 計算狀態
-      const creditDetails = calculateCreditDetails(schedule);
+      const creditDetails = calculateCreditDetails(data?.schedule_data, data?.flexible_courses);
       setTodayData(prev => ({
         ...prev,
         courses: todayCourses,
@@ -382,9 +402,9 @@ const TodayStatus = () => {
       );
     }
 
-    const { totalCredits, courseCount, categories, recommendedMin, recommendedMax } = todayData.creditDetails;
+    const { courseCount, categories, recommendedMin, recommendedMax } = todayData.creditDetails;
 
-    if (totalCredits === 0) {
+    if (todayData.totalCredits === 0) {
       return (
         <div className="empty-state">
           <div className="empty-icon">📚</div>
@@ -396,13 +416,13 @@ const TodayStatus = () => {
 
     const status = todayData.creditsStatus; // 🎯 直接使用已計算好的狀態
     const PROGRESS_BAR_MAX_CREDITS = 25; // 定義進度條的滿格為 25 學分
-    const progressPercentage = Math.min((totalCredits / PROGRESS_BAR_MAX_CREDITS) * 100, 100);
+    const progressPercentage = Math.min((todayData.totalCredits / PROGRESS_BAR_MAX_CREDITS) * 100, 100);
 
     return (
       <div className="credits-overview">
         <div className="credits-summary">
           <div className="credits-main">
-            <div className="credits-number">{totalCredits}</div>
+            <div className="credits-number">{todayData.totalCredits}</div>
             <div className="credits-unit">學分</div>
           </div>
           <div className="credits-info">
@@ -428,11 +448,11 @@ const TodayStatus = () => {
               }}
               // The style tag below will use the CSS variables to apply the style with !important
             ></div>
-            {totalCredits > recommendedMax && (
+            {todayData.totalCredits > recommendedMax && (
               <div 
                 className="progress-overflow"
                 style={{ 
-                  width: `${((totalCredits - recommendedMax) / recommendedMax) * 100}%` 
+                  width: `${((todayData.totalCredits - recommendedMax) / recommendedMax) * 100}%` 
                 }}
               ></div>
             )}
@@ -504,7 +524,7 @@ const TodayStatus = () => {
               <>
                 <p>目前學分偏少，建議：</p>
                 <ul>
-                  <li>考慮增加 {recommendedMin - totalCredits} 學分</li>
+                  <li>考慮增加 {recommendedMin - todayData.totalCredits} 學分</li>
                   <li>選修感興趣的通識課程</li>
                   <li>提前修習下學期必修課程</li>
                 </ul>
