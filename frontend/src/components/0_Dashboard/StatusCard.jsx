@@ -88,7 +88,7 @@ const StatusCard = ({
   const PopupCard = () => (
     <div
       ref={popupRef}
-      className="status-card-popup-glass"
+      className={`status-card-popup-glass`} // [修改] 移除 getStatusClass()
       style={{
         position: 'fixed',
         left: `${cardPosition.x}px`,
