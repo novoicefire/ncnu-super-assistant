@@ -2,35 +2,35 @@ name: Keep Render Alive
 
 on:
   schedule:
-    # 每 10 分鐘執行一次，僅在台灣白天時段
     - cron: '*/10 23 * * *'      # UTC 23:00-23:59 → 台灣 07:00-07:59
     - cron: '*/10 0-18 * * *'    # UTC 00:00-18:59 → 台灣 08:00-02:59
-  
-  workflow_dispatch:  # 允許手動觸發
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  # 檢查是否在台灣白天時段
   check-time:
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.time_check.outputs.should_run }}
+      current_time: ${{ steps.time_check.outputs.current_time }}
     steps:
       - name: Check Taiwan Time
         id: time_check
         run: |
           current_hour=$(TZ='Asia/Taipei' date +'%H')
-          echo "當前台灣時間: $(TZ='Asia/Taipei' date)"
+          current_time=$(TZ='Asia/Taipei' date +'%Y-%m-%d %H:%M:%S')
+          echo "當前台灣時間: $current_time"
           echo "當前小時: $current_hour"
+          echo "current_time=$current_time" >> $GITHUB_OUTPUT
           
           if [ "$current_hour" -ge 7 ] || [ "$current_hour" -lt 3 ]; then
-            echo "在執行時段內，繼續執行"
             echo "should_run=true" >> $GITHUB_OUTPUT
           else
-            echo "在休眠時段(03:00-06:59)，跳過執行"
             echo "should_run=false" >> $GITHUB_OUTPUT
           fi
 
-  # 喚醒 Render 服務
   ping-render:
     runs-on: ubuntu-latest
     needs: check-time
@@ -38,84 +38,67 @@ jobs:
     steps:
       - name: Ping Render Service
         id: ping
-        continue-on-error: true
         run: |
           echo "正在喚醒 Render 服務..."
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             --max-time 30 \
-            https://ncnu-assistant-backend.onrender.com)
+            https://wrong-url-for-testing.onrender.com/ping)
           
           if [ "$response" -eq 200 ]; then
             echo "✅ 服務正常運行 (HTTP $response)"
             echo "status=success" >> $GITHUB_OUTPUT
-            exit 0
+            echo "response_code=$response" >> $GITHUB_OUTPUT
           else
             echo "⚠️ 服務回應異常 (HTTP $response)"
             echo "status=failed" >> $GITHUB_OUTPUT
             echo "response_code=$response" >> $GITHUB_OUTPUT
-            exit 1
           fi
       
-      # 發送 Discord 通知（僅在失敗時）
-      - name: Send Discord Alert on Failure
-        if: failure()
-        uses: sarisia/actions-status-discord@v1
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: 'Failure'
-          title: '🚨 Render 服務異常警報'
-          description: |
-            **服務無法正常回應**
-            
-            **HTTP 狀態碼**: `${{ steps.ping.outputs.response_code }}`
-            **時間**: ${{ github.event.head_commit.timestamp }}
-            **倉庫**: `${{ github.repository }}`
-          color: 0xff0000
-          username: Render 監控機器人
-          avatar_url: https://avatars.githubusercontent.com/u/44036562?s=200&v=4
-      
-      # 每天早上 8 點發送成功摘要（可選）
-      - name: Send Daily Summary
-        if: success() && github.event.schedule == '0 0 * * *'
-        uses: sarisia/actions-status-discord@v1
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: 'Success'
-          title: '✅ Render 服務運行正常'
-          description: |
-            **服務狀態**: 正常運行
-            **監控週期**: 過去 24 小時
-            **倉庫**: `${{ github.repository }}`
-          color: 0x00ff00
-          username: Render 監控機器人
-          nodetail: true
-
-  # 防止 Workflow 失效
-  keep-workflow-alive:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - name: Check and Create Keepalive Commit
+      # 使用 curl 直接發送 Discord 通知（最可靠的方式）
+      - name: Send Discord Alert
+        if: always() && steps.ping.outputs.status == 'failed'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          curl -X POST "${{ secrets.DISCORD_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "embeds": [{
+                "title": "🚨 Render 服務異常警報",
+                "description": "服務無法正常回應，請立即檢查！",
+                "color": 16711680,
+                "fields": [
+                  {
+                    "name": "HTTP 狀態碼",
+                    "value": "`${{ steps.ping.outputs.response_code }}`",
+                    "inline": true
+                  },
+                  {
+                    "name": "倉庫",
+                    "value": "`${{ github.repository }}`",
+                    "inline": true
+                  },
+                  {
+                    "name": "觸發時間",
+                    "value": "${{ needs.check-time.outputs.current_time }} (台灣時間)",
+                    "inline": false
+                  },
+                  {
+                    "name": "執行記錄",
+                    "value": "[點擊查看詳情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                    "inline": false
+                  }
+                ],
+                "footer": {
+                  "text": "Workflow: ${{ github.workflow }}"
+                },
+                "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+              }],
+              "username": "Render 監控機器人",
+              "avatar_url": "https://avatars.githubusercontent.com/u/44036562?s=200&v=4"
+            }'
           
-          last_commit_date=$(git log -1 --format=%ct)
-          current_date=$(date +%s)
-          days_since_commit=$(( ($current_date - $last_commit_date) / 86400 ))
-          
-          echo "📅 距離上次提交: $days_since_commit 天"
-          
-          if [ $days_since_commit -gt 50 ]; then
-            echo "⚠️ 超過 50 天未提交，建立 keepalive commit"
-            git commit --allow-empty -m "chore: keepalive [skip ci]"
-            git push
-            echo "✅ Keepalive commit 已推送"
+          if [ $? -eq 0 ]; then
+            echo "✅ Discord 通知已發送"
           else
-            echo "✅ 無需 keepalive commit"
+            echo "❌ Discord 通知發送失敗"
+            exit 1
           fi
