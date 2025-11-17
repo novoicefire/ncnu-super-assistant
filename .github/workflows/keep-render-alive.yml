@@ -42,7 +42,7 @@ jobs:
           echo "正在喚醒 Render 服務..."
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             --max-time 30 \
-            https://wrong-url-for-testing.onrender.com/ping)
+            https://ncnu-assistant-backend.onrender.com)
           
           if [ "$response" -eq 200 ]; then
             echo "✅ 服務正常運行 (HTTP $response)"
