@@ -60,16 +60,25 @@
 
 ### 安裝步驟
 
-- **複製專案**：
-- git clone <https://github.com/novoicefire/ncnu-super-assistant.git>
-- cd ncnu-super-assistant
+**1. 複製專案**
 
-- **安裝前端依賴**：
-- cd frontend
-- npm install
+```bash
+git clone https://github.com/novoicefire/ncnu-super-assistant.git
+cd ncnu-super-assistant
+```
 
-啟動開發伺服器
+**2. 安裝前端依賴**
+
+```bash
+cd frontend
+npm install
+```
+
+**3. 啟動開發伺服器**
+
+```bash
 npm run dev
+```
 
 ### 環境變數設置
 
@@ -136,15 +145,19 @@ npm run dev
 
 ### 提交規範
 
+```
 type(scope): description
+```
 
-feat: 新功能
-fix: 錯誤修復
-docs: 文件更新
-style: 程式碼格式
-refactor: 重構
-test: 測試相關
-chore: 其他修改
+**類型說明：**
+
+- `feat`: 新功能
+- `fix`: 錯誤修復
+- `docs`: 文件更新
+- `style`: 程式碼格式
+- `refactor`: 重構
+- `test`: 測試相關
+- `chore`: 其他修改
 
 ## 📞 聯絡資訊
 
@@ -154,8 +167,7 @@ chore: 其他修改
 
 ## 📜 授權條款
 
-本專案採用 MIT 授權條款，詳見 [LICENSE](LICENSE) 檔案。
-
+本專案採用 [MIT 授權條款](https://opensource.org/licenses/MIT)，詳見 [LICENSE](https://github.com/novoicefire/ncnu-super-assistant/blob/main/LICENSE) 檔案。
 ---
 
 **⚠️ 重要聲明**：本專案為非官方學生自主開發，所有資訊請以學校正式公告為準。
