@@ -2,8 +2,9 @@ name: Keep Render Alive
 
 on:
   schedule:
-    - cron: '*/10 23 * * *'      # UTC 23:00-23:59 → 台灣 07:00-07:59
-    - cron: '*/10 0-18 * * *'    # UTC 00:00-18:59 → 台灣 08:00-02:59
+    # 每 5 分鐘執行一次，對應台灣時間 07:00-23:59
+    - cron: '*/5 23 * * *'      # UTC 23:00-23:55 → 台灣 07:00-07:55
+    - cron: '*/5 0-15 * * *'    # UTC 00:00-15:55 → 台灣 08:00-23:55
   workflow_dispatch:
 
 permissions:
@@ -25,9 +26,12 @@ jobs:
           echo "當前小時: $current_hour"
           echo "current_time=$current_time" >> $GITHUB_OUTPUT
           
-          if [ "$current_hour" -ge 7 ] || [ "$current_hour" -lt 3 ]; then
+          # 台灣時間 07:00-23:59 執行（排除 00:00-06:59）
+          if [ "$current_hour" -ge 7 ]; then
+            echo "✅ 在執行時段內 (07:00-23:59)，繼續執行"
             echo "should_run=true" >> $GITHUB_OUTPUT
           else
+            echo "💤 在休眠時段 (00:00-06:59)，跳過執行"
             echo "should_run=false" >> $GITHUB_OUTPUT
           fi
 
@@ -39,66 +43,76 @@ jobs:
       - name: Ping Render Service
         id: ping
         run: |
-          echo "正在喚醒 Render 服務..."
+          echo "🔄 正在喚醒 Render 服務 (5 分鐘間隔確保不休眠)..."
+          
           response=$(curl -s -o /dev/null -w "%{http_code}" \
-            --max-time 30 \
+            --max-time 45 \
+            --connect-timeout 20 \
             https://ncnu-assistant-backend.onrender.com)
           
-          if [ "$response" -eq 200 ]; then
-            echo "✅ 服務正常運行 (HTTP $response)"
-            echo "status=success" >> $GITHUB_OUTPUT
-            echo "response_code=$response" >> $GITHUB_OUTPUT
+          curl_exit_code=$?
+          
+          if [ $curl_exit_code -eq 0 ]; then
+            if [ "$response" -eq 200 ]; then
+              echo "✅ 服務正常運行 (HTTP $response)"
+              echo "status=success" >> $GITHUB_OUTPUT
+              echo "response_code=$response" >> $GITHUB_OUTPUT
+            else
+              echo "⚠️ 服務回應異常 (HTTP $response)"
+              echo "status=failed" >> $GITHUB_OUTPUT
+              echo "response_code=$response" >> $GITHUB_OUTPUT
+              echo "error_type=http_error" >> $GITHUB_OUTPUT
+            fi
           else
-            echo "⚠️ 服務回應異常 (HTTP $response)"
+            echo "❌ 連線失敗 (curl exit code: $curl_exit_code)"
             echo "status=failed" >> $GITHUB_OUTPUT
-            echo "response_code=$response" >> $GITHUB_OUTPUT
+            echo "response_code=curl_error_$curl_exit_code" >> $GITHUB_OUTPUT
+            
+            if [ $curl_exit_code -eq 28 ]; then
+              echo "error_type=timeout" >> $GITHUB_OUTPUT
+            else
+              echo "error_type=connection_error" >> $GITHUB_OUTPUT
+            fi
           fi
       
-      # 使用 curl 直接發送 Discord 通知（最可靠的方式）
+      # 發送 Discord 通知
       - name: Send Discord Alert
-        if: always() && steps.ping.outputs.status == 'failed'
+        if: always() && steps.ping.outputs.status == 'failed' && steps.ping.outputs.error_type != 'timeout'
         run: |
+          ERROR_MSG="服務異常"
+          case "${{ steps.ping.outputs.error_type }}" in
+            "http_error")
+              ERROR_MSG="HTTP 狀態碼異常"
+              ;;
+            "connection_error")
+              ERROR_MSG="無法連接到伺服器"
+              ;;
+          esac
+          
           curl -X POST "${{ secrets.DISCORD_WEBHOOK }}" \
             -H "Content-Type: application/json" \
             -d '{
               "embeds": [{
                 "title": "🚨 Render 服務異常警報",
-                "description": "服務無法正常回應，請立即檢查！",
+                "description": "'"$ERROR_MSG"'",
                 "color": 16711680,
                 "fields": [
                   {
-                    "name": "HTTP 狀態碼",
+                    "name": "狀態",
                     "value": "`${{ steps.ping.outputs.response_code }}`",
                     "inline": true
                   },
                   {
-                    "name": "倉庫",
-                    "value": "`${{ github.repository }}`",
+                    "name": "時間",
+                    "value": "${{ needs.check-time.outputs.current_time }}",
                     "inline": true
                   },
                   {
-                    "name": "觸發時間",
-                    "value": "${{ needs.check-time.outputs.current_time }} (台灣時間)",
-                    "inline": false
-                  },
-                  {
                     "name": "執行記錄",
-                    "value": "[點擊查看詳情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
-                    "inline": false
+                    "value": "[查看詳情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
                   }
                 ],
-                "footer": {
-                  "text": "Workflow: ${{ github.workflow }}"
-                },
                 "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
               }],
-              "username": "Render 監控機器人",
-              "avatar_url": "https://avatars.githubusercontent.com/u/44036562?s=200&v=4"
+              "username": "Render 監控機器人"
             }'
-          
-          if [ $? -eq 0 ]; then
-            echo "✅ Discord 通知已發送"
-          else
-            echo "❌ Discord 通知發送失敗"
-            exit 1
-          fi
