@@ -2,33 +2,6 @@
 export const announcementData = [
   {
     id: 1,
-    title: "🎁限時5天抽獎🎁租屋情況大調查！！！",
-    date: "2025-11-14",
-    priority: "high",
-    content: "<iframe src=\"https://embed.dcard.tw/post/260266739\" style='border:none' width=\"100%\" height=\"471px\"></iframe>",
-    images: [],
-    embeds: [],
-    buttons: [
-      {
-        text: "填寫問卷並抽獎!",
-        url: "https://docs.google.com/forms/d/e/1FAIpQLScgNASW27yjvVqKQT-1lcZgaeBqn-FCnu51B0L_1fRbjdFbFw/viewform",
-        style: "primary",
-        external: true
-      }
-    ]
-  },
-  {
-    id: 1,
-    title: "開學了，但一切尚未結束~",
-    date: "2025-09-07",
-    priority: "high",
-    content: "<iframe src=\"https://embed.dcard.tw/post/259732091\" style='border:none' width=\"100%\" height=\"372px\"></iframe>",
-    images: [],
-    embeds: [],
-    buttons: []
-  },
-  {
-    id: 1,
     title: "友情提示🫶不是廣告",
     date: "2025-09-01",
     priority: "normal",
@@ -45,41 +18,20 @@ export const announcementData = [
       }
     ]
   },
-/*
-
- {
+  {
     id: 2,
-    title: "📚 9/1~9/5 為二階選課選課週時間",
-    date: "2025-09-01",
+    title: "開學了，但一切尚未結束~",
+    date: "2025-09-07",
     priority: "high",
-    content: `親愛的同學們，為了您自己的權益，請記得要預先安排好課程規劃，並於校方公告時間前往校務系統選課。
-
-**選課時間：**
-9月1日 上午11:00 ~ 9月5日 上午10:00
-**選課範圍：**
-全校學生含研究生網路登記選課
-**公布抽籤時間：**
-每天的公告時間分別為:
-9月2日 上午10:50
-9月3日 上午10:50
-9月4日 上午10:50
-9月5日 上午10:50`,
+    content: "<iframe src=\"https://embed.dcard.tw/post/259732091\" style='border:none' width=\"100%\" height=\"372px\"></iframe>",
     images: [],
     embeds: [],
-    buttons: [
-      {
-        text: "了解詳情",
-        url: "https://curriculum.ncnu.edu.tw/p/404-1049-28076.php?Lang=zh-tw",
-        style: "warning",
-        icon: "📰",
-        external: true
-      }
-    ]
+    buttons: []
   },
   {
     id: 3,
     title: "🎓 暨大生使用回饋",
-    date: "2025-07-27", 
+    date: "2025-07-27",
     priority: "low",
     content: `感謝所有使用暨大生超級助理的同學們！您的支持是我們持續改進的動力。
 
@@ -96,12 +48,42 @@ export const announcementData = [
     buttons: [
       {
         text: "追蹤IG",
-        url: "https://www.instagram.com/ncnu_super_assistant/", 
+        url: "https://www.instagram.com/ncnu_super_assistant/",
         style: "success",
         icon: "💬",
         external: true
       },
     ]
   }
-*/
+  /*
+   {
+      id: 2,
+      title: "📚 9/1~9/5 為二階選課選課週時間",
+      date: "2025-09-01",
+      priority: "high",
+      content: `親愛的同學們，為了您自己的權益，請記得要預先安排好課程規劃，並於校方公告時間前往校務系統選課。
+  
+  **選課時間：**
+  9月1日 上午11:00 ~ 9月5日 上午10:00
+  **選課範圍：**
+  全校學生含研究生網路登記選課
+  **公布抽籤時間：**
+  每天的公告時間分別為:
+  9月2日 上午10:50
+  9月3日 上午10:50
+  9月4日 上午10:50
+  9月5日 上午10:50`,
+      images: [],
+      embeds: [],
+      buttons: [
+        {
+          text: "了解詳情",
+          url: "https://curriculum.ncnu.edu.tw/p/404-1049-28076.php?Lang=zh-tw",
+          style: "warning",
+          icon: "📰",
+          external: true
+        }
+      ]
+    },
+  */
 ];
