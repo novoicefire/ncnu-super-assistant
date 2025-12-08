@@ -175,12 +175,12 @@ const CoursePlanner = () => {
     if (!course.department || course.department.trim() === '') {
       if (course.course_cname) {
         const courseName = course.course_cname;
-        if (courseName.includes('通識') || courseName.includes('中文思辨') || 
-            courseName.includes('跨域專業學術英文')) {
+        if (courseName.includes('通識') || courseName.includes('中文思辨') ||
+          courseName.includes('跨域專業學術英文')) {
           return { ...course, department: '通識領域課程' };
         }
-        if (courseName.includes('服務學習') || courseName.includes('全校') || 
-            courseName.includes('共同')) {
+        if (courseName.includes('服務學習') || courseName.includes('全校') ||
+          courseName.includes('共同')) {
           return { ...course, department: '全校共同課程' };
         }
       }
@@ -192,14 +192,14 @@ const CoursePlanner = () => {
   // 🎯 格式化課程資訊顯示函數
   const formatCourseInfo = useCallback((course) => {
     const info = [];
-    
+
     if (course.teacher) info.push(course.teacher);
     if (course.department) info.push(course.department);
     if (course.division) info.push(course.division);
     if (course.time) info.push(course.time);
     if (course.location && course.location.trim() !== '') info.push(course.location);
     if (course.course_credit) info.push(`${course.course_credit}學分`);
-    
+
     return info.join(' | ');
   }, []);
 
@@ -214,7 +214,7 @@ const CoursePlanner = () => {
     setIsCapturing(true);
     try {
       showNotification('📸 正在生成課表圖片...', 'info');
-      
+
       const canvas = await html2canvas(tableElement, {
         backgroundColor: '#ffffff',
         scale: 2,
@@ -236,7 +236,7 @@ const CoursePlanner = () => {
           link.click();
           document.body.removeChild(link);
           URL.revokeObjectURL(url);
-          
+
           showNotification('✅ 課表圖片下載成功！', 'success');
         } else {
           throw new Error('無法生成圖片檔案');
@@ -259,7 +259,7 @@ const CoursePlanner = () => {
         console.log('🔄 開始載入課程資料...');
         const courseRes = await axios.get('/data/本學期開課資訊API.json');
         const rawCourses = courseRes.data?.course_ncnu?.item || [];
-        
+
         const normalizedCourses = rawCourses.map(course => {
           const normalized = normalizeCourseDepartment(course);
           if (!normalized.division || normalized.division.trim() === '') {
@@ -267,7 +267,7 @@ const CoursePlanner = () => {
           }
           return normalized;
         });
-        
+
         console.log('✅ 課程資料載入完成，共', normalizedCourses.length, '門課程');
         setStaticCourses(normalizedCourses);
 
@@ -275,7 +275,7 @@ const CoursePlanner = () => {
         try {
           console.log('🔄 開始載入課程熱度資料...');
           const hotnessResult = await robustRequest('get', '/api/courses/hotness');
-          
+
           if (hotnessResult && typeof hotnessResult === 'object') {
             console.log('✅ 課程熱度資料載入成功，共', Object.keys(hotnessResult).length, '筆記錄');
             setHotnessData(hotnessResult);
@@ -287,7 +287,7 @@ const CoursePlanner = () => {
           console.warn('⚠️ 課程熱度資料載入失敗，但不影響主要功能:', hotnessError.message);
           setHotnessData({});
         }
-        
+
       } catch (error) {
         console.error("❌ 主要資料載入失敗:", error);
         // 備用載入邏輯
@@ -344,10 +344,10 @@ const CoursePlanner = () => {
     // 計算固定時間課程學分（去重）
     const uniqueCourses = [...new Map(Object.values(schedule).map(item => [item['course_id'], item])).values()];
     const scheduledCreditsValue = uniqueCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
-    
+
     // 計算彈性課程學分
     const flexibleCreditsValue = flexibleCourses.reduce((sum, course) => sum + parseFloat(course.course_credit || 0), 0);
-    
+
     // 總學分 = 固定時間課程學分 + 彈性課程學分
     setTotalCredits(scheduledCreditsValue + flexibleCreditsValue);
     setScheduledCredits(scheduledCreditsValue);
@@ -356,10 +356,10 @@ const CoursePlanner = () => {
 
   const hasTimeConflict = useCallback((course) => {
     if (!course.time || Object.keys(schedule).length === 0) return false;
-    
+
     const courseSlots = parseTimeSlots(course.time);
     if (courseSlots.length === 0) return false;
-    
+
     return courseSlots.some(slot => {
       return schedule[slot] && schedule[slot].course_id !== course.course_id;
     });
@@ -367,7 +367,7 @@ const CoursePlanner = () => {
 
   useEffect(() => {
     let result = staticCourses;
-    
+
     if (filters.courseName) {
       result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
     }
@@ -383,35 +383,35 @@ const CoursePlanner = () => {
     if (filters.hideConflicting) {
       result = result.filter(course => !hasTimeConflict(course));
     }
-    
+
     setFilteredCourses(result);
   }, [filters, staticCourses, hasTimeConflict]);
 
   const uniqueDepartments = useMemo(() => {
     if (staticCourses.length === 0) return [];
-    
+
     const departments = staticCourses
       .map(c => c.department)
       .filter(dept => dept && dept.trim() !== '')
       .filter(Boolean);
-    
+
     const uniqueDepts = [...new Set(departments)].sort();
     console.log('📊 開課單位列表:', uniqueDepts);
-    
+
     return uniqueDepts;
   }, [staticCourses]);
 
   const uniqueDivisions = useMemo(() => {
     if (staticCourses.length === 0) return [];
-    
+
     const divisions = staticCourses
       .map(c => c.division)
       .filter(division => division && division.trim() !== '' && division !== '通識')
       .filter(Boolean);
-    
+
     const uniqueDivs = [...new Set(divisions)].sort();
     console.log('📊 班別列表:', uniqueDivs);
-    
+
     return uniqueDivs;
   }, [staticCourses]);
 
@@ -419,7 +419,7 @@ const CoursePlanner = () => {
     const id = Date.now();
     const notification = { id, message, type };
     setNotifications(prev => [...prev, notification]);
-    
+
     setTimeout(() => {
       setNotifications(prev => prev.filter(n => n.id !== id));
     }, 4000);
@@ -429,11 +429,11 @@ const CoursePlanner = () => {
   const saveSchedule = useCallback(async (newSchedule, newFlexibleCourses, actionType = 'update', courseName = '') => {
     setSchedule(newSchedule);
     setFlexibleCourses(newFlexibleCourses);
-    
+
     // 🔄 總是先儲存到本地（作為備份）
     localStorage.setItem('course-schedule', JSON.stringify(newSchedule));
     localStorage.setItem('flexible-courses', JSON.stringify(newFlexibleCourses));
-    
+
     if (isLoggedIn && user?.google_id) {
       // 🌐 登入用戶：同步到雲端
       setSaveStatus("saving");
@@ -445,7 +445,7 @@ const CoursePlanner = () => {
             flexible_courses: newFlexibleCourses
           }
         });
-        
+
         if (response && response.success) {
           setSaveStatus("success");
           if (actionType === 'add') {
@@ -495,10 +495,10 @@ const CoursePlanner = () => {
 
   const parseTimeSlots = (timeString) => {
     if (!timeString || typeof timeString !== 'string') return [];
-    
+
     const timeGroups = timeString.match(/\d[a-zA-Z]+/g) || [];
     const slots = [];
-    
+
     for (const group of timeGroups) {
       const day = group[0];
       const periods = group.substring(1);
@@ -506,7 +506,7 @@ const CoursePlanner = () => {
         slots.push(`${day}${period}`);
       }
     }
-    
+
     return slots;
   };
 
@@ -540,7 +540,7 @@ const CoursePlanner = () => {
     const slots = parseTimeSlots(time);
     const newSchedule = { ...schedule };
     let courseName = '';
-    
+
     slots.forEach(slot => {
       if (newSchedule[slot] && newSchedule[slot].course_id === courseId && newSchedule[slot].time === time) {
         courseName = newSchedule[slot].course_cname;
@@ -553,9 +553,9 @@ const CoursePlanner = () => {
 
   const isCourseInSchedule = (course) => {
     const slots = parseTimeSlots(course.time);
-    return slots.some(slot => 
-      schedule[slot] && 
-      schedule[slot].course_id === course.course_id && 
+    return slots.some(slot =>
+      schedule[slot] &&
+      schedule[slot].course_id === course.course_id &&
       schedule[slot].time === course.time
     );
   };
@@ -566,7 +566,7 @@ const CoursePlanner = () => {
 
   const handleCourseToggle = (course) => {
     const slots = parseTimeSlots(course.time);
-    
+
     // 無時間課程的處理
     if (slots.length === 0) {
       if (isCourseInFlexible(course)) {
@@ -576,7 +576,7 @@ const CoursePlanner = () => {
       }
       return;
     }
-    
+
     // 有時間課程的處理
     if (isCourseInSchedule(course)) {
       removeFromSchedule(course.course_id, course.time);
@@ -620,7 +620,7 @@ const CoursePlanner = () => {
 
   const getSaveStatusMessage = () => {
     if (!isLoggedIn) return "登入後即可將課表同步至雲端";
-    
+
     switch (saveStatus) {
       case "saving": return "同步中...";
       case "success": return "✔ 課表已同步至雲端！";
@@ -641,7 +641,7 @@ const CoursePlanner = () => {
         {notifications.map(notification => (
           <div key={notification.id} className={`notification notification-${notification.type}`}>
             <span>{notification.message}</span>
-            <button 
+            <button
               className="notification-close"
               onClick={() => setNotifications(prev => prev.filter(n => n.id !== notification.id))}
             >
@@ -666,7 +666,7 @@ const CoursePlanner = () => {
       <div className="filters">
         <div className="filter-group">
           <label>課程名稱</label>
-          <input 
+          <input
             type="text"
             name="courseName"
             value={filters.courseName}
@@ -674,10 +674,10 @@ const CoursePlanner = () => {
             placeholder="搜尋課程名稱..."
           />
         </div>
-        
+
         <div className="filter-group">
           <label>授課教師</label>
-          <input 
+          <input
             type="text"
             name="teacher"
             value={filters.teacher}
@@ -685,14 +685,14 @@ const CoursePlanner = () => {
             placeholder="搜尋教師姓名..."
           />
         </div>
-        
+
         <div className="filter-group">
           <label>開課單位</label>
-          <input 
-            type="text" 
-            name="department" 
+          <input
+            type="text"
+            name="department"
             list="department-list"
-            value={filters.department} 
+            value={filters.department}
             onChange={handleFilterChange}
             placeholder="輸入或選擇開課單位"
             autoComplete="off"
@@ -786,7 +786,7 @@ const CoursePlanner = () => {
 
           </datalist>
         </div>
-        
+
         <div className="filter-group">
           <label>班別</label>
           <select name="division" value={filters.division} onChange={handleFilterChange}>
@@ -796,10 +796,10 @@ const CoursePlanner = () => {
             ))}
           </select>
         </div>
-        
+
         <div className="filter-group conflict-filter-group">
           <label className="conflict-filter-label">
-            <input 
+            <input
               type="checkbox"
               name="hideConflicting"
               checked={filters.hideConflicting}
@@ -829,7 +829,7 @@ const CoursePlanner = () => {
             <ul className="course-list">
               {filteredCourses.map((course, index) => (
                 <li key={`${course.course_id}-${course.time}-${index}`}>
-                  <div className="course-info"> 
+                  <div className="course-info">
                     <div className="course-title-container">
                       <strong>{course.course_cname}</strong>
                       {!course.time && <span className="course-type-badge flexible">彈性</span>}
@@ -844,9 +844,8 @@ const CoursePlanner = () => {
                     </small>
                   </div>
                   <button
-                    className={`course-toggle-btn ${
-                      isCourseInSchedule(course) || isCourseInFlexible(course) ? 'remove' : 'add'
-                    }`}
+                    className={`course-toggle-btn ${isCourseInSchedule(course) || isCourseInFlexible(course) ? 'remove' : 'add'
+                      }`}
                     onClick={() => handleCourseToggle(course)}
                   >
                     {isCourseInSchedule(course) || isCourseInFlexible(course) ? '−' : '+'}
@@ -866,7 +865,7 @@ const CoursePlanner = () => {
                 點擊課表中的課程方塊即可移除
               </p>
             </div>
-            <button 
+            <button
               className="save-image-btn"
               onClick={captureScheduleImage}
               disabled={isCapturing}
@@ -875,9 +874,9 @@ const CoursePlanner = () => {
               {isCapturing ? '📸 生成中...' : '📷 保存圖片'}
             </button>
           </div>
-          <CourseTable 
-            schedule={schedule} 
-            onRemove={removeFromSchedule} 
+          <CourseTable
+            schedule={schedule}
+            onRemove={removeFromSchedule}
           />
         </div>
       </div>
