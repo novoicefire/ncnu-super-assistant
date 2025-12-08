@@ -20,7 +20,8 @@ app = Flask(__name__)
 ALLOWED_ORIGINS = [
     "https://ncnu-super-assistant.vercel.app",  # 您的正式版網站
     "https://ncnu-super-assistant-git-develop-yoialexs-projects.vercel.app", # 您的測試版網站
-    "http://localhost:5173"  # 本地開發環境
+    "http://localhost:5173",  # 本地開發環境
+    "http://localhost:3000"   # 本地開發環境
 ]
 CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
 # --- 安全設定 END ---
@@ -249,3 +250,7 @@ def get_today_events():
                 today_events.append(event)
     
     return jsonify(today_events)
+
+# --- Flask 應用程式啟動 ---
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
