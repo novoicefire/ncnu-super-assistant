@@ -1,7 +1,9 @@
 // frontend/src/components/1_CoursePlanner/CourseTable.jsx (課程名稱粗體綠色修復版)
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CourseTable = ({ schedule, onRemove }) => {
+  const { t } = useTranslation();
   useEffect(() => {
     const courseTableIsolatedStyles = `
       /* ✅ 基礎表格樣式 */
@@ -204,10 +206,10 @@ const CourseTable = ({ schedule, onRemove }) => {
 
   const days = ['一', '二', '三', '四', '五'];
   const periods = ['a', 'b', 'c', 'd', 'z', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'];
-  
+
   const periodTimes = {
     'a': '08:00 - 09:00',
-    'b': '09:00 - 10:00', 
+    'b': '09:00 - 10:00',
     'c': '10:00 - 11:00',
     'd': '11:00 - 12:00',
     'z': '12:00 - 13:00',
@@ -229,22 +231,22 @@ const CourseTable = ({ schedule, onRemove }) => {
     if (period === 'z') {
       return (
         <td key={`${day}-${period}`} className="lunch-break-cell">
-          午休時間
+          {t('coursePlanner.lunchBreak')}
         </td>
       );
     }
 
     if (course) {
       return (
-        <td 
-          key={`${day}-${period}`} 
+        <td
+          key={`${day}-${period}`}
           className="course-cell-filled"
           onClick={() => {
-            if (onRemove && window.confirm(`您確定要從課表中移除「${course.course_cname}」嗎？`)) {
+            if (onRemove && window.confirm(t('coursePlanner.confirmRemove', { courseName: course.course_cname }))) {
               onRemove(course.course_id, course.time);
             }
           }}
-          title={`課程：${course.course_cname}\n教師：${course.teacher}\n教室：${course.location}\n學分：${course.course_credit}`}
+          title={`${t('coursePlanner.courseLabel')}: ${course.course_cname}\n${t('coursePlanner.teacher')}: ${course.teacher}\n${t('coursePlanner.room')}: ${course.location}\n${t('coursePlanner.credits')}: ${course.course_credit}`}
         >
           <div className="course-name">{course.course_cname}</div>
           <div className="course-teacher">{course.teacher}</div>
@@ -263,9 +265,9 @@ const CourseTable = ({ schedule, onRemove }) => {
       <table id="course-schedule-table-isolated">
         <thead>
           <tr>
-            <th className="time-cell">時間</th>
+            <th className="time-cell">{t('coursePlanner.time')}</th>
             {days.map(day => (
-              <th key={day}>星期{day}</th>
+              <th key={day}>{t(`coursePlanner.weekday${day}`)}</th>
             ))}
           </tr>
         </thead>
@@ -274,7 +276,7 @@ const CourseTable = ({ schedule, onRemove }) => {
             <tr key={period}>
               <td className="time-cell">
                 <div style={{ fontWeight: 'bold', fontSize: 'inherit' }}>
-                  {period === 'z' ? '午休' : `第${period.toUpperCase()}節`}
+                  {period === 'z' ? t('coursePlanner.lunchBreak') : t('coursePlanner.period', { period: period.toUpperCase() })}
                 </div>
                 <div style={{ fontSize: '0.7rem', color: '#666', lineHeight: '1.0' }}>
                   {periodTimes[period]}

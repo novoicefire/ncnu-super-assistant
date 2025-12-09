@@ -1,18 +1,356 @@
 <!doctype html>
 <html lang="zh-Hant-TW">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>暨大生超級助理</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    
-    <!-- [核心修改] 1. 直接從 Google 載入 GIS 函式庫 -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
-    <!-- 2. 載入我們的 React 應用 -->
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>暨大生超級助理</title>
+
+  <!-- 初始載入動畫樣式 - 現代極簡風格 -->
+  <style>
+    /* 初始載入畫面 */
+    .initial-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      overflow: hidden;
+    }
+
+    .initial-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* 動態背景網格 */
+    .loader-grid-bg {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background-image:
+        linear-gradient(rgba(0, 121, 107, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 121, 107, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+      transform: rotate(-5deg);
+    }
+
+    @keyframes gridMove {
+      0% {
+        transform: rotate(-5deg) translate(0, 0);
+      }
+
+      100% {
+        transform: rotate(-5deg) translate(50px, 50px);
+      }
+    }
+
+    /* 發光球體背景 */
+    .loader-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: orbFloat 6s ease-in-out infinite;
+    }
+
+    .loader-orb-1 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #00796B 0%, transparent 70%);
+      top: 20%;
+      left: 10%;
+    }
+
+    .loader-orb-2 {
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, #26A69A 0%, transparent 70%);
+      bottom: 20%;
+      right: 10%;
+      animation-delay: -3s;
+    }
+
+    @keyframes orbFloat {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(30px, -20px) scale(1.1);
+      }
+    }
+
+    /* 主內容容器 */
+    .loader-main {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1;
+    }
+
+    /* Logo 容器 */
+    .loader-logo-wrap {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 32px;
+    }
+
+    /* Logo 圖片 */
+    .loader-logo-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      animation: logoBreath 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(0, 121, 107, 0.5));
+    }
+
+    @keyframes logoBreath {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.05);
+        opacity: 0.9;
+      }
+    }
+
+    /* DNA 螺旋動畫 */
+    .dna-helix {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .dna-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #00796B;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 121, 107, 0.8);
+    }
+
+    .dna-dot:nth-child(1) {
+      animation: dnaOrbit 2s linear infinite;
+      animation-delay: 0s;
+    }
+
+    .dna-dot:nth-child(2) {
+      animation: dnaOrbit 2s linear infinite;
+      animation-delay: 0.25s;
+    }
+
+    .dna-dot:nth-child(3) {
+      animation: dnaOrbit 2s linear infinite;
+      animation-delay: 0.5s;
+    }
+
+    .dna-dot:nth-child(4) {
+      animation: dnaOrbit 2s linear infinite;
+      animation-delay: 0.75s;
+    }
+
+    .dna-dot:nth-child(5) {
+      animation: dnaOrbit 2s linear infinite;
+      animation-delay: 1s;
+    }
+
+    .dna-dot:nth-child(6) {
+      animation: dnaOrbit 2s linear infinite;
+      animation-delay: 1.25s;
+    }
+
+    .dna-dot:nth-child(7) {
+      animation: dnaOrbit 2s linear infinite;
+      animation-delay: 1.5s;
+    }
+
+    .dna-dot:nth-child(8) {
+      animation: dnaOrbit 2s linear infinite;
+      animation-delay: 1.75s;
+    }
+
+    @keyframes dnaOrbit {
+      0% {
+        transform: rotate(0deg) translateX(50px) rotate(0deg);
+        opacity: 0.3;
+      }
+
+      25% {
+        opacity: 1;
+      }
+
+      50% {
+        transform: rotate(180deg) translateX(50px) rotate(-180deg);
+        opacity: 0.3;
+      }
+
+      75% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: rotate(360deg) translateX(50px) rotate(-360deg);
+        opacity: 0.3;
+      }
+    }
+
+    /* 品牌文字 */
+    .loader-brand-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 0%, #00796B 50%, #26A69A 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textGradient 3s ease infinite;
+      margin-bottom: 24px;
+      letter-spacing: 2px;
+    }
+
+    @keyframes textGradient {
+
+      0%,
+      100% {
+        background-position: 0% center;
+      }
+
+      50% {
+        background-position: 200% center;
+      }
+    }
+
+    /* 載入指示條 */
+    .loader-bar-container {
+      width: 200px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .loader-bar {
+      height: 100%;
+      background: linear-gradient(90deg, transparent, #00796B, #26A69A, transparent);
+      background-size: 200% 100%;
+      animation: barSlide 1.5s ease-in-out infinite;
+    }
+
+    @keyframes barSlide {
+      0% {
+        transform: translateX(-100%);
+        background-position: 0% 0;
+      }
+
+      100% {
+        transform: translateX(100%);
+        background-position: 100% 0;
+      }
+    }
+
+    /* 載入狀態文字 */
+    .loader-status {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+
+      0%,
+      100% {
+        opacity: 0.5;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 初始載入動畫 -->
+  <div id="initial-loader" class="initial-loader">
+    <!-- 背景元素 -->
+    <div class="loader-grid-bg"></div>
+    <div class="loader-orb loader-orb-1"></div>
+    <div class="loader-orb loader-orb-2"></div>
+
+    <!-- 主內容 -->
+    <div class="loader-main">
+      <div class="loader-logo-wrap">
+        <!-- DNA 螺旋動畫點 -->
+        <div class="dna-helix">
+          <div class="dna-dot"></div>
+          <div class="dna-dot"></div>
+          <div class="dna-dot"></div>
+          <div class="dna-dot"></div>
+          <div class="dna-dot"></div>
+          <div class="dna-dot"></div>
+          <div class="dna-dot"></div>
+          <div class="dna-dot"></div>
+        </div>
+        <img src="/logo.svg" alt="Logo" class="loader-logo-img" onerror="this.style.display='none'" />
+      </div>
+
+      <div class="loader-brand-text">暨大生超級助理</div>
+
+      <div class="loader-bar-container">
+        <div class="loader-bar"></div>
+      </div>
+
+      <div class="loader-status">Loading</div>
+    </div>
+  </div>
+
+  <div id="root"></div>
+
+  <!-- [核心修改] 1. 直接從 Google 載入 GIS 函式庫 -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- 2. 載入我們的 React 應用 -->
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- 隱藏初始載入動畫的腳本 -->
+  <script>
+    window.hideInitialLoader = function () {
+      const loader = document.getElementById('initial-loader');
+      if (loader) {
+        loader.classList.add('hidden');
+        setTimeout(() => {
+          loader.remove();
+        }, 600);
+      }
+    };
+  </script>
+</body>
+
 </html>

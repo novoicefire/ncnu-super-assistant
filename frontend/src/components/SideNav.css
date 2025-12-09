@@ -1,0 +1,604 @@
+/**
+ * SideNav.css - 電腦版側邊導航欄樣式
+ * 毛玻璃效果 + eMenu Tokyo 風格
+ */
+
+.side-nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+
+    /* 毛玻璃效果 */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    /* 邊框與陰影 */
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+
+    /* 動畫 */
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+.side-nav.collapsed {
+    width: 72px;
+}
+
+/* 深色模式 */
+[data-theme="dark"] .side-nav {
+    background: rgba(26, 32, 44, 0.9);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== Header 區域 ========== */
+.side-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    min-height: 80px;
+}
+
+[data-theme="dark"] .side-nav-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.side-nav-logo {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.side-nav-logo:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.brand-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 0.2s ease, width 0.3s ease;
+}
+
+.side-nav.collapsed .brand-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+/* 收合狀態下的 header */
+.side-nav.collapsed .side-nav-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 8px;
+}
+
+.side-nav.collapsed .brand-container {
+    justify-content: center;
+}
+
+.side-nav.collapsed .collapse-btn {
+    margin: 0;
+}
+
+.collapse-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--theme-text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.collapse-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .collapse-btn {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .collapse-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ========== 導航連結區域 ========== */
+.side-nav-links {
+    flex: 1;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+}
+
+.side-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    color: var(--theme-text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.side-nav-item:hover {
+    background: rgba(74, 144, 226, 0.1);
+    color: var(--primary-color);
+    transform: translateX(4px);
+}
+
+.side-nav-item.active {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.15), rgba(53, 122, 189, 0.1));
+    color: var(--primary-color);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--primary-color);
+}
+
+.side-nav.collapsed .side-nav-item {
+    justify-content: center;
+    padding: 14px;
+}
+
+.side-nav.collapsed .side-nav-item.active {
+    box-shadow: none;
+}
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.side-nav-item:hover .nav-icon {
+    transform: scale(1.1);
+}
+
+.nav-label {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.side-nav.collapsed .nav-label {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+/* 外部連結樣式 */
+.side-nav-item.external-link {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(238, 90, 36, 0.05));
+    border: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.side-nav-item.external-link:hover {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(238, 90, 36, 0.1));
+    color: #ee5a24;
+}
+
+.side-nav-item.external-link .nav-icon {
+    color: #ff6b6b;
+}
+
+.external-badge {
+    margin-left: auto;
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+/* ========== Footer 區域 ========== */
+.side-nav-footer {
+    padding: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+[data-theme="dark"] .side-nav-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 主題切換按鈕 */
+.theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--theme-text-secondary);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--theme-text-primary);
+}
+
+[data-theme="dark"] .theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.side-nav.collapsed .theme-toggle-btn {
+    justify-content: center;
+    padding: 12px;
+}
+
+/* 用戶區域 */
+.user-section {
+    padding: 8px 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.user-info.collapsed {
+    justify-content: center;
+    padding: 8px;
+}
+
+[data-theme="dark"] .user-info {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* 收合時隱藏 user-details */
+.user-info.collapsed .user-details {
+    display: none;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(220, 53, 69, 0.2);
+}
+
+.google-login-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.loading-text {
+    text-align: center;
+    color: var(--theme-text-secondary);
+    font-size: 0.85rem;
+}
+
+/* ========== 工具按鈕樣式 ========== */
+.side-nav-tool-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: var(--theme-text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.side-nav-tool-btn:hover {
+    background: var(--theme-bg-hover);
+    color: var(--theme-text-primary);
+}
+
+.side-nav.collapsed .side-nav-tool-btn {
+    justify-content: center;
+    padding: 12px;
+}
+
+/* ========== 語言切換樣式 ========== */
+.lang-wrapper-side {
+    position: relative;
+}
+
+.side-lang-dropdown {
+    position: absolute;
+    left: calc(100% + 8px);
+    bottom: 0;
+    min-width: 160px;
+    background: var(--theme-bg-card);
+    border: 1px solid var(--theme-border-primary);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    z-index: 1100;
+    animation: slideInLeft 0.2s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.side-lang-dropdown .lang-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: var(--theme-text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.side-lang-dropdown .lang-option:hover {
+    background: var(--theme-bg-hover);
+}
+
+.side-lang-dropdown .lang-option.active {
+    background: rgba(0, 121, 107, 0.1);
+    color: var(--primary-color);
+}
+
+.side-lang-dropdown .lang-flag {
+    font-size: 1.2rem;
+}
+
+.side-lang-dropdown .lang-name {
+    flex: 1;
+}
+
+.side-lang-dropdown .lang-check {
+    color: var(--primary-color);
+}
+
+/* ========== 通知樣式 ========== */
+.notification-wrapper-side {
+    position: relative;
+}
+
+.notification-badge-side {
+    position: absolute;
+    top: 6px;
+    left: 26px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    z-index: 2;
+}
+
+.side-nav.collapsed .notification-badge-side {
+    left: 50%;
+    transform: translateX(4px);
+}
+
+.side-notification-dropdown {
+    position: absolute;
+    left: calc(100% + 8px);
+    bottom: 0;
+    width: 320px;
+    max-height: 400px;
+    background: var(--theme-bg-card);
+    border: 1px solid var(--theme-border-primary);
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 1100;
+    animation: slideInLeft 0.25s ease;
+}
+
+.notification-dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--theme-border-secondary);
+    font-weight: 600;
+    color: var(--theme-text-primary);
+}
+
+.mark-all-read {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.mark-all-read:hover {
+    opacity: 0.7;
+}
+
+.notification-list-side {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.notification-item-side {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid var(--theme-border-secondary);
+}
+
+.notification-item-side:last-child {
+    border-bottom: none;
+}
+
+.notification-item-side:hover {
+    background: var(--theme-bg-secondary);
+}
+
+.notification-item-side.read {
+    opacity: 0.6;
+}
+
+.notification-icon-side {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+[data-theme="dark"] .notification-icon-side {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.notification-content-side {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title-side {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+}
+
+.notification-message-side {
+    font-size: 0.75rem;
+    color: var(--theme-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notification-time-side {
+    font-size: 0.7rem;
+    color: var(--theme-text-tertiary);
+    margin-top: 2px;
+}
+
+.empty-notifications-side {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--theme-text-tertiary);
+}
+
+.empty-notifications-side svg {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    opacity: 0.5;
+}
+
+.empty-notifications-side p {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+/* ========== 響應式：手機版隱藏 ========== */
+@media (max-width: 768px) {
+    .side-nav {
+        display: none;
+    }
+}

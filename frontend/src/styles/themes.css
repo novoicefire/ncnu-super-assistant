@@ -1,6 +1,6 @@
-/* frontend/src/styles/themes.css (完整深色模式系統) */
+/* frontend/src/styles/themes.css (重構版 - 更安全的主題系統) */
 
-/* 🌞 明亮模式變數 */
+/* ===== 🌞 明亮模式變數 ===== */
 [data-theme="light"] {
   /* 背景色系 */
   --theme-bg-primary: #f4f7f6;
@@ -8,24 +8,28 @@
   --theme-bg-tertiary: #e0f2f1;
   --theme-bg-card: #ffffff;
   --theme-bg-overlay: rgba(255, 255, 255, 0.9);
-  
+
   /* 文字色系 */
   --theme-text-primary: #333333;
   --theme-text-secondary: #666666;
   --theme-text-tertiary: #999999;
   --theme-text-inverse: #ffffff;
-  
+
   /* 邊框與分隔線 */
   --theme-border-primary: #e0e0e0;
   --theme-border-secondary: #f0f0f0;
-  
-  /* 陰影系統 */
-  --theme-shadow-primary: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --theme-shadow-secondary: 0 4px 16px rgba(0, 0, 0, 0.15);
-  --theme-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.2);
-  --theme-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
 
-  /* 📅 行事曆專用變數 */
+  /* 陰影系統 */
+  --theme-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --theme-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --theme-shadow-primary: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --theme-shadow-secondary: 0 4px 6px rgba(0, 0, 0, 0.04), 0 10px 15px rgba(0, 0, 0, 0.06);
+  --theme-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --theme-shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.06), 0 8px 16px rgba(0, 0, 0, 0.04);
+  --theme-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+  --theme-shadow-glow: 0 0 20px rgba(74, 144, 226, 0.15);
+
+  /* 行事曆專用變數 */
   --calendar-bg: linear-gradient(135deg, #f9f9f9, #e8f5e8);
   --calendar-border: #e0e0e0;
   --calendar-tile-bg: transparent;
@@ -40,7 +44,7 @@
   --calendar-list-border: var(--primary-ultra-light);
 }
 
-/* 🌙 深色模式變數 */
+/* ===== 🌙 深色模式變數 ===== */
 [data-theme="dark"] {
   /* 背景色系 */
   --theme-bg-primary: #1a1a1a;
@@ -48,24 +52,28 @@
   --theme-bg-tertiary: #3a3a3a;
   --theme-bg-card: #2d2d2d;
   --theme-bg-overlay: rgba(45, 45, 45, 0.9);
-  
+
   /* 文字色系 */
   --theme-text-primary: #ffffff;
   --theme-text-secondary: #cccccc;
   --theme-text-tertiary: #999999;
   --theme-text-inverse: #1a1a1a;
-  
+
   /* 邊框與分隔線 */
   --theme-border-primary: #404040;
   --theme-border-secondary: #353535;
-  
-  /* 陰影系統 */
-  --theme-shadow-primary: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --theme-shadow-secondary: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --theme-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --theme-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
 
-  /* 📅 行事曆專用變數 */
+  /* 陰影系統 */
+  --theme-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
+  --theme-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --theme-shadow-primary: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.15);
+  --theme-shadow-secondary: 0 4px 6px rgba(0, 0, 0, 0.15), 0 10px 15px rgba(0, 0, 0, 0.2);
+  --theme-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1);
+  --theme-shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.12);
+  --theme-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  --theme-shadow-glow: 0 0 20px rgba(74, 144, 226, 0.25);
+
+  /* 行事曆專用變數 */
   --calendar-bg: linear-gradient(135deg, #1a1a1a, #212b21);
   --calendar-border: #404040;
   --calendar-tile-bg: transparent;
@@ -80,235 +88,162 @@
   --calendar-list-border: #404040;
 }
 
-/* 🎨 主題切換動畫 */
-* {
-  transition: background-color 0.3s ease, 
-              color 0.3s ease, 
-              border-color 0.3s ease,
-              box-shadow 0.3s ease !important;
-}
-
-/* 🔧 全域主題應用 */
-body {
-  background-color: var(--theme-bg-primary) !important;
-  color: var(--theme-text-primary) !important;
-}
-
-/* 📱 通用卡片樣式 */
-.card, 
-.status-card, 
-.course-preview, 
-.welcome-banner,
+/* ===== 主題切換動畫（限定特定屬性） ===== */
+body,
+.card,
+.status-card,
+.course-preview,
 .apple-card,
 .today-status,
-.system-status {
-  background-color: var(--theme-bg-card) !important;
-  border: 1px solid var(--theme-border-primary) !important;
-  box-shadow: var(--theme-shadow-primary) !important;
-  color: var(--theme-text-primary) !important;
+.system-status,
+.announcement-card {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.card:hover, 
-.status-card:hover,
-.apple-card:hover {
-  box-shadow: var(--theme-shadow-hover) !important;
+/* ===== 全域主題應用（只限 body） ===== */
+body {
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
 }
 
-/* 🎯 導航欄主題修復 */
-.navbar {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+/* ===== 表格主題（限定特定容器） ===== */
+.course-preview .course-table,
+.course-preview .modern-table,
+.course-planner .course-table {
+  background: var(--theme-bg-secondary);
 }
 
-/* 🎨 歡迎橫幅主題修復 */
-.welcome-banner {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
-  color: white !important;
+.course-preview .course-table th,
+.course-preview .modern-table th,
+.course-planner .course-table th {
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
+  border-bottom: 1px solid var(--theme-border-primary);
 }
 
-.welcome-title,
-.welcome-subtitle {
-  color: white !important;
+.course-preview .course-table td,
+.course-preview .modern-table td,
+.course-planner .course-table td {
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  border-bottom: 1px solid var(--theme-border-secondary);
+  border-right: 1px solid var(--theme-border-secondary);
 }
 
-/* 📋 表格主題修復 */
-.course-table,
-.modern-table {
-  background: var(--theme-bg-secondary) !important;
+.course-preview .period-header,
+.course-planner .period-header {
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
 }
 
-.course-table th,
-.modern-table th {
-  background: var(--theme-bg-tertiary) !important;
-  color: var(--theme-text-primary) !important;
-  border-bottom: 1px solid var(--theme-border-primary) !important;
+.course-preview .course-cell-container.has-course,
+.course-planner .course-cell-container.has-course {
+  background: linear-gradient(135deg, var(--primary-ultra-light), rgba(0, 121, 107, 0.1));
+  border: 1px solid var(--primary-color);
 }
 
-.course-table td,
-.modern-table td {
-  background: var(--theme-bg-secondary) !important;
-  color: var(--theme-text-primary) !important;
-  border-bottom: 1px solid var(--theme-border-secondary) !important;
-  border-right: 1px solid var(--theme-border-secondary) !important;
+.course-preview .course-cell-container.empty-cell,
+.course-planner .course-cell-container.empty-cell {
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-secondary);
 }
 
-.period-header {
-  background: var(--theme-bg-tertiary) !important;
-  color: var(--theme-text-primary) !important;
+.course-preview .lunch-break,
+.course-planner .lunch-break {
+  background: var(--theme-bg-tertiary);
+  color: var(--theme-text-secondary);
 }
 
-.course-cell-container.has-course {
-  background: linear-gradient(135deg, var(--primary-ultra-light), rgba(0, 121, 107, 0.1)) !important;
-  border: 1px solid var(--primary-color) !important;
-}
-
-.course-cell-container.empty-cell {
-  background: var(--theme-bg-secondary) !important;
-  border: 1px solid var(--theme-border-secondary) !important;
-}
-
-.lunch-break {
-  background: var(--theme-bg-tertiary) !important;
-  color: var(--theme-text-secondary) !important;
-}
-
-/* 🔘 按鈕主題修復 */
-.apple-button:not(.apple-button) {
-  background: var(--theme-bg-secondary) !important;
-  color: var(--theme-text-primary) !important;
-  border: 1px solid var(--theme-border-primary) !important;
-}
-
-.preview-action-btn,
-.placeholder-btn,
-.refresh-btn {
-  background: var(--primary-color) !important;
-  color: white !important;
-}
-
-/* 📝 輸入框主題修復 */
+/* ===== 輸入框主題（限定表單元素） ===== */
 .apple-input,
-input,
-select,
-textarea {
-  background: var(--theme-bg-secondary) !important;
-  color: var(--theme-text-primary) !important;
-  border: 2px solid var(--theme-border-primary) !important;
+.form-control,
+.search-input {
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  border: 2px solid var(--theme-border-primary);
 }
 
 .apple-input:focus,
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--primary-color) !important;
+.form-control:focus,
+.search-input:focus {
+  border-color: var(--primary-color);
 }
 
-/* 🎯 狀態指示器顏色（不受主題影響） */
-.status-active { --status-color: #28a745; }
-.status-warning { --status-color: #ffc107; }
-.status-error { --status-color: #dc3545; }
-.status-info { --status-color: #17a2b8; }
-.status-empty { --status-color: #6c757d; }
+/* ===== 狀態指示器顏色 ===== */
+.status-active {
+  --status-color: #28a745;
+}
 
-/* 🔄 載入狀態主題修復 */
+.status-warning {
+  --status-color: #ffc107;
+}
+
+.status-error {
+  --status-color: #dc3545;
+}
+
+.status-info {
+  --status-color: #17a2b8;
+}
+
+.status-empty {
+  --status-color: #6c757d;
+}
+
+/* ===== 載入狀態主題 ===== */
 .loading-skeleton {
-  background: linear-gradient(90deg, 
-    var(--theme-border-secondary) 25%, 
-    var(--theme-border-primary) 50%, 
-    var(--theme-border-secondary) 75%
-  ) !important;
+  background: linear-gradient(90deg,
+      var(--theme-border-secondary) 25%,
+      var(--theme-border-primary) 50%,
+      var(--theme-border-secondary) 75%);
 }
 
 .page-loading {
-  background: var(--theme-bg-primary) !important;
+  background: var(--theme-bg-primary);
 }
 
 .loading-text {
-  color: var(--theme-text-secondary) !important;
+  color: var(--theme-text-secondary);
 }
 
-/* 🚨 錯誤邊界主題修復 */
+/* ===== 錯誤邊界主題 ===== */
 .error-container {
-  background: var(--theme-bg-card) !important;
-  color: var(--theme-text-primary) !important;
-  border: 1px solid var(--theme-border-primary) !important;
+  background: var(--theme-bg-card);
+  color: var(--theme-text-primary);
+  border: 1px solid var(--theme-border-primary);
 }
 
 .error-details {
-  background: var(--theme-bg-secondary) !important;
-  border: 1px solid var(--theme-border-primary) !important;
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-primary);
 }
 
 .error-stack {
-  background: var(--theme-bg-primary) !important;
-  color: var(--theme-text-secondary) !important;
-  border: 1px solid var(--theme-border-secondary) !important;
+  background: var(--theme-bg-primary);
+  color: var(--theme-text-secondary);
+  border: 1px solid var(--theme-border-secondary);
 }
 
-/* 📱 彈出卡片主題修復 */
-.status-card-popup {
-  background: var(--theme-bg-card) !important;
-  border: 1px solid var(--theme-border-primary) !important;
-  color: var(--theme-text-primary) !important;
+/* ===== 搜尋高亮 ===== */
+.search-highlight {
+  background: var(--primary-color);
+  color: white;
 }
 
-/* 🎨 毛玻璃效果主題適配 */
+/* ===== Toast 通知 ===== */
+.toast-notification {
+  background: var(--theme-bg-card);
+  color: var(--theme-text-primary);
+  border: 1px solid var(--theme-border-primary);
+}
+
+/* ===== 毛玻璃效果 ===== */
 .glass-effect {
-  background: var(--theme-bg-overlay) !important;
-  border: 1px solid var(--theme-border-primary) !important;
+  background: var(--theme-bg-overlay);
+  border: 1px solid var(--theme-border-primary);
 }
 
 [data-theme="dark"] .glass-effect {
-  background: rgba(45, 45, 45, 0.8) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* 🔍 搜尋與高亮主題修復 */
-.search-highlight {
-  background: var(--primary-color) !important;
-  color: white !important;
-}
-
-/* 📊 統計項目主題修復 */
-.stat-item,
-.metric-item,
-.status-item {
-  background: var(--theme-bg-secondary) !important;
-  border: 1px solid var(--theme-border-primary) !important;
-}
-
-.stat-label,
-.metric-label,
-.status-label {
-  color: var(--theme-text-secondary) !important;
-}
-
-.stat-number,
-.metric-value,
-.status-text {
-  color: var(--theme-text-primary) !important;
-}
-
-/* 🎯 課程項目主題修復 */
-.course-item,
-.event-item {
-  background: var(--theme-bg-secondary) !important;
-  border: 1px solid var(--theme-border-secondary) !important;
-}
-
-.course-name,
-.event-name {
-  color: var(--theme-text-primary) !important;
-}
-
-.course-details,
-.course-meta,
-.event-time {
-  color: var(--theme-text-secondary) !important;
-}
-
-/* 🌐 Toast 通知主題修復 */
-.toast-notification {
-  background: var(--theme-bg-card) !important;
-  color: var(--theme-text-primary) !important;
-  border: 1px solid var(--theme-border-primary) !important;
+  background: rgba(45, 45, 45, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

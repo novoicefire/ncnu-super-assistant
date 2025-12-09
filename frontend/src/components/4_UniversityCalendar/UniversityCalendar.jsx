@@ -1,12 +1,13 @@
-// frontend/src/components/4_UniversityCalendar/UniversityCalendar.jsx (Refactored with Hook)
+// frontend/src/components/4_UniversityCalendar/UniversityCalendar.jsx (Refactored with Hook + i18n)
 import React, { useState, useMemo } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useCalendarEvents } from '../../hooks/useCalendarEvents'; // 導入新的 Hook
+import { useCalendarEvents } from '../../hooks/useCalendarEvents';
 import './UniversityCalendar.css';
 
-// 骨架屏載入動畫元件 (保持不變)
+// 骨架屏載入動畫元件
 const CalendarSkeleton = () => (
   <div className="calendar-container skeleton-container">
     <div className="calendar-header">
@@ -37,8 +38,9 @@ const CalendarSkeleton = () => (
 );
 
 const UniversityCalendar = () => {
+  const { t, i18n } = useTranslation();
   const { theme } = useTheme();
-  const { events, loading, error, isFallback } = useCalendarEvents(); // 使用 Hook 獲取資料
+  const { events, loading, error, isFallback } = useCalendarEvents();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState('day');
@@ -61,9 +63,10 @@ const UniversityCalendar = () => {
     if (endDate.getHours() === 0 && endDate.getMinutes() === 0) {
       endDate.setDate(endDate.getDate() - 1);
     }
+    const locale = i18n.language === 'en' ? 'en-US' : 'zh-TW';
     const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
-    const formattedStart = startDate.toLocaleDateString('zh-TW', options);
-    const formattedEnd = endDate.toLocaleDateString('zh-TW', options);
+    const formattedStart = startDate.toLocaleDateString(locale, options);
+    const formattedEnd = endDate.toLocaleDateString(locale, options);
     return formattedStart === formattedEnd ? formattedStart : `${formattedStart} - ${formattedEnd}`;
   };
 
@@ -92,17 +95,26 @@ const UniversityCalendar = () => {
   };
 
   if (loading) return <CalendarSkeleton />;
-  if (error) return <div className="calendar-container"><div className="error-message"><h3>❌ 載入失敗</h3><p>{error}</p></div></div>;
+  if (error) return (
+    <div className="calendar-container">
+      <div className="error-message">
+        <h3>❌ {t('calendar.loadFailed')}</h3>
+        <p>{error}</p>
+      </div>
+    </div>
+  );
+
+  const locale = i18n.language === 'en' ? 'en-US' : 'zh-TW';
 
   return (
     <div className="calendar-container">
       <div className="calendar-header">
         <div className="header-title-group">
-          <h2>暨大行事曆</h2>
-          {isFallback && <div className="fallback-notice">⚠️ 目前為離線備份資料</div>}
+          <h2>{t('calendar.title')}</h2>
+          {isFallback && <div className="fallback-notice">⚠️ {t('calendar.fallbackNotice')}</div>}
         </div>
         <button onClick={() => setViewMode(viewMode === 'day' ? 'all' : 'day')} className="view-toggle-btn">
-          {viewMode === 'day' ? '📅 顯示所有事件' : '📄 僅顯示當日'}
+          {viewMode === 'day' ? `📅 ${t('calendar.showAll')}` : `📄 ${t('calendar.showToday')}`}
         </button>
       </div>
 
@@ -112,14 +124,16 @@ const UniversityCalendar = () => {
             key={theme}
             onChange={setSelectedDate}
             value={selectedDate}
-            locale="zh-TW"
+            locale={locale}
             tileContent={renderTileContent}
           />
         </div>
-        
+
         <div className="events-list-container">
           <h3 className="events-list-header">
-            {viewMode === 'day' ? selectedDate.toLocaleDateString('zh-TW', { month: 'long', day: 'numeric' }) : '所有即將到來的事件'}
+            {viewMode === 'day'
+              ? selectedDate.toLocaleDateString(locale, { month: 'long', day: 'numeric' })
+              : t('calendar.upcomingEvents')}
           </h3>
           {filteredEvents.length > 0 ? (
             filteredEvents.map(event => (
@@ -132,7 +146,7 @@ const UniversityCalendar = () => {
             ))
           ) : (
             <div className="no-events">
-              <p>{viewMode === 'day' ? '本日無任何事件' : '沒有即將到來的事件'}</p>
+              <p>{viewMode === 'day' ? t('calendar.noEventsToday') : t('calendar.noUpcomingEvents')}</p>
             </div>
           )}
         </div>

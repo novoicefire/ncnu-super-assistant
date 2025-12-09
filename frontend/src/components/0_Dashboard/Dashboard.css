@@ -8,26 +8,84 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 🎨 歡迎橫幅 */
 .welcome-banner {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark), #4A90E2);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease-in-out infinite;
   border-radius: 20px;
   padding: 3rem 2rem;
   margin-bottom: 1rem;
   color: white;
   position: relative;
   overflow: hidden;
-  box-shadow: var(--theme-shadow-secondary);
+  box-shadow: 0 8px 32px rgba(0, 121, 107, 0.25);
+}
+
+/* 漸層動畫 */
+@keyframes gradientShift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* 背景光暈效果 */
+.welcome-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+  animation: glowRotate 15s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes glowRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .welcome-content {
   position: relative;
   z-index: 2;
   text-align: center;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .welcome-title {
@@ -35,6 +93,8 @@
   font-weight: 700;
   margin: 0 0 1rem 0;
   line-height: 1.2;
+  color: white;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
 }
 
 .welcome-subtitle {
@@ -42,32 +102,970 @@
   opacity: 0.9;
   margin: 0;
   font-weight: 400;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
 
 .welcome-decoration {
   position: absolute;
   top: 0;
+  left: 0;
   right: 0;
-  width: 200px;
-  height: 100%;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 🎨 動態幾何形狀 */
+.floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  animation: floatShape 12s ease-in-out infinite;
+}
+
+.shape-1 {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+  top: 10%;
+  right: 10%;
+  animation-delay: 0s;
+}
+
+.shape-2 {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05));
+  top: 60%;
+  left: 8%;
+  animation-delay: 2s;
+  animation-duration: 10s;
+}
+
+.shape-3 {
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  bottom: 20%;
+  right: 30%;
+  animation-delay: 4s;
+  animation-duration: 8s;
+}
+
+.shape-4 {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+  top: 15%;
+  left: 15%;
+  animation-delay: 1s;
+  animation-duration: 14s;
+}
+
+.shape-5 {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.15);
+  bottom: 25%;
+  left: 40%;
+  animation-delay: 3s;
+  animation-duration: 11s;
+}
+
+@keyframes floatShape {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+
+  10% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: translateY(-30px) scale(1.1);
+  }
+
+  90% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+}
+
+/* ========== 增強版 Welcome Banner ========== */
+.welcome-banner.enhanced {
+  padding: 1.5rem 2rem;
+}
+
+.welcome-content.enhanced {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* 頂部：問候 + 天氣 */
+.welcome-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.greeting-section .welcome-title {
+  font-size: 1.8rem;
+  margin: 0;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.weather-widget {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+
+.weather-icon {
+  font-size: 1.2rem;
+  color: #FFD700;
+}
+
+.weather-temp {
+  font-weight: 600;
+}
+
+.weather-desc {
+  opacity: 0.9;
+}
+
+/* 中間：今日摘要 */
+.welcome-stats-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.banner-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  color: white;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.banner-stat svg {
+  font-size: 1rem;
+  color: white;
+}
+
+.class-ongoing {
+  color: #FFD700;
+  font-weight: 600;
+}
+
+.class-soon {
+  color: #98FB98;
+  font-weight: 600;
+}
+
+/* 學期進度條 */
+.semester-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.semester-progress-bar .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #98FB98, #FFD700);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* 勵志語錄 */
+.quote-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-style: italic;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+.quote-icon {
+  opacity: 0.6;
+  font-size: 0.8rem;
+}
+
+.quote-author {
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+/* 快捷按鈕 */
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 0.5rem;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.quick-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.quick-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.quick-btn svg {
+  font-size: 1rem;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .welcome-banner.enhanced {
+    padding: 1.25rem 1rem;
+  }
+
+  .welcome-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .greeting-section .welcome-title {
+    font-size: 1.4rem;
+  }
+
+  .weather-widget {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .welcome-stats-row {
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .quote-section {
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .quick-actions {
+    flex-wrap: wrap;
+  }
+
+  .quick-btn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ========== 整合版 Welcome Banner ========== */
+.welcome-banner.integrated {
+  padding: 1.5rem;
+}
+
+.welcome-content.integrated {
+  display: flex;
   flex-direction: column;
-  opacity: 0.3;
+  gap: 1rem;
 }
 
-.floating-element {
-  font-size: 2rem;
-  animation: float 3s ease-in-out infinite;
+/* 學期進度行 */
+.semester-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeInUp 0.6s ease-out 0.15s both;
 }
 
-/* 📊 主要內容區域 */
+.semester-text {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.semester-row .semester-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.semester-row .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #98FB98, #FFD700);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* 三個可點擊的統計卡片 */
+.status-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  animation: fadeInUp 0.6s ease-out 0.25s both;
+}
+
+.status-card-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.status-card-mini:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.status-card-mini.active {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.status-card-mini .card-icon {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+.status-card-mini .card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.status-card-mini .card-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.status-card-mini .card-label {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.status-card-mini .expand-icon {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* 展開區域 */
+.expanded-section {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.expanded-content {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.expanded-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.expanded-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: white;
+}
+
+.close-expanded {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.close-expanded:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.empty-state-mini {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+/* 課程列表 */
+.courses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.course-row:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.course-row.in-progress {
+  background: rgba(255, 215, 0, 0.15);
+  border-left: 3px solid #FFD700;
+}
+
+.course-row.upcoming {
+  background: rgba(152, 251, 152, 0.12);
+  border-left: 3px solid #98FB98;
+}
+
+.course-time-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.course-row .course-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.course-row .course-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.course-row .course-meta {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.status-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+.status-badge.live {
+  background: #FFD700;
+  color: #333;
+}
+
+.status-badge.soon {
+  background: #98FB98;
+  color: #333;
+}
+
+/* 活動列表 */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ========== 航班卡片風格課程列表 ========== */
+.expanded-content.flight-style {
+  background: transparent;
+  padding: 12px;
+  border: none;
+}
+
+.flight-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.flight-card {
+  background: linear-gradient(135deg, #00897B 0%, #00796B 50%, #00695C 100%);
+  border-radius: 16px;
+  padding: 16px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+}
+
+.flight-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* 進行中：漸層藍色（類似圖片中的航班卡片） */
+.flight-card.in-progress {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 50%, #2E6BA8 100%);
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+}
+
+/* 即將開始：藍青色 */
+.flight-card.upcoming {
+  background: linear-gradient(135deg, #4DB6AC 0%, #26A69A 50%, #009688 100%);
+  box-shadow: 0 4px 15px rgba(77, 182, 172, 0.4);
+}
+
+/* 卡片頂部 */
+.flight-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.flight-label {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.flight-time {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.flight-status {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* 路線區域 */
+.flight-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.flight-point {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.flight-point.from {
+  align-items: flex-start;
+}
+
+.flight-point.to {
+  align-items: flex-end;
+}
+
+.point-label {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  letter-spacing: 1px;
+}
+
+.point-code {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.flight-line {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 16px;
+}
+
+.dashed-line {
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0.5) 0px,
+      rgba(255, 255, 255, 0.5) 6px,
+      transparent 6px,
+      transparent 12px);
+}
+
+/* 進度條虛線（進行中課程專用） */
+.progress-dashed-line {
+  flex: 1;
+  height: 4px;
+  position: relative;
+  border-radius: 2px;
+  /* 背景：灰色虛線 */
+  background: repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0.3) 0px,
+      rgba(255, 255, 255, 0.3) 6px,
+      transparent 6px,
+      transparent 12px);
+}
+
+.progress-fill-dashed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 2px;
+  /* 前景：亮白色虛線（填充進度） */
+  background: repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0.9) 0px,
+      rgba(255, 255, 255, 0.9) 6px,
+      transparent 6px,
+      transparent 12px);
+  transition: width 0.5s ease;
+}
+
+.flight-icon {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  transform: rotate(0deg);
+}
+
+/* 書本圖示跟隨進度移動 */
+.progress-dashed-line.with-icon {
+  position: relative;
+}
+
+.flight-icon.moving {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  font-size: 1.1rem;
+  background: rgba(74, 144, 226, 0.9);
+  padding: 6px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: left 0.5s ease;
+}
+
+/* 卡片底部 */
+.flight-card-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 12px;
+}
+
+.flight-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.flight-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.flight-meta {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+/* 響應式手機版 */
+@media (max-width: 768px) {
+  .flight-card {
+    padding: 12px;
+  }
+
+  .point-code {
+    font-size: 1.4rem;
+  }
+
+  .flight-line {
+    margin: 0 8px;
+  }
+}
+
+/* 簡單課程列表（非特殊課程） */
+.courses-list-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.courses-divider {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 0 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 4px;
+}
+
+.course-row-simple {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.course-row-simple:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.course-row-simple .course-time-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.course-row-simple .course-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.course-row-simple .course-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.course-row-simple .course-meta {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* 已完成課程：淡化顯示 */
+.courses-list-simple.completed {
+  opacity: 0.7;
+}
+
+.course-row-simple.completed {
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.course-row-simple.completed .course-time-badge {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.completed-badge {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: auto;
+}
+
+/* 活動列表 */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.event-row {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.event-row .event-name {
+  font-size: 0.9rem;
+  color: white;
+}
+
+/* 學分詳情 */
+.credits-summary {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.credits-big {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.credits-label {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+.credits-bar {
+  width: 100%;
+  max-width: 200px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  margin: 16px auto 8px;
+  overflow: hidden;
+}
+
+.credits-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #98FB98, #FFD700);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.credits-range {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* 響應式：手機版 */
+@media (max-width: 768px) {
+  .welcome-banner.integrated {
+    padding: 1rem;
+  }
+
+  .status-cards-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .status-card-mini {
+    flex-direction: column;
+    padding: 8px 6px;
+    text-align: center;
+    gap: 4px;
+  }
+
+  .status-card-mini .card-icon {
+    font-size: 1.2rem;
+  }
+
+  .status-card-mini .card-content {
+    align-items: center;
+  }
+
+  .status-card-mini .card-value {
+    font-size: 1.1rem;
+  }
+
+  .status-card-mini .card-label {
+    font-size: 0.65rem;
+  }
+
+  .status-card-mini .expand-icon {
+    display: none;
+  }
+
+  .semester-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .semester-row .semester-progress-bar {
+    width: 100%;
+  }
+
+  .expanded-content {
+    padding: 12px;
+  }
+}
+
+
 .dashboard-main {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+/* 簡化版佈局（無 TodayStatus） */
+.dashboard-main.simplified {
+  grid-template-columns: 1fr 1.5fr;
+}
+
+@media (max-width: 768px) {
+  .dashboard-main.simplified {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* 📅 今日狀態側邊欄 */
@@ -81,7 +1079,7 @@
   background: var(--theme-bg-card);
   border-radius: 16px;
   padding: 1rem;
-  box-shadow: var(--theme-shadow-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
   border: 1px solid var(--theme-border-primary);
 }
 
@@ -96,12 +1094,19 @@
 .status-card {
   position: relative;
   background: var(--theme-bg-secondary);
-  border: 1px solid var(--theme-border-primary);
+  border: 1px solid var(--theme-border-secondary);
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 0.5rem;
   cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 狀態卡片懸浮效果 */
+.status-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
 }
 
 /* [腳本修改] 原始懸浮樣式已註解
@@ -141,11 +1146,25 @@
 }
 
 /* 🎯 狀態指示器 */
-.status-active { border-left: 4px solid #28a745; }
-.status-warning { border-left: 4px solid #ffc107; }
-.status-error { border-left: 4px solid #dc3545; }
-.status-info { border-left: 4px solid #17a2b8; }
-.status-empty { border-left: 4px solid #6c757d; }
+.status-active {
+  border-left: 4px solid #28a745;
+}
+
+.status-warning {
+  border-left: 4px solid #ffc107;
+}
+
+.status-error {
+  border-left: 4px solid #dc3545;
+}
+
+.status-info {
+  border-left: 4px solid #17a2b8;
+}
+
+.status-empty {
+  border-left: 4px solid #6c757d;
+}
 
 /* 💬 懸停卡片 */
 .status-card-popup {
@@ -165,8 +1184,15 @@
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(-50%) translateX(-10px); }
-  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
 }
 
 .status-card-popup-arrow {
@@ -194,22 +1220,26 @@
 }
 
 /* 📚 課程/活動項目 */
-.course-item, .event-item {
+.course-item,
+.event-item {
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--theme-border-secondary);
 }
 
-.course-item:last-child, .event-item:last-child {
+.course-item:last-child,
+.event-item:last-child {
   border-bottom: none;
 }
 
-.course-name, .event-name {
+.course-name,
+.event-name {
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: var(--theme-text-primary);
 }
 
-.course-details, .event-time {
+.course-details,
+.event-time {
   font-size: 0.85rem;
   color: var(--theme-text-secondary);
 }
@@ -255,7 +1285,8 @@
   box-shadow: var(--theme-shadow-primary);
   border: 1px solid var(--theme-border-primary);
   position: relative;
-  z-index: 1; /* 降低課表預覽的層級 */
+  z-index: 1;
+  /* 降低課表預覽的層級 */
 }
 
 .course-preview-header {
@@ -294,7 +1325,8 @@
   border-radius: 12px;
   border: 1px solid var(--theme-border-primary);
   position: relative;
-  z-index: 1; /* 確保課表不會擋到彈出卡片 */
+  z-index: 1;
+  /* 確保課表不會擋到彈出卡片 */
 }
 
 .course-table {
@@ -405,7 +1437,8 @@
 
 
 /* 🔄 載入狀態 */
-.preview-loading, .today-status.loading {
+.preview-loading,
+.today-status.loading {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -438,13 +1471,19 @@
   animation: pulse 1.4s ease-in-out infinite both;
 }
 
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
 
 /* TodayStatus 區域層級設定 */
 .today-status {
   position: relative;
-  z-index: 2; /* 稍微提高今日狀態區的層級 */
+  z-index: 2;
+  /* 稍微提高今日狀態區的層級 */
 }
 
 /* 追加到 frontend/src/components/0_Dashboard/Dashboard.css */
@@ -499,15 +1538,27 @@
   animation: bounce-loading 1.4s ease-in-out infinite both;
 }
 
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-.loading-dots span:nth-child(3) { animation-delay: 0s; }
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0s;
+}
 
 @keyframes bounce-loading {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     transform: scale(0.8);
     opacity: 0.5;
   }
+
   40% {
     transform: scale(1.2);
     opacity: 1;
@@ -516,17 +1567,17 @@
 
 /* 📱 手機版系統狀態優化 */
 @media (max-width: 768px) {
-  
+
 
   .last-update {
     font-size: 0.75rem;
   }
 
-  
 
-  
 
-  
+
+
+
 
   .status-sub {
     font-size: 0.65rem;
@@ -558,6 +1609,7 @@
     transform: translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -593,25 +1645,65 @@
 
 .status-pulse {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--status-color, var(--primary-color));
   opacity: 0;
-  animation: statusPulse 2s infinite;
+  animation: statusPulse 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+/* ✨ 改良版脈動動畫 - 更柔和的光暈效果 */
 @keyframes statusPulse {
   0% {
-    transform: scale(0.8);
-    opacity: 0.6;
+    transform: scale(0.85);
+    opacity: 0.5;
+    box-shadow: 0 0 0 0 rgba(var(--status-color-rgb, 74, 144, 226), 0.4);
   }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.3;
+
+  40% {
+    transform: scale(1);
+    opacity: 0.35;
+    box-shadow: 0 0 0 8px rgba(var(--status-color-rgb, 74, 144, 226), 0.1);
   }
+
+  70% {
+    transform: scale(1.15);
+    opacity: 0.15;
+    box-shadow: 0 0 0 12px rgba(var(--status-color-rgb, 74, 144, 226), 0);
+  }
+
   100% {
-    transform: scale(1.5);
+    transform: scale(1.3);
+    opacity: 0;
+    box-shadow: 0 0 0 16px rgba(var(--status-color-rgb, 74, 144, 226), 0);
+  }
+}
+
+/* 🎯 第二層光暈效果（交錯動畫） */
+.status-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: statusPulseSecondary 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 1.25s;
+}
+
+@keyframes statusPulseSecondary {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.15;
+  }
+
+  100% {
+    transform: scale(1.25);
     opacity: 0;
   }
 }
@@ -672,6 +1764,7 @@
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -777,7 +1870,8 @@
   gap: 0.25rem;
 }
 
-.course-teacher, .course-location {
+.course-teacher,
+.course-location {
   font-size: 0.8rem;
   color: var(--theme-text-secondary);
 }
@@ -1246,9 +2340,7 @@
 
 [data-theme="dark"] .today-status,
 [data-theme="dark"] .course-preview,
-[data-theme="dark"] 
-
-[data-theme="dark"] .course-table {
+[data-theme="dark"] [data-theme="dark"] .course-table {
   background: var(--theme-bg-secondary);
 }
 
@@ -1450,8 +2542,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* ✅ SystemStatus 按鈕位置完全修復 */
@@ -1486,8 +2585,13 @@
 
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* ✅ 系統動作按鈕 */
@@ -1500,27 +2604,9 @@
 
 
 /* ✅ 手機版樣式 */
-@media (max-width: 768px) {
-  
+@media (max-width: 768px) {}
 
-  
-
-  
-
-  
-
-  
-}
-
-@media (max-width: 480px) {
-  
-
-  
-
-  
-
-  
-}
+@media (max-width: 480px) {}
 
 /* ✅ StatusCard 彈出卡片完整樣式 */
 .status-card-popup {
@@ -1542,6 +2628,7 @@
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1673,7 +2760,8 @@
   margin: 0;
 }
 
-.teacher, .classroom {
+.teacher,
+.classroom {
   font-size: 0.8rem;
   color: var(--theme-text-secondary);
 }
@@ -1805,16 +2893,73 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
+/* 🎯 航班卡片風格：進行中課程 */
 .popup-body-glass .course-item.in-progress {
-  border-color: rgba(220, 53, 69, 0.5) !important;
-  background: rgba(220, 53, 69, 0.1) !important;
-  box-shadow: 0 0 12px rgba(220, 53, 69, 0.2) !important;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  color: white !important;
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.35) !important;
+  position: relative;
+  overflow: hidden;
 }
 
+/* 航班卡片裝飾圓圈 */
+.popup-body-glass .course-item.in-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+}
+
+/* 🎯 航班卡片風格：即將開始課程 */
 .popup-body-glass .course-item.upcoming {
-  border-color: rgba(255, 193, 7, 0.5) !important;
-  background: rgba(255, 193, 7, 0.1) !important;
-  box-shadow: 0 0 12px rgba(255, 193, 7, 0.2) !important;
+  background: linear-gradient(135deg, #5BA0F2 0%, #4A90E2 100%) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  color: white !important;
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.popup-body-glass .course-item.upcoming::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+}
+
+/* 航班卡片內文字顏色 */
+.popup-body-glass .course-item.in-progress .course-name,
+.popup-body-glass .course-item.in-progress .time-range,
+.popup-body-glass .course-item.in-progress .teacher,
+.popup-body-glass .course-item.in-progress .classroom,
+.popup-body-glass .course-item.upcoming .course-name,
+.popup-body-glass .course-item.upcoming .time-range,
+.popup-body-glass .course-item.upcoming .teacher,
+.popup-body-glass .course-item.upcoming .classroom {
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+  text-shadow: none !important;
+}
+
+/* 航班卡片內 Badge */
+.popup-body-glass .course-item.in-progress .live-badge,
+.popup-body-glass .course-item.upcoming .upcoming-badge {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 .popup-body-glass .course-time {
@@ -1870,7 +3015,7 @@
   margin: 0 !important;
 }
 
-.popup-body-glass .teacher, 
+.popup-body-glass .teacher,
 .popup-body-glass .classroom {
   font-size: 0.8rem !important;
   color: rgba(108, 117, 125, 0.9) !important;
@@ -2003,21 +3148,22 @@
 
 /* ✅ Safari 不支援 backdrop-filter 時的降級方案 */
 @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+
   .popup-body-glass .course-item,
   .popup-body-glass .event-item {
     background: rgba(255, 255, 255, 0.9) !important;
   }
-  
+
   [data-theme="dark"] .popup-body-glass .course-item,
   [data-theme="dark"] .popup-body-glass .event-item {
     background: rgba(74, 85, 104, 0.9) !important;
   }
-  
+
   .popup-body-glass .live-badge,
   .popup-body-glass .upcoming-badge {
     background: rgba(220, 53, 69, 1) !important;
   }
-  
+
   .popup-body-glass .upcoming-badge {
     background: rgba(255, 193, 7, 1) !important;
   }
@@ -2071,43 +3217,9 @@
 
 
 /* 手機版樣式 */
-@media (max-width: 768px) {
-  
+@media (max-width: 768px) {}
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-}
-
-@media (max-width: 480px) {
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-}
+@media (max-width: 480px) {}
 
 /* 📱 響應式設計 */
 @media (max-width: 1024px) {
@@ -2144,7 +3256,11 @@
   }
 
   .welcome-decoration {
-    display: none;
+    opacity: 0.5;
+  }
+
+  .floating-shape {
+    transform: scale(0.7);
   }
 
   .dashboard-main {
@@ -2161,7 +3277,7 @@
     z-index: 1001;
   }
 
-  
+
 
   .course-table {
     font-size: 0.8rem;
@@ -2184,7 +3300,7 @@
 
   .today-status,
   .course-preview,
-  
+
 
   .course-table {
     font-size: 0.7rem;
@@ -2210,9 +3326,7 @@
 
 [data-theme="dark"] .today-status,
 [data-theme="dark"] .course-preview,
-[data-theme="dark"] 
-
-[data-theme="dark"] .course-table {
+[data-theme="dark"] [data-theme="dark"] .course-table {
   background: var(--theme-bg-secondary);
 }
 
@@ -2278,6 +3392,7 @@
 [data-theme="dark"] .legend-item {
   color: var(--theme-text-secondary);
 }
+
 /* ===== 總學分彈出卡片樣式 ===== */
 
 /* ✅ 學分概覽容器 - Safari 兼容性毛玻璃效果 */
@@ -2593,13 +3708,14 @@
 
 /* ✅ Safari 降級方案 */
 @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+
   .popup-body-glass .credits-summary,
   .popup-body-glass .credits-progress,
   .popup-body-glass .credits-breakdown,
   .popup-body-glass .credits-recommendations {
     background: rgba(255, 255, 255, 0.9) !important;
   }
-  
+
   [data-theme="dark"] .popup-body-glass .credits-summary,
   [data-theme="dark"] .popup-body-glass .credits-progress,
   [data-theme="dark"] .popup-body-glass .credits-breakdown,
@@ -2684,7 +3800,7 @@
   max-height: 600px;
   opacity: 1;
   padding: 0;
-  
+
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
 }
@@ -3031,32 +4147,32 @@
   }
 
   .announcement-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-  border-bottom: none;
-  margin-bottom: 1.5rem;
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 1.5rem;
+  }
 
   .announcement-card .collapsible-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 600px;
-  opacity: 1;
-  padding: 0;
-  
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
-}
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 600px;
+    opacity: 1;
+    padding: 0;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+  }
 
   .announcement-card .collapsible-content.collapsed {
-  max-height: 0;
-  opacity: 0;
-  padding: 0;
-  overflow: hidden;
-}
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+  }
 
   .announcement-card .collapsible-content::-webkit-scrollbar {
     width: 4px;
@@ -3082,25 +4198,25 @@
 
 @media (max-width: 480px) {
   .announcement-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-  border-bottom: none;
-  margin-bottom: 1.5rem;
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 1.5rem;
+  }
 
   .announcement-card .collapsible-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 600px;
-  opacity: 1;
-  padding: 0;
-  
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
-}
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 600px;
+    opacity: 1;
+    padding: 0;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+  }
 
   .announcement-item {
     padding: 0.75rem;
@@ -3134,9 +4250,17 @@
   max-height: 600px;
   opacity: 1;
   padding: 0;
-  
+
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+}
+
+/* ✅ 深色模式下的收合狀態 */
+[data-theme="dark"] .announcement-card .collapsible-content.collapsed {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
 }
 
 [data-theme="dark"] .announcement-card .collapsible-content::-webkit-scrollbar-track {
@@ -3203,3 +4327,720 @@
 }
 
 /* ===== 點擊觸發樣式結束 ===== */
+
+/* ===== eMenu Tokyo 風格樣式 ===== */
+
+/* 🎨 毛玻璃效果增強 */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="dark"] .glass-effect {
+  background: rgba(26, 32, 44, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 🎯 深藍漸層統計卡片（參考旅費管理） */
+.stats-gradient-card {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  border-radius: 20px;
+  padding: 24px;
+  color: white;
+  box-shadow: 0 8px 24px rgba(74, 144, 226, 0.25);
+}
+
+.stats-gradient-card .credits-number,
+.stats-gradient-card .stat-number {
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+  background: none !important;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.stats-gradient-card .credits-unit,
+.stats-gradient-card .stat-label {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.stats-gradient-card .credits-status,
+.stats-gradient-card .course-count {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* 學分進度條在深藍卡片內 */
+.stats-gradient-card .progress-bar {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stats-gradient-card .progress-fill {
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+.stats-gradient-card .progress-range,
+.stats-gradient-card .progress-label {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 🎯 航班卡片風格課程卡片 */
+.flight-style-card {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.25);
+}
+
+.flight-style-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+}
+
+.flight-style-card .course-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0;
+}
+
+.flight-style-card .route-from,
+.flight-style-card .route-to {
+  text-align: center;
+}
+
+.flight-style-card .route-time {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.flight-style-card .route-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.flight-style-card .route-line {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.flight-style-card .route-line::before {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(to right,
+      rgba(255, 255, 255, 0.6),
+      rgba(255, 255, 255, 0.6) 8px,
+      transparent 8px,
+      transparent 16px);
+}
+
+.flight-style-card .route-icon {
+  font-size: 1.2rem;
+  margin: 0 8px;
+}
+
+.flight-style-card .course-info-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+}
+
+.flight-style-card .confirm-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+/* 🎯 當前/即將開始課程突出顯示 */
+.course-item.current-course {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+}
+
+.course-item.current-course .course-name,
+.course-item.current-course .time-range,
+.course-item.current-course .teacher,
+.course-item.current-course .classroom {
+  color: white !important;
+}
+
+.course-item.current-course .live-badge {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+}
+
+/* 🎨 日期選擇器樣式（參考 eMenu） */
+.date-selector {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.date-selector::-webkit-scrollbar {
+  display: none;
+}
+
+.date-tab {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  min-width: 60px;
+  transition: all 0.2s ease;
+}
+
+.date-tab:hover {
+  background: rgba(74, 144, 226, 0.1);
+}
+
+.date-tab.active {
+  background: #4A90E2;
+  color: white;
+}
+
+.date-tab .date-day {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.date-tab .date-num {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .date-tab {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .date-tab:hover {
+  background: rgba(74, 144, 226, 0.2);
+}
+
+/* 🎯 統計區塊響應式 */
+@media (max-width: 768px) {
+  .stats-gradient-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .stats-gradient-card .credits-number,
+  .stats-gradient-card .stat-number {
+    font-size: 2rem;
+  }
+
+  .flight-style-card {
+    padding: 16px;
+  }
+}
+
+/* ========== 公告卡片時間軸風格 ========== */
+.announcement-card.modern {
+  background: var(--theme-bg-card);
+  border-radius: 16px;
+  border: 1px solid var(--theme-border-secondary);
+  box-shadow: var(--theme-shadow-sm);
+  overflow: hidden;
+}
+
+.announcement-card.modern .announcement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--theme-border-secondary);
+  background: var(--theme-bg-secondary);
+}
+
+.announcement-card.modern .header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.announcement-card.modern .header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.announcement-card.modern .header-icon {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.announcement-card.modern h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+}
+
+.unread-badge {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.announcement-card.modern .last-update {
+  font-size: 0.75rem;
+  color: var(--theme-text-tertiary);
+}
+
+.collapse-toggle.modern {
+  background: var(--theme-bg-tertiary);
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--theme-text-secondary);
+  transition: all 0.2s ease;
+}
+
+.collapse-toggle.modern:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* 時間軸佈局 */
+.announcements-timeline {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 16px;
+  position: relative;
+}
+
+.timeline-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 0 4px var(--theme-bg-card);
+}
+
+.timeline-dot .unread-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  font-size: 8px;
+  color: #ef4444;
+  animation: pulse 1.5s infinite;
+}
+
+.timeline-line {
+  width: 2px;
+  flex: 1;
+  background: var(--theme-border-primary);
+  min-height: 20px;
+}
+
+/* 公告內容區 */
+.timeline-content {
+  flex: 1;
+  background: var(--theme-bg-secondary);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid var(--theme-border-secondary);
+}
+
+.timeline-content:hover {
+  transform: translateX(4px);
+  box-shadow: var(--theme-shadow-sm);
+  border-color: var(--primary-color);
+}
+
+.timeline-item.unread .timeline-content {
+  border-left: 3px solid var(--priority-color, var(--primary-color));
+}
+
+.timeline-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priority-badge svg {
+  font-size: 0.65rem;
+}
+
+.timeline-date {
+  font-size: 0.75rem;
+  color: var(--theme-text-tertiary);
+}
+
+.timeline-title {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  line-height: 1.4;
+}
+
+/* 展開內容 */
+.timeline-body {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+  margin-top: 0;
+}
+
+.timeline-body.show {
+  max-height: 1000px;
+  opacity: 1;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--theme-border-secondary);
+}
+
+.timeline-body .announcement-content {
+  font-size: 0.9rem;
+  color: var(--theme-text-secondary);
+  line-height: 1.6;
+}
+
+.timeline-body .announcement-content p {
+  margin: 0 0 8px 0;
+}
+
+.timeline-body .announcement-content li {
+  margin-left: 16px;
+  margin-bottom: 4px;
+}
+
+.expand-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--theme-text-tertiary);
+  margin-top: 8px;
+  transition: color 0.2s ease;
+}
+
+.timeline-content:hover .expand-hint {
+  color: var(--primary-color);
+}
+
+/* 空狀態 */
+.empty-announcements {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--theme-text-tertiary);
+}
+
+.empty-announcements .empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.empty-announcements h4 {
+  margin: 0 0 8px 0;
+  color: var(--theme-text-secondary);
+}
+
+.empty-announcements p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .announcements-timeline {
+    padding: 12px;
+  }
+
+  .timeline-content {
+    padding: 12px;
+  }
+
+  .timeline-connector {
+    width: 16px;
+  }
+
+  .timeline-dot {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* ========== 常用連結卡片 ========== */
+.quick-links-card {
+  background: var(--theme-bg-card);
+  border-radius: 16px;
+  border: 1px solid var(--theme-border-secondary);
+  box-shadow: var(--theme-shadow-sm);
+  overflow: hidden;
+}
+
+.quick-links-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--theme-border-secondary);
+  background: var(--theme-bg-secondary);
+}
+
+.quick-links-header .header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quick-links-header .header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quick-links-header .header-icon {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.quick-links-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+}
+
+.quick-links-header .header-subtitle {
+  font-size: 0.75rem;
+  color: var(--theme-text-tertiary);
+}
+
+/* 連結內容區 */
+.quick-links-content {
+  padding: 20px;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.quick-links-content.collapsed {
+  max-height: 0;
+  padding: 0 20px;
+  opacity: 0;
+}
+
+/* 格子佈局 */
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* 單個連結卡片 */
+.link-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-secondary);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--theme-shadow-sm);
+  border-color: var(--link-color, var(--primary-color));
+  background: var(--theme-bg-primary);
+}
+
+.link-card:active {
+  transform: translateY(0);
+}
+
+/* 圖示區 */
+.link-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* 文字資訊 */
+.link-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.link-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link-desc {
+  font-size: 0.7rem;
+  color: var(--theme-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 外部連結圖示 */
+.external-icon {
+  font-size: 0.7rem;
+  color: var(--theme-text-tertiary);
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.link-card:hover .external-icon {
+  opacity: 1;
+  color: var(--link-color, var(--primary-color));
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-links-content {
+    padding: 12px;
+  }
+
+  .link-card {
+    padding: 12px 14px;
+  }
+
+  .link-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .link-name {
+    font-size: 0.85rem;
+  }
+
+  .link-desc {
+    font-size: 0.65rem;
+  }
+}
+
+/* ========== Dashboard Main Simplified 佈局 ========== */
+.dashboard-main.simplified {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.dashboard-main.simplified .dashboard-sidebar,
+.dashboard-main.simplified .dashboard-content {
+  width: 100%;
+}
+
+/* 手機版響應式 - 置中對齊 */
+@media (max-width: 768px) {
+  .dashboard-main.simplified {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .dashboard-main.simplified .dashboard-sidebar,
+  .dashboard-main.simplified .dashboard-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* 確保卡片內容置中 */
+  .dashboard-main.simplified .quick-links-card,
+  .dashboard-main.simplified .announcement-card {
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-main.simplified {
+    padding: 0;
+  }
+}

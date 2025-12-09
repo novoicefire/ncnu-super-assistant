@@ -2,12 +2,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
+import { useTranslation } from 'react-i18next';
 import CourseTable from './CourseTable.jsx';
 import './CoursePlanner.css';
 import { useAuth } from '../../AuthContext.jsx';
 import { robustRequest } from '../../apiHelper.js';
 
 const CoursePlanner = () => {
+  const { t } = useTranslation();
   const { user, isLoggedIn } = useAuth();
   const [staticCourses, setStaticCourses] = useState([]);
   const [hotnessData, setHotnessData] = useState({});
@@ -21,6 +23,7 @@ const CoursePlanner = () => {
     teacher: '',
     department: '',
     division: '',
+    time: '',
     hideConflicting: false
   });
   const [filteredCourses, setFilteredCourses] = useState([]);
@@ -207,13 +210,13 @@ const CoursePlanner = () => {
   const captureScheduleImage = useCallback(async () => {
     const tableElement = document.getElementById('course-schedule-table-isolated');
     if (!tableElement) {
-      showNotification('❌ 找不到課表元素，無法截圖', 'error');
+      showNotification(t('coursePlanner.notifyNoTable'), 'error');
       return;
     }
 
     setIsCapturing(true);
     try {
-      showNotification('📸 正在生成課表圖片...', 'info');
+      showNotification(t('coursePlanner.notifyGenerating'), 'info');
 
       const canvas = await html2canvas(tableElement, {
         backgroundColor: '#ffffff',
@@ -230,26 +233,26 @@ const CoursePlanner = () => {
         if (blob) {
           const url = URL.createObjectURL(blob);
           const link = document.createElement('a');
-          link.download = `暨大課表_${new Date().toLocaleDateString('zh-TW').replace(/\//g, '-')}.png`;
+          link.download = `NCNU_Schedule_${new Date().toLocaleDateString('en-US').replace(/\//g, '-')}.png`;
           link.href = url;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
           URL.revokeObjectURL(url);
 
-          showNotification('✅ 課表圖片下載成功！', 'success');
+          showNotification(t('coursePlanner.notifyImageSuccess'), 'success');
         } else {
-          throw new Error('無法生成圖片檔案');
+          throw new Error('Cannot generate image');
         }
       }, 'image/png');
 
     } catch (error) {
-      console.error('截圖失敗:', error);
-      showNotification('❌ 截圖失敗，請稍後再試', 'error');
+      console.error('Screenshot failed:', error);
+      showNotification(t('coursePlanner.notifyImageFailed'), 'error');
     } finally {
       setIsCapturing(false);
     }
-  }, []);
+  }, [t]);
 
   // 🔄 載入真實課程資料
   useEffect(() => {
@@ -380,6 +383,9 @@ const CoursePlanner = () => {
     if (filters.division) {
       result = result.filter(c => c.division === filters.division);
     }
+    if (filters.time) {
+      result = result.filter(c => c.time && c.time.toLowerCase().includes(filters.time.toLowerCase()));
+    }
     if (filters.hideConflicting) {
       result = result.filter(course => !hasTimeConflict(course));
     }
@@ -449,11 +455,11 @@ const CoursePlanner = () => {
         if (response && response.success) {
           setSaveStatus("success");
           if (actionType === 'add') {
-            showNotification(`✅ 「${courseName}」已成功加入課表並同步至雲端`, 'success');
+            showNotification(t('coursePlanner.notifyAddedCloud', { courseName }), 'success');
           } else if (actionType === 'remove') {
-            showNotification(`🗑️ 「${courseName}」已從課表移除並同步至雲端`, 'success');
+            showNotification(t('coursePlanner.notifyRemovedCloud', { courseName }), 'success');
           } else {
-            showNotification('✔ 課表已同步至雲端', 'success');
+            showNotification(t('coursePlanner.notifyCloudSync'), 'success');
           }
         } else {
           throw new Error(response.error || "Backend response did not indicate success.");
@@ -461,16 +467,16 @@ const CoursePlanner = () => {
       } catch (error) {
         setSaveStatus("error");
         console.error("Failed to save schedule to cloud:", error);
-        showNotification('❌ 雲端同步失敗，但已保存到本地。請檢查網路連線', 'warning');
+        showNotification(t('coursePlanner.notifyCloudFailed'), 'warning');
       } finally {
         setTimeout(() => setSaveStatus("idle"), 3000);
       }
     } else {
       // 💾 未登入用戶：只存本地
       if (actionType === 'add') {
-        showNotification(`✅ 「${courseName}」已加入課表，登入後可同步至雲端`, 'success');
+        showNotification(t('coursePlanner.notifyAddedLocal', { courseName }), 'success');
       } else if (actionType === 'remove') {
-        showNotification(`🗑️ 「${courseName}」已從課表移除`, 'success');
+        showNotification(t('coursePlanner.notifyRemovedLocal', { courseName }), 'success');
       }
     }
   }, [isLoggedIn, user, showNotification]);
@@ -478,7 +484,7 @@ const CoursePlanner = () => {
   // 新增彈性課程
   const addFlexibleCourse = useCallback((course) => {
     if (flexibleCourses.some(fc => fc.course_id === course.course_id)) {
-      showNotification('⚠️ 此課程已在彈性課程區', 'warning');
+      showNotification(t('coursePlanner.notifyAlreadyFlexible'), 'warning');
       return;
     }
     const newFlexible = [...flexibleCourses, course];
@@ -521,7 +527,7 @@ const CoursePlanner = () => {
     for (let slot of slots) {
       if (schedule[slot]) {
         showNotification(
-          `⚠️ 課程時間衝突！時段 ${slot[0]} 的 ${slot.substring(1)} 節已被「${schedule[slot].course_cname}」佔用`,
+          t('coursePlanner.notifyConflict', { day: slot[0], period: slot.substring(1), existingCourse: schedule[slot].course_cname }),
           'warning'
         );
         return;
@@ -619,13 +625,13 @@ const CoursePlanner = () => {
   }, [flexibleCourses, flexibleSort]);
 
   const getSaveStatusMessage = () => {
-    if (!isLoggedIn) return "登入後即可將課表同步至雲端";
+    if (!isLoggedIn) return t('coursePlanner.statusNotLoggedIn');
 
     switch (saveStatus) {
-      case "saving": return "同步中...";
-      case "success": return "✔ 課表已同步至雲端！";
-      case "error": return "❌ 雲端同步失敗，已保存到本地";
-      default: return "課表變動將自動同步";
+      case "saving": return t('coursePlanner.statusSaving');
+      case "success": return t('coursePlanner.statusSuccess');
+      case "error": return t('coursePlanner.statusError');
+      default: return t('coursePlanner.statusAuto');
     }
   };
 
@@ -652,11 +658,11 @@ const CoursePlanner = () => {
       </div>
 
       <div className="planner-header">
-        <h1>智慧排課系統</h1>
+        <h1>{t('coursePlanner.title')}</h1>
         <div className="header-info">
           <span>
-            已選學分: {totalCredits} 學分
-            {totalCredits > 0 && `（固定 ${scheduledCredits} + 彈性 ${flexibleCredits}）`}
+            {t('coursePlanner.selectedCredits')}: {totalCredits} {t('coursePlanner.creditsUnit')}
+            {totalCredits > 0 && `（${t('coursePlanner.fixed')} ${scheduledCredits} + ${t('coursePlanner.flexible')} ${flexibleCredits}）`}
           </span>
           <span>{getSaveStatusMessage()}</span>
         </div>
@@ -665,40 +671,51 @@ const CoursePlanner = () => {
       {/* 篩選器區域 */}
       <div className="filters">
         <div className="filter-group">
-          <label>課程名稱</label>
+          <label>{t('coursePlanner.courseName')}</label>
           <input
             type="text"
             name="courseName"
             value={filters.courseName}
             onChange={handleFilterChange}
-            placeholder="搜尋課程名稱..."
+            placeholder={t('coursePlanner.searchCoursePlaceholder')}
           />
         </div>
 
         <div className="filter-group">
-          <label>授課教師</label>
+          <label>{t('coursePlanner.teacher')}</label>
           <input
             type="text"
             name="teacher"
             value={filters.teacher}
             onChange={handleFilterChange}
-            placeholder="搜尋教師姓名..."
+            placeholder={t('coursePlanner.searchTeacherPlaceholder')}
           />
         </div>
 
         <div className="filter-group">
-          <label>開課單位</label>
+          <label>{t('coursePlanner.classTime')}</label>
+          <input
+            type="text"
+            name="time"
+            value={filters.time}
+            onChange={handleFilterChange}
+            placeholder={t('coursePlanner.classTimePlaceholder')}
+          />
+        </div>
+
+        <div className="filter-group">
+          <label>{t('coursePlanner.department')}</label>
           <input
             type="text"
             name="department"
             list="department-list"
             value={filters.department}
             onChange={handleFilterChange}
-            placeholder="輸入或選擇開課單位"
+            placeholder={t('coursePlanner.selectDepartment')}
             autoComplete="off"
           />
           <datalist id="department-list">
-            <option value="">所有開課單位</option>
+            <option value="">{t('coursePlanner.allDepartments')}</option>
 
             {/* 人文學院 */}
             <option value="中文系">📚 人文學院 - 中國語文學系</option>
@@ -788,9 +805,9 @@ const CoursePlanner = () => {
         </div>
 
         <div className="filter-group">
-          <label>班別</label>
+          <label>{t('coursePlanner.division')}</label>
           <select name="division" value={filters.division} onChange={handleFilterChange}>
-            <option value="">所有班別</option>
+            <option value="">{t('coursePlanner.allDivisions')}</option>
             {uniqueDivisions.map(division => (
               <option key={division} value={division}>{division}</option>
             ))}
@@ -799,22 +816,23 @@ const CoursePlanner = () => {
 
         <div className="filter-group conflict-filter-group">
           <label className="conflict-filter-label">
-            <input
-              type="checkbox"
-              name="hideConflicting"
-              checked={filters.hideConflicting}
-              onChange={handleFilterChange}
-              className="conflict-checkbox"
-            />
-            <div className="conflict-checkbox-text">
-              <span>隱藏衝堂課程</span>
-              {conflictingCoursesCount > 0 && (
-                <span className="conflict-count">({conflictingCoursesCount}門課程)</span>
-              )}
+            <span className="conflict-label-text">{t('coursePlanner.hideConflicts')}</span>
+            <div className="toggle-switch">
+              <input
+                type="checkbox"
+                name="hideConflicting"
+                checked={filters.hideConflicting}
+                onChange={handleFilterChange}
+                className="toggle-input"
+              />
+              <span className="toggle-slider"></span>
             </div>
+            {conflictingCoursesCount > 0 && (
+              <span className="conflict-count">({conflictingCoursesCount})</span>
+            )}
           </label>
           <div className="filter-info">
-            避免顯示與已選課程時間衝突的課程
+            {t('coursePlanner.conflictHint')}
           </div>
         </div>
       </div>
@@ -822,9 +840,9 @@ const CoursePlanner = () => {
       <div className="planner-content">
         {/* 課程列表 */}
         <div className="course-list-container">
-          <h3>課程列表 ({filteredCourses.length})</h3>
+          <h3>{t('coursePlanner.courseList')} ({filteredCourses.length})</h3>
           {isLoading ? (
-            <p>載入課程資料中...</p>
+            <p>{t('coursePlanner.loading')}</p>
           ) : (
             <ul className="course-list">
               {filteredCourses.map((course, index) => (
@@ -832,11 +850,11 @@ const CoursePlanner = () => {
                   <div className="course-info">
                     <div className="course-title-container">
                       <strong>{course.course_cname}</strong>
-                      {!course.time && <span className="course-type-badge flexible">彈性</span>}
+                      {!course.time && <span className="course-type-badge flexible">{t('coursePlanner.flexible')}</span>}
                     </div>
                     {hotnessData && hotnessData[course.course_id] && (
                       <span className="hotness-indicator">
-                        🔥 {hotnessData[course.course_id]}人
+                        🔥 {hotnessData[course.course_id]}{t('coursePlanner.people')}
                       </span>
                     )}
                     <small>
@@ -860,18 +878,18 @@ const CoursePlanner = () => {
         <div className="schedule-container">
           <div className="schedule-header">
             <div>
-              <h3>我的課表</h3>
+              <h3>{t('coursePlanner.mySchedule')}</h3>
               <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
-                點擊課表中的課程方塊即可移除
+                {t('coursePlanner.clickToRemove')}
               </p>
             </div>
             <button
               className="save-image-btn"
               onClick={captureScheduleImage}
               disabled={isCapturing}
-              title="下載課表圖片"
+              title={t('coursePlanner.saveImage')}
             >
-              {isCapturing ? '📸 生成中...' : '📷 保存圖片'}
+              {isCapturing ? t('coursePlanner.generating') : t('coursePlanner.saveImage')}
             </button>
           </div>
           <CourseTable
@@ -885,26 +903,26 @@ const CoursePlanner = () => {
       <div className="flexible-courses-container">
         <div className="schedule-header flexible-header">
           <div className="flexible-header-title">
-            <h3>彈性/無固定時間課程</h3>
+            <h3>{t('coursePlanner.flexibleCourses')}</h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
-              包含專題、實習、線上非同步等課程
+              {t('coursePlanner.flexibleDesc')}
             </p>
           </div>
           <div className="flexible-sort-buttons">
             <button onClick={() => handleFlexibleSort('course_credit')} className={flexibleSort.key === 'course_credit' ? 'active' : ''}>
-              學分 {flexibleSort.key === 'course_credit' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+              {t('coursePlanner.credits')} {flexibleSort.key === 'course_credit' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
             </button>
             <button onClick={() => handleFlexibleSort('course_cname')} className={flexibleSort.key === 'course_cname' ? 'active' : ''}>
-              名稱 {flexibleSort.key === 'course_cname' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+              {t('coursePlanner.name')} {flexibleSort.key === 'course_cname' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
             </button>
             <button onClick={() => handleFlexibleSort('added_time')} className={flexibleSort.key === 'added_time' ? 'active' : ''}>
-              加入時間 {flexibleSort.key === 'added_time' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+              {t('coursePlanner.addedTime')} {flexibleSort.key === 'added_time' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
             </button>
           </div>
         </div>
         {flexibleCourses.length === 0 ? (
           <p style={{ textAlign: 'center', color: 'var(--theme-text-tertiary)', padding: '20px', lineHeight: '1.6' }}>
-            尚未加入彈性課程。專題、實習等無固定時間的課程會顯示在此。
+            {t('coursePlanner.noFlexibleCourses')}
           </p>
         ) : (
           <ul className="flexible-course-list">
@@ -913,7 +931,7 @@ const CoursePlanner = () => {
                 <div className="course-info">
                   <strong>{fc.course_cname}</strong>
                   <small>
-                    {fc.teacher} | {fc.department} | {fc.course_credit}學分
+                    {fc.teacher} | {fc.department} | {fc.course_credit}{t('coursePlanner.creditsUnit')}
                   </small>
                 </div>
                 <button

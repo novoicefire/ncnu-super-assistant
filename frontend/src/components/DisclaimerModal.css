@@ -1,291 +1,455 @@
-/* frontend/src/components/DisclaimerModal.css (深色模式完整修復版) */
+/* frontend/src/components/DisclaimerModal.css (全面改良版 v2) */
+/* 現代化玻璃擬態風格 + 動畫效果 */
 
-.disclaimer-overlay {
+/* ========== 覆蓋層 ========== */
+.disclaimer-overlay-v2 {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   padding: 1rem;
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  overflow: hidden;
 }
 
-/* ✅ 修復：使用CSS變數，添加深色模式支援 */
-.disclaimer-modal {
-  background: var(--theme-bg-card);
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  max-width: 600px;
+.disclaimer-overlay-v2.active {
+  opacity: 1;
+}
+
+/* ========== 背景裝飾 ========== */
+.disclaimer-bg-decoration {
+  position: absolute;
   width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  border: 3px solid var(--warning-color);
-  animation: disclaimerSlideIn 0.4s ease-out;
-  color: var(--theme-text-primary);
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-@keyframes disclaimerSlideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  animation: floatCircle 8s ease-in-out infinite;
+}
+
+.circle-1 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, #06b6d4, #10b981);
+  bottom: -50px;
+  right: -50px;
+  animation-delay: 2s;
+}
+
+.circle-3 {
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  top: 50%;
+  right: 20%;
+  animation-delay: 4s;
+}
+
+@keyframes floatCircle {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
   }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
+
+  50% {
+    transform: translate(20px, -20px) scale(1.1);
   }
 }
 
-/* ✅ 修復：響應主題的標題區域 */
-.disclaimer-header {
-  background: linear-gradient(135deg, var(--warning-color), #e0a800);
-  color: var(--theme-text-primary);
-  padding: 1.5rem;
+/* ========== 主卡片 ========== */
+.disclaimer-card-v2 {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.25rem 1.25rem;
   text-align: center;
-  border-radius: 12px 12px 0 0;
+  box-shadow:
+    0 20px 40px -12px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(30px) scale(0.95);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.disclaimer-header h2 {
-  margin: 0;
+.disclaimer-card-v2.active {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* ========== 頂部圖標區 ========== */
+.disclaimer-icon-section {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.disclaimer-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.35);
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+.disclaimer-main-icon {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #333; /* 警告背景上保持深色文字以確保對比度 */
+  color: white;
 }
 
-/* ✅ 修復：內容區域使用主題變數 */
-.disclaimer-content {
-  padding: 2rem;
-  background: var(--theme-bg-card);
+.disclaimer-icon-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  animation: iconPulse 2s ease-in-out infinite;
+  z-index: -1;
 }
 
-.disclaimer-text {
-  line-height: 1.8;
-  font-size: 1rem;
-  color: var(--theme-text-primary);
+@keyframes iconBounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
-.disclaimer-text p {
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-  color: var(--theme-text-primary);
+@keyframes iconPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
 }
 
-.disclaimer-text strong {
-  color: var(--error-color);
-  font-weight: 700;
+/* ========== 標題區 ========== */
+.disclaimer-title-section h1 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.02em;
 }
 
-/* ✅ 修復：提示框區域主題適配 */
-.disclaimer-note {
-  background: var(--theme-bg-tertiary);
-  padding: 1.5rem;
-  border-radius: 8px;
-  border-left: 4px solid var(--info-color);
-  margin-top: 1.5rem;
+.disclaimer-subtitle {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+  margin: 0 0 0.75rem;
 }
 
-.disclaimer-note p {
-  margin: 0 0 0.5rem 0;
-  font-weight: 600;
-  color: var(--primary-dark);
+/* ========== 信息卡片網格 ========== */
+.disclaimer-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
 }
 
-.disclaimer-note ul {
-  margin: 0.5rem 0 0 0;
-  padding-left: 1.5rem;
+.info-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.disclaimer-note li {
-  margin-bottom: 0.25rem;
-  color: var(--theme-text-secondary);
-}
-
-/* ✅ 修復：底部區域主題適配 */
-.disclaimer-footer {
-  padding: 1.5rem 2rem 2rem;
-  text-align: center;
-  border-top: 1px solid var(--theme-border-primary);
-  background: var(--theme-bg-card);
-}
-
-.disclaimer-accept-btn {
-  background: linear-gradient(135deg, var(--success-color), #218838);
-  color: #ffffff;
-  border: none;
-  padding: 1rem 3rem;
-  border-radius: 25px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
-  min-width: 280px;
-}
-
-.disclaimer-accept-btn:hover {
-  background: linear-gradient(135deg, #218838, #1e7e34);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
-}
-
-.disclaimer-accept-btn:active {
+.info-card.visible {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+  opacity: 1;
 }
 
-/* ✅ 新增：深色模式專用適配 */
-[data-theme="dark"] .disclaimer-overlay {
-  background-color: rgba(0, 0, 0, 0.9); /* 深色模式下更深的背景 */
+.info-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
 }
 
-[data-theme="dark"] .disclaimer-modal {
-  background: var(--theme-bg-card);
-  border: 3px solid var(--warning-color);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+.info-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
 }
 
-[data-theme="dark"] .disclaimer-header {
-  background: linear-gradient(135deg, var(--warning-color), #e0a800);
-  color: #333; /* 在黃色背景上保持深色文字 */
+.info-card p {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.3;
 }
 
-[data-theme="dark"] .disclaimer-content,
-[data-theme="dark"] .disclaimer-footer {
-  background: var(--theme-bg-card);
+/* ========== 聯絡連結 ========== */
+.disclaimer-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: linear-gradient(135deg, #e91e63, #9c27b0);
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
 }
 
-[data-theme="dark"] .disclaimer-text,
-[data-theme="dark"] .disclaimer-text p {
-  color: var(--theme-text-primary);
+.disclaimer-contact.visible {
+  transform: translateY(0);
+  opacity: 1;
 }
 
-[data-theme="dark"] .disclaimer-note {
-  background: var(--theme-bg-secondary);
-  border-left: 4px solid var(--primary-light);
+.disclaimer-contact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
 }
 
-[data-theme="dark"] .disclaimer-note p {
-  color: var(--primary-light);
+.contact-icon {
+  font-size: 1rem;
 }
 
-[data-theme="dark"] .disclaimer-note li {
-  color: var(--theme-text-secondary);
+.arrow-icon {
+  font-size: 0.7rem;
+  transition: transform 0.3s ease;
 }
 
-[data-theme="dark"] .disclaimer-footer {
-  border-top: 1px solid var(--theme-border-primary);
+.disclaimer-contact:hover .arrow-icon {
+  transform: translateX(4px);
 }
 
-/* ✅ 深色模式下的滾動條美化 */
-[data-theme="dark"] .disclaimer-modal::-webkit-scrollbar {
-  width: 6px;
+/* ========== 確認按鈕 ========== */
+.disclaimer-accept-btn-v2 {
+  position: relative;
+  width: 100%;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-[data-theme="dark"] .disclaimer-modal::-webkit-scrollbar-track {
-  background: var(--theme-bg-tertiary);
+.disclaimer-accept-btn-v2.visible {
+  transform: translateY(0);
+  opacity: 1;
 }
 
-[data-theme="dark"] .disclaimer-modal::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
-  border-radius: 3px;
+.disclaimer-accept-btn-v2:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
 }
 
-[data-theme="dark"] .disclaimer-modal::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-light);
+.disclaimer-accept-btn-v2:active {
+  transform: translateY(0);
 }
 
-/* 🔧 修復：body滾動控制 */
-body.disclaimer-showing {
-  overflow: hidden !important;
+.btn-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: btnShine 3s infinite;
 }
 
-/* 📱 響應式設計 - 深色模式適配 */
-@media (max-width: 768px) {
-  .disclaimer-overlay {
-    padding: 0.5rem;
+@keyframes btnShine {
+  0% {
+    left: -100%;
   }
 
-  .disclaimer-modal {
-    max-height: 90vh;
-    border-width: 2px;
-  }
-
-  .disclaimer-header {
-    padding: 1rem;
-  }
-
-  .disclaimer-header h2 {
-    font-size: 1.3rem;
-  }
-
-  .disclaimer-content {
-    padding: 1.5rem;
-  }
-
-  .disclaimer-text {
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-
-  .disclaimer-note {
-    padding: 1rem;
-  }
-
-  .disclaimer-footer {
-    padding: 1rem 1.5rem 1.5rem;
-  }
-
-  .disclaimer-accept-btn {
-    font-size: 1rem;
-    padding: 1rem 1.5rem;
-    min-width: 240px;
+  50%,
+  100% {
+    left: 100%;
   }
 }
 
-@media (max-width: 480px) {
-  .disclaimer-text {
+/* ========== 底部文字 ========== */
+.disclaimer-footer-text {
+  margin: 1.25rem 0 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ========== 深色/淺色模式適配 ========== */
+[data-theme="light"] .disclaimer-overlay-v2 {
+  background: linear-gradient(135deg, rgba(241, 245, 249, 0.98), rgba(226, 232, 240, 0.98));
+}
+
+[data-theme="light"] .disclaimer-card-v2 {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .disclaimer-title-section h1 {
+  color: #1e293b;
+}
+
+[data-theme="light"] .disclaimer-subtitle {
+  color: #64748b;
+}
+
+[data-theme="light"] .info-card {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .info-card:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .info-card p {
+  color: #334155;
+}
+
+[data-theme="light"] .disclaimer-footer-text {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .bg-circle {
+  opacity: 0.2;
+}
+
+/* ========== 響應式設計 ========== */
+@media (max-width: 520px) {
+  .disclaimer-card-v2 {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+  }
+
+  .disclaimer-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+  }
+
+  .disclaimer-main-icon {
+    font-size: 2rem;
+  }
+
+  .disclaimer-icon-pulse {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+  }
+
+  .disclaimer-title-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .disclaimer-subtitle {
     font-size: 0.85rem;
   }
 
-  .disclaimer-accept-btn {
-    font-size: 0.9rem;
-    min-width: 200px;
+  .disclaimer-info-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
 
-  /* 小螢幕深色模式優化 */
-  [data-theme="dark"] .disclaimer-overlay {
-    background-color: rgba(0, 0, 0, 0.95);
+  .info-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem;
+  }
+
+  .info-icon {
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .disclaimer-contact {
+    font-size: 0.8rem;
+    padding: 0.75rem 1.25rem;
   }
 }
 
-/* ✅ 高對比度模式支援 */
-@media (prefers-contrast: high) {
-  .disclaimer-modal {
-    border-width: 4px;
-  }
-  
-  [data-theme="dark"] .disclaimer-text,
-  [data-theme="dark"] .disclaimer-text p {
-    color: #ffffff;
-  }
-  
-  [data-theme="dark"] .disclaimer-note {
-    border-left-width: 6px;
-  }
-}
-
-/* ✅ 減少動畫偏好支援 */
+/* ========== 減少動畫偏好 ========== */
 @media (prefers-reduced-motion: reduce) {
-  .disclaimer-modal {
+
+  .disclaimer-card-v2,
+  .info-card,
+  .disclaimer-contact,
+  .disclaimer-accept-btn-v2 {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  .bg-circle,
+  .btn-shine,
+  .disclaimer-icon-pulse {
     animation: none;
   }
-  
-  .disclaimer-accept-btn {
-    transition: none;
+
+  .disclaimer-icon-wrapper {
+    animation: none;
   }
+}
+
+/* ========== Body 滾動控制 ========== */
+body.disclaimer-showing {
+  overflow: hidden !important;
 }

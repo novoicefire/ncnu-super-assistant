@@ -1,6 +1,7 @@
-// frontend/src/components/Navbar.jsx (新方案：IBS按鈕統一放置於右側區域)
+// frontend/src/components/Navbar.jsx (新方案：IBS按鈕統一放置於右側區域 + i18n)
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext.jsx';
 import { useTheme } from '../contexts/ThemeContext.jsx';
 import './Navbar.css';
@@ -41,6 +42,7 @@ const GoogleLoginButton = () => {
 };
 
 const Navbar = ({ disclaimerAccepted }) => {
+  const { t } = useTranslation();
   const { isLoggedIn, user, logout, isLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
@@ -115,78 +117,75 @@ const Navbar = ({ disclaimerAccepted }) => {
     <nav className="navbar">
       {/* 🎨 品牌區域 */}
       <div className="nav-brand-container">
-        <button 
+        <button
           ref={menuToggleRef}
           className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
           onClick={toggleMobileMenu}
-          aria-label="切換選單"
+          aria-label={t('common.toggleMenu')}
         >
           <span></span>
           <span></span>
           <span></span>
         </button>
-        
-        <img 
-          src="/logo.svg" 
-          alt="暨大生超級助理 Logo" 
+
+        <img
+          src="/logo.svg"
+          alt={t('header.brandFull')}
           className="nav-logo"
           onError={(e) => {
             e.target.style.display = 'none';
           }}
         />
-        <div className="nav-brand">暨大生超級助理</div>
+        <div className="nav-brand">{t('header.brandFull')}</div>
       </div>
-      
+
       {/* 導航連結區域 */}
-      <div 
+      <div
         ref={mobileMenuRef}
         className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}
       >
         <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}>
-          🏠 首頁
+          🏠 {t('nav.home')}
         </NavLink>
         <NavLink to="/course-planner" className={({ isActive }) => isActive ? 'active' : ''}>
-          📚 智慧排課
+          📚 {t('nav.coursePlanner')}
         </NavLink>
         <NavLink to="/tracker" className={({ isActive }) => isActive ? 'active' : ''}>
-          🎓 畢業進度
-        </NavLink>
-        <NavLink to="/directory" className={({ isActive }) => isActive ? 'active' : ''}>
-          📞 校園通訊錄
+          🎓 {t('nav.progress')}
         </NavLink>
         <NavLink to="/calendar" className={({ isActive }) => isActive ? 'active' : ''}>
-          📅 暨大行事曆
+          📅 {t('nav.calendar')}
         </NavLink>
         <NavLink to="/updates" className={({ isActive }) => isActive ? 'active' : ''}>
-          📋 更新日誌
+          📋 {t('nav.updateLog')}
         </NavLink>
-        
+
         {/* 手機版專用：並排按鈕容器 */}
         <div className="mobile-buttons-row">
           {/* 🎓 手機版IBS專區連結（與深色模式並排） */}
-          <a 
+          <a
             href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
             target="_blank"
             rel="noopener noreferrer"
             className={`nav-external-link ibs-handbook mobile-ibs-link ${showIBSAnimation ? 'animate' : ''}`}
-            title="國企系 IBS 學士班手冊（外部連結）"
+            title={t('nav.ibsZone')}
           >
             <span className="link-icon">📚</span>
-            <span className="link-text">IBS專區</span>
+            <span className="link-text">{t('nav.ibsZone')}</span>
             <span className="external-indicator">↗</span>
           </a>
 
           {/* ✅ 主題切換按鈕 */}
-          <button 
+          <button
             className="mobile-theme-toggle-container"
             onClick={toggleTheme}
-            title={`切換至${theme === 'light' ? '深色' : '明亮'}模式`}
+            title={theme === 'light' ? t('common.switchToDark') : t('common.switchToLight')}
           >
             <div className="mobile-theme-toggle-icon">
               {theme === 'light' ? '🌙' : '☀️'}
             </div>
             <span className="mobile-theme-label">
-              {theme === 'light' ? '深色模式' : '明亮模式'}
+              {theme === 'light' ? t('common.darkMode') : t('common.lightMode')}
             </span>
           </button>
         </div>
@@ -195,23 +194,23 @@ const Navbar = ({ disclaimerAccepted }) => {
       {/* 🎨 右側區域：IBS專區 + 主題切換 + 認證 */}
       <div className="nav-right-section">
         {/* ✅ 新增：IBS專區按鈕（放在主題按鈕左邊） */}
-        <a 
+        <a
           href="https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73"
           target="_blank"
           rel="noopener noreferrer"
           className={`nav-external-link ibs-handbook ${showIBSAnimation ? 'animate' : ''}`}
-          title="國企系 IBS 學士班手冊（外部連結）"
+          title={t('nav.ibsZone')}
         >
           <span className="link-icon">📚</span>
-          <span className="link-text">IBS專區</span>
+          <span className="link-text">{t('nav.ibsZone')}</span>
           <span className="external-indicator">↗</span>
         </a>
 
         {/* ✅ 桌面版主題切換按鈕 */}
-        <button 
+        <button
           className="theme-toggle desktop-theme-toggle"
           onClick={toggleTheme}
-          title={`切換至${theme === 'light' ? '深色' : '明亮'}模式`}
+          title={theme === 'light' ? t('common.switchToDark') : t('common.switchToLight')}
         >
           {theme === 'light' ? '🌙' : '☀️'}
         </button>
@@ -219,22 +218,22 @@ const Navbar = ({ disclaimerAccepted }) => {
         {/* 🔐 認證區域 */}
         <div className="auth-section">
           {isLoading ? (
-            <div className="loading-text">載入中...</div>
+            <div className="loading-text">{t('common.loading')}</div>
           ) : isLoggedIn && user ? (
             <div className="user-profile">
-              <img 
-                src={user.avatar_url} 
-                alt={user.full_name} 
+              <img
+                src={user.avatar_url}
+                alt={user.full_name}
                 className="avatar"
                 title={user.full_name}
               />
               <span className="user-name">{user.full_name}</span>
-              <button 
-                onClick={logout} 
+              <button
+                onClick={logout}
                 className="logout-button"
-                title="登出"
+                title={t('common.logout')}
               >
-                登出
+                {t('common.logout')}
               </button>
             </div>
           ) : (

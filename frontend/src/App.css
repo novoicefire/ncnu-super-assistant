@@ -119,8 +119,65 @@ body {
   box-sizing: border-box;
 }
 
+/* 🎯 新佈局結構：側邊導航 + 主內容 */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--theme-bg-primary);
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  /* 側邊導航寬度 */
+  padding: 2rem;
+  max-width: calc(100% - 260px);
+  box-sizing: border-box;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 側邊導航收合時 */
+.side-nav.collapsed~.main-content,
+body:has(.side-nav.collapsed) .main-content {
+  margin-left: 72px;
+  max-width: calc(100% - 72px);
+}
+
+/* 導航錯誤狀態 */
+.nav-error {
+  background: #dc3545;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* 📱 響應式處理 */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 1rem;
+    padding-top: 72px;
+    /* 為固定頂部 header 留空間 (56px header + 16px 間距) */
+    padding-bottom: 100px;
+    /* 為懸浮底部導航留空間 */
+    box-sizing: border-box;
+  }
+}
+
 /* 🎨 通用元素樣式 */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--theme-text-primary);
   margin-top: 0;
   transition: color 0.3s ease;
@@ -130,7 +187,9 @@ button {
   transition: all 0.3s ease;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   transition: all 0.3s ease;
 }
 
@@ -226,6 +285,7 @@ input, select, textarea {
 
 /* 使用 @supports 為特定組件應用 Firefox 樣式 */
 @supports (scrollbar-width: thin) {
+
   .dashboard,
   .course-preview,
   .today-status {
@@ -234,6 +294,7 @@ input, select, textarea {
 }
 
 @supports (scrollbar-color: auto) {
+
   .dashboard,
   .course-preview,
   .today-status {
@@ -249,13 +310,13 @@ input, select, textarea {
       scrollbar-width: none;
     }
   }
-  
+
   @supports (-ms-overflow-style: none) {
     * {
       -ms-overflow-style: none;
     }
   }
-  
+
   /* WebKit 瀏覽器隱藏滾動條 */
   *::-webkit-scrollbar {
     display: none;
@@ -284,11 +345,11 @@ input, select, textarea {
   .container {
     padding: 1rem;
   }
-  
+
   .init-text {
     font-size: 1.5rem;
   }
-  
+
   .init-subtext {
     font-size: 0.9rem;
   }
@@ -298,16 +359,16 @@ input, select, textarea {
   .container {
     padding: 0.5rem;
   }
-  
+
   .navbar-error {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .init-loading {
     gap: 1rem;
   }
-  
+
   .init-text {
     font-size: 1.3rem;
   }
@@ -320,7 +381,7 @@ input, select, textarea {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .init-logo {
     animation: none;
   }
@@ -350,35 +411,36 @@ a:focus-visible {
 
 /* 🎯 印刷媒體優化 */
 @media print {
+
   .navbar,
   .performance-monitor,
   .loading-overlay,
   .error-boundary {
     display: none !important;
   }
-  
+
   .container {
     max-width: none;
     padding: 0;
   }
-  
+
   * {
     background: white !important;
     color: black !important;
     box-shadow: none !important;
   }
-  
+
   /* 印刷時隱藏所有滾動條 */
   *::-webkit-scrollbar {
     display: none !important;
   }
-  
+
   @supports (scrollbar-width: none) {
     * {
       scrollbar-width: none !important;
     }
   }
-  
+
   @supports (-ms-overflow-style: none) {
     * {
       -ms-overflow-style: none !important;
@@ -393,7 +455,7 @@ a:focus-visible {
   *::-webkit-scrollbar {
     -webkit-appearance: none;
   }
-  
+
   *::-webkit-scrollbar-thumb {
     -webkit-border-radius: 10px;
     border-radius: 10px;

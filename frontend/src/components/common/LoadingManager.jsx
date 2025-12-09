@@ -1,5 +1,7 @@
-// frontend/src/components/common/LoadingManager.jsx (全域載入狀態管理)
+// frontend/src/components/common/LoadingManager.jsx (全域載入狀態管理 - 改良版)
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import '../../styles/LoadingStyles.css';
 
 const LoadingContext = createContext();
 
@@ -19,12 +21,12 @@ export const LoadingProvider = ({ children }) => {
   const setLoading = useCallback((key, isLoading, options = {}) => {
     setLoadingStates(prev => {
       const newState = { ...prev };
-      
+
       if (isLoading) {
         newState[key] = {
           isLoading: true,
           startTime: Date.now(),
-          message: options.message || '載入中...',
+          message: options.message || 'loading',
           progress: options.progress || 0,
           cancelable: options.cancelable || false,
           onCancel: options.onCancel
@@ -32,7 +34,7 @@ export const LoadingProvider = ({ children }) => {
       } else {
         delete newState[key];
       }
-      
+
       return newState;
     });
   }, []);
@@ -41,7 +43,7 @@ export const LoadingProvider = ({ children }) => {
   const updateProgress = useCallback((key, progress, message) => {
     setLoadingStates(prev => {
       if (!prev[key]) return prev;
-      
+
       return {
         ...prev,
         [key]: {
@@ -101,10 +103,11 @@ export const LoadingProvider = ({ children }) => {
   );
 };
 
-// 🎯 載入覆蓋層組件
+// 🎯 載入覆蓋層組件（改良版）
 const LoadingOverlay = () => {
   const { loadingStates, globalLoading } = useLoading();
-  
+  const { t } = useTranslation();
+
   // 只顯示全域載入或重要載入
   const importantLoadings = Object.entries(loadingStates).filter(
     ([key, state]) => key === 'global' || state.important
@@ -119,23 +122,24 @@ const LoadingOverlay = () => {
   return (
     <div className="loading-overlay">
       <div className="loading-backdrop" />
-      <div className="loading-content glass-effect">
+      <div className="loading-content">
         <div className="loading-spinner-container">
-          <div className="apple-spinner large">
-            <div className="spinner-ring"></div>
-            <div className="spinner-ring"></div>
-            <div className="spinner-ring"></div>
+          <div className="modern-spinner">
+            <div className="spinner-circle"></div>
+            <div className="spinner-circle"></div>
+            <div className="spinner-circle"></div>
+            <div className="spinner-core"></div>
           </div>
         </div>
-        
+
         <div className="loading-text">
-          {currentLoading?.message || '載入中...'}
+          {t(`common.${currentLoading?.message}`) || t('common.loading')}
         </div>
-        
+
         {currentLoading?.progress > 0 && (
           <div className="loading-progress">
             <div className="progress-bar">
-              <div 
+              <div
                 className="progress-fill"
                 style={{ width: `${currentLoading.progress}%` }}
               />
@@ -145,13 +149,13 @@ const LoadingOverlay = () => {
             </div>
           </div>
         )}
-        
+
         {currentLoading?.cancelable && (
-          <button 
+          <button
             className="cancel-btn"
             onClick={() => currentLoading.onCancel?.()}
           >
-            取消
+            {t('common.cancel')}
           </button>
         )}
       </div>

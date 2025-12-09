@@ -1,0 +1,408 @@
+/**
+ * LoadingStyles.css - 現代化載入動畫樣式
+ * 全域載入覆蓋層、骨架屏、頁面過渡動畫
+ */
+
+/* ========== 全域載入覆蓋層 ========== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.loading-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px 60px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: loadingFadeIn 0.3s ease;
+}
+
+@keyframes loadingFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+[data-theme="light"] .loading-content {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* ========== 現代化 Spinner ========== */
+.loading-spinner-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.modern-spinner {
+    width: 60px;
+    height: 60px;
+    position: relative;
+}
+
+.modern-spinner .spinner-circle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    animation: spinnerRotate 1.5s linear infinite;
+}
+
+.modern-spinner .spinner-circle:nth-child(1) {
+    border-top-color: #00796B;
+    animation-delay: 0s;
+}
+
+.modern-spinner .spinner-circle:nth-child(2) {
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    border-right-color: #26A69A;
+    animation-delay: 0.15s;
+    animation-direction: reverse;
+}
+
+.modern-spinner .spinner-circle:nth-child(3) {
+    width: 60%;
+    height: 60%;
+    top: 20%;
+    left: 20%;
+    border-bottom-color: #4DB6AC;
+    animation-delay: 0.3s;
+}
+
+@keyframes spinnerRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 中心圓點脈衝 */
+.spinner-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, #00796B, #26A69A);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: corePulse 1s ease-in-out infinite;
+}
+
+@keyframes corePulse {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0.7;
+    }
+}
+
+/* ========== 載入文字 ========== */
+.loading-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #f1f5f9;
+    text-align: center;
+}
+
+[data-theme="light"] .loading-text {
+    color: #1e293b;
+}
+
+/* ========== 進度條 ========== */
+.loading-progress {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+[data-theme="light"] .progress-bar {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00796B, #26A69A, #4DB6AC);
+    background-size: 200% 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    animation: progressShine 1.5s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.progress-text {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme="light"] .progress-text {
+    color: #64748b;
+}
+
+/* ========== 取消按鈕 ========== */
+.cancel-btn {
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #f1f5f9;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .cancel-btn {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #475569;
+}
+
+/* ========== 骨架屏 ========== */
+.skeleton {
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.06) 25%,
+            rgba(0, 0, 0, 0.1) 50%,
+            rgba(0, 0, 0, 0.06) 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.5s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+[data-theme="dark"] .skeleton {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 25%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 75%);
+    background-size: 200% 100%;
+}
+
+@keyframes skeletonShimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-text {
+    height: 1em;
+    margin-bottom: 0.5em;
+}
+
+.skeleton-text.short {
+    width: 40%;
+}
+
+.skeleton-text.medium {
+    width: 70%;
+}
+
+.skeleton-text.long {
+    width: 100%;
+}
+
+.skeleton-title {
+    height: 1.5em;
+    width: 60%;
+    margin-bottom: 1em;
+}
+
+.skeleton-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.skeleton-card {
+    height: 120px;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.skeleton-button {
+    height: 40px;
+    width: 120px;
+    border-radius: 8px;
+}
+
+/* ========== 頁面過渡動畫 ========== */
+.page-transition-enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-transition-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-transition-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ========== 懶載入容器 ========== */
+.lazy-loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    padding: 40px;
+}
+
+.lazy-error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    padding: 40px;
+}
+
+.error-content {
+    text-align: center;
+}
+
+.error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.error-content h3 {
+    color: var(--theme-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.error-content p {
+    color: var(--theme-text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* ========== 迷你載入 Spinner ========== */
+.mini-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 121, 107, 0.2);
+    border-top-color: #00796B;
+    border-radius: 50%;
+    animation: spinnerRotate 0.8s linear infinite;
+}
+
+.mini-spinner.white {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: #fff;
+}
+
+/* ========== 內容載入淡入 ========== */
+.content-fade-in {
+    animation: contentFadeIn 0.4s ease;
+}
+
+@keyframes contentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== 響應式 ========== */
+@media (max-width: 480px) {
+    .loading-content {
+        padding: 30px 40px;
+    }
+
+    .loading-spinner-container,
+    .modern-spinner {
+        width: 50px;
+        height: 50px;
+    }
+
+    .loading-text {
+        font-size: 0.9rem;
+    }
+
+    .loading-progress {
+        width: 150px;
+    }
+}

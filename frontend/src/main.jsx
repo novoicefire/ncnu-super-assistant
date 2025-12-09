@@ -1,4 +1,4 @@
-// frontend/src/main.jsx (GIS API 版本 + Google Analytics)
+// frontend/src/main.jsx (GIS API 版本 + Google Analytics + i18n)
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -6,6 +6,7 @@ import App from './App.jsx'
 import './index.css'
 import { AuthProvider } from './AuthContext.jsx'
 import ReactGA from 'react-ga4'
+import './i18n' // 導入 i18n 配置
 
 // 🎯 初始化 Google Analytics
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID
@@ -28,3 +29,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </AuthProvider>
   </React.StrictMode>,
 )
+
+// 🎯 React 應用掛載後隱藏初始載入動畫
+setTimeout(() => {
+  if (window.hideInitialLoader) {
+    window.hideInitialLoader();
+  }
+}, 500); // 給一點延遲確保首屏渲染完成
