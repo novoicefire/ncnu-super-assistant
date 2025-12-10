@@ -6,6 +6,7 @@
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext.jsx';
 import { useTheme } from '../contexts/ThemeContext.jsx';
 import { useNotifications } from '../contexts/NotificationContext.jsx';
@@ -19,7 +20,8 @@ import {
     faCheckCircle,
     faInfoCircle,
     faExclamationTriangle,
-    faXmark
+    faXmark,
+    faGear
 } from '@fortawesome/free-solid-svg-icons';
 import './MobileHeader.css';
 
@@ -29,18 +31,26 @@ const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' }
 ];
 
+// 管理員 email 列表
+const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS || '').split(',').map(e => e.trim());
+
 const MobileHeader = () => {
     const { t, i18n } = useTranslation();
     const { isLoggedIn, user, logout, isLoading, handleGoogleLogin } = useAuth();
     const { theme, toggleTheme } = useTheme();
     // 使用真實通知 Context
-    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+    const { notifications, unreadCount, markAsRead, markAllAsRead, newNotification, dismissNewNotification } = useNotifications();
+
+    // 檢查是否為管理員
+    const isAdmin = isLoggedIn && user?.email && ADMIN_EMAILS.includes(user.email);
 
     const [showLangMenu, setShowLangMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [showUserMenu, setShowUserMenu] = useState(false);
     const [showLogo, setShowLogo] = useState(false); // false=先顯示品牌名，15秒後切換為Logo
     const langRef = useRef(null);
     const notificationRef = useRef(null);
+    const userRef = useRef(null);
 
     // 進入網站15秒後從品牌名切換為Logo（只執行一次）
     useEffect(() => {
@@ -58,6 +68,9 @@ const MobileHeader = () => {
             }
             if (notificationRef.current && !notificationRef.current.contains(event.target)) {
                 setShowNotifications(false);
+            }
+            if (userRef.current && !userRef.current.contains(event.target)) {
+                setShowUserMenu(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -104,6 +117,7 @@ const MobileHeader = () => {
         switch (type) {
             case 'success': return { icon: faCheckCircle, color: '#10b981' };
             case 'warning': return { icon: faExclamationTriangle, color: '#f59e0b' };
+            case 'error': return { icon: faXmark, color: '#ef4444' };
             default: return { icon: faInfoCircle, color: '#3b82f6' };
         }
     };
@@ -183,6 +197,25 @@ const MobileHeader = () => {
                         )}
                     </button>
 
+                    {/* 新通知彈出框 */}
+                    {newNotification && (() => {
+                        const iconConfig = getNotificationIcon(newNotification.type);
+                        return (
+                            <div className="new-notification-popup">
+                                <div className="popup-content">
+                                    <FontAwesomeIcon icon={iconConfig.icon} className="popup-icon" style={{ color: iconConfig.color }} />
+                                    <div className="popup-text">
+                                        <div className="popup-title">{newNotification.title}</div>
+                                        <div className="popup-message">{newNotification.message}</div>
+                                    </div>
+                                    <button className="popup-close" onClick={dismissNewNotification}>
+                                        <FontAwesomeIcon icon={faXmark} />
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })()}
+
                     {showNotifications && (
                         <div className="notification-dropdown">
                             <div className="dropdown-header">
@@ -232,6 +265,17 @@ const MobileHeader = () => {
                                     })
                                 )}
                             </div>
+                            {/* 管理員連結 */}
+                            {isAdmin && (
+                                <Link
+                                    to="/admin/notifications"
+                                    className="admin-link"
+                                    onClick={() => setShowNotifications(false)}
+                                >
+                                    <FontAwesomeIcon icon={faGear} />
+                                    管理通知
+                                </Link>
+                            )}
                         </div>
                     )}
                 </div>
@@ -240,20 +284,32 @@ const MobileHeader = () => {
                 {isLoading ? (
                     <span className="loading-dot">•••</span>
                 ) : isLoggedIn && user ? (
-                    <div className="mobile-user">
-                        <img
-                            src={user.avatar_url}
-                            alt={user.full_name}
-                            className="mobile-avatar"
-                            title={user.full_name}
-                        />
+                    <div className="mobile-user-wrapper" ref={userRef}>
                         <button
-                            onClick={logout}
-                            className="mobile-logout-btn"
-                            title={t('common.logout')}
+                            className="mobile-avatar-btn"
+                            onClick={() => setShowUserMenu(!showUserMenu)}
                         >
-                            <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                            <img
+                                src={user.avatar_url}
+                                alt={user.full_name}
+                                className="mobile-avatar"
+                            />
                         </button>
+                        {showUserMenu && (
+                            <div className="user-dropdown">
+                                <div className="user-info">
+                                    <span className="user-name">{user.full_name}</span>
+                                    <span className="user-email">{user.email}</span>
+                                </div>
+                                <button
+                                    onClick={() => { logout(); setShowUserMenu(false); }}
+                                    className="logout-dropdown-btn"
+                                >
+                                    <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                                    {t('common.logout')}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <GoogleLoginButton />

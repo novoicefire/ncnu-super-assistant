@@ -3,7 +3,7 @@
  * 參考 eMenu Tokyo 設計，使用毛玻璃效果
  */
 import React, { useState, useRef, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext.jsx';
 import { useTheme } from '../contexts/ThemeContext.jsx';
@@ -26,7 +26,9 @@ import {
     faBell,
     faCheckCircle,
     faInfoCircle,
-    faExclamationTriangle
+    faExclamationTriangle,
+    faXmark,
+    faGear
 } from '@fortawesome/free-solid-svg-icons';
 import './SideNav.css';
 
@@ -36,13 +38,18 @@ const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' }
 ];
 
+// 管理員 email 列表
+const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS || '').split(',').map(e => e.trim());
+
 const SideNav = ({ disclaimerAccepted }) => {
     const { t, i18n } = useTranslation();
     const { isLoggedIn, user, logout, isLoading } = useAuth();
     const { theme, toggleTheme } = useTheme();
     // 使用真實通知 Context
-    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+    const { notifications, unreadCount, markAsRead, markAllAsRead, newNotification, dismissNewNotification } = useNotifications();
     const location = useLocation();
+    // 檢查是否為管理員
+    const isAdmin = isLoggedIn && user?.email && ADMIN_EMAILS.includes(user.email);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [showLangMenu, setShowLangMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
@@ -81,6 +88,7 @@ const SideNav = ({ disclaimerAccepted }) => {
         switch (type) {
             case 'success': return { icon: faCheckCircle, color: '#10b981' };
             case 'warning': return { icon: faExclamationTriangle, color: '#f59e0b' };
+            case 'error': return { icon: faXmark, color: '#ef4444' };
             default: return { icon: faInfoCircle, color: '#3b82f6' };
         }
     };
@@ -227,6 +235,25 @@ const SideNav = ({ disclaimerAccepted }) => {
                         {!isCollapsed && <span className="nav-label">{t('header.notifications')}</span>}
                     </button>
 
+                    {/* 新通知彈出框 */}
+                    {newNotification && (() => {
+                        const iconConfig = getNotificationIcon(newNotification.type);
+                        return (
+                            <div className="new-notification-popup-side">
+                                <div className="popup-content">
+                                    <FontAwesomeIcon icon={iconConfig.icon} className="popup-icon" style={{ color: iconConfig.color }} />
+                                    <div className="popup-text">
+                                        <div className="popup-title">{newNotification.title}</div>
+                                        <div className="popup-message">{newNotification.message}</div>
+                                    </div>
+                                    <button className="popup-close" onClick={dismissNewNotification}>
+                                        ×
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })()}
+
                     {showNotifications && (
                         <div className="side-notification-dropdown">
                             <div className="notification-dropdown-header">
@@ -269,6 +296,17 @@ const SideNav = ({ disclaimerAccepted }) => {
                                     </div>
                                 )}
                             </div>
+                            {/* 管理員連結 */}
+                            {isAdmin && (
+                                <Link
+                                    to="/admin/notifications"
+                                    className="admin-link-side"
+                                    onClick={() => setShowNotifications(false)}
+                                >
+                                    <FontAwesomeIcon icon={faGear} />
+                                    管理通知
+                                </Link>
+                            )}
                         </div>
                     )}
                 </div>

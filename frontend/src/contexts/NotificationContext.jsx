@@ -24,6 +24,7 @@ export const NotificationProvider = ({ children }) => {
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [newNotification, setNewNotification] = useState(null); // 新通知彈出框
 
     // 計算未讀數量
     useEffect(() => {
@@ -134,28 +135,37 @@ export const NotificationProvider = ({ children }) => {
                         {
                             event: 'INSERT',
                             schema: 'public',
-                            table: 'notifications',
-                            filter: `user_id=eq.${user.google_id}`
+                            table: 'notifications'
+                            // 不使用 filter，訂閱所有 INSERT 事件
                         },
                         (payload) => {
-                            console.log('New notification:', payload.new);
-                            setNotifications(prev => [payload.new, ...prev]);
+                            const newNotif = payload.new;
+                            console.log('Realtime: New notification received:', newNotif);
+
+                            // 手動過濾：只接收屬於當前用戶的通知或全站通知 (user_id = null)
+                            if (newNotif.user_id === null || newNotif.user_id === user.google_id) {
+                                console.log('Realtime: Notification matched, showing popup');
+                                // 避免重複：只有當通知不存在時才新增
+                                setNotifications(prev => {
+                                    const exists = prev.some(n => n.id === newNotif.id);
+                                    if (exists) {
+                                        console.log('Realtime: Notification already exists, skipping');
+                                        return prev;
+                                    }
+                                    return [newNotif, ...prev];
+                                });
+                                // 設定 newNotification 供 UI 顯示彈出框
+                                setNewNotification(newNotif);
+                                // 5 秒後自動清除
+                                setTimeout(() => setNewNotification(null), 5000);
+                            } else {
+                                console.log('Realtime: Notification not for this user, ignoring');
+                            }
                         }
                     )
-                    .on(
-                        'postgres_changes',
-                        {
-                            event: 'INSERT',
-                            schema: 'public',
-                            table: 'notifications',
-                            filter: 'user_id=is.null'  // 全站通知
-                        },
-                        (payload) => {
-                            console.log('New broadcast notification:', payload.new);
-                            setNotifications(prev => [payload.new, ...prev]);
-                        }
-                    )
-                    .subscribe();
+                    .subscribe((status) => {
+                        console.log('Realtime subscription status:', status);
+                    });
             } catch (err) {
                 console.error('Error setting up Realtime:', err);
                 // 降級為輪詢
@@ -173,6 +183,11 @@ export const NotificationProvider = ({ children }) => {
         };
     }, [isLoggedIn, user, fetchNotifications]);
 
+    // 清除新通知彈出框
+    const dismissNewNotification = useCallback(() => {
+        setNewNotification(null);
+    }, []);
+
     // Context 值
     const value = {
         notifications,
@@ -181,7 +196,9 @@ export const NotificationProvider = ({ children }) => {
         error,
         fetchNotifications,
         markAsRead,
-        markAllAsRead
+        markAllAsRead,
+        newNotification,
+        dismissNewNotification
     };
 
     return (

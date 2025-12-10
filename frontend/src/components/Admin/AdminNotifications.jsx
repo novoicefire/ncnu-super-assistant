@@ -48,6 +48,8 @@ const AdminNotifications = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    // 批量選擇狀態
+    const [selectedIds, setSelectedIds] = useState(new Set());
 
     // 取得已發送通知列表
     useEffect(() => {
@@ -131,9 +133,53 @@ const AdminNotifications = () => {
 
             if (response.ok) {
                 setSentNotifications(prev => prev.filter(n => n.id !== id));
+                setSelectedIds(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete(id);
+                    return newSet;
+                });
             }
         } catch (err) {
             console.error('Error deleting notification:', err);
+        }
+    };
+
+    // 切換單個選擇
+    const toggleSelect = (id) => {
+        setSelectedIds(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(id)) {
+                newSet.delete(id);
+            } else {
+                newSet.add(id);
+            }
+            return newSet;
+        });
+    };
+
+    // 全選 / 取消全選
+    const toggleSelectAll = () => {
+        if (selectedIds.size === sentNotifications.length) {
+            setSelectedIds(new Set());
+        } else {
+            setSelectedIds(new Set(sentNotifications.map(n => n.id)));
+        }
+    };
+
+    // 批量刪除
+    const handleBatchDelete = async () => {
+        if (selectedIds.size === 0) return;
+        if (!window.confirm(`確定要刪除選中的 ${selectedIds.size} 則通知嗎？`)) return;
+
+        try {
+            const deletePromises = Array.from(selectedIds).map(id =>
+                fetch(`${API_BASE}/api/notifications/${id}`, { method: 'DELETE' })
+            );
+            await Promise.all(deletePromises);
+            setSentNotifications(prev => prev.filter(n => !selectedIds.has(n.id)));
+            setSelectedIds(new Set());
+        } catch (err) {
+            console.error('Error batch deleting notifications:', err);
         }
     };
 
@@ -291,7 +337,29 @@ const AdminNotifications = () => {
 
                 {/* 已發送通知列表 */}
                 <section className="sent-notifications-section">
-                    <h2><FontAwesomeIcon icon={faBell} /> 已發送通知 ({sentNotifications.length})</h2>
+                    <div className="section-header-row">
+                        <h2><FontAwesomeIcon icon={faBell} /> 已發送通知 ({sentNotifications.length})</h2>
+                        {sentNotifications.length > 0 && (
+                            <div className="batch-actions">
+                                <label className="select-all-label">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedIds.size === sentNotifications.length && sentNotifications.length > 0}
+                                        onChange={toggleSelectAll}
+                                    />
+                                    全選
+                                </label>
+                                <button
+                                    className="batch-delete-btn"
+                                    onClick={handleBatchDelete}
+                                    disabled={selectedIds.size === 0}
+                                >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                    刪除選中 ({selectedIds.size})
+                                </button>
+                            </div>
+                        )}
+                    </div>
 
                     <div className="notifications-list">
                         {sentNotifications.length === 0 ? (
@@ -303,7 +371,13 @@ const AdminNotifications = () => {
                             sentNotifications.map(notification => {
                                 const iconInfo = getTypeIcon(notification.type);
                                 return (
-                                    <div key={notification.id} className="notification-card">
+                                    <div key={notification.id} className={`notification-card ${selectedIds.has(notification.id) ? 'selected' : ''}`}>
+                                        <input
+                                            type="checkbox"
+                                            className="notification-checkbox"
+                                            checked={selectedIds.has(notification.id)}
+                                            onChange={() => toggleSelect(notification.id)}
+                                        />
                                         <div className="notification-icon" style={{ background: iconInfo.color }}>
                                             <FontAwesomeIcon icon={iconInfo.icon} />
                                         </div>

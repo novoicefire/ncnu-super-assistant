@@ -596,9 +596,134 @@
     font-size: 0.85rem;
 }
 
+/* 管理員連結 */
+.admin-link-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    margin-top: 8px;
+    background: linear-gradient(135deg, var(--primary-color), #26a69a);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.admin-link-side:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+}
+
+.admin-link-side svg {
+    font-size: 0.8rem;
+}
+
 /* ========== 響應式：手機版隱藏 ========== */
 @media (max-width: 768px) {
     .side-nav {
         display: none;
     }
+}
+
+/* ========== 新通知彈出框 (電腦版) ========== */
+.new-notification-popup-side {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin-left: 10px;
+    width: 280px;
+    z-index: 1000;
+    animation: popupSlideInSide 0.3s ease-out;
+}
+
+@keyframes popupSlideInSide {
+    from {
+        opacity: 0;
+        transform: translateX(-10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+.new-notification-popup-side .popup-content {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* 向左的小尖角 */
+.new-notification-popup-side .popup-content::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 12px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid rgba(255, 255, 255, 0.95);
+}
+
+.new-notification-popup-side .popup-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.new-notification-popup-side .popup-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.new-notification-popup-side .popup-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.new-notification-popup-side .popup-message {
+    font-size: 0.75rem;
+    color: #64748b;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.new-notification-popup-side .popup-close {
+    background: rgba(0, 0, 0, 0.08);
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.new-notification-popup-side .popup-close:hover {
+    background: rgba(0, 0, 0, 0.15);
 }

@@ -376,6 +376,80 @@
     color: #ef4444;
 }
 
+/* 批量操作 */
+.section-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.section-header-row h2 {
+    margin: 0 !important;
+}
+
+.batch-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.select-all-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--theme-text-secondary);
+    cursor: pointer;
+}
+
+.select-all-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+}
+
+.batch-delete-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.batch-delete-btn:hover:not(:disabled) {
+    background: #ef4444;
+    color: white;
+}
+
+.batch-delete-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 通知卡片選擇框 */
+.notification-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.notification-card.selected {
+    background: rgba(0, 121, 107, 0.08);
+    border: 1px solid var(--primary-color);
+}
+
 /* 響應式 */
 @media (max-width: 768px) {
     .admin-notifications {
@@ -393,5 +467,15 @@
     .type-btn {
         width: 100%;
         justify-content: center;
+    }
+
+    .section-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .batch-actions {
+        width: 100%;
+        justify-content: space-between;
     }
 }
