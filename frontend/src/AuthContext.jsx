@@ -23,30 +23,53 @@ const urlBase64ToUint8Array = (base64String) => {
 
 // 檢查並訂閱推播通知
 const checkAndSubscribeToNotifications = async (googleId) => {
+    console.log('[Push] Starting push subscription check...');
+
     // 檢查瀏覽器支援
-    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
-        console.log('Push notifications not supported');
+    if (!('Notification' in window)) {
+        console.log('[Push] Notification API not supported');
+        return;
+    }
+
+    if (!('serviceWorker' in navigator)) {
+        console.log('[Push] Service Worker not supported');
+        return;
+    }
+
+    // 檢測 iOS Safari
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isPWA = window.matchMedia('(display-mode: standalone)').matches
+        || window.navigator.standalone === true;
+
+    console.log('[Push] Environment:', { isIOS, isPWA, permission: Notification.permission });
+
+    // iOS Safari 只能在 PWA 模式下使用推播
+    if (isIOS && !isPWA) {
+        console.log('[Push] iOS detected but not in PWA mode, skipping push subscription');
         return;
     }
 
     try {
-        // 先檢查 Service Worker 是否已註冊
+        // 檢查 Service Worker 註冊
+        console.log('[Push] Checking Service Worker registration...');
         let registration = await navigator.serviceWorker.getRegistration('/service-worker.js');
 
         if (!registration) {
-            // 尚未註冊，嘗試註冊
+            console.log('[Push] Registering Service Worker...');
             registration = await navigator.serviceWorker.register('/service-worker.js');
         }
+
+        console.log('[Push] Waiting for Service Worker ready...');
         await navigator.serviceWorker.ready;
+        console.log('[Push] Service Worker is ready');
 
         // 檢查是否已有訂閱
         const existingSubscription = await registration.pushManager.getSubscription();
+        console.log('[Push] Existing subscription:', existingSubscription ? 'Yes' : 'No');
 
         if (existingSubscription) {
-            console.log('Already subscribed to push notifications, updating user_id...');
-            console.log('Updating subscription for user:', googleId);
+            console.log('[Push] Already subscribed, updating user_id in backend...');
 
-            // 確保後端有這個訂閱記錄（可能 user_id 不同，需要更新）
             const response = await fetch(`${API_URL}/api/push/subscribe`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -57,43 +80,58 @@ const checkAndSubscribeToNotifications = async (googleId) => {
             });
 
             const result = await response.json();
-            console.log('Subscribe API response:', result);
+            console.log('[Push] Subscribe API response:', response.status, result);
 
             if (!response.ok) {
-                console.error('Failed to update subscription:', result);
+                console.error('[Push] Failed to update subscription:', result);
+            } else {
+                console.log('[Push] Subscription updated successfully');
             }
             return;
         }
 
         // 檢查通知權限
+        console.log('[Push] Current permission:', Notification.permission);
+
+        if (Notification.permission === 'denied') {
+            console.log('[Push] Permission previously denied, cannot subscribe');
+            return;
+        }
+
         if (Notification.permission === 'default') {
-            // 尚未決定，請求權限
+            console.log('[Push] Requesting permission...');
             const permission = await Notification.requestPermission();
+            console.log('[Push] Permission result:', permission);
+
             if (permission !== 'granted') {
-                console.log('Notification permission denied');
+                console.log('[Push] Permission not granted');
                 return;
             }
-        } else if (Notification.permission === 'denied') {
-            console.log('Notification permission previously denied');
-            return;
         }
 
         // 取得 VAPID 公鑰
+        console.log('[Push] Fetching VAPID public key...');
         const vapidResponse = await fetch(`${API_URL}/api/push/vapid-public-key`);
+
         if (!vapidResponse.ok) {
-            console.warn('VAPID key not available');
+            console.warn('[Push] VAPID key not available:', vapidResponse.status);
             return;
         }
+
         const { publicKey } = await vapidResponse.json();
+        console.log('[Push] Got VAPID public key');
 
         // 訂閱推播
+        console.log('[Push] Creating push subscription...');
         const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(publicKey)
         });
+        console.log('[Push] Push subscription created:', subscription.endpoint);
 
         // 發送訂閱資訊到後端
-        await fetch(`${API_URL}/api/push/subscribe`, {
+        console.log('[Push] Sending subscription to backend...');
+        const response = await fetch(`${API_URL}/api/push/subscribe`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -102,9 +140,17 @@ const checkAndSubscribeToNotifications = async (googleId) => {
             })
         });
 
-        console.log('Push notification subscribed successfully');
+        const result = await response.json();
+        console.log('[Push] Backend response:', response.status, result);
+
+        if (response.ok) {
+            console.log('[Push] ✅ Push notification subscribed successfully!');
+        } else {
+            console.error('[Push] ❌ Failed to save subscription:', result);
+        }
     } catch (error) {
-        console.error('Push subscription failed:', error);
+        console.error('[Push] ❌ Push subscription failed:', error.name, error.message);
+        console.error('[Push] Stack:', error.stack);
     }
 };
 
