@@ -26,7 +26,7 @@ const motivationalQuotes = [
   { text: "千里之行，始於足下", author: "老子" },
   { text: "知識就是力量", author: "培根" },
   { text: "今天的努力是明天的收穫", author: "諺語" },
-  { text: "堅持就是勝利", author: "諺語" },
+  { text: "堅持就是勝利", author: "奧利給" },
   { text: "學而不思則罔，思而不學則殆", author: "孔子" },
   { text: "書山有路勤為徑，學海無涯苦作舟", author: "韓愈" },
   { text: "活到老，學到老", author: "諺語" },
@@ -35,7 +35,7 @@ const motivationalQuotes = [
 ];
 
 const RECOMMENDED_MIN_CREDITS = 16;
-const RECOMMENDED_MAX_CREDITS = 22;
+const RECOMMENDED_MAX_CREDITS = 20;
 
 const getSemesterProgress = () => {
   const now = new Date();
@@ -50,8 +50,8 @@ const getSemesterProgress = () => {
     semesterStart = new Date(year - 1, 8, 9);
   }
   const weeksPassed = Math.floor((now - semesterStart) / (7 * 24 * 60 * 60 * 1000));
-  const currentWeek = Math.max(1, Math.min(18, weeksPassed + 1));
-  const totalWeeks = 18;
+  const currentWeek = Math.max(1, Math.min(16, weeksPassed + 1));
+  const totalWeeks = 16;
   const progress = (currentWeek / totalWeeks) * 100;
   return { currentWeek, totalWeeks, progress };
 };
