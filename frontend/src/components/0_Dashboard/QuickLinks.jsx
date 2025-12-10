@@ -13,7 +13,8 @@ import {
     faChevronDown,
     faChevronUp,
     faLink,
-    faQrcode
+    faQrcode,
+    faChalkboardTeacher
 } from '@fortawesome/free-solid-svg-icons';
 
 const QuickLinks = () => {
@@ -23,36 +24,28 @@ const QuickLinks = () => {
     // 使用翻譯的連結資料
     const quickLinksData = [
         {
+            id: 'moodle',
+            nameKey: 'quickLinks.moodle',
+            icon: faChalkboardTeacher,
+            url: 'https://moodle.ncnu.edu.tw/',
+            color: '#F57C00',
+            descKey: 'quickLinks.moodleDesc'
+        },
+        {
             id: 'portal',
             nameKey: 'quickLinks.portal',
             icon: faGraduationCap,
-            url: 'https://sis.ncnu.edu.tw/',
+            url: 'https://sso.ncnu.edu.tw/',
             color: '#00796B',
             descKey: 'quickLinks.portalDesc'
         },
         {
-            id: 'course',
-            nameKey: 'quickLinks.courseQuery',
-            icon: faBook,
-            url: 'https://coursemap.ncnu.edu.tw/index.php',
-            color: '#1976D2',
-            descKey: 'quickLinks.courseQueryDesc'
-        },
-        {
-            id: 'ncnu-line',
-            nameKey: 'quickLinks.ncnuLine',
-            icon: faCheckCircle,
-            url: 'https://line.me/R/ti/p/@445dvnmk',
-            color: '#00695C',
-            descKey: 'quickLinks.ncnuLineDesc'
-        },
-        {
-            id: 'library',
-            nameKey: 'quickLinks.library',
-            icon: faBuilding,
-            url: 'https://www.lib.ncnu.edu.tw/index.php/tw/',
-            color: '#7B1FA2',
-            descKey: 'quickLinks.libraryDesc'
+            id: 'line',
+            nameKey: 'quickLinks.studentLine',
+            icon: faUsers,
+            url: 'https://line.me/ti/g2/ZjOqtMz4xdB_W4_hig6PCfFItPfeWYuOLlMmGA?utm_source=invitation&utm_medium=link_copy&utm_campaign=default',
+            color: '#4CAF50',
+            descKey: 'quickLinks.studentLineDesc'
         },
         {
             id: 'libraryQr',
@@ -63,20 +56,36 @@ const QuickLinks = () => {
             descKey: 'quickLinks.libraryQrDesc'
         },
         {
+            id: 'ncnu-line',
+            nameKey: 'quickLinks.ncnuLine',
+            icon: faCheckCircle,
+            url: 'https://line.me/R/ti/p/@445dvnmk',
+            color: '#00695C',
+            descKey: 'quickLinks.ncnuLineDesc'
+        },
+        {
+            id: 'course',
+            nameKey: 'quickLinks.courseQuery',
+            icon: faBook,
+            url: 'https://coursemap.ncnu.edu.tw/index.php',
+            color: '#1976D2',
+            descKey: 'quickLinks.courseQueryDesc'
+        },
+        {
+            id: 'library',
+            nameKey: 'quickLinks.library',
+            icon: faBuilding,
+            url: 'https://www.lib.ncnu.edu.tw/index.php/tw/',
+            color: '#7B1FA2',
+            descKey: 'quickLinks.libraryDesc'
+        },
+        {
             id: 'mail',
             nameKey: 'quickLinks.email',
             icon: faEnvelope,
             url: 'https://cc.ncnu.edu.tw/p/404-1001-6149.php?Lang=zh-tw',
             color: '#D32F2F',
             descKey: 'quickLinks.emailDesc'
-        },
-        {
-            id: 'line',
-            nameKey: 'quickLinks.studentLine',
-            icon: faUsers,
-            url: 'https://line.me/ti/g2/ZjOqtMz4xdB_W4_hig6PCfFItPfeWYuOLlMmGA?utm_source=invitation&utm_medium=link_copy&utm_campaign=default',
-            color: '#4CAF50',
-            descKey: 'quickLinks.studentLineDesc'
         }
     ];
 

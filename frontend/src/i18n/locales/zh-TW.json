@@ -109,11 +109,11 @@
     "quickLinks": {
         "title": "常用連結",
         "subtitle": "校務系統快速入口",
-        "portal": "校務資訊系統",
-        "portalDesc": "成績、選課、註冊",
+        "portal": "暨大單一入口",
+        "portalDesc": "新世代校務系統、Webmail...",
         "courseQuery": "課程查詢系統",
         "courseQueryDesc": "開課資訊、課程地圖",
-        "ncnuLine": "暨大生活圈line@帳號",
+        "ncnuLine": "暨大生活圈line@",
         "ncnuLineDesc": "學校官方LINE@帳號",
         "library": "圖書館",
         "libraryDesc": "館藏查詢、借閱",
@@ -122,7 +122,9 @@
         "email": "學生信箱問題",
         "emailDesc": "學生E-MAIL帳號說明",
         "studentLine": "NCNU學生LINE社群",
-        "studentLineDesc": "非官方暨南大學的學生社群"
+        "studentLineDesc": "全校最大非官方學生社群",
+        "moodle": "Moodle 數位學習平台",
+        "moodleDesc": "國立暨南國際大學課程資訊網"
     },
     "nav": {
         "home": "首頁",

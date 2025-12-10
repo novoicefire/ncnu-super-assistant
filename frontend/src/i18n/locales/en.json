@@ -109,8 +109,8 @@
     "quickLinks": {
         "title": "Quick Links",
         "subtitle": "Campus system shortcuts",
-        "portal": "Student Portal",
-        "portalDesc": "Grades, Courses, Registration",
+        "portal": "NCNU Single Portal",
+        "portalDesc": "SIS、Webmail...",
         "courseQuery": "Course Query",
         "courseQueryDesc": "Course info & Map",
         "ncnuLine": "NCNU Life Circle LINE@",
@@ -121,8 +121,10 @@
         "libraryQrDesc": "Access system QRcode portal",
         "email": "Student Email Help",
         "emailDesc": "Email account guide",
-        "studentLine": "NCNU Student LINE Group",
-        "studentLineDesc": "Unofficial student community"
+        "studentLine": "NCNU Student LINE OpenChat",
+        "studentLineDesc": "Largest unofficial student community",
+        "moodle": "Moodle E-Learning",
+        "moodleDesc": "NCNU Course Information Website"
     },
     "nav": {
         "home": "Home",
