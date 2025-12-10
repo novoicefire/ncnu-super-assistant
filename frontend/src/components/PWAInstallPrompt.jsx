@@ -72,7 +72,7 @@ const PWAInstallPrompt = () => {
                 {/* 標題區 */}
                 <div className="pwa-install-header">
                     <div className="pwa-install-icon">
-                        <img src="/logo.svg" alt="暨大助理" />
+                        <img src="/logo.svg" alt="暨大生超級助理" />
                     </div>
                     <h2>安裝「暨大生超級助理」App</h2>
                     <p className="pwa-install-subtitle">
