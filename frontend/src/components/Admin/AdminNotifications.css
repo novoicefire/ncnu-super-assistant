@@ -1,0 +1,397 @@
+/**
+ * AdminNotifications.css - 管理員通知頁面樣式
+ */
+
+.admin-notifications {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+/* 未授權狀態 */
+.admin-notifications.unauthorized {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 16px;
+    padding: 100px 24px;
+}
+
+.admin-notifications.unauthorized .error-icon {
+    font-size: 4rem;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    padding: 24px;
+    border-radius: 50%;
+}
+
+.admin-notifications.unauthorized h2 {
+    font-size: 1.5rem;
+    color: var(--theme-text-primary);
+    margin: 0;
+}
+
+.admin-notifications.unauthorized p {
+    color: var(--theme-text-secondary);
+    margin: 0;
+}
+
+.admin-notifications.unauthorized .hint {
+    font-size: 0.85rem;
+    color: var(--theme-text-tertiary);
+    background: var(--theme-bg-secondary);
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+/* 頁首 */
+.admin-header {
+    margin-bottom: 32px;
+}
+
+.admin-header .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-header .header-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.admin-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--theme-text-primary);
+    margin: 0;
+}
+
+.admin-header .admin-email {
+    color: var(--theme-text-secondary);
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+/* 內容區域 */
+.admin-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Section 共用樣式 */
+.admin-content section {
+    background: var(--theme-bg-card);
+    border: 1px solid var(--theme-border-primary);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.admin-content section h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+    margin: 0 0 20px 0;
+}
+
+.admin-content section h2 svg {
+    color: var(--primary-color);
+}
+
+/* 表單樣式 */
+.notification-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--theme-text-secondary);
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 12px 16px;
+    border: 1px solid var(--theme-border-primary);
+    border-radius: 10px;
+    background: var(--theme-bg-primary);
+    color: var(--theme-text-primary);
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* 類型選擇器 */
+.type-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.type-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid var(--theme-border-primary);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--theme-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.type-btn:hover {
+    border-color: var(--type-color);
+    color: var(--type-color);
+}
+
+.type-btn.active {
+    border-color: var(--type-color);
+    background: var(--type-color);
+    color: white;
+}
+
+.type-btn svg {
+    font-size: 1rem;
+}
+
+/* Checkbox */
+.checkbox-group .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--theme-text-primary);
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+/* 訊息 */
+.message {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.message.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.message.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* 送出按鈕 */
+.submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--primary-color), #26a69a);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 推播設定 */
+.push-status {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.push-status p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--theme-text-secondary);
+}
+
+.subscribe-btn,
+.unsubscribe-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.subscribe-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.unsubscribe-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+/* 通知列表 */
+.notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--theme-text-tertiary);
+}
+
+.empty-state svg {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* 通知卡片 */
+.notification-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+    background: var(--theme-bg-secondary);
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.notification-card:hover {
+    transform: translateX(4px);
+}
+
+.notification-card .notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.notification-card .notification-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+    margin: 0 0 4px 0;
+}
+
+.notification-card p {
+    font-size: 0.85rem;
+    color: var(--theme-text-secondary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notification-card .notification-meta {
+    font-size: 0.75rem;
+    color: var(--theme-text-tertiary);
+    margin-top: 6px;
+    display: block;
+}
+
+.notification-card .delete-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--theme-text-tertiary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.notification-card .delete-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .admin-notifications {
+        padding: 16px;
+    }
+
+    .admin-content section {
+        padding: 20px 16px;
+    }
+
+    .type-selector {
+        flex-direction: column;
+    }
+
+    .type-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

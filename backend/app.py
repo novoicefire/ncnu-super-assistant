@@ -15,6 +15,15 @@ import threading
 load_dotenv()
 app = Flask(__name__)
 
+# 匯入通知與推播模組
+from notifications import notifications_bp, init_notifications
+from push_service import push_bp, init_push_service
+
+# 註冊 Blueprint
+app.register_blueprint(notifications_bp)
+app.register_blueprint(push_bp)
+
+
 # --- 安全設定 START ---
 # 明確列出所有允許的前端來源網址
 ALLOWED_ORIGINS = [
@@ -45,6 +54,11 @@ def initialize_app():
             raise ValueError("FATAL: SUPABASE_URL and SUPABASE_KEY must be set in environment variables.")
         supabase = create_client(url, key)
         print("Supabase client initialized.")
+        
+        # 初始化通知與推播服務
+        init_notifications(supabase)
+        init_push_service(supabase)
+        print("Notification and Push services initialized.")
 
 def load_static_data_if_needed():
     """懶加載：檢查資料是否已載入，如果沒有，則執行載入"""

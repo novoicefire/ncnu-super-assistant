@@ -8,6 +8,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext.jsx';
 import { useTheme } from '../contexts/ThemeContext.jsx';
+import { useNotifications } from '../contexts/NotificationContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faMoon,
@@ -17,7 +18,8 @@ import {
     faArrowRightFromBracket,
     faCheckCircle,
     faInfoCircle,
-    faExclamationTriangle
+    faExclamationTriangle,
+    faXmark
 } from '@fortawesome/free-solid-svg-icons';
 import './MobileHeader.css';
 
@@ -31,6 +33,8 @@ const MobileHeader = () => {
     const { t, i18n } = useTranslation();
     const { isLoggedIn, user, logout, isLoading, handleGoogleLogin } = useAuth();
     const { theme, toggleTheme } = useTheme();
+    // 使用真實通知 Context
+    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
     const [showLangMenu, setShowLangMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
@@ -45,39 +49,6 @@ const MobileHeader = () => {
         }, 15000); // 15秒
         return () => clearTimeout(timer);
     }, []);
-
-    // 模擬通知
-    const notifications = [
-        {
-            id: 1,
-            type: 'success',
-            title: t('notifications.syncComplete'),
-            message: t('notifications.syncCompleteMsg'),
-            time: `5 ${t('time.minutesAgo')}`
-        },
-        {
-            id: 2,
-            type: 'info',
-            title: t('notifications.newAnnouncement'),
-            message: t('notifications.newAnnouncementMsg'),
-            time: `1 ${t('time.hoursAgo')}`
-        },
-        {
-            id: 3,
-            type: 'warning',
-            title: t('notifications.courseReminder'),
-            message: t('notifications.courseReminderMsg'),
-            time: t('time.yesterday')
-        }
-    ];
-
-    const [notificationState, setNotificationState] = useState([
-        { id: 1, read: false },
-        { id: 2, read: false },
-        { id: 3, read: true }
-    ]);
-
-    const unreadCount = notificationState.filter(n => !n.read).length;
 
     // 點擊外部關閉
     useEffect(() => {
@@ -127,16 +98,6 @@ const MobileHeader = () => {
     const handleLanguageChange = (langCode) => {
         i18n.changeLanguage(langCode);
         setShowLangMenu(false);
-    };
-
-    const markAsRead = (id) => {
-        setNotificationState(prev =>
-            prev.map(n => n.id === id ? { ...n, read: true } : n)
-        );
-    };
-
-    const markAllAsRead = () => {
-        setNotificationState(prev => prev.map(n => ({ ...n, read: true })));
     };
 
     const getNotificationIcon = (type) => {
@@ -242,13 +203,12 @@ const MobileHeader = () => {
                                         <p>{t('header.noNotifications')}</p>
                                     </div>
                                 ) : (
-                                    notifications.map((notification, index) => {
+                                    notifications.map((notification) => {
                                         const iconConfig = getNotificationIcon(notification.type);
-                                        const isRead = notificationState[index]?.read;
                                         return (
                                             <div
                                                 key={notification.id}
-                                                className={`notification-item ${isRead ? 'read' : ''}`}
+                                                className={`notification-item ${notification.read ? 'read' : ''}`}
                                                 onClick={() => markAsRead(notification.id)}
                                             >
                                                 <div
@@ -260,9 +220,13 @@ const MobileHeader = () => {
                                                 <div className="notification-content">
                                                     <span className="notification-title">{notification.title}</span>
                                                     <span className="notification-message">{notification.message}</span>
-                                                    <span className="notification-time">{notification.time}</span>
+                                                    <span className="notification-time">
+                                                        {notification.created_at
+                                                            ? new Date(notification.created_at).toLocaleString('zh-TW')
+                                                            : ''}
+                                                    </span>
                                                 </div>
-                                                {!isRead && <div className="unread-dot" />}
+                                                {!notification.read && <div className="unread-dot" />}
                                             </div>
                                         );
                                     })

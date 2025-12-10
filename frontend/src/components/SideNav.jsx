@@ -7,6 +7,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext.jsx';
 import { useTheme } from '../contexts/ThemeContext.jsx';
+import { useNotifications } from '../contexts/NotificationContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHouse,
@@ -39,42 +40,14 @@ const SideNav = ({ disclaimerAccepted }) => {
     const { t, i18n } = useTranslation();
     const { isLoggedIn, user, logout, isLoading } = useAuth();
     const { theme, toggleTheme } = useTheme();
+    // 使用真實通知 Context
+    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
     const location = useLocation();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [showLangMenu, setShowLangMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const langRef = useRef(null);
     const notificationRef = useRef(null);
-
-    // 模擬通知資料
-    const [notificationState, setNotificationState] = useState([
-        {
-            id: 1,
-            type: 'success',
-            title: t('notifications.syncComplete'),
-            message: t('notifications.syncCompleteMsg'),
-            time: `5 ${t('time.minutesAgo')}`,
-            read: false
-        },
-        {
-            id: 2,
-            type: 'info',
-            title: t('notifications.newAnnouncement'),
-            message: t('notifications.newAnnouncementMsg'),
-            time: `1 ${t('time.hoursAgo')}`,
-            read: false
-        },
-        {
-            id: 3,
-            type: 'warning',
-            title: t('notifications.courseReminder'),
-            message: t('notifications.courseReminderMsg'),
-            time: t('time.yesterday'),
-            read: true
-        }
-    ]);
-
-    const unreadCount = notificationState.filter(n => !n.read).length;
 
     // 導航項目配置（使用翻譯 key）
     const navItems = [
@@ -102,16 +75,6 @@ const SideNav = ({ disclaimerAccepted }) => {
     const handleLanguageChange = (langCode) => {
         i18n.changeLanguage(langCode);
         setShowLangMenu(false);
-    };
-
-    const markAsRead = (id) => {
-        setNotificationState(prev =>
-            prev.map(n => n.id === id ? { ...n, read: true } : n)
-        );
-    };
-
-    const markAllAsRead = () => {
-        setNotificationState(prev => prev.map(n => ({ ...n, read: true })));
     };
 
     const getNotificationIcon = (type) => {
@@ -275,8 +238,8 @@ const SideNav = ({ disclaimerAccepted }) => {
                                 )}
                             </div>
                             <div className="notification-list-side">
-                                {notificationState.length > 0 ? (
-                                    notificationState.map(notification => {
+                                {notifications.length > 0 ? (
+                                    notifications.map(notification => {
                                         const iconInfo = getNotificationIcon(notification.type);
                                         return (
                                             <div
@@ -290,7 +253,11 @@ const SideNav = ({ disclaimerAccepted }) => {
                                                 <div className="notification-content-side">
                                                     <div className="notification-title-side">{notification.title}</div>
                                                     <div className="notification-message-side">{notification.message}</div>
-                                                    <div className="notification-time-side">{notification.time}</div>
+                                                    <div className="notification-time-side">
+                                                        {notification.created_at
+                                                            ? new Date(notification.created_at).toLocaleString('zh-TW')
+                                                            : ''}
+                                                    </div>
                                                 </div>
                                             </div>
                                         );
