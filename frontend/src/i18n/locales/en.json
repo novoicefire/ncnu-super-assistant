@@ -117,6 +117,8 @@
         "ncnuLineDesc": "Official LINE@ Account",
         "library": "Library",
         "libraryDesc": "Collection & Borrowing",
+        "libraryQr": "Library Access QRcode",
+        "libraryQrDesc": "Access system QRcode portal",
         "email": "Student Email Help",
         "emailDesc": "Email account guide",
         "studentLine": "NCNU Student LINE Group",

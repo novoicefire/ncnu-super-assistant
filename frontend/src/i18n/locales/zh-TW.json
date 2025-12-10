@@ -117,6 +117,8 @@
         "ncnuLineDesc": "學校官方LINE@帳號",
         "library": "圖書館",
         "libraryDesc": "館藏查詢、借閱",
+        "libraryQr": "圖書館門禁 QRcode",
+        "libraryQrDesc": "門禁系統 QRcode 入口",
         "email": "學生信箱問題",
         "emailDesc": "學生E-MAIL帳號說明",
         "studentLine": "NCNU學生LINE社群",

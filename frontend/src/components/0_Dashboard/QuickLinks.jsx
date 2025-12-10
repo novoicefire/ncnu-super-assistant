@@ -12,7 +12,8 @@ import {
     faExternalLinkAlt,
     faChevronDown,
     faChevronUp,
-    faLink
+    faLink,
+    faQrcode
 } from '@fortawesome/free-solid-svg-icons';
 
 const QuickLinks = () => {
@@ -52,6 +53,14 @@ const QuickLinks = () => {
             url: 'https://www.lib.ncnu.edu.tw/index.php/tw/',
             color: '#7B1FA2',
             descKey: 'quickLinks.libraryDesc'
+        },
+        {
+            id: 'libraryQr',
+            nameKey: 'quickLinks.libraryQr',
+            icon: faQrcode,
+            url: 'https://webdoor.lib.ncnu.edu.tw/',
+            color: '#C62828',
+            descKey: 'quickLinks.libraryQrDesc'
         },
         {
             id: 'mail',
