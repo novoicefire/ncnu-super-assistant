@@ -6,16 +6,14 @@
     display: none;
     /* 桌面版隱藏 */
     position: fixed;
-    top: 0;
+    /* iOS PWA: 從 safe area 頂部開始定位 */
+    top: env(safe-area-inset-top, 0px);
     left: 0;
     right: 0;
-
-    /* iOS PWA Safe Area - 使用 min-height 確保內容區域固定 */
-    min-height: 56px;
+    height: 56px;
     padding: 0 12px;
-    padding-top: env(safe-area-inset-top, 0px);
 
-    /* 漸層玻璃效果 - 背景會自動填滿整個元素包含 padding */
+    /* 漸層玻璃效果 */
     background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.95) 0%,
             rgba(248, 250, 252, 0.95) 100%);
@@ -26,14 +24,27 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 
-    /* 佈局 - 使用 flex 讓內容在 padding 後的區域置中 */
+    /* 佈局 */
     justify-content: space-between;
     align-items: center;
-
-    /* 確保 box model 正確 */
     box-sizing: border-box;
 
     z-index: 999;
+}
+
+/* iOS PWA: 延伸背景到狀態列區域 */
+.mobile-header::before {
+    content: '';
+    position: absolute;
+    top: calc(-1 * env(safe-area-inset-top, 0px));
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top, 0px);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(248, 250, 252, 0.95) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 /* 現代風格 */
@@ -48,6 +59,13 @@
             rgba(17, 24, 39, 0.98) 100%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 深色模式: 延伸背景 */
+[data-theme="dark"] .mobile-header::before {
+    background: linear-gradient(135deg,
+            rgba(26, 32, 44, 0.98) 0%,
+            rgba(17, 24, 39, 0.98) 100%);
 }
 
 /* 品牌區域（精簡版 - 舊版，保留兼容） */
