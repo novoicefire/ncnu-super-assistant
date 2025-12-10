@@ -137,7 +137,7 @@ const PWAInstallPrompt = () => {
 
                 {/* 底部提示 */}
                 <div className="pwa-install-footer">
-                    <p>安裝完成後，此提示將自動消失</p>
+                    <p>安裝完成後，從桌面開啟即可使用</p>
                 </div>
             </div>
         </div>
