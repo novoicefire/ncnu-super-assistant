@@ -12,6 +12,10 @@
     height: 56px;
     padding: 0 12px;
 
+    /* iOS PWA Safe Area - 避免與狀態列重疊 */
+    padding-top: env(safe-area-inset-top, 0px);
+    height: calc(56px + env(safe-area-inset-top, 0px));
+
     /* 漸層玻璃效果 */
     background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.95) 0%,

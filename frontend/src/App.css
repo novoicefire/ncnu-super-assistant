@@ -163,10 +163,10 @@ body:has(.side-nav.collapsed) .main-content {
     max-width: 100% !important;
     width: 100% !important;
     padding: 1rem;
-    padding-top: 72px;
-    /* 為固定頂部 header 留空間 (56px header + 16px 間距) */
-    padding-bottom: 100px;
+    /* iOS PWA Safe Area - 72px (header) + safe-area-inset-top */
+    padding-top: calc(72px + env(safe-area-inset-top, 0px));
     /* 為懸浮底部導航留空間 */
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
     box-sizing: border-box;
   }
 }
