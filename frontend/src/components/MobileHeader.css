@@ -473,7 +473,7 @@
 .notification-dropdown {
     position: absolute;
     top: calc(100% + 8px);
-    right: -60px;
+    right: -20px;
     width: 300px;
     max-height: 400px;
     background: var(--theme-bg-card);
