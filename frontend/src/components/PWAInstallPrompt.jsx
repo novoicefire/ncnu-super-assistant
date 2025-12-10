@@ -74,7 +74,7 @@ const PWAInstallPrompt = () => {
                     <div className="pwa-install-icon">
                         <img src="/logo.svg" alt="暨大助理" />
                     </div>
-                    <h2>安裝「暨大助理」App</h2>
+                    <h2>安裝「暨大生超級助理」App</h2>
                     <p className="pwa-install-subtitle">
                         為了獲得完整功能（包括<strong>推播通知</strong>），請先將本網站加入主畫面
                     </p>

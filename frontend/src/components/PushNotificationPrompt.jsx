@@ -1,18 +1,18 @@
 /**
- * PushNotificationPrompt.jsx - 推播通知訂閱提示
+ * PushNotificationPrompt.jsx - 推播通知訂閱提示（強制版）
  * iOS Safari PWA 需要用戶手動點擊按鈕才能觸發權限請求
+ * 用戶必須開啟推播才能繼續使用
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faXmark, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faCheckCircle, faMobileScreen, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../AuthContext.jsx';
 import { usePushNotification } from '../hooks/usePushNotification.js';
 import './PushNotificationPrompt.css';
 
 const PushNotificationPrompt = () => {
-    const { user, isLoggedIn } = useAuth();
+    const { isLoggedIn } = useAuth();
     const { isSupported, permission, isSubscribed, subscribe, loading, error } = usePushNotification();
-    const [dismissed, setDismissed] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
 
     // 檢測 iOS PWA 模式
@@ -20,43 +20,33 @@ const PushNotificationPrompt = () => {
     const isPWA = window.matchMedia('(display-mode: standalone)').matches
         || window.navigator.standalone === true;
 
-    // 檢查是否應該顯示提示
+    // 檢查是否應該顯示強制提示
     const shouldShow = isLoggedIn
         && isSupported
         && !isSubscribed
         && permission !== 'denied'
-        && !dismissed
         && !showSuccess
         // iOS 必須在 PWA 模式才顯示
         && (!isIOS || isPWA);
-
-    // 從 localStorage 檢查是否已經 dismissed
-    useEffect(() => {
-        const wasDismissed = localStorage.getItem('push_prompt_dismissed');
-        if (wasDismissed === 'true') {
-            setDismissed(true);
-        }
-    }, []);
 
     const handleSubscribe = async () => {
         const success = await subscribe();
         if (success) {
             setShowSuccess(true);
+            // 3秒後自動關閉
             setTimeout(() => setShowSuccess(false), 3000);
         }
     };
 
-    const handleDismiss = () => {
-        setDismissed(true);
-        localStorage.setItem('push_prompt_dismissed', 'true');
-    };
-
-    // 已經訂閱或顯示成功訊息
+    // 已經訂閱成功
     if (showSuccess) {
         return (
-            <div className="push-prompt success">
-                <FontAwesomeIcon icon={faCheckCircle} className="success-icon" />
-                <span>推播通知已開啟！</span>
+            <div className="push-overlay success-overlay">
+                <div className="push-success-modal">
+                    <FontAwesomeIcon icon={faCheckCircle} className="success-icon-large" />
+                    <h2>推播通知已開啟！</h2>
+                    <p>您將收到重要公告和更新通知</p>
+                </div>
             </div>
         );
     }
@@ -66,31 +56,61 @@ const PushNotificationPrompt = () => {
     }
 
     return (
-        <div className="push-prompt">
-            <div className="push-prompt-content">
-                <div className="push-prompt-icon">
+        <div className="push-overlay">
+            <div className="push-modal">
+                {/* 圖示 */}
+                <div className="push-modal-icon">
                     <FontAwesomeIcon icon={faBell} />
                 </div>
-                <div className="push-prompt-text">
-                    <p className="prompt-title">開啟推播通知</p>
-                    <p className="prompt-desc">接收重要公告和更新</p>
+
+                {/* 標題 */}
+                <h2>開啟推播通知</h2>
+                <p className="push-modal-subtitle">
+                    為了讓您不錯過重要公告，請開啟推播通知
+                </p>
+
+                {/* 功能說明 */}
+                <div className="push-features">
+                    <div className="push-feature">
+                        <FontAwesomeIcon icon={faMobileScreen} />
+                        <span>即時接收重要公告</span>
+                    </div>
+                    <div className="push-feature">
+                        <FontAwesomeIcon icon={faBell} />
+                        <span>課程異動提醒</span>
+                    </div>
                 </div>
+
+                {/* 錯誤訊息 */}
+                {error && (
+                    <div className="push-error-box">
+                        <p>{error}</p>
+                    </div>
+                )}
+
+                {/* 開啟按鈕 */}
                 <button
-                    className="push-prompt-btn"
+                    className="push-enable-btn"
                     onClick={handleSubscribe}
                     disabled={loading}
                 >
-                    {loading ? '處理中...' : '開啟'}
+                    {loading ? (
+                        '處理中...'
+                    ) : (
+                        <>
+                            開啟推播通知
+                            <FontAwesomeIcon icon={faArrowRight} />
+                        </>
+                    )}
                 </button>
-                <button
-                    className="push-prompt-close"
-                    onClick={handleDismiss}
-                    aria-label="關閉"
-                >
-                    <FontAwesomeIcon icon={faXmark} />
-                </button>
+
+                {/* 權限被拒絕時的提示 */}
+                {permission === 'denied' && (
+                    <p className="push-denied-hint">
+                        推播權限已被封鎖，請到系統設定中手動開啟
+                    </p>
+                )}
             </div>
-            {error && <p className="push-error">{error}</p>}
         </div>
     );
 };

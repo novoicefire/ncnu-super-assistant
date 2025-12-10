@@ -1,175 +1,199 @@
 /**
- * PushNotificationPrompt.css - 推播通知提示樣式
+ * PushNotificationPrompt.css - 推播通知強制提示樣式
  */
 
-.push-prompt {
+/* 全螢幕覆蓋層 */
+.push-overlay {
     position: fixed;
-    bottom: 90px;
-    /* 在底部導航上方 */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 998;
-    width: calc(100% - 32px);
-    max-width: 400px;
-    animation: slideUp 0.3s ease-out;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    z-index: 999998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-@keyframes slideUp {
+/* 成功覆蓋層 */
+.push-overlay.success-overlay {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #10b981 100%);
+}
+
+/* 成功彈窗 */
+.push-success-modal {
+    text-align: center;
+    animation: successPop 0.4s ease-out;
+}
+
+@keyframes successPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.success-icon-large {
+    font-size: 4rem;
+    color: white;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 20px rgba(255, 255, 255, 0.3));
+}
+
+.push-success-modal h2 {
+    color: white;
+    font-size: 1.5rem;
+    margin: 0 0 8px 0;
+}
+
+.push-success-modal p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* 主彈窗 */
+.push-modal {
+    background: rgba(30, 30, 45, 0.95);
+    border-radius: 24px;
+    padding: 32px 24px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    animation: modalSlideIn 0.4s ease-out;
+}
+
+@keyframes modalSlideIn {
     from {
         opacity: 0;
-        transform: translateX(-50%) translateY(20px);
+        transform: translateY(30px) scale(0.95);
     }
 
     to {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
-.push-prompt.success {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
+/* 圖示 */
+.push-modal-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #00796B, #26A69A);
+    border-radius: 20px;
     display: flex;
     align-items: center;
-    gap: 10px;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+    font-size: 2rem;
+    color: white;
+    box-shadow: 0 8px 24px rgba(0, 121, 107, 0.3);
 }
 
-.push-prompt.success .success-icon {
-    font-size: 1.2rem;
+.push-modal h2 {
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
 }
 
-.push-prompt-content {
+.push-modal-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    margin: 0 0 24px 0;
+    line-height: 1.5;
+}
+
+/* 功能說明 */
+.push-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(0, 121, 107, 0.1);
+    border-radius: 12px;
+}
+
+.push-feature {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 16px;
-    background: var(--theme-bg-card, #fff);
-    border-radius: 16px;
-    border: 1px solid var(--theme-border-secondary, rgba(0, 0, 0, 0.1));
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
-
-.push-prompt-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #00796B, #26A69A);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-
-.push-prompt-text {
-    flex: 1;
-    min-width: 0;
-}
-
-.push-prompt-text .prompt-title {
+    color: #26A69A;
     font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--theme-text-primary, #1e293b);
-    margin: 0 0 2px 0;
 }
 
-.push-prompt-text .prompt-desc {
-    font-size: 0.75rem;
-    color: var(--theme-text-tertiary, #94a3b8);
-    margin: 0;
+.push-feature svg {
+    font-size: 1.1rem;
+    width: 20px;
 }
 
-.push-prompt-btn {
-    padding: 8px 16px;
+/* 開啟按鈕 */
+.push-enable-btn {
+    width: 100%;
+    padding: 16px 24px;
     background: linear-gradient(135deg, #00796B, #26A69A);
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 0.85rem;
+    border-radius: 12px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     transition: all 0.2s ease;
-    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(0, 121, 107, 0.4);
 }
 
-.push-prompt-btn:hover {
-    transform: scale(1.05);
+.push-enable-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 121, 107, 0.5);
 }
 
-.push-prompt-btn:disabled {
+.push-enable-btn:active {
+    transform: translateY(0);
+}
+
+.push-enable-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
 }
 
-.push-prompt-close {
-    width: 28px;
-    height: 28px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.05);
-    color: var(--theme-text-tertiary, #94a3b8);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-.push-prompt-close:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: var(--theme-text-primary, #1e293b);
-}
-
-.push-error {
-    margin: 8px 0 0 0;
-    padding: 8px 12px;
-    background: rgba(239, 68, 68, 0.1);
+/* 錯誤訊息 */
+.push-error-box {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 8px;
-    color: #ef4444;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+}
+
+.push-error-box p {
+    color: #fca5a5;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* 權限被拒絕的提示 */
+.push-denied-hint {
+    color: rgba(255, 255, 255, 0.5);
     font-size: 0.8rem;
-    text-align: center;
-}
-
-/* 深色模式 */
-[data-theme="dark"] .push-prompt-content {
-    background: var(--theme-bg-card, #1e293b);
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .push-prompt-close {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .push-prompt-close:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* 桌面版調整 */
-@media (min-width: 769px) {
-    .push-prompt {
-        bottom: 20px;
-        right: 20px;
-        left: auto;
-        transform: none;
-    }
-
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+    margin: 16px 0 0 0;
 }
