@@ -21,7 +21,8 @@ import {
     faInfoCircle,
     faExclamationTriangle,
     faXmark,
-    faGear
+    faGear,
+    faShieldHalved
 } from '@fortawesome/free-solid-svg-icons';
 import './MobileHeader.css';
 
@@ -265,17 +266,6 @@ const MobileHeader = () => {
                                     })
                                 )}
                             </div>
-                            {/* 管理員連結 */}
-                            {isAdmin && (
-                                <Link
-                                    to="/admin/notifications"
-                                    className="admin-link"
-                                    onClick={() => setShowNotifications(false)}
-                                >
-                                    <FontAwesomeIcon icon={faGear} />
-                                    管理通知
-                                </Link>
-                            )}
                         </div>
                     )}
                 </div>
@@ -308,6 +298,16 @@ const MobileHeader = () => {
                                     <FontAwesomeIcon icon={faArrowRightFromBracket} />
                                     {t('common.logout')}
                                 </button>
+                                {isAdmin && (
+                                    <Link
+                                        to="/admin"
+                                        className="admin-dropdown-btn"
+                                        onClick={() => setShowUserMenu(false)}
+                                    >
+                                        <FontAwesomeIcon icon={faShieldHalved} />
+                                        管理中心
+                                    </Link>
+                                )}
                             </div>
                         )}
                     </div>

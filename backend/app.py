@@ -18,10 +18,12 @@ app = Flask(__name__)
 # 匯入通知與推播模組
 from notifications import notifications_bp, init_notifications
 from push_service import push_bp, init_push_service
+from announcements import announcements_bp, init_announcements
 
 # 註冊 Blueprint
 app.register_blueprint(notifications_bp)
 app.register_blueprint(push_bp)
+app.register_blueprint(announcements_bp)
 
 
 # --- 安全設定 START ---
@@ -58,7 +60,8 @@ def initialize_app():
         # 初始化通知與推播服務
         init_notifications(supabase)
         init_push_service(supabase)
-        print("Notification and Push services initialized.")
+        init_announcements(supabase)
+        print("Notification, Push, and Announcements services initialized.")
 
 def load_static_data_if_needed():
     """懶加載：檢查資料是否已載入，如果沒有，則執行載入"""

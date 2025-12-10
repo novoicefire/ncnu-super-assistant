@@ -28,7 +28,8 @@ import {
     faInfoCircle,
     faExclamationTriangle,
     faXmark,
-    faGear
+    faGear,
+    faShieldHalved
 } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import './SideNav.css';
@@ -314,17 +315,6 @@ const SideNav = ({ disclaimerAccepted }) => {
                                     </div>
                                 )}
                             </div>
-                            {/* 管理員連結 */}
-                            {isAdmin && (
-                                <Link
-                                    to="/admin/notifications"
-                                    className="admin-link-side"
-                                    onClick={() => setShowNotifications(false)}
-                                >
-                                    <FontAwesomeIcon icon={faGear} />
-                                    管理通知
-                                </Link>
-                            )}
                         </div>
                     )}
                 </div>
@@ -366,6 +356,16 @@ const SideNav = ({ disclaimerAccepted }) => {
                                         <FontAwesomeIcon icon={faArrowRightFromBracket} />
                                         <span>{t('common.logout')}</span>
                                     </button>
+                                    {isAdmin && (
+                                        <Link
+                                            to="/admin"
+                                            className="admin-btn"
+                                            title="管理中心"
+                                        >
+                                            <FontAwesomeIcon icon={faShieldHalved} />
+                                            <span>管理中心</span>
+                                        </Link>
+                                    )}
                                 </div>
                             )}
                         </div>

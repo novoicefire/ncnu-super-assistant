@@ -1,0 +1,627 @@
+/**
+ * AdminAnnouncements.css - 管理員公告管理頁面樣式
+ * 參考 AdminNotifications.css 設計
+ */
+
+.admin-announcements {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+/* 未授權狀態 */
+.admin-announcements.unauthorized {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 16px;
+    padding: 100px 24px;
+}
+
+.admin-announcements.unauthorized .error-icon {
+    font-size: 4rem;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    padding: 24px;
+    border-radius: 50%;
+}
+
+.admin-announcements.unauthorized h2 {
+    font-size: 1.5rem;
+    color: var(--theme-text-primary);
+    margin: 0;
+}
+
+.admin-announcements.unauthorized p {
+    color: var(--theme-text-secondary);
+    margin: 0;
+}
+
+.admin-announcements.unauthorized .hint {
+    font-size: 0.85rem;
+    color: var(--theme-text-tertiary);
+    background: var(--theme-bg-secondary);
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+/* 頁首 */
+.admin-announcements .admin-header {
+    margin-bottom: 32px;
+}
+
+.admin-announcements .admin-header .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-announcements .admin-header .header-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.admin-announcements .admin-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--theme-text-primary);
+    margin: 0;
+}
+
+.admin-announcements .admin-header .admin-email {
+    color: var(--theme-text-secondary);
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+/* 內容區域 */
+.admin-announcements .admin-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Section 共用樣式 */
+.admin-announcements .admin-content section {
+    background: var(--theme-bg-card);
+    border: 1px solid var(--theme-border-primary);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.admin-announcements .admin-content section h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+    margin: 0 0 20px 0;
+}
+
+.admin-announcements .admin-content section h2 svg {
+    color: var(--primary-color);
+}
+
+/* 表單樣式 */
+.admin-announcements .announcement-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-announcements .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-announcements .form-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--theme-text-secondary);
+}
+
+.admin-announcements .form-group input,
+.admin-announcements .form-group textarea {
+    padding: 12px 16px;
+    border: 1px solid var(--theme-border-primary);
+    border-radius: 10px;
+    background: var(--theme-bg-primary);
+    color: var(--theme-text-primary);
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-announcements .form-group input:focus,
+.admin-announcements .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1);
+}
+
+.admin-announcements .form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: 'Courier New', monospace;
+}
+
+/* 優先級選擇器 */
+.admin-announcements .priority-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.admin-announcements .priority-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px solid var(--theme-border-primary);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--theme-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.admin-announcements .priority-btn:hover {
+    border-color: var(--priority-color);
+    color: var(--priority-color);
+}
+
+.admin-announcements .priority-btn.active {
+    border-color: var(--priority-color);
+    background: var(--priority-color);
+    color: white;
+}
+
+/* 多媒體區域 */
+.admin-announcements .media-section {
+    border-top: 1px solid var(--theme-border-primary);
+    padding-top: 20px;
+}
+
+.admin-announcements .media-actions {
+    display: flex;
+    gap: 10px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+}
+
+.admin-announcements .media-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.admin-announcements .media-btn.image {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.admin-announcements .media-btn.embed {
+    background: #e8f5e8;
+    color: #388e3c;
+}
+
+.admin-announcements .media-btn.button {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.admin-announcements .media-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.admin-announcements .media-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-announcements .media-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--theme-bg-secondary);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.admin-announcements .media-item button {
+    background: transparent;
+    border: none;
+    color: var(--theme-text-tertiary);
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.admin-announcements .media-item button:hover {
+    color: #ef4444;
+}
+
+/* Checkbox */
+.admin-announcements .checkbox-group .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--theme-text-primary);
+}
+
+.admin-announcements .checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+/* 訊息 */
+.admin-announcements .message {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.admin-announcements .message.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.admin-announcements .message.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* 表單操作按鈕 */
+.admin-announcements .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.admin-announcements .preview-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    border: 1px solid var(--theme-border-primary);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.admin-announcements .preview-btn:hover {
+    background: var(--theme-bg-primary);
+}
+
+.admin-announcements .submit-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-color), #26a69a);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.admin-announcements .submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+}
+
+.admin-announcements .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.admin-announcements .cancel-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+/* 預覽區域 */
+.admin-announcements .preview-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: var(--theme-bg-secondary);
+    border-radius: 12px;
+}
+
+.admin-announcements .preview-section h3 {
+    margin: 0 0 16px 0;
+    font-size: 1rem;
+    color: var(--theme-text-secondary);
+}
+
+.admin-announcements .preview-card {
+    background: var(--theme-bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--theme-border-primary);
+}
+
+.admin-announcements .preview-header {
+    margin-bottom: 12px;
+}
+
+.admin-announcements .preview-priority {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.admin-announcements .preview-card h4 {
+    margin: 0 0 12px 0;
+    font-size: 1.1rem;
+    color: var(--theme-text-primary);
+}
+
+.admin-announcements .preview-content {
+    color: var(--theme-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.admin-announcements .preview-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.admin-announcements .preview-btn-tag {
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.admin-announcements .preview-btn-tag.btn-success {
+    background: #10b981;
+    color: white;
+}
+
+.admin-announcements .preview-btn-tag.btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.admin-announcements .preview-btn-tag.btn-warning {
+    background: #f59e0b;
+    color: white;
+}
+
+/* 公告列表 */
+.admin-announcements .announcements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.admin-announcements .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--theme-text-tertiary);
+}
+
+.admin-announcements .empty-state svg {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+/* 公告卡片 */
+.admin-announcements .announcement-card {
+    background: var(--theme-bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.admin-announcements .announcement-card.inactive {
+    opacity: 0.6;
+}
+
+.admin-announcements .announcement-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.admin-announcements .announcement-card .card-header:hover {
+    background: var(--theme-bg-primary);
+}
+
+.admin-announcements .card-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-announcements .priority-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.admin-announcements .card-title-area {
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-announcements .card-title-area h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-announcements .card-meta {
+    font-size: 0.8rem;
+    color: var(--theme-text-tertiary);
+}
+
+.admin-announcements .card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-announcements .card-actions button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--theme-text-tertiary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.admin-announcements .toggle-btn.active {
+    color: #10b981;
+}
+
+.admin-announcements .toggle-btn:not(.active) {
+    color: #6b7280;
+}
+
+.admin-announcements .edit-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.admin-announcements .delete-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.admin-announcements .expand-icon {
+    color: var(--theme-text-tertiary);
+    transition: transform 0.2s ease;
+}
+
+/* 卡片內容 */
+.admin-announcements .card-body {
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--theme-border-primary);
+}
+
+.admin-announcements .card-content {
+    padding: 16px 0;
+    color: var(--theme-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.admin-announcements .card-buttons,
+.admin-announcements .card-embeds {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.admin-announcements .button-tag,
+.admin-announcements .embed-tag {
+    padding: 6px 12px;
+    background: var(--theme-bg-primary);
+    border-radius: 16px;
+    font-size: 0.8rem;
+    color: var(--theme-text-secondary);
+}
+
+/* Section header row */
+.admin-announcements .section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.admin-announcements .section-header-row h2 {
+    margin: 0 !important;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .admin-announcements {
+        padding: 16px;
+    }
+
+    .admin-announcements .admin-content section {
+        padding: 20px 16px;
+    }
+
+    .admin-announcements .priority-selector {
+        flex-direction: column;
+    }
+
+    .admin-announcements .priority-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .admin-announcements .form-actions {
+        flex-direction: column;
+    }
+
+    .admin-announcements .form-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .admin-announcements .card-actions {
+        flex-wrap: wrap;
+    }
+}

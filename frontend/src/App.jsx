@@ -24,6 +24,8 @@ const GraduationTracker = lazy(() => import('./components/2_GraduationTracker/Gr
 const UniversityCalendar = lazy(() => import('./components/4_UniversityCalendar/UniversityCalendar.jsx'));
 const UpdateLog = lazy(() => import('./components/5_UpdateLog/UpdateLog.jsx'));
 const AdminNotifications = lazy(() => import('./components/Admin/AdminNotifications.jsx'));
+const AdminAnnouncements = lazy(() => import('./components/Admin/AdminAnnouncements.jsx'));
+const AdminDashboard = lazy(() => import('./components/Admin/AdminDashboard.jsx'));
 
 // 樣式
 import './App.css';
@@ -205,9 +207,9 @@ function App() {
                             <UpdateLog />
                           </Suspense>
                         } />
-                        <Route path="/admin/notifications" element={
-                          <Suspense fallback={<PageLoadingFallback pageName="管理後台" />}>
-                            <AdminNotifications />
+                        <Route path="/admin" element={
+                          <Suspense fallback={<PageLoadingFallback pageName="管理中心" />}>
+                            <AdminDashboard />
                           </Suspense>
                         } />
                       </Routes>

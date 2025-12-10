@@ -26,12 +26,33 @@ const AnnouncementCard = () => {
   });
 
   useEffect(() => {
-    const sortedAnnouncements = [...announcementData]
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
-      .slice(0, 5);
+    const fetchAnnouncements = async () => {
+      try {
+        // 嘗試從 API 取得公告
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const response = await fetch(`${API_BASE}/api/announcements`);
 
-    setAnnouncements(sortedAnnouncements);
-    setLastUpdate(new Date());
+        if (response.ok) {
+          const data = await response.json();
+          const sortedAnnouncements = [...data]
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 5);
+          setAnnouncements(sortedAnnouncements);
+        } else {
+          throw new Error('API 回應錯誤');
+        }
+      } catch (error) {
+        console.warn('無法從 API 取得公告，使用靜態資料:', error);
+        // 備援：使用靜態資料
+        const sortedAnnouncements = [...announcementData]
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, 5);
+        setAnnouncements(sortedAnnouncements);
+      }
+      setLastUpdate(new Date());
+    };
+
+    fetchAnnouncements();
   }, []);
 
   // 保存已讀狀態到 localStorage

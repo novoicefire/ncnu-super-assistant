@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +33,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
@@ -55,7 +56,7 @@
         .panel {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -192,14 +193,29 @@
             gap: 8px;
         }
 
-        .media-btn.image { background: #e3f2fd; color: #1976d2; }
-        .media-btn.video { background: #fce4ec; color: #c2185b; }
-        .media-btn.link { background: #e8f5e8; color: #388e3c; }
-        .media-btn.button { background: #fff3e0; color: #f57c00; }
+        .media-btn.image {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .media-btn.video {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .media-btn.link {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .media-btn.button {
+            background: #fff3e0;
+            color: #f57c00;
+        }
 
         .media-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .media-list {
@@ -264,7 +280,7 @@
         .announcement-preview {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -340,7 +356,7 @@
         .image-preview {
             max-width: 100%;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .image-caption {
@@ -350,20 +366,23 @@
             margin-top: 8px;
         }
 
-        .video-preview, .link-preview {
+        .video-preview,
+        .link-preview {
             padding: 15px;
             background: #f8f9fa;
             border-radius: 10px;
             border-left: 4px solid #4facfe;
         }
 
-        .video-preview a, .link-preview a {
+        .video-preview a,
+        .link-preview a {
             color: #4facfe;
             text-decoration: none;
             font-weight: 600;
         }
 
-        .video-preview a:hover, .link-preview a:hover {
+        .video-preview a:hover,
+        .link-preview a:hover {
             text-decoration: underline;
         }
 
@@ -387,18 +406,45 @@
 
         .preview-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .btn-primary { background: #007bff; color: white; }
-        .btn-secondary { background: #6c757d; color: white; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-warning { background: #ffc107; color: #212529; }
-        .btn-danger { background: #dc3545; color: white; }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
 
-        .priority-high { color: #dc3545; }
-        .priority-normal { color: #007bff; }
-        .priority-low { color: #6c757d; }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .priority-high {
+            color: #dc3545;
+        }
+
+        .priority-normal {
+            color: #007bff;
+        }
+
+        .priority-low {
+            color: #6c757d;
+        }
 
         .bottom-toolbar {
             display: flex;
@@ -407,7 +453,7 @@
             background: white;
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
 
@@ -430,15 +476,38 @@
 
         .action-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .btn-load { background: #17a2b8; color: white; }
-        .btn-save { background: #28a745; color: white; }
-        .btn-clear { background: #6c757d; color: white; }
-        .btn-copy { background: #fd7e14; color: white; }
-        .btn-export { background: #e83e8c; color: white; }
-        .btn-preview { background: #6f42c1; color: white; }
+        .btn-load {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-save {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-copy {
+            background: #fd7e14;
+            color: white;
+        }
+
+        .btn-export {
+            background: #e83e8c;
+            color: white;
+        }
+
+        .btn-preview {
+            background: #6f42c1;
+            color: white;
+        }
 
         .modal {
             display: none;
@@ -448,7 +517,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-content {
@@ -509,12 +578,12 @@
             .main-content {
                 grid-template-columns: 1fr;
             }
-            
+
             .bottom-toolbar {
                 flex-direction: column;
                 gap: 15px;
             }
-            
+
             .toolbar-section {
                 flex-wrap: wrap;
                 justify-content: center;
@@ -526,6 +595,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- 標題區 -->
@@ -589,15 +659,19 @@
                                 <i class="fas fa-heading"></i> 標題
                             </button>
                         </div>
-                        <textarea id="content" class="content-editor" placeholder="開始輸入您的公告內容...支援Markdown語法"></textarea>
+                        <textarea id="content" class="content-editor"
+                            placeholder="開始輸入您的公告內容...支援Markdown語法"></textarea>
                     </div>
 
                     <!-- 多媒體區域 -->
                     <div class="media-section">
                         <label><i class="fas fa-images"></i> 多媒體內容</label>
                         <div class="media-buttons">
-                            <button class="media-btn image" onclick="addImage()">
-                                <i class="fas fa-image"></i> 添加圖片
+                            <button class="media-btn image" onclick="addImageFromFile()">
+                                <i class="fas fa-upload"></i> 上傳圖片
+                            </button>
+                            <button class="media-btn image" onclick="addImageFromUrl()">
+                                <i class="fas fa-link"></i> 圖片網址
                             </button>
                             <button class="media-btn video" onclick="addVideo()">
                                 <i class="fas fa-video"></i> 添加影片
@@ -693,16 +767,16 @@
         };
 
         // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             updatePreview();
-            
+
             // 事件監聽
             document.getElementById('title').addEventListener('input', updatePreview);
             document.getElementById('content').addEventListener('input', updatePreview);
-            
+
             // 優先級選擇
             document.querySelectorAll('input[name="priority"]').forEach(radio => {
-                radio.addEventListener('change', function() {
+                radio.addEventListener('change', function () {
                     document.querySelectorAll('.priority-option').forEach(option => {
                         option.classList.remove('active');
                     });
@@ -719,32 +793,51 @@
             const end = textarea.selectionEnd;
             const selected = textarea.value.substring(start, end);
             const replacement = prefix + (selected || '文字') + suffix;
-            
+
             textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
             textarea.focus();
             textarea.setSelectionRange(start + prefix.length, start + prefix.length + (selected || '文字').length);
-            
+
             updatePreview();
         }
 
-        // 添加圖片
-        function addImage() {
+        // 添加圖片（從檔案上傳）
+        function addImageFromFile() {
             document.getElementById('imageInput').click();
+        }
+
+        // 添加圖片（從 URL）
+        function addImageFromUrl() {
+            const url = prompt('請輸入圖片網址:');
+            if (url) {
+                const alt = prompt('請輸入圖片替代文字 (alt):') || 'image';
+                const caption = prompt('請輸入圖片說明文字:') || '';
+
+                const imageData = {
+                    src: url,
+                    alt: alt,
+                    caption: caption
+                };
+
+                announcementData.images.push(imageData);
+                updateMediaList();
+                updatePreview();
+            }
         }
 
         function handleImageLoad(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const caption = prompt('請輸入圖片說明文字:') || '';
-                    
+
                     const imageData = {
                         src: e.target.result,
                         alt: file.name,
                         caption: caption
                     };
-                    
+
                     announcementData.images.push(imageData);
                     updateMediaList();
                     updatePreview();
@@ -759,7 +852,7 @@
             if (url) {
                 const title = prompt('請輸入影片標題:') || 'YouTube影片';
                 const videoId = extractYouTubeId(url);
-                
+
                 if (videoId) {
                     const embedData = {
                         type: "youtube",
@@ -767,7 +860,7 @@
                         title: title,
                         url: url
                     };
-                    
+
                     announcementData.embeds.push(embedData);
                     updateMediaList();
                     updatePreview();
@@ -783,14 +876,14 @@
             if (url) {
                 const title = prompt('請輸入連結標題:') || url;
                 const description = prompt('請輸入連結描述:') || '';
-                
+
                 const linkData = {
                     type: "link",
                     url: url,
                     title: title,
                     description: description
                 };
-                
+
                 announcementData.embeds.push(linkData);
                 updateMediaList();
                 updatePreview();
@@ -803,16 +896,18 @@
             if (text) {
                 const url = prompt('請輸入按鈕連結:');
                 if (url) {
-                    const style = prompt('請選擇按鈕樣式 (primary/secondary/success/warning/danger):', 'primary');
+                    const style = prompt('請選擇按鈕樣式 (primary/secondary/success/warning/danger):', 'success');
+                    const icon = prompt('請輸入按鈕圖示 (例如: 💬, 📰, 🔗):', '💬');
                     const external = confirm('是否為外部連結？');
-                    
+
                     const buttonData = {
                         text: text,
                         url: url,
-                        style: style || 'primary',
+                        style: style || 'success',
+                        icon: icon || '💬',
                         external: external
                     };
-                    
+
                     announcementData.buttons.push(buttonData);
                     updateMediaList();
                     updatePreview();
@@ -827,7 +922,7 @@
                 /youtu\.be\/([^?]+)/,
                 /youtube\.com\/embed\/([^?]+)/
             ];
-            
+
             for (let pattern of patterns) {
                 const match = url.match(pattern);
                 if (match) return match[1];
@@ -839,7 +934,7 @@
         function updateMediaList() {
             const mediaList = document.getElementById('mediaList');
             const items = [];
-            
+
             // 添加圖片
             announcementData.images.forEach((img, index) => {
                 items.push({
@@ -849,7 +944,7 @@
                     data: img
                 });
             });
-            
+
             // 添加嵌入內容
             announcementData.embeds.forEach((embed, index) => {
                 const icon = embed.type === 'youtube' ? '🎥' : '🔗';
@@ -860,7 +955,7 @@
                     data: embed
                 });
             });
-            
+
             // 添加按鈕
             announcementData.buttons.forEach((btn, index) => {
                 items.push({
@@ -870,7 +965,7 @@
                     data: btn
                 });
             });
-            
+
             if (items.length === 0) {
                 mediaList.innerHTML = `
                     <div class="media-list-placeholder">
@@ -893,7 +988,7 @@
         // 刪除多媒體項目
         function deleteMediaItem(type, index) {
             if (confirm('確定要刪除這個項目嗎？')) {
-                switch(type) {
+                switch (type) {
                     case 'image':
                         announcementData.images.splice(index, 1);
                         break;
@@ -916,7 +1011,7 @@
             announcementData.content = document.getElementById('content').value;
             announcementData.priority = document.querySelector('input[name="priority"]:checked').value;
             announcementData.date = new Date().toISOString().split('T')[0];
-            
+
             // 渲染預覽
             const previewContent = document.getElementById('previewContent');
             previewContent.innerHTML = renderPreview(announcementData);
@@ -926,7 +1021,7 @@
         function renderPreview(data) {
             const priorityIcons = { high: '🔥', normal: '📢', low: '💬' };
             const priorityClasses = { high: 'priority-high', normal: 'priority-normal', low: 'priority-low' };
-            
+
             let html = `
                 <div class="announcement-preview">
                     <div class="announcement-header">
@@ -938,12 +1033,12 @@
                     </div>
                     <div class="announcement-content">
             `;
-            
+
             // 渲染內容
             if (data.content) {
                 html += renderMarkdown(data.content);
             }
-            
+
             // 渲染圖片
             data.images.forEach(img => {
                 html += `
@@ -953,7 +1048,7 @@
                     </div>
                 `;
             });
-            
+
             // 渲染嵌入內容
             data.embeds.forEach(embed => {
                 if (embed.type === 'youtube') {
@@ -977,7 +1072,7 @@
                     `;
                 }
             });
-            
+
             // 渲染按鈕
             if (data.buttons.length > 0) {
                 html += '<div class="buttons-preview">';
@@ -992,12 +1087,12 @@
                 });
                 html += '</div>';
             }
-            
+
             html += `
                     </div>
                 </div>
             `;
-            
+
             return html;
         }
 
@@ -1013,12 +1108,20 @@
                 .replace(/<\/ul><br><ul>/g, '')
                 .replace(/<ul><li>/g, '<ul><li>')
                 .replace(/<\/li><\/ul>/g, '</li></ul>');
-            
+
             return `<div>${html}</div>`;
         }
 
-        // 生成JSON
+        // 生成JSON（產生可直接貼到 announcementData.js 的格式）
         function generateJSON() {
+            // 將單一公告包在陣列中，並加上 export 前綴
+            const arrayFormat = [announcementData];
+            const jsonContent = JSON.stringify(arrayFormat, null, 2);
+            return `// frontend/src/components/0_Dashboard/announcementData.js\nexport const announcementData = ${jsonContent};\n`;
+        }
+
+        // 生成純 JSON（單一物件，不含 export）
+        function generatePureJSON() {
             return JSON.stringify(announcementData, null, 2);
         }
 
@@ -1075,24 +1178,24 @@
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     try {
                         const data = JSON.parse(e.target.result);
-                        
+
                         // 載入資料到介面
                         announcementData = data;
                         document.getElementById('title').value = data.title || '';
                         document.getElementById('content').value = data.content || '';
-                        
+
                         // 設定優先級
                         document.querySelector(`input[name="priority"][value="${data.priority || 'normal'}"]`).checked = true;
                         document.querySelectorAll('.priority-option').forEach(option => option.classList.remove('active'));
                         document.querySelector(`input[name="priority"][value="${data.priority || 'normal'}"]`).parentElement.classList.add('active');
-                        
+
                         updateMediaList();
                         updatePreview();
                         alert('檔案載入成功！');
-                        
+
                     } catch (error) {
                         alert('檔案格式錯誤，請確認是有效的JSON檔案');
                     }
@@ -1119,20 +1222,20 @@
                     embeds: [],
                     buttons: []
                 };
-                
+
                 document.getElementById('title').value = '';
                 document.getElementById('content').value = '';
                 document.querySelector('input[name="priority"][value="normal"]').checked = true;
                 document.querySelectorAll('.priority-option').forEach(option => option.classList.remove('active'));
                 document.querySelector('input[name="priority"][value="normal"]').parentElement.classList.add('active');
-                
+
                 updateMediaList();
                 updatePreview();
             }
         }
 
         // 點擊模態框外部關閉
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('jsonModal');
             if (event.target === modal) {
                 closeModal();
@@ -1140,4 +1243,5 @@
         }
     </script>
 </body>
+
 </html>
