@@ -14,6 +14,7 @@ import SideNav from './components/SideNav.jsx';
 import BottomNavBar from './components/BottomNavBar.jsx';
 import MobileHeader from './components/MobileHeader.jsx'; // ✅ 手機版頂部標題欄
 import DisclaimerModal from './components/DisclaimerModal.jsx';
+import PWAInstallPrompt from './components/PWAInstallPrompt.jsx';
 
 // 🎯 懶載入頁面組件
 const Dashboard = lazy(() => import('./components/0_Dashboard/Dashboard.jsx'));
@@ -149,6 +150,9 @@ function App() {
           <LoadingProvider>
             <Router>
               <RouteTracker />
+
+              {/* iOS PWA 強制安裝提示 */}
+              <PWAInstallPrompt />
 
               <DisclaimerModal
                 isVisible={showDisclaimer}

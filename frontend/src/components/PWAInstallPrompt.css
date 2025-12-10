@@ -1,0 +1,278 @@
+/**
+ * PWAInstallPrompt.css - PWA 安裝提示樣式
+ * 強制覆蓋整個畫面，無法關閉
+ */
+
+/* 全螢幕覆蓋層 */
+.pwa-install-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* 彈窗主體 */
+.pwa-install-modal {
+    background: rgba(30, 30, 45, 0.95);
+    border-radius: 24px;
+    padding: 32px 24px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    animation: modalSlideIn 0.4s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 標題區 */
+.pwa-install-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.pwa-install-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #00796B, #26A69A);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 121, 107, 0.3);
+}
+
+.pwa-install-icon img {
+    width: 50px;
+    height: 50px;
+    filter: brightness(10);
+}
+
+.pwa-install-header h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.pwa-install-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.pwa-install-subtitle strong {
+    color: #26A69A;
+}
+
+/* 功能說明 */
+.pwa-features {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(0, 121, 107, 0.1);
+    border-radius: 12px;
+}
+
+.pwa-feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #26A69A;
+    font-size: 0.9rem;
+}
+
+.pwa-feature svg {
+    font-size: 1.1rem;
+}
+
+/* 安裝步驟 */
+.pwa-install-steps {
+    margin-bottom: 20px;
+}
+
+.pwa-install-steps h3 {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    text-align: center;
+}
+
+.pwa-step {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pwa-step:hover,
+.pwa-step.active {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(0, 121, 107, 0.3);
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #00796B, #26A69A);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 8px 0;
+    font-size: 0.95rem;
+}
+
+.step-content strong {
+    color: #fff;
+}
+
+.step-hint {
+    font-size: 0.85rem !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 步驟圖示演示 */
+.step-icon-demo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #26A69A;
+    font-size: 0.9rem;
+}
+
+.step-icon-demo .share-icon {
+    font-size: 1.5rem;
+    color: #007AFF;
+    /* iOS 藍色 */
+}
+
+.step-icon-demo .arrow-icon {
+    font-size: 1rem;
+}
+
+.step-icon-demo.add-home {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.step-icon-demo.add-home svg {
+    color: #007AFF;
+}
+
+/* 彈跳動畫 */
+.bounce {
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* iOS 版本警告 */
+.pwa-ios-warning {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+}
+
+.pwa-ios-warning p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    margin: 0;
+    text-align: center;
+}
+
+.pwa-ios-warning p:first-child {
+    margin-bottom: 4px;
+}
+
+/* 底部提示 */
+.pwa-install-footer {
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pwa-install-footer p {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+/* 響應式 */
+@media (max-height: 700px) {
+    .pwa-install-modal {
+        padding: 24px 20px;
+    }
+
+    .pwa-install-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .pwa-install-icon img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .pwa-install-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .pwa-step {
+        padding: 12px;
+    }
+}
