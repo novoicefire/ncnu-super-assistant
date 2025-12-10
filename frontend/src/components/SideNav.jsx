@@ -30,6 +30,7 @@ import {
     faXmark,
     faGear
 } from '@fortawesome/free-solid-svg-icons';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import './SideNav.css';
 
 // 語言選項
@@ -181,6 +182,23 @@ const SideNav = ({ disclaimerAccepted }) => {
                     {!isCollapsed && (
                         <>
                             <span className="nav-label">{t('nav.ibsZone')}</span>
+                            <span className="external-badge">↗</span>
+                        </>
+                    )}
+                </a>
+
+                {/* Instagram 聯繫/問題回報連結 */}
+                <a
+                    href="https://www.instagram.com/ncnu_super_assistant/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="side-nav-item external-link instagram-link"
+                    title={isCollapsed ? t('nav.contactIG') : ''}
+                >
+                    <FontAwesomeIcon icon={faInstagram} className="nav-icon" />
+                    {!isCollapsed && (
+                        <>
+                            <span className="nav-label">{t('nav.contactIG')}</span>
                             <span className="external-badge">↗</span>
                         </>
                     )}

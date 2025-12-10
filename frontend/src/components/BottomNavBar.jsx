@@ -17,12 +17,27 @@ import {
     faBook,
     faXmark
 } from '@fortawesome/free-solid-svg-icons';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import './BottomNavBar.css';
 
 const BottomNavBar = () => {
     const { t } = useTranslation();
     const location = useLocation();
     const [showMore, setShowMore] = useState(false);
+
+    // 檢查用戶是否已經看過 IG 提示（從 localStorage 讀取）
+    const [hasSeenIGHint, setHasSeenIGHint] = useState(() => {
+        return localStorage.getItem('hasSeenIGHint') === 'true';
+    });
+
+    // 當用戶點開「其他」選單時，標記已看過
+    const handleMoreClick = () => {
+        if (!hasSeenIGHint) {
+            localStorage.setItem('hasSeenIGHint', 'true');
+            setHasSeenIGHint(true);
+        }
+        setShowMore(!showMore);
+    };
 
     // 主要 Tab 項目（使用翻譯 key）
     const mainTabs = [
@@ -39,6 +54,12 @@ const BottomNavBar = () => {
             path: 'https://solar-tuesday-ad1.notion.site/edb276ef8b5c4d05983a4a27c841a989?v=0e56c1269fd149aebe113ddff1c49d73',
             labelKey: 'nav.ibsZone',
             icon: faBook,
+            external: true
+        },
+        {
+            path: 'https://www.instagram.com/ncnu_super_assistant/',
+            labelKey: 'nav.contactIG',
+            icon: faInstagram,
             external: true
         },
     ];
@@ -115,10 +136,12 @@ const BottomNavBar = () => {
                 {/* 更多按鈕 */}
                 <button
                     className={`bottom-nav-tab more-btn ${showMore || isMoreActive ? 'active' : ''}`}
-                    onClick={() => setShowMore(!showMore)}
+                    onClick={handleMoreClick}
                 >
                     <FontAwesomeIcon icon={faEllipsis} className="tab-icon" />
                     <span className="tab-label">{t('nav.more')}</span>
+                    {/* IG 提示泡泡：只有在用戶尚未看過時才顯示 */}
+                    {!hasSeenIGHint && <span className="ig-hint-bubble">IG</span>}
                 </button>
             </nav>
         </>
