@@ -15,6 +15,7 @@ import BottomNavBar from './components/BottomNavBar.jsx';
 import MobileHeader from './components/MobileHeader.jsx'; // ✅ 手機版頂部標題欄
 import DisclaimerModal from './components/DisclaimerModal.jsx';
 import PWAInstallPrompt from './components/PWAInstallPrompt.jsx';
+import PushNotificationPrompt from './components/PushNotificationPrompt.jsx';
 
 // 🎯 懶載入頁面組件
 const Dashboard = lazy(() => import('./components/0_Dashboard/Dashboard.jsx'));
@@ -216,6 +217,9 @@ function App() {
 
                 {/* 底部導航（手機版） */}
                 <BottomNavBar />
+
+                {/* 推播通知訂閱提示（用戶手動點擊觸發） */}
+                <PushNotificationPrompt />
 
                 <Toaster
                   position="top-right"
