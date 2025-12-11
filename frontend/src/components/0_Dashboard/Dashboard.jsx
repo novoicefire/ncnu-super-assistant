@@ -1,8 +1,9 @@
-// frontend/src/components/0_Dashboard/Dashboard.jsx (簡化版 - 移除 CoursePreview)
+// frontend/src/components/0_Dashboard/Dashboard.jsx (新增體育館開放時間卡片)
 import React from 'react';
 import WelcomeBanner from './WelcomeBanner.jsx';
 import QuickLinks from './QuickLinks.jsx';
 import AnnouncementCard from './AnnouncementCard.jsx';
+import GymScheduleCard from './GymScheduleCard.jsx';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -17,6 +18,7 @@ const Dashboard = () => {
           <AnnouncementCard />
         </div>
         <div className="dashboard-content">
+          <GymScheduleCard />
           <QuickLinks />
         </div>
       </div>

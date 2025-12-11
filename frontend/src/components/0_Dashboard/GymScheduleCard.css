@@ -1,0 +1,1049 @@
+/**
+ * GymScheduleCard.css - 體育館開放時間卡片樣式
+ * 包含橫向日曆、設施卡片、進度條與各種狀態動畫
+ */
+
+/* ========== 卡片容器 ========== */
+.gym-schedule-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.gym-schedule-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* 冬季主題 */
+.gym-schedule-card.winter-theme {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-color: rgba(33, 150, 243, 0.2);
+}
+
+/* 深色模式 */
+.dark-mode .gym-schedule-card {
+    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .gym-schedule-card.winter-theme {
+    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+}
+
+/* ========== 卡片標題 ========== */
+.gym-schedule-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-icon {
+    font-size: 1.2rem;
+    color: var(--primary-color, #00796B);
+}
+
+.gym-schedule-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary, #333);
+}
+
+.dark-mode .gym-schedule-header h3 {
+    color: #fff;
+}
+
+/* header 動作區 */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 可收合內容區域 */
+.gym-schedule-content {
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.gym-schedule-content.collapsed {
+    max-height: 0;
+    padding: 0;
+    opacity: 0;
+}
+
+/* 回到今日按鈕 - 正方形斜對角設計 */
+.go-today-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 2px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color, #00796B);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.go-today-btn .month {
+    font-size: 0.55rem;
+    line-height: 1;
+    opacity: 0.9;
+    transform: translateX(-3px);
+}
+
+.go-today-btn .day {
+    font-size: 0.85rem;
+    line-height: 1;
+    transform: translateX(3px);
+}
+
+.go-today-btn:hover {
+    background: #009688;
+    transform: scale(1.05);
+}
+
+/* ========== 橫向日曆選擇器 ========== */
+.date-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+}
+
+/* 月份顯示 */
+.month-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.current-month {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary, #333);
+    background: rgba(0, 121, 107, 0.08);
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+.dark-mode .current-month {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 日期導航列 */
+.date-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.date-nav-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-secondary, #666);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.date-nav-btn:hover {
+    background: var(--primary-color, #00796B);
+    color: white;
+    transform: scale(1.05);
+}
+
+.dark-mode .date-nav-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #aaa;
+}
+
+.date-nav-btn.disabled,
+.date-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.date-scroll-container {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 4px 0;
+}
+
+.date-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* 日曆滑動動畫 */
+.date-scroll-container.slide-left {
+    animation: slideOutLeft 0.5s ease-in-out forwards;
+}
+
+.date-scroll-container.slide-right {
+    animation: slideOutRight 0.5s ease-in-out forwards;
+}
+
+@keyframes slideOutLeft {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-60px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(60px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+
+.date-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    min-width: 50px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    transform-origin: center;
+}
+
+
+.date-item:hover {
+    background: rgba(0, 121, 107, 0.1);
+    transform: translateY(-2px);
+}
+
+.date-item.selected {
+    background: var(--primary-color, #00796B);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+}
+
+.date-item.today:not(.selected) {
+    border: 2px solid var(--primary-color, #00796B);
+}
+
+.date-weekday {
+    font-size: 0.7rem;
+    font-weight: 500;
+    opacity: 0.7;
+    margin-bottom: 2px;
+}
+
+.date-day {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.today-indicator {
+    position: absolute;
+    bottom: 2px;
+    font-size: 0.5rem;
+    color: var(--primary-color, #00796B);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.date-item.selected .today-indicator {
+    color: white;
+}
+
+.dark-mode .date-item {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ccc;
+}
+
+.dark-mode .date-item.selected {
+    background: var(--primary-color, #00796B);
+    color: white;
+}
+
+/* ========== 冬季休館提示 ========== */
+.winter-closure-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #1976D2 0%, #2196F3 100%);
+    border-radius: 12px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.winter-icon {
+    animation: snowflake-spin 4s linear infinite;
+}
+
+@keyframes snowflake-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 20px 5px rgba(33, 150, 243, 0.2);
+    }
+}
+
+/* ========== 設施列表（三欄並排） ========== */
+.facilities-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+/* ========== 精簡設施卡片 ========== */
+.facility-card-compact {
+    position: relative;
+    background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    min-height: 100px;
+}
+
+/* 非當日卡片：縮小、黯淡 */
+.facility-card-compact.not-today {
+    min-height: 70px;
+    padding: 8px;
+    opacity: 0.6;
+    filter: grayscale(30%);
+}
+
+.facility-card-compact.not-today .compact-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+}
+
+.facility-card-compact.not-today .compact-name {
+    font-size: 0.75rem;
+}
+
+.facility-card-compact.not-today .compact-time {
+    font-size: 0.65rem;
+}
+
+/* 卡片背景進度條填充 - 使用設施本身顏色 */
+.card-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+            color-mix(in srgb, var(--facility-color, #00796B) 20%, transparent) 0%,
+            color-mix(in srgb, var(--facility-color, #00796B) 8%, transparent) 100%);
+    transition: width 0.5s ease;
+    z-index: 0;
+}
+
+.dark-mode .card-progress-fill {
+    background: linear-gradient(90deg,
+            color-mix(in srgb, var(--facility-color, #00796B) 30%, transparent) 0%,
+            color-mix(in srgb, var(--facility-color, #00796B) 15%, transparent) 100%);
+}
+
+/* 精簡卡片內容 */
+.compact-card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+}
+
+.compact-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--facility-color, #00796B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.compact-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-primary, #333);
+}
+
+.dark-mode .compact-name {
+    color: #fff;
+}
+
+.compact-time {
+    font-size: 0.75rem;
+    color: var(--text-secondary, #666);
+    font-weight: 500;
+}
+
+.dark-mode .compact-time {
+    color: #aaa;
+}
+
+.compact-remaining {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #00796B;
+    background: rgba(0, 121, 107, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.compact-countdown {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #E65100;
+    background: rgba(255, 152, 0, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* 精簡卡片的狀態標籤 */
+.facility-card-compact .facility-status-badge {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    margin-top: 2px;
+}
+
+.dark-mode .facility-card-compact {
+    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* 精簡卡片動畫狀態 */
+.facility-card-compact.animate-open {
+    animation: breathe-glow-compact 3s ease-in-out infinite;
+}
+
+@keyframes breathe-glow-compact {
+
+    0%,
+    100% {
+        box-shadow: 0 2px 8px rgba(0, 121, 107, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 4px 16px rgba(0, 121, 107, 0.2);
+    }
+}
+
+.facility-card-compact.animate-upcoming {
+    animation: soft-blink 2s ease-in-out infinite;
+}
+
+.facility-card-compact.animate-closed {
+    opacity: 0.6;
+    filter: grayscale(40%);
+}
+
+.facility-card-compact.animate-holiday {
+    opacity: 0.5;
+    filter: grayscale(60%);
+}
+
+.facility-card-compact.animate-winter {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.facility-card-compact.animate-winter::before {
+    background: linear-gradient(180deg, #2196F3, #1565C0);
+}
+
+/* 精簡卡片響應式 */
+@media (max-width: 600px) {
+    .facilities-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .facility-card-compact {
+        padding: 10px 8px;
+        min-height: 90px;
+    }
+
+    .compact-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+
+    .compact-name {
+        font-size: 0.75rem;
+    }
+
+    .compact-time {
+        font-size: 0.65rem;
+    }
+
+    .compact-remaining,
+    .compact-countdown {
+        font-size: 0.6rem;
+        padding: 1px 5px;
+    }
+
+    .facility-card-compact .facility-status-badge {
+        font-size: 0.55rem;
+        padding: 1px 4px;
+    }
+}
+
+/* ========== 設施卡片 ========== */
+.facility-card {
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.facility-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--facility-color, #00796B);
+    transition: width 0.3s ease;
+}
+
+.facility-card:hover::before {
+    width: 6px;
+}
+
+.dark-mode .facility-card {
+    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ========== 狀態動畫類別 ========== */
+
+/* 開放中 - 呼吸燈效果 */
+.facility-card.animate-open {
+    animation: breathe-glow 3s ease-in-out infinite;
+}
+
+.facility-card.animate-open::before {
+    background: linear-gradient(180deg, #4CAF50, #00796B);
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes breathe-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 2px 10px rgba(0, 121, 107, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 4px 20px rgba(0, 121, 107, 0.2);
+    }
+}
+
+@keyframes shimmer {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* 即將開放 - 柔和閃爍 */
+.facility-card.animate-upcoming {
+    animation: soft-blink 2s ease-in-out infinite;
+}
+
+.facility-card.animate-upcoming::before {
+    background: linear-gradient(180deg, #FF9800, #F57C00);
+}
+
+@keyframes soft-blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.85;
+    }
+}
+
+/* 已關閉 - 灰階 */
+.facility-card.animate-closed {
+    opacity: 0.7;
+    filter: grayscale(30%);
+}
+
+.facility-card.animate-closed::before {
+    background: #9E9E9E;
+}
+
+/* 休館日 */
+.facility-card.animate-holiday {
+    opacity: 0.6;
+    filter: grayscale(50%);
+}
+
+.facility-card.animate-holiday::before {
+    background: #B71C1C;
+}
+
+/* 冬季休館 - 冰凍效果 */
+.facility-card.animate-winter {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.facility-card.animate-winter::before {
+    background: linear-gradient(180deg, #2196F3, #1565C0);
+}
+
+.dark-mode .facility-card.animate-winter {
+    background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+}
+
+/* 雪花飄落容器 */
+.snowfall-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.snowflake-particle {
+    position: absolute;
+    top: -20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+    animation: snowfall 3s linear infinite;
+}
+
+@keyframes snowfall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ========== 設施標題區 ========== */
+.facility-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.facility-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--facility-color, #00796B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.facility-icon {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.facility-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.facility-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary, #333);
+}
+
+.dark-mode .facility-name {
+    color: #fff;
+}
+
+.facility-time {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #666);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dark-mode .facility-time {
+    color: #aaa;
+}
+
+.follows-pool-tag {
+    font-size: 0.65rem;
+    background: rgba(156, 39, 176, 0.1);
+    color: #9C27B0;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* 狀態標籤 */
+.facility-status-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.facility-status-badge.status-open {
+    background: rgba(76, 175, 80, 0.15);
+    color: #2E7D32;
+}
+
+.facility-status-badge.status-upcoming {
+    background: rgba(255, 152, 0, 0.15);
+    color: #E65100;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.facility-status-badge.status-closed {
+    background: rgba(158, 158, 158, 0.15);
+    color: #616161;
+}
+
+.facility-status-badge.status-holiday {
+    background: rgba(244, 67, 54, 0.1);
+    color: #C62828;
+}
+
+.facility-status-badge.status-winter {
+    background: rgba(33, 150, 243, 0.15);
+    color: #1565C0;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ========== 進度條區域 ========== */
+.facility-progress-section {
+    margin-top: 8px;
+}
+
+.progress-bar-container {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.dark-mode .progress-bar-container {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #00796B);
+    border-radius: 3px;
+    position: relative;
+    transition: width 0.5s ease;
+    animation: progress-slide 1.5s ease-out;
+}
+
+@keyframes progress-slide {
+    from {
+        width: 0;
+    }
+}
+
+.progress-glow {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6));
+    animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+}
+
+.progress-label {
+    color: var(--text-secondary, #666);
+}
+
+.progress-time {
+    font-weight: 600;
+    color: #00796B;
+}
+
+.dark-mode .progress-label {
+    color: #aaa;
+}
+
+.dark-mode .progress-time {
+    color: #4DB6AC;
+}
+
+/* 即將開放倒數 */
+.upcoming-countdown {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #E65100;
+    animation: countdown-pulse 1s ease-in-out infinite;
+}
+
+.countdown-icon {
+    animation: rotate-tick 1s steps(60) infinite;
+}
+
+@keyframes rotate-tick {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes countdown-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* 已關閉訊息 */
+.closed-message {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #888);
+    font-style: italic;
+}
+
+/* 休館訊息 */
+.holiday-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: #B71C1C;
+}
+
+.facility-card.animate-winter .holiday-message {
+    color: #1565C0;
+}
+
+/* ========== 底部連結 ========== */
+.schedule-footer {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    text-align: center;
+}
+
+.source-link {
+    font-size: 0.75rem;
+    color: var(--text-secondary, #888);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.source-link:hover {
+    color: var(--primary-color, #00796B);
+    text-decoration: underline;
+}
+
+.dark-mode .schedule-footer {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .source-link {
+    color: #aaa;
+}
+
+/* ========== 響應式設計 ========== */
+@media (max-width: 768px) {
+    .gym-schedule-card {
+        padding: 1.25rem 1rem;
+        border-radius: 16px;
+    }
+
+    .date-selector {
+        gap: 4px;
+    }
+
+    .date-nav-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .date-item {
+        padding: 6px 10px;
+        min-width: 42px;
+    }
+
+    .date-day {
+        font-size: 1rem;
+    }
+
+    .facility-card {
+        padding: 14px;
+    }
+
+    .facility-icon-wrapper {
+        width: 36px;
+        height: 36px;
+    }
+
+    .facility-icon {
+        font-size: 1rem;
+    }
+
+    .facility-name {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .date-item {
+        padding: 5px 8px;
+        min-width: 38px;
+    }
+
+    .date-weekday {
+        font-size: 0.6rem;
+    }
+
+    .date-day {
+        font-size: 0.9rem;
+    }
+
+    .winter-closure-banner {
+        font-size: 0.8rem;
+        padding: 10px 12px;
+    }
+}

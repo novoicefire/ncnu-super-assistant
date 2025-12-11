@@ -320,5 +320,28 @@
         "q4Author": "Proverb",
         "q5": "Persistence leads to victory",
         "q5Author": "Proverb"
+    },
+    "gymSchedule": {
+        "title": "Gym Schedule",
+        "pool": "Swimming Pool",
+        "gym": "Fitness Center",
+        "spa": "SPA",
+        "today": "Today",
+        "prevWeek": "Previous Week",
+        "nextWeek": "Next Week",
+        "statusOpen": "Open",
+        "statusUpcoming": "Opening Soon",
+        "statusClosed": "Closed",
+        "statusHoliday": "Holiday",
+        "statusWinterClosed": "Winter Closure",
+        "remaining": "Remaining",
+        "opensIn": "Opens in",
+        "closedToday": "Closed for today",
+        "followsPool": "Same as Pool",
+        "regularClosed": "Regular closure",
+        "holidayClosed": "Holiday closure",
+        "winterClosed": "Winter closure period",
+        "winterClosureNotice": "Pool closed for winter (12/28 ~ 3/16)",
+        "dataSource": "Source: PE Office Website"
     }
 }

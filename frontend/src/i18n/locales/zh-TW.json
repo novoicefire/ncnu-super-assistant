@@ -320,5 +320,28 @@
         "q4Author": "諺語",
         "q5": "堅持就是勝利",
         "q5Author": "諺語"
+    },
+    "gymSchedule": {
+        "title": "體育館開放時間",
+        "pool": "游泳池",
+        "gym": "健身房",
+        "spa": "SPA",
+        "today": "今日",
+        "prevWeek": "前一週",
+        "nextWeek": "後一週",
+        "statusOpen": "開放中",
+        "statusUpcoming": "即將開放",
+        "statusClosed": "已關閉",
+        "statusHoliday": "休館日",
+        "statusWinterClosed": "冬季休館",
+        "remaining": "剩餘時間",
+        "opensIn": "開放倒數",
+        "closedToday": "今日已結束營業",
+        "followsPool": "同游泳池",
+        "regularClosed": "例行休館",
+        "holidayClosed": "國定假日休館",
+        "winterClosed": "冬季休館期間",
+        "winterClosureNotice": "游泳池冬季休館中 (12/28 ~ 3/16)",
+        "dataSource": "資料來源：體育組網站"
     }
 }
