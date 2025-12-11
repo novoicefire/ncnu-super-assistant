@@ -1,6 +1,6 @@
 {
     "name": "暨大生超級助理",
-    "short_name": "暨大助理",
+    "short_name": "暨大生超級助理",
     "description": "暨南國際大學學生的最佳助手，提供課程模擬、校園生活資訊、以及即時資訊查詢。",
     "start_url": "/",
     "display": "standalone",
