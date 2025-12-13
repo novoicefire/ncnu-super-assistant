@@ -275,38 +275,27 @@ const GymScheduleCard = () => {
         <div className={`gym-schedule-card ${showWinterWarning ? 'winter-theme' : ''}`}>
             {/* 卡片標題 */}
             <div className="gym-schedule-header">
-                <div className="header-title">
-                    <FontAwesomeIcon icon={faCalendarAlt} className="header-icon" />
-                    <h3>{t('gymSchedule.title')}</h3>
+                <div className="header-content">
+                    <div className="header-title-row">
+                        <FontAwesomeIcon icon={faCalendarAlt} className="header-icon" />
+                        <h3>{t('gymSchedule.title')}</h3>
+                    </div>
+                    <span className="header-subtitle">{t('gymSchedule.subtitle')}</span>
                 </div>
-                <div className="header-actions">
-                    {/* 回到今日按鈕 */}
-                    {!isSameDay(selectedDate, new Date()) && (
-                        <button
-                            className="go-today-btn"
-                            onClick={() => handleDateClick(clampDateToAvailableRange(new Date()))}
-                            title={t('gymSchedule.today')}
-                        >
-                            <span className="month">{new Date().getMonth() + 1}/</span>
-                            <span className="day">{new Date().getDate()}</span>
-                        </button>
-                    )}
-                    {/* 收合按鈕 */}
-                    <button
-                        className="collapse-toggle modern"
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        title={isCollapsed ? t('common.expand') : t('common.collapse')}
-                    >
-                        <FontAwesomeIcon icon={isCollapsed ? faChevronDown : faChevronUp} />
-                    </button>
-                </div>
+                <button
+                    className="collapse-toggle modern"
+                    onClick={() => setIsCollapsed(!isCollapsed)}
+                    title={isCollapsed ? t('common.expand') : t('common.collapse')}
+                >
+                    <FontAwesomeIcon icon={isCollapsed ? faChevronDown : faChevronUp} />
+                </button>
             </div>
 
             {/* 可收合的內容區域 */}
             <div className={`gym-schedule-content ${isCollapsed ? 'collapsed' : ''}`}>
                 {/* 橫向日曆選擇器 */}
                 <div className="date-selector">
-                    {/* 月份顯示 */}
+                    {/* 月份顯示 + 回到今日按鈕 */}
                     <div className="month-display">
                         <span className="current-month">
                             {locale === 'zh-TW'
@@ -314,6 +303,17 @@ const GymScheduleCard = () => {
                                 : selectedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
                             }
                         </span>
+                        {/* 回到今日按鈕 */}
+                        {!isSameDay(selectedDate, new Date()) && (
+                            <button
+                                className="go-today-btn"
+                                onClick={() => handleDateClick(clampDateToAvailableRange(new Date()))}
+                                title={t('gymSchedule.today')}
+                            >
+                                <span className="month">{new Date().getMonth() + 1}/</span>
+                                <span className="day">{new Date().getDate()}</span>
+                            </button>
+                        )}
                     </div>
 
                     {/* 日期滾動區 */}

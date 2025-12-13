@@ -15,10 +15,12 @@
 
 | 面向 | 技術 / 平台 | 關鍵文件/位置 | 運維重點 |
 | :--- | :--- | :--- | :--- |
-| **前端** | React 19 + Vite | `frontend/` | Vercel 自動化部署 |
+| **前端** | React 19.2 + Vite 7.2 | `frontend/` | Vercel 自動化部署 |
 | **後端** | Python 3.11 + Flask | `backend/app.py` | Render Web Service (Gunicorn) |
-| **資料庫** | Supabase (PostgreSQL) | `users`, `schedules` 表 | RLS 安全策略、金鑰管理 |
+| **資料庫** | Supabase (PostgreSQL) | `users`, `schedules`, `notifications` 表 | RLS 安全策略、金鑰管理 |
 | **身分驗證** | Google OAuth 2.0 | `frontend/src/AuthContext.jsx` | GCP OAuth 憑證需定期更新 |
+| **推播通知** | Web Push + VAPID | `backend/push_service.py` | VAPID 金鑰管理 |
+| **多國語系** | i18next | `frontend/src/i18n/` | 翻譯檔案維護 |
 | **自動化任務** | GitHub Actions | `.github/workflows/` (4個工作流程) | 資料同步、服務保活、資料庫監控 |
 | **版本管理** | Git (GitFlow) | `main` (生產), `develop` (開發) | PR 審核後自動部署 |
 
@@ -77,37 +79,65 @@ ncnu-super-assistant/
 │     └─ keepalive.yml            # 備用保活腳本
 ├─ backend/
 │  ├─ app.py                    # 後端 Flask API 主程式
+│  ├─ notifications.py          # 通知服務 API
+│  ├─ push_service.py           # Web Push 推播服務
 │  └─ requirements.txt          # Python 套件依賴
 ├─ frontend/
 │  ├─ public/
 │  │  ├─ data/                  # 自動同步的課程資料 (JSON)
+│  │  ├─ icons/                 # PWA 應用圖標
+│  │  ├─ manifest.json          # PWA 設定檔
+│  │  ├─ service-worker.js      # Service Worker（推播通知）
 │  │  └─ calendar.ics           # 校曆 .ics 檔案
 │  ├─ src/
 │  │  ├─ App.jsx                # React 主應用元件與路由
 │  │  ├─ main.jsx               # React 應用程式進入點
-│  │  ├─ apiHelper.js           # API 呼叫工具
-│  │  ├─ AuthContext.jsx        # Google 登入驗證
-│  │  └─ components/            # 各功能UI元件
-│  │     ├─ 0_Dashboard/         # 首頁儀表板
-│  │     │  ├─ Dashboard.jsx
-│  │     │  ├─ WelcomeBanner.jsx
-│  │     │  └─ ...
-│  │     ├─ 1_CoursePlanner/     # 課程規劃
-│  │     │  ├─ CoursePlanner.jsx
-│  │     │  └─ CourseTable.jsx
-│  │     ├─ 2_GraduationTracker/ # 畢業進度
-│  │     │  └─ GraduationTracker.jsx
-│  │     ├─ 3_CampusDirectory/   # 校園單位導覽
-│  │     │  └─ CampusDirectory.jsx
-│  │     ├─ 4_UniversityCalendar/# 校園行事曆
-│  │     │  └─ UniversityCalendar.jsx
-│  │     ├─ 5_UpdateLog/         # 更新日誌
-│  │     │  └─ UpdateLog.jsx
-│  │     ├─ common/              # 共用元件 (錯誤邊界、載入指示器)
-│  │     │  ├─ ErrorBoundary.jsx
-│  │     │  └─ LazyLoader.jsx
-│  │     ├─ DisclaimerModal.jsx  # 免責聲明
-│  │     └─ Navbar.jsx           # 導覽列
+│  │  ├─ AuthContext.jsx        # Google 登入驗證 + 推播訂閱
+│  │  ├─ components/            # 各功能UI元件
+│  │  │  ├─ 0_Dashboard/         # 首頁儀表板
+│  │  │  │  ├─ Dashboard.jsx
+│  │  │  │  ├─ WelcomeBanner.jsx
+│  │  │  │  ├─ QuickLinks.jsx    # 常用連結
+│  │  │  │  ├─ GymScheduleCard.jsx # 體育館時間卡片
+│  │  │  │  ├─ WeatherWidget.jsx # 天氣小工具
+│  │  │  │  └─ AnnouncementCard.jsx # 公告卡片
+│  │  │  ├─ 1_CoursePlanner/     # 課程規劃
+│  │  │  │  ├─ CoursePlanner.jsx
+│  │  │  │  └─ CourseTable.jsx
+│  │  │  ├─ 2_GraduationTracker/ # 畢業進度
+│  │  │  │  └─ GraduationTracker.jsx
+│  │  │  ├─ 4_UniversityCalendar/# 校園行事曆
+│  │  │  │  └─ UniversityCalendar.jsx
+│  │  │  ├─ 5_UpdateLog/         # 更新日誌
+│  │  │  │  └─ UpdateLog.jsx
+│  │  │  ├─ Admin/               # 🆕 管理中心
+│  │  │  │  ├─ AdminDashboard.jsx    # 管理儀表板
+│  │  │  │  ├─ AdminAnnouncements.jsx # 公告管理
+│  │  │  │  └─ AdminNotifications.jsx # 通知推播管理
+│  │  │  ├─ common/              # 共用元件 (錯誤邊界、載入指示器)
+│  │  │  │  ├─ ErrorBoundary.jsx
+│  │  │  │  └─ LazyLoader.jsx
+│  │  │  ├─ SideNav.jsx          # 🆕 桌面版側邊導航
+│  │  │  ├─ MobileHeader.jsx     # 🆕 行動版頁首
+│  │  │  ├─ BottomNavBar.jsx     # 🆕 行動版底部導航
+│  │  │  ├─ PWAInstallPrompt.jsx # 🆕 PWA 安裝引導
+│  │  │  ├─ DisclaimerModal.jsx  # 免責聲明
+│  │  │  └─ Toast.jsx            # 🆕 Toast 通知元件
+│  │  ├─ contexts/               # 🆕 React Context
+│  │  │  ├─ ThemeContext.jsx     # 主題管理（深色/淺色模式）
+│  │  │  └─ NotificationContext.jsx # 通知狀態管理
+│  │  ├─ hooks/                  # 🆕 自定義 Hook
+│  │  │  └─ usePushNotification.js # 推播通知 Hook
+│  │  ├─ i18n/                   # 🆕 多國語系
+│  │  │  ├─ index.js             # i18next 設定
+│  │  │  └─ locales/
+│  │  │     ├─ zh-TW.json        # 繁體中文
+│  │  │     └─ en.json           # 英文
+│  │  ├─ services/               # API 服務
+│  │  │  └─ weatherService.js    # 天氣 API 服務
+│  │  └─ styles/                 # 全域樣式
+│  │     ├─ themes.css           # 主題變數
+│  │     └─ animations.css       # 動畫樣式
 │  ├─ index.html               # SPA 進入點 HTML
 │  ├─ package.json             # 前端套件依賴
 │  ├─ vite.config.js           # Vite 設定檔
@@ -163,8 +193,12 @@ npm run dev
 | **Render** | `SUPABASE_URL` | Supabase 專案 URL |
 | | `SUPABASE_KEY` | Supabase 專案 Public Key |
 | | `ALLOWED_ORIGINS` | 允許跨域請求的來源 (Vercel 網址) |
+| | `VAPID_PRIVATE_KEY` | 🆕 Web Push 私鑰 |
+| | `VAPID_PUBLIC_KEY` | 🆕 Web Push 公鑰 |
+| | `VAPID_CLAIMS_EMAIL` | 🆕 VAPID 認證信箱 |
 | **Vercel** | `VITE_API_URL` | 指向 Render 後端服務的 URL |
 | | `VITE_GOOGLE_CLIENT_ID` | Google OAuth Client ID |
+| | `VITE_VAPID_PUBLIC_KEY` | 🆕 Web Push 公鑰（前端用）|
 
 #### GitHub Secrets (自動化任務用)
 
@@ -189,6 +223,12 @@ npm run dev
 | `/api/contacts` | GET | 取得校園聯絡資訊 | 公開 | 整合單位網址資訊 |
 | `/api/calendar` | GET | 取得完整校曆事件 | 公開 | Google Calendar iCal |
 | `/api/events/today` | GET | 取得今日行事曆活動 | 公開 | Dashboard 首頁使用 |
+| `/api/notifications` | GET | 🆕 取得所有通知 | 公開 | 支援分頁 |
+| `/api/notifications` | POST | 🆕 發送新通知 | 管理員 | 需驗證管理員權限 |
+| `/api/notifications/<id>` | DELETE | 🆕 刪除通知 | 管理員 | 需驗證管理員權限 |
+| `/api/push/subscribe` | POST | 🆕 訂閱推播通知 | Bearer Token | Web Push 訂閱 |
+| `/api/push/unsubscribe` | POST | 🆕 取消訂閱推播 | Bearer Token | 移除訂閱 |
+| `/api/announcements` | GET/POST | 🆕 公告管理 | 管理員 | 首頁公告 CRUD |
 
 ### 5.2. 重要 API 說明
 
@@ -381,6 +421,90 @@ ADD COLUMN flexible_courses JSONB DEFAULT '[]'::jsonb;
 
 **向後相容**：舊版前端（v4.x）仍可正常使用，只是看不到彈性課程功能
 
+### 🆕 推播通知系統（2025-12）
+
+**功能說明**：
+- Web Push 通知，支援 Chrome、Firefox、Safari
+- iOS Safari 推播完整支援（需 iOS 16.4+）
+- 管理員可透過後台發送通知給所有訂閱用戶
+
+**技術實作**：
+- 前端：`usePushNotification.js` Hook 處理訂閱邏輯
+- 後端：`push_service.py` 使用 pywebpush 發送通知
+- 認證：VAPID 金鑰對（公鑰/私鑰）
+
+**資料庫**：
+```sql
+-- Supabase 新增 push_subscriptions 表
+CREATE TABLE push_subscriptions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  endpoint TEXT NOT NULL,
+  keys JSONB NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**環境變數**：
+- `VAPID_PUBLIC_KEY`：公鑰（前後端共用）
+- `VAPID_PRIVATE_KEY`：私鑰（僅後端）
+- `VAPID_CLAIMS_EMAIL`：聯絡信箱
+
+### 🆕 管理中心（2025-12）
+
+**位置**：`frontend/src/components/Admin/`
+
+**功能模組**：
+- `AdminDashboard.jsx`：管理首頁，功能入口
+- `AdminAnnouncements.jsx`：首頁公告 CRUD 管理
+- `AdminNotifications.jsx`：推播通知發送與管理
+
+**權限控制**：
+- 管理員帳號由 Supabase `users` 表的 `is_admin` 欄位決定
+- 非管理員無法進入 `/admin` 路由
+
+### 🆕 多國語系（2025-12）
+
+**位置**：`frontend/src/i18n/`
+
+**支援語言**：
+- 繁體中文（`zh-TW.json`）- 預設
+- 英文（`en.json`）
+
+**使用方式**：
+```javascript
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { t } = useTranslation();
+  return <h1>{t('nav.dashboard')}</h1>;
+}
+```
+
+**新增翻譯步驟**：
+1. 在 `zh-TW.json` 新增中文鍵值
+2. 在 `en.json` 新增對應英文翻譯
+3. 在元件中使用 `t('key')` 取得翻譯
+
+### 🆕 PWA 支援（2025-12）
+
+**功能**：
+- 離線存取（Service Worker 快取）
+- 桌面/手機安裝為獨立 App
+- iOS Safe Area 完整支援
+
+**關鍵檔案**：
+- `frontend/public/manifest.json`：PWA 設定
+- `frontend/public/service-worker.js`：Service Worker
+- `frontend/src/components/PWAInstallPrompt.jsx`：安裝引導
+
+### 🆕 響應式導航（2025-12）
+
+**元件**：
+- `SideNav.jsx`：桌面版左側固定導航
+- `MobileHeader.jsx`：行動版頂部導航（含用戶選單）
+- `BottomNavBar.jsx`：行動版底部導航列
+
 ### v4.0.0 - Dashboard 首頁與深色模式（2025-08-03）
 
 **重大更新**：
@@ -530,9 +654,16 @@ const CoursePlanner = lazy(() => import('./components/1_CoursePlanner/CoursePlan
 
 - ✅ **智慧選課系統**（v1.0-v5.0）：課程規劃、彈性課程、課表管理
 - ✅ **畢業進度追蹤**（v2.2）：全校 100+ 系所必修課程追蹤
-- ✅ **校園資訊整合**（v1.0）：單位通訊錄、行事曆、更新日誌
+- ✅ **校園資訊整合**（v1.0）：行事曆、更新日誌、常用連結
 - ✅ **Dashboard 首頁**（v4.0.0）：儀表板設計與深色模式
 - ✅ **自動化監控**（2025）：Keep-Alive 機制確保服務穩定
+- ✅ **🆕 推播通知系統**（2025-12）：Web Push 通知、Safari 推播支援
+- ✅ **🆕 管理中心**（2025-12）：公告管理、通知推播管理
+- ✅ **🆕 多國語系**（2025-12）：繁體中文、英文介面
+- ✅ **🆕 PWA 支援**（2025-12）：離線使用、桌面安裝、安裝引導
+- ✅ **🆕 響應式導航**（2025-12）：桌面側邊導航、行動版頁首與底部導航
+- ✅ **🆕 體育館時間卡片**（2025-12）：游泳池、健身房、SPA 開放時間
+- ✅ **🆕 天氣小工具**（2025-12）：埔里地區即時天氣
 
 ---
 

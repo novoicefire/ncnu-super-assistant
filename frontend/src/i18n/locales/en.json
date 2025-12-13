@@ -323,6 +323,7 @@
     },
     "gymSchedule": {
         "title": "Gym Schedule",
+        "subtitle": "Facility opening hours",
         "pool": "Swimming Pool",
         "gym": "Fitness Center",
         "spa": "SPA",

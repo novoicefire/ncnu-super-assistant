@@ -5,16 +5,16 @@
 
 /* ========== 卡片容器 ========== */
 .gym-schedule-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border-radius: 20px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--theme-bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--theme-border-secondary);
+    box-shadow: var(--theme-shadow-sm);
+    overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .gym-schedule-card:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--theme-shadow-md, 0 8px 30px rgba(0, 0, 0, 0.12));
 }
 
 /* 冬季主題 */
@@ -24,31 +24,41 @@
 }
 
 /* 深色模式 */
-.dark-mode .gym-schedule-card {
-    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
-    border-color: rgba(255, 255, 255, 0.1);
+.dark-mode .gym-schedule-card,
+[data-theme="dark"] .gym-schedule-card {
+    background: var(--theme-bg-card);
+    border-color: var(--theme-border-secondary);
 }
 
-.dark-mode .gym-schedule-card.winter-theme {
+.dark-mode .gym-schedule-card.winter-theme,
+[data-theme="dark"] .gym-schedule-card.winter-theme {
     background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
 }
 
-/* ========== 卡片標題 ========== */
+/* ========== 卡片標題 - 與 QuickLinks 一致 ========== */
 .gym-schedule-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--theme-border-secondary);
+    background: var(--theme-bg-secondary);
 }
 
-.header-title {
+.gym-schedule-header .header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gym-schedule-header .header-title-row {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.header-icon {
-    font-size: 1.2rem;
+.gym-schedule-header .header-icon {
+    font-size: 1.1rem;
     color: var(--primary-color, #00796B);
 }
 
@@ -56,31 +66,35 @@
     margin: 0;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text-primary, #333);
+    color: var(--theme-text-primary, #333);
 }
 
-.dark-mode .gym-schedule-header h3 {
-    color: #fff;
+.gym-schedule-header .header-subtitle {
+    font-size: 0.75rem;
+    color: var(--theme-text-tertiary);
 }
 
-/* header 動作區 */
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.dark-mode .gym-schedule-header h3,
+[data-theme="dark"] .gym-schedule-header h3 {
+    color: var(--theme-text-primary, #fff);
 }
 
 /* 可收合內容區域 */
 .gym-schedule-content {
-    padding: 0;
+    padding: 20px;
     overflow: hidden;
     transition: all 0.4s ease;
 }
 
 .gym-schedule-content.collapsed {
     max-height: 0;
-    padding: 0;
+    padding: 0 20px;
     opacity: 0;
+}
+
+/* 收合狀態時隱藏 header 底線 */
+.gym-schedule-card:has(.gym-schedule-content.collapsed) .gym-schedule-header {
+    border-bottom: none;
 }
 
 /* 回到今日按鈕 - 正方形斜對角設計 */
@@ -129,24 +143,26 @@
     margin-bottom: 1.25rem;
 }
 
-/* 月份顯示 */
+/* 月份顯示 + 回到今日按鈕 */
 .month-display {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
 }
 
 .current-month {
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--text-primary, #333);
+    color: var(--theme-text-primary, #333);
     background: rgba(0, 121, 107, 0.08);
     padding: 6px 16px;
     border-radius: 20px;
 }
 
-.dark-mode .current-month {
-    color: #fff;
+.dark-mode .current-month,
+[data-theme="dark"] .current-month {
+    color: var(--theme-text-primary, #fff);
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -987,8 +1003,9 @@
 
 /* ========== 響應式設計 ========== */
 @media (max-width: 768px) {
+
+    /* 移除卡片額外 padding，與公告卡片、快速連結卡片保持一致 */
     .gym-schedule-card {
-        padding: 1.25rem 1rem;
         border-radius: 16px;
     }
 

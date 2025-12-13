@@ -3735,7 +3735,7 @@
 /* ===== 新增：AnnouncementCard 公告區樣式（滾輪滾動版） ===== */
 
 /* 🎨 公告卡片主容器 */
-.announcement-card {
+.announcement-card:not(.modern) {
   background: var(--theme-bg-card);
   border-radius: 16px;
   padding: 1rem;
@@ -3746,8 +3746,8 @@
   overflow: hidden;
 }
 
-/* 📋 公告卡片標題區域 */
-.announcement-header {
+/* 📋 公告卡片標題區域（舊版，非 modern） */
+.announcement-card:not(.modern) .announcement-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -3756,18 +3756,18 @@
   margin-bottom: 1.5rem;
 }
 
-.announcement-header .header-content {
+.announcement-card:not(.modern) .announcement-header .header-content {
   flex: 1;
 }
 
-.announcement-header .header-content h3 {
+.announcement-card:not(.modern) .announcement-header .header-content h3 {
   margin: 0 0 0.5rem 0;
   color: var(--theme-text-primary);
   font-size: 1.3rem;
   font-weight: 600;
 }
 
-.announcement-header .last-update {
+.announcement-card:not(.modern) .announcement-header .last-update {
   font-size: 0.8rem;
   color: var(--theme-text-secondary);
   font-weight: 400;
@@ -4149,11 +4149,11 @@
 
 /* 📱 手機版滾動適配 */
 @media (max-width: 768px) {
-  .announcement-card .collapse-toggle {
+  .announcement-card:not(.modern) .collapse-toggle {
     display: block;
   }
 
-  .announcement-header {
+  .announcement-card:not(.modern) .announcement-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -4204,7 +4204,7 @@
 }
 
 @media (max-width: 480px) {
-  .announcement-header {
+  .announcement-card:not(.modern) .announcement-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -4238,8 +4238,8 @@
   }
 }
 
-/* 🌙 深色模式滾動條適配 */
-[data-theme="dark"] .announcement-card {
+/* 🌙 深色模式滾動條適配（舉版，非 modern） */
+[data-theme="dark"] .announcement-card:not(.modern) {
   background: var(--theme-bg-card);
   border-radius: 16px;
   padding: 1.5rem;
@@ -4894,6 +4894,15 @@
   max-height: 0;
   padding: 0 20px;
   opacity: 0;
+}
+
+/* 收合狀態時隱藏 header 底線 */
+.quick-links-card:has(.quick-links-content.collapsed) .quick-links-header {
+  border-bottom: none;
+}
+
+.announcement-card.modern:has(.collapsible-content.collapsed) .announcement-header {
+  border-bottom: none;
 }
 
 /* 格子佈局 */

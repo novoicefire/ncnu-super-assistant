@@ -1,6 +1,6 @@
 # 🎓 暨大生超級助理 (NCNU Super Assistant)
 
-為國立暨南國際大學學生打造的全方位校園服務平台，提供智慧排課、畢業進度追蹤、校園資訊查詢等核心功能。
+為國立暨南國際大學學生打造的全方位校園服務平台，提供智慧排課、畢業進度追蹤、校園資訊查詢、推播通知等核心功能。
 
 ## ✨ 主要功能
 
@@ -19,28 +19,57 @@
 - **進度視覺化**：清楚顯示已修課程與剩餘必修
 - **獨立儲存**：各系所進度獨立管理，支援轉系需求
 
+### 🏋️ 體育館時間卡片
+
+- **即時開放狀態**：游泳池、健身房、SPA 開放時間一目瞭然
+- **橫向日曆選擇器**：可視化選擇日期查看時段
+- **實時進度條**：顯示當前時段剩餘時間
+- **冬季閉館提醒**：自動判斷特殊閉館日期
+
+### 🔔 推播通知系統
+
+- **即時通知**：接收校園重要公告與活動資訊
+- **Safari 推播支援**：完整支援 iOS Safari 推播通知
+- **訂閱管理**：可隨時開啟或關閉通知訂閱
+- **通知中心**：集中管理已讀/未讀通知
+
+### 🛡️ 管理中心
+
+- **公告管理 (AdminAnnouncements)**：新增、編輯、刪除首頁公告
+- **通知推播管理 (AdminNotifications)**：發送與管理推播通知
+- **管理儀表板 (AdminDashboard)**：集中式管理介面入口
+
 ### 📞 校園服務整合
 
-- **校園通訊錄**：完整的校園單位聯絡資訊
 - **暨大行事曆**：重要校園活動與考試日程
+- **常用連結**：Moodle、圖書館門禁系統 QRCode 等快速連結
 - **更新日誌**：系統功能更新與改進記錄
+
+### 🌤️ 天氣小工具
+
+- **即時天氣**：顯示埔里地區當前天氣狀況
+- **氣溫顯示**：當前溫度與體感溫度
+- **天氣圖標**：動態天氣圖標呈現
 
 ## 🛠️ 技術架構
 
 ### 前端技術
 
-- **框架**：React 19.1.0 + Vite 7.0.4
+- **框架**：React 19.2.3 + Vite 7.2.7
 - **路由**：React Router DOM 7.7.0
 - **狀態管理**：React Hooks + Context API
+- **國際化**：i18next + react-i18next（多國語系支援）
 - **UI 組件**：自定義組件系統
 - **樣式**：CSS3 + 響應式設計
 - **通知系統**：React Hot Toast 2.5.2
+- **PWA**：Service Worker + Web Push API
 
 ### 後端服務
 
 - **API 服務**：Flask + Python
 - **資料庫**：Supabase PostgreSQL
 - **身份驗證**：Google OAuth 2.0
+- **推播通知**：pywebpush + VAPID 認證
 - **資料同步**：RESTful API + Axios
 
 ### 部署與CI/CD
@@ -49,6 +78,35 @@
 - **後端部署**：Render (容器化服務)
 - **版本控制**：GitHub + Git Flow
 - **自動化**：GitHub Actions (測試與部署)
+
+## 📁 專案結構
+
+```
+ncnu-super-assistant/
+├── frontend/                    # React 前端應用
+│   ├── public/                  # 靜態資源（圖標、manifest）
+│   ├── src/
+│   │   ├── components/          # React 元件
+│   │   │   ├── 0_Dashboard/     # 首頁儀表板（公告、天氣、體育館時間）
+│   │   │   ├── 1_CoursePlanner/ # 智慧排課系統
+│   │   │   ├── 2_GraduationTracker/ # 畢業進度追蹤
+│   │   │   ├── 4_UniversityCalendar/ # 校園行事曆
+│   │   │   ├── 5_UpdateLog/     # 更新日誌
+│   │   │   └── Admin/           # 管理中心
+│   │   ├── contexts/            # React Context（主題、通知、認證）
+│   │   ├── hooks/               # 自定義 Hook
+│   │   ├── i18n/                # 多國語系翻譯檔案
+│   │   ├── services/            # API 服務
+│   │   └── styles/              # 全域樣式
+│   └── package.json
+├── backend/                     # Flask 後端 API
+│   ├── app.py                   # 主應用程式
+│   ├── notifications.py         # 通知服務
+│   ├── push_service.py          # 推播服務
+│   └── requirements.txt
+├── scripts/                     # 資料處理腳本
+└── README.md
+```
 
 ## 🚀 開發環境設置
 
@@ -84,14 +142,18 @@ npm run dev
 
 - **直接寫在了vercel跟render的環境變數設定中**
 
-- **Vercel**：
-- 1.VITE_GOOGLE_CLIENT_ID
-- 2.VITE_API_URL
+- **Vercel (Frontend)**：
+  - `VITE_GOOGLE_CLIENT_ID`：Google OAuth 客戶端 ID
+  - `VITE_API_URL`：後端 API 網址
+  - `VITE_VAPID_PUBLIC_KEY`：推播通知公鑰
 
-- **Render**：
-- 1.PYTHON_VERSION = 3.11.9
-- 2.SUPABASE_KEY
-- 3.SUPABASE_URL
+- **Render (Backend)**：
+  - `PYTHON_VERSION = 3.11.9`
+  - `SUPABASE_KEY`：Supabase 服務金鑰
+  - `SUPABASE_URL`：Supabase 專案網址
+  - `VAPID_PRIVATE_KEY`：推播通知私鑰
+  - `VAPID_PUBLIC_KEY`：推播通知公鑰
+  - `VAPID_CLAIMS_EMAIL`：VAPID 認證信箱
 
 ## 📈 版本管理
 
@@ -120,6 +182,12 @@ npm run dev
 - **非官方性質**：明確說明與學校官方的關係
 - **用戶同意機制**：確保使用者了解服務性質
 
+### 🌐 多國語系支援
+
+- **中文（繁體）**：預設語言
+- **英文**：完整英語介面翻譯
+- **語言切換**：即時切換，無需刷新頁面
+
 ### 🤖 智能化功能
 
 - **課程資料處理**：自動分類和標準化課程資訊
@@ -129,19 +197,26 @@ npm run dev
 ### 📱 跨平台支援
 
 - **響應式設計**：完美適配桌面、平板、手機
+- **響應式導航**：桌面版側邊導航、行動版頁首與底部導航列
+- **深色/淺色主題**：支援主題切換，自動跟隨系統設定
 - **PWA 功能**：支援離線使用和桌面安裝
+- **PWA 安裝引導**：智能引導用戶安裝應用程式
+- **iOS Safe Area 支援**：完整適配 iPhone 瀏海與 Home Indicator
 - **跨瀏覽器**：支援 Chrome、Firefox、Safari、Edge
+
+### 🔗 SEO 與社群分享
+
+- **Open Graph 標籤**：社群平台分享預覽優化
+- **Meta 描述**：完整的 SEO 元資料設定
 
 ## 🤝 貢獻指南
 
-歡迎提交 Issue 和 Pull Request！
+歡迎提交 Issue ！
 
 ### 開發分支策略
 
 - `main`：正式版本分支
 - `develop`：開發分支
-- `feature/*`：功能開發分支
-- `fix/*`：問題修復分支
 
 ### 提交規範
 

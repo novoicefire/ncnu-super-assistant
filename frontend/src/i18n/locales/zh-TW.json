@@ -323,6 +323,7 @@
     },
     "gymSchedule": {
         "title": "體育館開放時間",
+        "subtitle": "體育館各設施開放時間",
         "pool": "游泳池",
         "gym": "健身房",
         "spa": "SPA",
