@@ -1,0 +1,56 @@
+name: Update Gym Schedule
+
+# 體育館開放時間自動更新
+# 每週一台灣時間 08:00 (UTC 00:00) 執行
+# 更新 gymScheduleData.js 並自動 commit 回 repo
+
+on:
+  schedule:
+    # 每週一 UTC 00:00 (台灣時間週一 08:00)
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+    # 允許手動觸發
+
+jobs:
+  update-schedule:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 pdfplumber
+
+      - name: Run update script
+        run: |
+          cd scripts
+          python fetch_gym_schedule.py
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet frontend/src/components/0_Dashboard/gymScheduleData.js || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add frontend/src/components/0_Dashboard/gymScheduleData.js
+          git commit -m "chore: 自動更新體育館開放時間資料 [skip ci]"
+          git push
+
+      - name: Log completion
+        run: |
+          if [ "${{ steps.git-check.outputs.changes }}" == "true" ]; then
+            echo "✅ Gym schedule updated and committed at $(date)"
+          else
+            echo "ℹ️ No changes detected at $(date)"
+          fi
