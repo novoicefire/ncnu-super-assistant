@@ -20,9 +20,8 @@ import {
     faClock,
     faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
+import { robustRequest } from '../../apiHelper.js';
 import './DormMailCard.css';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 const DormMailCard = () => {
     const { t } = useTranslation();
@@ -40,18 +39,15 @@ const DormMailCard = () => {
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/departments`);
-                if (response.ok) {
-                    const data = await response.json();
-                    // API 回傳格式: {course_deptId: {item: [...]}} 或直接是陣列
-                    let deptList = [];
-                    if (data?.course_deptId?.item) {
-                        deptList = data.course_deptId.item;
-                    } else if (Array.isArray(data)) {
-                        deptList = data;
-                    }
-                    setDepartments(deptList);
+                const data = await robustRequest('get', '/api/departments');
+                // API 回傳格式: {course_deptId: {item: [...]}} 或直接是陣列
+                let deptList = [];
+                if (data?.course_deptId?.item) {
+                    deptList = data.course_deptId.item;
+                } else if (Array.isArray(data)) {
+                    deptList = data;
                 }
+                setDepartments(deptList);
             } catch (err) {
                 console.error('Failed to fetch departments:', err);
             }
@@ -66,15 +62,14 @@ const DormMailCard = () => {
         setHasSearched(true);
 
         try {
-            const params = new URLSearchParams();
+            const params = {};
             if (queryMode === 'department' && department) {
-                params.append('department', department);
+                params.department = department;
             } else if (queryMode === 'name' && name) {
-                params.append('name', name);
+                params.name = name;
             }
 
-            const response = await fetch(`${API_BASE_URL}/api/dorm-mail?${params}`);
-            const result = await response.json();
+            const result = await robustRequest('get', '/api/dorm-mail', { params });
 
             if (result.success) {
                 setMailList(result.data);
