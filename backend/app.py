@@ -245,6 +245,66 @@ def get_calendar():
     load_static_data_if_needed()
     return jsonify(CALENDAR_EVENTS)
 
+@app.route('/api/dorm-mail', methods=['GET'])
+def get_dorm_mail():
+    """
+    查詢宿舍包裹資訊
+    
+    Query Parameters:
+        - department: 系所名稱（選填），例如：應化系
+        - name: 收件人姓名格式（選填），例如：武Ｏ星
+        - 若兩者都未提供，則返回所有包裹資料
+    
+    Returns:
+        JSON: {
+            "success": true/false,
+            "data": [...],  # 包裹資料列表
+            "count": 數量,
+            "error": "錯誤訊息"  # 僅在失敗時
+        }
+    """
+    from dorm_mail import fetch_dorm_mail_data, filter_by_department, filter_by_name
+    
+    try:
+        # 取得查詢參數
+        department = request.args.get('department', '').strip()
+        name = request.args.get('name', '').strip()
+        
+        # 爬取包裹資料
+        mail_list = fetch_dorm_mail_data()
+        
+        if mail_list is None:
+            return jsonify({
+                "success": False,
+                "error": "無法連接到學校宿舍包裹系統，請稍後再試",
+                "data": [],
+                "count": 0
+            }), 503
+        
+        # 根據參數篩選資料
+        if department:
+            mail_list = filter_by_department(mail_list, department)
+        
+        if name:
+            mail_list = filter_by_name(mail_list, name)
+        
+        return jsonify({
+            "success": True,
+            "data": mail_list,
+            "count": len(mail_list)
+        })
+        
+    except Exception as e:
+        print(f"ERROR in get_dorm_mail: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "success": False,
+            "error": "查詢包裹時發生錯誤",
+            "data": [],
+            "count": 0
+        }), 500
+
 # --- 應用程式啟動區塊 ---
 with app.app_context():
     initialize_app()

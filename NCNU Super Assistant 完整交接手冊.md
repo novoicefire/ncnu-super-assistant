@@ -79,6 +79,7 @@ ncnu-super-assistant/
 │     └─ keepalive.yml            # 備用保活腳本
 ├─ backend/
 │  ├─ app.py                    # 後端 Flask API 主程式
+│  ├─ dorm_mail.py              # 🆕 宿舍包裹查詢服務
 │  ├─ notifications.py          # 通知服務 API
 │  ├─ push_service.py           # Web Push 推播服務
 │  └─ requirements.txt          # Python 套件依賴
@@ -99,6 +100,7 @@ ncnu-super-assistant/
 │  │  │  │  ├─ WelcomeBanner.jsx
 │  │  │  │  ├─ QuickLinks.jsx    # 常用連結
 │  │  │  │  ├─ GymScheduleCard.jsx # 體育館時間卡片
+│  │  │  │  ├─ DormMailCard.jsx   # 🆕 宿舍包裹查詢卡片
 │  │  │  │  ├─ WeatherWidget.jsx # 天氣小工具
 │  │  │  │  └─ AnnouncementCard.jsx # 公告卡片
 │  │  │  ├─ 1_CoursePlanner/     # 課程規劃
@@ -229,6 +231,7 @@ npm run dev
 | `/api/push/subscribe` | POST | 🆕 訂閱推播通知 | Bearer Token | Web Push 訂閱 |
 | `/api/push/unsubscribe` | POST | 🆕 取消訂閱推播 | Bearer Token | 移除訂閱 |
 | `/api/announcements` | GET/POST | 🆕 公告管理 | 管理員 | 首頁公告 CRUD |
+| `/api/dorm-mail` | GET | 🆕 宿舍包裹查詢 | 公開 | 支援 department 或 name 參數 |
 
 ### 5.2. 重要 API 說明
 
@@ -505,6 +508,27 @@ function MyComponent() {
 - `MobileHeader.jsx`：行動版頂部導航（含用戶選單）
 - `BottomNavBar.jsx`：行動版底部導航列
 
+### 🆕 宿舍包裹查詢（2025-12）
+
+**功能說明**：
+- 即時查詢學校宿舍未領取包裹
+- 支援依學系或依姓名兩種查詢方式
+- 根據學校「5 日未領退件」規定，顯示剩餘可領天數
+- 緊急程度以顏色標示（綠色：≥3天、黃色：2天、紅色：≤1天或逾期）
+
+**技術實作**：
+- 前端：`DormMailCard.jsx` + `DormMailCard.css`
+- 後端：`dorm_mail.py` 模組
+- 資料來源：爬取 `https://ccweb.ncnu.edu.tw/dormmail/Default.asp`
+
+**後端 API**：
+- `/api/dorm-mail?department=資工` - 依學系查詢
+- `/api/dorm-mail?name=武星星` - 依姓名查詢
+
+**注意事項**：
+- 網頁使用 Big5 編碼，程式已自動處理編碼轉換
+- 姓名查詢支援智慧匹配（如「武星星」會自動轉換為「武Ｏ星」進行比對）
+
 ### v4.0.0 - Dashboard 首頁與深色模式（2025-08-03）
 
 **重大更新**：
@@ -664,6 +688,7 @@ const CoursePlanner = lazy(() => import('./components/1_CoursePlanner/CoursePlan
 - ✅ **🆕 響應式導航**（2025-12）：桌面側邊導航、行動版頁首與底部導航
 - ✅ **🆕 體育館時間卡片**（2025-12）：游泳池、健身房、SPA 開放時間
 - ✅ **🆕 天氣小工具**（2025-12）：埔里地區即時天氣
+- ✅ **🆕 宿舍包裹查詢**（2025-12）：查詢未領包裹、剩餘天數提醒、緊急程度標示
 
 ---
 

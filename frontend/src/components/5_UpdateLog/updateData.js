@@ -15,6 +15,7 @@ export const updateHistory = [
       "📱 PWA 安裝引導（智能引導用戶安裝為獨立 App）",
       "🏋️ 體育館時間卡片（游泳池、健身房、SPA 開放時間）",
       "🌤️ 天氣小工具（埔里地區即時天氣）",
+      "📦 宿舍包裹查詢（即時查詢未領包裹、剩餘天數提醒、緊急程度標示）",
       "🔗 常用連結擴充（Moodle、圖書館門禁 QRCode）",
       "📱 iOS Safe Area 完整適配（支援 iPhone 瀏海與 Home Indicator）"
     ],
@@ -27,6 +28,7 @@ export const updateHistory = [
       "後端新增:",
       "push_service.py（Web Push 推播服務）",
       "notifications.py（通知 API）",
+      "dorm_mail.py（宿舍包裹查詢服務）",
       "VAPID 金鑰認證機制"
     ]
   },

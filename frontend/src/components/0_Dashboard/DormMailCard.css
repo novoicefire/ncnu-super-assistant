@@ -1,0 +1,581 @@
+/* DormMailCard.css - 宿舍包裹查詢卡片樣式 */
+
+/* ========== 卡片容器 ========== */
+.dorm-mail-card {
+    background: var(--theme-bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--theme-border-secondary);
+    box-shadow: var(--theme-shadow-sm);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.dorm-mail-card:hover {
+    box-shadow: var(--theme-shadow-md, 0 8px 30px rgba(0, 0, 0, 0.12));
+}
+
+/* 深色模式 */
+.dark-mode .dorm-mail-card,
+[data-theme="dark"] .dorm-mail-card {
+    background: var(--theme-bg-card);
+    border-color: var(--theme-border-secondary);
+}
+
+/* ========== 卡片標題 - 與 GymScheduleCard/QuickLinks 一致 ========== */
+.dorm-mail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--theme-border-secondary);
+    background: var(--theme-bg-secondary);
+}
+
+.dorm-mail-header .header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dorm-mail-header .header-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dorm-mail-header .header-icon {
+    font-size: 1.1rem;
+    color: var(--primary-color, #6366f1);
+}
+
+.dorm-mail-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--theme-text-primary, #333);
+}
+
+.dorm-mail-header .header-subtitle {
+    font-size: 0.75rem;
+    color: var(--theme-text-tertiary);
+}
+
+.dark-mode .dorm-mail-header h3,
+[data-theme="dark"] .dorm-mail-header h3 {
+    color: var(--theme-text-primary, #fff);
+}
+
+/* 收合按鈕 - 與 QuickLinks .collapse-toggle.modern 一致 */
+.dorm-mail-header .collapse-toggle {
+    background: var(--theme-bg-tertiary);
+    border: none;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--theme-text-secondary);
+    transition: all 0.2s ease;
+}
+
+.dorm-mail-header .collapse-toggle:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* ========== 可收合內容區域 ========== */
+.dorm-mail-content {
+    padding: 20px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.dorm-mail-content.collapsed {
+    max-height: 0;
+    padding: 0 20px;
+    opacity: 0;
+}
+
+/* 收合狀態時隱藏 header 底線 */
+.dorm-mail-card:has(.dorm-mail-content.collapsed) .dorm-mail-header {
+    border-bottom: none;
+}
+
+/* ========== 查詢模式切換 ========== */
+.query-mode-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    background: var(--theme-bg-tertiary, rgba(0, 0, 0, 0.05));
+    padding: 0.25rem;
+    border-radius: 10px;
+}
+
+.mode-tab {
+    flex: 1;
+    padding: 0.625rem 1rem;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--theme-text-secondary, #666);
+    transition: all 0.2s;
+}
+
+.mode-tab:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .mode-tab:hover,
+[data-theme="dark"] .mode-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.mode-tab.active {
+    background: var(--theme-bg-card, white);
+    color: var(--primary-color, #00796B);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.dark-mode .mode-tab.active,
+[data-theme="dark"] .mode-tab.active {
+    background: var(--theme-bg-secondary, #2a2a2a);
+    color: var(--primary-color, #4fd1c5);
+}
+
+/* ========== 查詢輸入區 ========== */
+.query-input-section {
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--theme-text-primary, #333);
+    margin-bottom: 0.5rem;
+}
+
+.dark-mode .input-group label,
+[data-theme="dark"] .input-group label {
+    color: var(--theme-text-primary, #fff);
+}
+
+.department-select,
+.name-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--theme-border-secondary, #ddd);
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    background: var(--theme-bg-primary, white);
+    color: var(--theme-text-primary, #333);
+    transition: all 0.2s;
+}
+
+.dark-mode .department-select,
+.dark-mode .name-input,
+[data-theme="dark"] .department-select,
+[data-theme="dark"] .name-input {
+    background: var(--theme-bg-tertiary, #2a2a2a);
+    color: var(--theme-text-primary, #fff);
+    border-color: var(--theme-border-secondary, #444);
+}
+
+.department-select:focus,
+.name-input:focus {
+    outline: none;
+    border-color: var(--primary-color, #00796B);
+    box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.15);
+}
+
+.input-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: var(--theme-text-tertiary, #888);
+    margin-top: 0.5rem;
+}
+
+.input-hint svg {
+    color: #f59e0b;
+}
+
+/* ========== 搜尋按鈕 ========== */
+.search-btn {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    background: linear-gradient(135deg, #00796B, #009688);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.search-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #009688, #26a69a);
+    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+}
+
+.search-btn:disabled {
+
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* === 錯誤訊息 === */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+/* === 查詢結果 === */
+.mail-results {
+    margin-top: 1.5rem;
+}
+
+.results-header {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+}
+
+.no-results svg {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.no-results p {
+    margin: 0;
+    font-size: 0.9375rem;
+}
+
+.mail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ========== 包裹項目 ========== */
+.mail-item {
+    background: var(--theme-bg-secondary, #f9fafb);
+    border: 1px solid var(--theme-border-secondary, #e5e7eb);
+    border-left: 4px solid var(--primary-color, #00796B);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.dark-mode .mail-item,
+[data-theme="dark"] .mail-item {
+    background: var(--theme-bg-tertiary, #2a2a2a);
+    border-color: var(--theme-border-secondary, #444);
+    border-left-color: var(--primary-color, #4fd1c5);
+}
+
+.mail-item:hover {
+    border-left-color: #009688;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateX(4px);
+}
+
+.mail-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.875rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--theme-border-secondary, #e5e7eb);
+}
+
+.dark-mode .mail-item-header,
+[data-theme="dark"] .mail-item-header {
+    border-bottom-color: var(--theme-border-secondary, #444);
+}
+
+.mail-id {
+    font-weight: 600;
+    color: var(--theme-text-primary, #333);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.9rem;
+}
+
+.dark-mode .mail-id,
+[data-theme="dark"] .mail-id {
+    color: var(--theme-text-primary, #fff);
+}
+
+/* ========== 標籤容器 ========== */
+.mail-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ========== 剩餘天數標籤 ========== */
+.remaining-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* 綠色 - 安全 (≥3 天) */
+.remaining-badge.safe {
+    background: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+}
+
+/* 黃色 - 警告 (2 天) */
+.remaining-badge.warning {
+    background: rgba(251, 191, 36, 0.2);
+    color: #d97706;
+}
+
+/* 紅色 - 危險 (≤1 天) */
+.remaining-badge.danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #dc2626;
+    animation: pulse-urgent 1.5s ease-in-out infinite;
+}
+
+/* 紅色 - 已逾期 */
+.remaining-badge.expired {
+    background: rgba(239, 68, 68, 0.2);
+    color: #b91c1c;
+    animation: pulse-urgent 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-urgent {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* 深色模式剩餘天數標籤 */
+.dark-mode .remaining-badge.safe,
+[data-theme="dark"] .remaining-badge.safe {
+    background: rgba(34, 197, 94, 0.25);
+    color: #4ade80;
+}
+
+.dark-mode .remaining-badge.warning,
+[data-theme="dark"] .remaining-badge.warning {
+    background: rgba(251, 191, 36, 0.25);
+    color: #fbbf24;
+}
+
+.dark-mode .remaining-badge.danger,
+.dark-mode .remaining-badge.expired,
+[data-theme="dark"] .remaining-badge.danger,
+[data-theme="dark"] .remaining-badge.expired {
+    background: rgba(239, 68, 68, 0.25);
+    color: #f87171;
+}
+
+/* ========== 包裹類型標籤 ========== */
+.mail-type {
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.mail-type.package {
+    background: rgba(0, 121, 107, 0.15);
+    color: #00796B;
+}
+
+.mail-type.registered {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+}
+
+/* 深色模式標籤樣式 */
+.dark-mode .mail-type.package,
+[data-theme="dark"] .mail-type.package {
+    background: rgba(79, 209, 197, 0.2);
+    color: #4fd1c5;
+}
+
+.dark-mode .mail-type.registered,
+[data-theme="dark"] .mail-type.registered {
+    background: rgba(52, 211, 153, 0.2);
+    color: #34d399;
+}
+
+.mail-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.detail-icon {
+    width: 1rem;
+    color: var(--theme-text-tertiary, #888);
+}
+
+.detail-label {
+    color: var(--theme-text-secondary, #666);
+    min-width: 5rem;
+}
+
+.dark-mode .detail-label,
+[data-theme="dark"] .detail-label {
+    color: var(--theme-text-secondary, #aaa);
+}
+
+.detail-value {
+    color: var(--theme-text-primary, #333);
+    font-weight: 500;
+}
+
+.dark-mode .detail-value,
+[data-theme="dark"] .detail-value {
+    color: var(--theme-text-primary, #fff);
+}
+
+.tracking-number {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8125rem;
+}
+
+/* === 資料來源 === */
+.dorm-mail-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.source-link {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.source-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* ========== RWD 響應式設計 ========== */
+@media (max-width: 768px) {
+
+    /* 內容區 */
+    .dorm-mail-content {
+        padding: 16px;
+    }
+
+    .dorm-mail-content.collapsed {
+        padding: 0 16px;
+    }
+
+    /* 查詢表單 */
+    .mode-tab {
+        font-size: 0.8125rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    /* 包裹項目 - 緊湊版 */
+    .mail-item {
+        padding: 12px;
+    }
+
+    .mail-item-header {
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+    }
+
+    .mail-id {
+        font-size: 0.8rem;
+    }
+
+    .mail-type {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+    }
+
+    /* 結果明細 - 網格佈局更緊湊 */
+    .mail-item-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px 12px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        font-size: 0.75rem;
+    }
+
+    .detail-icon {
+        display: none;
+    }
+
+    .detail-label {
+        font-size: 0.65rem;
+        min-width: auto;
+        opacity: 0.7;
+    }
+
+    .detail-value {
+        font-size: 0.8rem;
+        margin-left: 0;
+    }
+}

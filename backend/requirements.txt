@@ -6,3 +6,5 @@ pywebpush
 gunicorn
 python-dotenv
 supabase>=2.0,<3.0  # 使用官方新的 supabase-py 套件
+beautifulsoup4  # 用於解析宿舍包裹系統 HTML
+lxml  # BeautifulSoup 的解析器

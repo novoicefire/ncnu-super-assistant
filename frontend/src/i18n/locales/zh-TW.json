@@ -343,6 +343,36 @@
         "holidayClosed": "國定假日休館",
         "winterClosed": "冬季休館期間",
         "winterClosureNotice": "游泳池冬季休館中 (12/28 ~ 3/16)",
-        "dataSource": "資料來源：體育組網站"
+        "dataSource": "資料來源:體育組網站"
+    },
+    "dormMail": {
+        "title": "宿舍包裹查詢",
+        "subtitle": "查詢未領取的宿舍包裹",
+        "queryByDept": "依學系查詢",
+        "queryByName": "依姓名查詢",
+        "selectDepartment": "選擇學系",
+        "selectDepartmentPlaceholder": "請選擇系所...",
+        "enterName": "輸入姓名",
+        "namePlaceholder": "例如：武星星",
+        "nameFormatHint": "請以繁體中文輸入，名字中間會以「Ｏ」顯示以保護隱私",
+        "search": "查詢",
+        "searching": "查詢中...",
+        "noResults": "沒有找到符合的包裹",
+        "foundCount": "找到 {{count}} 筆包裹",
+        "mailNumber": "包裹編號",
+        "arrivalTime": "到達時間",
+        "recipient": "收件人",
+        "carrier": "物流公司",
+        "type": "類型",
+        "trackingNumber": "追蹤號碼",
+        "department": "系所班級",
+        "typePackage": "包裹",
+        "typeRegistered": "掛號",
+        "dataSource": "資料來源：學校宿舍包裹系統",
+        "queryFailed": "查詢失敗，請稍後再試",
+        "networkError": "網路連線錯誤，請檢查您的網路",
+        "daysRemaining": "剩餘 {{days}} 天",
+        "lastDay": "最後一天！",
+        "expired": "已逾期"
     }
 }

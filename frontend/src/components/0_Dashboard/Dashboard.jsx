@@ -1,9 +1,9 @@
-// frontend/src/components/0_Dashboard/Dashboard.jsx (新增體育館開放時間卡片)
 import React from 'react';
 import WelcomeBanner from './WelcomeBanner.jsx';
 import QuickLinks from './QuickLinks.jsx';
 import AnnouncementCard from './AnnouncementCard.jsx';
 import GymScheduleCard from './GymScheduleCard.jsx';
+import DormMailCard from './DormMailCard.jsx';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -19,6 +19,7 @@ const Dashboard = () => {
         </div>
         <div className="dashboard-content">
           <GymScheduleCard />
+          <DormMailCard />
           <QuickLinks />
         </div>
       </div>
