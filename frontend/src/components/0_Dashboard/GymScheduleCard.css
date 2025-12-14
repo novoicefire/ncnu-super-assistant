@@ -162,8 +162,9 @@
 
 .dark-mode .current-month,
 [data-theme="dark"] .current-month {
-    color: var(--theme-text-primary, #fff);
-    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    background: rgba(0, 150, 136, 0.3);
+    border: 1px solid rgba(0, 150, 136, 0.4);
 }
 
 /* 日期導航列 */
@@ -195,9 +196,11 @@
     transform: scale(1.05);
 }
 
-.dark-mode .date-nav-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #aaa;
+.dark-mode .date-nav-btn,
+[data-theme="dark"] .date-nav-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ddd;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .date-nav-btn.disabled,
@@ -263,7 +266,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px 12px;
+    padding: 8px 12px 16px 12px;
     min-width: 50px;
     border: none;
     border-radius: 12px;
@@ -284,7 +287,10 @@
     background: var(--primary-color, #00796B);
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+    box-shadow:
+        0 2px 4px rgba(0, 121, 107, 0.15),
+        0 4px 8px rgba(0, 121, 107, 0.12),
+        0 8px 16px rgba(0, 121, 107, 0.1);
 }
 
 .date-item.today:not(.selected) {
@@ -305,8 +311,8 @@
 
 .today-indicator {
     position: absolute;
-    bottom: 2px;
-    font-size: 0.5rem;
+    bottom: 3px;
+    font-size: 0.55rem;
     color: var(--primary-color, #00796B);
     font-weight: 600;
     white-space: nowrap;
@@ -316,14 +322,28 @@
     color: white;
 }
 
-.dark-mode .date-item {
-    background: rgba(255, 255, 255, 0.05);
-    color: #ccc;
+.dark-mode .date-item,
+[data-theme="dark"] .date-item {
+    background: rgba(255, 255, 255, 0.1);
+    color: #eee;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.dark-mode .date-item.selected {
-    background: var(--primary-color, #00796B);
+.dark-mode .date-item:hover,
+[data-theme="dark"] .date-item:hover {
+    background: rgba(0, 150, 136, 0.25);
+    border-color: rgba(0, 150, 136, 0.4);
+}
+
+.dark-mode .date-item.selected,
+[data-theme="dark"] .date-item.selected {
+    background: linear-gradient(135deg, #00897B 0%, #00796B 100%);
     color: white;
+    border-color: rgba(0, 150, 136, 0.6);
+    box-shadow:
+        0 2px 6px rgba(0, 150, 136, 0.2),
+        0 4px 12px rgba(0, 150, 136, 0.15),
+        0 0 20px rgba(0, 150, 136, 0.1);
 }
 
 /* ========== 冬季休館提示 ========== */
@@ -457,8 +477,10 @@
     color: var(--text-primary, #333);
 }
 
-.dark-mode .compact-name {
+.dark-mode .compact-name,
+[data-theme="dark"] .compact-name {
     color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .compact-time {
@@ -467,8 +489,9 @@
     font-weight: 500;
 }
 
-.dark-mode .compact-time {
-    color: #aaa;
+.dark-mode .compact-time,
+[data-theme="dark"] .compact-time {
+    color: #ccc;
 }
 
 .compact-remaining {
@@ -497,9 +520,11 @@
     margin-top: 2px;
 }
 
-.dark-mode .facility-card-compact {
-    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
-    border-color: rgba(255, 255, 255, 0.08);
+.dark-mode .facility-card-compact,
+[data-theme="dark"] .facility-card-compact {
+    background: linear-gradient(135deg, #3a3a3a 0%, #444 100%);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* 精簡卡片動畫狀態 */
@@ -1019,7 +1044,7 @@
     }
 
     .date-item {
-        padding: 6px 10px;
+        padding: 6px 10px 14px 10px;
         min-width: 42px;
     }
 
@@ -1047,7 +1072,7 @@
 
 @media (max-width: 480px) {
     .date-item {
-        padding: 5px 8px;
+        padding: 5px 8px 12px 8px;
         min-width: 38px;
     }
 
