@@ -1,6 +1,10 @@
 /**
  * PWAInstallPrompt.css - PWA 安裝提示樣式
- * 強制覆蓋整個畫面，無法關閉
+ * 
+ * 三種提示類型：
+ * 1. iOS Safari 安裝引導
+ * 2. Android Chrome 安裝引導
+ * 3. 應用內瀏覽器開啟提示
  */
 
 /* 全螢幕覆蓋層 */
@@ -65,7 +69,17 @@
 .pwa-install-icon img {
     width: 38px;
     height: 38px;
-    /* 移除 filter，顯示原始 logo */
+}
+
+.pwa-install-icon svg {
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+/* 警告圖示樣式（用於應用內瀏覽器提示） */
+.pwa-install-icon.warning-icon {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
 }
 
 .pwa-install-header h2 {
@@ -107,6 +121,42 @@
 
 .pwa-feature svg {
     font-size: 0.95rem;
+}
+
+/* 安裝按鈕區（用於 Android Chrome 有 beforeinstallprompt 時） */
+.pwa-install-action {
+    margin-bottom: 16px;
+}
+
+.install-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #00796B, #26A69A);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 121, 107, 0.4);
+}
+
+.install-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 121, 107, 0.5);
+}
+
+.install-btn:active {
+    transform: translateY(0);
+}
+
+.install-btn svg {
+    font-size: 1.1rem;
 }
 
 /* 安裝步驟 */
@@ -188,6 +238,11 @@
     /* iOS 藍色 */
 }
 
+.step-icon-demo .menu-icon {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
 .step-icon-demo .arrow-icon {
     font-size: 1rem;
 }
@@ -201,6 +256,37 @@
 
 .step-icon-demo.add-home svg {
     color: #007AFF;
+}
+
+/* 複製連結按鈕 */
+.copy-link-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(0, 121, 107, 0.2);
+    border: 1px solid rgba(0, 121, 107, 0.4);
+    border-radius: 8px;
+    color: #26A69A;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+}
+
+.copy-link-btn:hover {
+    background: rgba(0, 121, 107, 0.3);
+}
+
+.copy-link-btn.copied {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #22c55e;
+}
+
+.copy-link-btn svg {
+    font-size: 1rem;
 }
 
 /* 彈跳動畫 */
@@ -275,5 +361,22 @@
 
     .pwa-step {
         padding: 12px;
+    }
+}
+
+/* 小螢幕優化 */
+@media (max-width: 360px) {
+    .pwa-install-modal {
+        padding: 20px 16px;
+    }
+
+    .pwa-features {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .pwa-install-header h2 {
+        font-size: 1.1rem;
     }
 }
