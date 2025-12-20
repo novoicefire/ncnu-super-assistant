@@ -239,11 +239,20 @@ def send_push_notification():
             except WebPushException as e:
                 print(f"Push failed for {sub['endpoint']}: {e}")
                 failed_count += 1
-                # 如果訂閱過期，刪除它
+                # ========================================
+                # 🗑️ 自動清理失效訂閱
+                # ----------------------------------------
+                # 當推播失敗時，檢查錯誤碼：
+                # - 404: 訂閱端點不存在（用戶可能清除了瀏覽器資料）
+                # - 410: 訂閱已過期（Gone）
+                # 這兩種情況表示訂閱已失效，自動從資料庫刪除
+                # ========================================
                 if e.response and e.response.status_code in [404, 410]:
+                    print(f"  → 訂閱已失效 (HTTP {e.response.status_code})，正在刪除...")
                     supabase.table('push_subscriptions').delete().eq(
                         'endpoint', sub['endpoint']
                     ).execute()
+                    print(f"  → 已刪除失效訂閱: {sub['endpoint'][:50]}...")
         
         return jsonify({
             "success": True,
