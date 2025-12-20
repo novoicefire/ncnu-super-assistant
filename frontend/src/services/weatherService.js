@@ -41,8 +41,33 @@ const WMO_CODES = {
  * 獲取暨大當前天氣
  * @returns {Promise<Object>} 天氣資料
  */
+const CACHE_KEY = 'ncnu_weather_cache';
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes from TODO list
+
+/**
+ * 獲取暨大當前天氣
+ * @returns {Promise<Object>} 天氣資料
+ */
 export const fetchWeather = async () => {
     try {
+        // 1. 檢查快取
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            const { data, timestamp } = JSON.parse(cached);
+            const isCacheValid = (Date.now() - timestamp) < CACHE_DURATION;
+
+            if (isCacheValid) {
+                // 回傳快取資料，但更新 isDay 狀態（因為可能過了很久變成晚上）
+                return {
+                    ...data,
+                    isDay: isCurrentlyDay(),
+                    lastUpdated: new Date(timestamp), // 這裡保留原始更新時間，或者也可以更新為現在
+                    fromCache: true
+                };
+            }
+        }
+
+        // 2. 呼叫 API
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${NCNU_LATITUDE}&longitude=${NCNU_LONGITUDE}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,uv_index&timezone=Asia%2FTaipei`;
 
         const response = await fetch(url);
@@ -57,7 +82,7 @@ export const fetchWeather = async () => {
         const weatherCode = current.weather_code;
         const weatherInfo = WMO_CODES[weatherCode] || WMO_CODES[0];
 
-        return {
+        const weatherData = {
             temperature: Math.round(current.temperature_2m),
             feelsLike: Math.round(current.apparent_temperature),
             humidity: current.relative_humidity_2m,
@@ -70,8 +95,32 @@ export const fetchWeather = async () => {
             lastUpdated: new Date(),
             success: true
         };
+
+        // 3. 寫入快取
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                data: weatherData,
+                timestamp: Date.now()
+            }));
+        } catch (e) {
+            console.warn('Failed to save weather cache:', e);
+        }
+
+        return weatherData;
     } catch (error) {
         console.error('Failed to fetch weather:', error);
+        // 如果 API 失敗，嘗試回傳過期快取
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            const { data } = JSON.parse(cached);
+            return {
+                ...data,
+                descKey: data.descKey + ' (Offline)', // 標記為離線數據
+                success: true,
+                isDay: isCurrentlyDay()
+            };
+        }
+
         // 返回備用天氣資料
         return {
             temperature: 22,

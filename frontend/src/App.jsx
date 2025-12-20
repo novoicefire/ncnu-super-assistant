@@ -92,7 +92,7 @@ function App() {
               return Promise.resolve();
             }
           })(),
-          new Promise(resolve => setTimeout(resolve, 800))
+
         ]);
         setIsAppReady(true);
       } catch (error) {

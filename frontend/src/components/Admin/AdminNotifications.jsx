@@ -97,9 +97,18 @@ const AdminNotifications = () => {
 
             // 2. 如果勾選發送推播
             if (formData.sendPush) {
+                // 取得 Google ID Token 用於驗證管理員身分
+                const credential = user?.credential;
+                if (!credential) {
+                    console.warn('無法取得 Google credential，推播發送可能失敗');
+                }
+
                 const pushResponse = await fetch(`${API_BASE}/api/push/send`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(credential && { 'Authorization': `Bearer ${credential}` })
+                    },
                     body: JSON.stringify({
                         title: formData.title,
                         message: formData.message,
@@ -108,7 +117,8 @@ const AdminNotifications = () => {
                 });
 
                 if (!pushResponse.ok) {
-                    console.warn('推播發送失敗，但網站通知已建立');
+                    const errorData = await pushResponse.json().catch(() => ({}));
+                    console.warn('推播發送失敗:', errorData.error || '未知錯誤');
                 }
             }
 

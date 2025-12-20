@@ -7,7 +7,7 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 from collections import Counter
 import requests
-import icalendar
+
 from datetime import datetime
 import threading
 
@@ -41,9 +41,7 @@ CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
 
 # --- 全域變數宣告 ---
 supabase: Client = None
-STATIC_DATA = {}
-CALENDAR_EVENTS = []
-data_loaded = threading.Event()
+
 
 def initialize_app():
     """在應用程式上下文中，初始化所有服務"""
@@ -63,48 +61,7 @@ def initialize_app():
         init_announcements(supabase)
         print("Notification, Push, and Announcements services initialized.")
 
-def load_static_data_if_needed():
-    """懶加載：檢查資料是否已載入，如果沒有，則執行載入"""
-    if not data_loaded.is_set():
-        print("Static data not loaded yet. Loading now...")
-        global STATIC_DATA, CALENDAR_EVENTS
-        api_urls = {
-            'unitId_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=unitId_ncnu',
-            'contact_ncnu': 'https://api.ncnu.edu.tw/API/get.aspx?json=contact_ncnu',
-            'course_deptId': 'https://api.ncnu.edu.tw/API/get.aspx?json=course_deptId'
-        }
-        for key, data_url in api_urls.items():
-            try:
-                response = requests.get(data_url, timeout=15)
-                response.raise_for_status()
-                content = response.json()
-                data_key = list(content.keys())[0]
-                STATIC_DATA[key] = content[data_key].get('item', [])
-            except Exception as e:
-                print(f"Warning: Failed to fetch static data for '{key}'. Error: {e}")
-                STATIC_DATA[key] = []
-        try:
-            ics_url = "https://www.google.com/calendar/ical/curricul%40mail.ncnu.edu.tw/public/basic.ics"
-            response = requests.get(ics_url, timeout=15)
-            response.raise_for_status()
-            calendar = icalendar.Calendar.from_ical(response.content)
-            temp_events = []
-            CALENDAR_EVENTS.clear()
-            for component in calendar.walk():
-                if component.name == "VEVENT":
-                    dtstart, dtend = component.get('dtstart'), component.get('dtend')
-                    if dtstart and dtend:
-                        temp_events.append({
-                            "summary": str(component.get('summary')),
-                            "start": dtstart.dt.isoformat() if hasattr(dtstart.dt, 'isoformat') else str(dtstart.dt),
-                            "end": dtend.dt.isoformat() if hasattr(dtend.dt, 'isoformat') else str(dtend.dt)
-                        })
-            CALENDAR_EVENTS.extend(sorted(temp_events, key=lambda x: x['start']))
-        except Exception as e:
-            print(f"Warning: Failed to fetch calendar. Error: {e}")
-        
-        data_loaded.set()
-        print("Static data loading finished.")
+
 
 # --- API 端點 ---
 @app.route("/")
@@ -224,26 +181,11 @@ def get_course_hotness():
         print(f"ERROR in get_course_hotness: {e}")
         return jsonify({"error": "An error occurred while calculating course hotness."}), 500
 
-@app.route('/api/departments')
-def get_departments():
-    load_static_data_if_needed()
-    return jsonify(STATIC_DATA.get('course_deptId', []))
 
-@app.route('/api/contacts')
-def get_contacts():
-    load_static_data_if_needed()
-    contacts = STATIC_DATA.get('contact_ncnu', [])
-    unit_info = STATIC_DATA.get('unitId_ncnu', [])
-    if contacts and unit_info:
-        for contact in contacts:
-            matching_unit = next((unit for unit in unit_info if unit['中文名稱'] == contact['title']), None)
-            if matching_unit: contact['web'] = matching_unit.get('網站網址', contact.get('web'))
-    return jsonify(contacts)
 
-@app.route('/api/calendar')
-def get_calendar():
-    load_static_data_if_needed()
-    return jsonify(CALENDAR_EVENTS)
+
+
+
 
 @app.route('/api/dorm-mail', methods=['GET'])
 def get_dorm_mail():
@@ -309,25 +251,7 @@ def get_dorm_mail():
 with app.app_context():
     initialize_app()
 
-@app.route('/api/events/today')
-def get_today_events():
-    """
-    篩選並回傳今天的行事曆活動。
-    """
-    from datetime import datetime
-    load_static_data_if_needed()
-    
-    today_str = datetime.now().strftime('%Y-%m-%d')
-    today_events = []
 
-    for event in CALENDAR_EVENTS:
-        # 確保 event['start'] 是字串且至少有10個字元 (YYYY-MM-DD)
-        if isinstance(event.get('start'), str) and len(event['start']) >= 10:
-            event_date_str = event['start'][:10]
-            if event_date_str == today_str:
-                today_events.append(event)
-    
-    return jsonify(today_events)
 
 # --- Flask 應用程式啟動 ---
 if __name__ == '__main__':

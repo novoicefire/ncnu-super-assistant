@@ -39,17 +39,21 @@ const DormMailCard = () => {
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const data = await robustRequest('get', '/api/departments');
-                // API 回傳格式: {course_deptId: {item: [...]}} 或直接是陣列
+                // 改為讀取靜態 JSON 檔案 (由 GitHub Actions 每日更新)
+                const response = await fetch('/data/departments.json');
+                const data = await response.json();
+
+                // 兼容性處理：直接是陣列或舊格式
                 let deptList = [];
-                if (data?.course_deptId?.item) {
-                    deptList = data.course_deptId.item;
-                } else if (Array.isArray(data)) {
+                if (Array.isArray(data)) {
                     deptList = data;
+                } else if (data?.course_deptId?.item) {
+                    deptList = data.course_deptId.item;
                 }
                 setDepartments(deptList);
             } catch (err) {
                 console.error('Failed to fetch departments:', err);
+                // 靜態檔案載入失敗不需 retry，因為通常是 404
             }
         };
         fetchDepartments();
@@ -62,21 +66,57 @@ const DormMailCard = () => {
         setHasSearched(true);
 
         try {
-            const params = {};
-            if (queryMode === 'department' && department) {
-                params.department = department;
-            } else if (queryMode === 'name' && name) {
-                params.name = name;
-            }
+            const workerUrl = import.meta.env.VITE_DORM_MAIL_WORKER_URL;
+            let resultData = [];
 
-            const result = await robustRequest('get', '/api/dorm-mail', { params });
+            if (workerUrl) {
+                // 使用 Cloudflare Worker (回傳全部資料，需前端篩選)
+                console.log('Fetching from Worker:', workerUrl);
+                const response = await fetch(workerUrl);
+                if (!response.ok) throw new Error('Worker response was not ok');
 
-            if (result.success) {
-                setMailList(result.data);
+                const json = await response.json();
+                if (json.success) {
+                    const allMails = json.data;
+                    // 前端篩選邏輯
+                    if (queryMode === 'department' && department) {
+                        resultData = allMails.filter(item => item.department.includes(department));
+                    } else if (queryMode === 'name' && name) {
+                        // 簡單姓名比對 (需與後端邏輯一致，或簡化)
+                        resultData = allMails.filter(item => {
+                            // 支援完整匹配或名字部分匹配
+                            // 這裡簡化為：只要包含輸入的字串就算 (比後端寬鬆一點，但夠用)
+                            // 移除 'Ｏ' 或 'O' 後進行比對
+                            const cleanName = name.replace(/[ＯO]/g, '');
+                            const cleanRecipient = item.recipient.replace(/[ＯO]/g, '');
+                            if (cleanName.length < 1) return false;
+                            return cleanRecipient.includes(cleanName);
+                        });
+                    }
+                } else {
+                    throw new Error(json.error || 'Worker returned error');
+                }
             } else {
-                setError(result.error || t('dormMail.queryFailed'));
-                setMailList([]);
+                // 使用後端 API (後端負責篩選)
+                const params = {};
+                if (queryMode === 'department' && department) {
+                    params.department = department;
+                } else if (queryMode === 'name' && name) {
+                    params.name = name;
+                }
+                const result = await robustRequest('get', '/api/dorm-mail', { params });
+
+                if (result.success) {
+                    resultData = result.data;
+                } else {
+                    setError(result.error || t('dormMail.queryFailed'));
+                    setMailList([]);
+                    return;
+                }
             }
+
+            setMailList(resultData);
+
         } catch (err) {
             console.error('Failed to fetch dorm mail:', err);
             setError(t('dormMail.networkError'));

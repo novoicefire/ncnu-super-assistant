@@ -1,0 +1,11 @@
+name = "ncnu-dorm-mail-proxy"
+main = "dorm-mail-worker.js"
+compatibility_date = "2023-10-30"
+
+[triggers]
+crons = []
+
+# Optional: Add KV namespace binding if needed in future
+# [[kv_namespaces]]
+# binding = "CACHE_KV"
+# id = "..."

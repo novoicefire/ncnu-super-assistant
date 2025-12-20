@@ -1,0 +1,50 @@
+name: Update Calendar Data
+
+on:
+  schedule:
+    # 每天 18:00 UTC (台灣時間 02:00) 執行
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-calendar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: pip install requests icalendar
+        
+      - name: Fetch and parse calendar
+        run: python scripts/fetch_calendar.py
+        
+      - name: Commit and push changes (Main)
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add frontend/public/data/calendar.json
+          git commit -m "Data: 自動更新行事曆 JSON - $(date +'%Y-%m-%d')" || echo "無新變更"
+          git push origin main
+          
+      - name: Checkout develop branch
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          
+      - name: Sync calendar to develop
+        run: |
+          git checkout origin/main -- frontend/public/data/calendar.json
+          git add frontend/public/data/calendar.json
+          git commit -m "Data: 同步 Main 分支行事曆更新 - $(date +'%Y-%m-%d')" || echo "無新變更"
+          git push origin develop

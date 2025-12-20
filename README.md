@@ -71,6 +71,7 @@
 - **樣式**：CSS3 + 響應式設計
 - **通知系統**：React Hot Toast 2.5.2
 - **PWA**：Service Worker + Web Push API
+- **Proxy**: Cloudflare Workers (宿舍包裹查詢代理)
 
 ### 後端服務
 
@@ -84,6 +85,7 @@
 
 - **前端部署**：Vercel (自動化部署)
 - **後端部署**：Render (容器化服務)
+- **Edge 網路**：Cloudflare Workers
 - **版本控制**：GitHub + Git Flow
 - **自動化**：GitHub Actions (測試與部署)
 
@@ -109,11 +111,17 @@ ncnu-super-assistant/
 │   └── package.json
 ├── backend/                     # Flask 後端 API
 │   ├── app.py                   # 主應用程式
-│   ├── dorm_mail.py             # 宿舍包裹查詢服務
+│   ├── dorm_mail.py             # 宿舍包裹查詢服務 (Legacy)
 │   ├── notifications.py         # 通知服務
 │   ├── push_service.py          # 推播服務
 │   └── requirements.txt
+├── workers/                     # Cloudflare Workers
+│   ├── dorm-mail-worker.js      # 宿舍包裹代理服務
+│   └── wrangler.toml            # Worker 設定檔
 ├── scripts/                     # 資料處理腳本
+│   ├── fetch_calendar.py        # 行事曆同步
+│   ├── fetch_departments.py     # 開課單位同步
+│   └── ...
 └── README.md
 ```
 
@@ -155,6 +163,7 @@ npm run dev
   - `VITE_GOOGLE_CLIENT_ID`：Google OAuth 客戶端 ID
   - `VITE_API_URL`：後端 API 網址
   - `VITE_VAPID_PUBLIC_KEY`：推播通知公鑰
+  - `VITE_DORM_MAIL_WORKER_URL`：Cloudflare Worker 代理網址 (選填，加速用)
 
 - **Render (Backend)**：
   - `PYTHON_VERSION = 3.11.9`

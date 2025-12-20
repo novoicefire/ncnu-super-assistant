@@ -41,7 +41,13 @@ export const useCalendarEvents = () => {
 
   const fetchCalendar = useCallback(async () => {
     try {
-      const data = await robustRequest('get', '/api/calendar');
+      // 改為讀取靜態 JSON 檔案
+      const response = await fetch('/data/calendar.json');
+      if (!response.ok) {
+        throw new Error('無法載入行事曆資料');
+      }
+      const data = await response.json();
+
       if (Array.isArray(data)) {
         setEvents(data);
         setError(null);
@@ -50,6 +56,8 @@ export const useCalendarEvents = () => {
         throw new Error('無法識別的行事曆資料格式');
       }
     } catch (err) {
+      console.warn('Static calendar fetch failed:', err);
+      // 如果 JSON 載入失敗，嘗試載入本地 ICS (作為最後備援)
       retryCount.current += 1;
       if (retryCount.current >= MAX_RETRIES) {
         await fetchLocalCalendar();

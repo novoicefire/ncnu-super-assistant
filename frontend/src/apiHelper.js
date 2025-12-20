@@ -70,7 +70,7 @@ export const robustRequest = async (method, url, options = {}) => {
 // 🎯 判斷是否應該重試
 const shouldRetryRequest = (error) => {
   if (!error.response) return true; // 網路錯誤
-  
+
   const status = error.response.status;
   return status >= 500 || status === 429; // 伺服器錯誤或限流
 };
@@ -97,7 +97,7 @@ export const checkSystemHealth = async () => {
     const startTime = Date.now();
     const response = await apiClient.get('/api/health', { timeout: 5000 });
     const responseTime = Date.now() - startTime;
-    
+
     return {
       status: 'online',
       responseTime,
@@ -137,14 +137,25 @@ export const getUserStats = async () => {
 // 🎯 新增：獲取今日行事曆活動 (修正版)
 export const getTodayEvents = async () => {
   try {
-    // 修正點 1：呼叫正確的 API 路徑
-    const response = await robustRequest('get', '/api/events/today');
-    
-    // 修正點 2：後端已完成篩選，直接回傳 response 即可
-    return response || [];
+    // 改為讀取靜態 JSON 並在前端篩選
+    const response = await fetch('/data/calendar.json');
+    if (!response.ok) return [];
+
+    const events = await response.json();
+    if (!Array.isArray(events)) return [];
+
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+
+    // 篩選今天的活動
+    return events.filter(event => {
+      // 簡單判斷：活動開始日期是今天
+      // 這裡假設 event.start 是 ISO 字串 (YYYY-MM-DDTHH:mm:ss)
+      const startDate = event.start.split('T')[0];
+      return startDate === todayStr;
+    });
   } catch (error) {
     console.warn('無法載入今日活動:', error);
-    // 修正點 3：API 失敗時回傳空陣列，而不是模擬資料
     return [];
   }
 };

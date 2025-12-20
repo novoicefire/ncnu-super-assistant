@@ -5,7 +5,7 @@ name: Weekly Course Data Sync
 on:
   # 每週一 18:00 UTC (台灣時間週二凌晨 2:00) 執行
   schedule:
-    - cron: '0 18 * * 1'
+    - cron: "0 18 * * 1"
   # 保留手動觸發功能
   workflow_dispatch:
 
@@ -23,7 +23,7 @@ jobs:
         run: |
           month=$(date +%m)
           echo "當前月份: $month"
-          
+
           # 10-12月和3-6月停止更新
           if [[ $month -ge 10 ]] || [[ $month -ge 3 && $month -le 6 ]]; then
             echo "should-update=false" >> $GITHUB_OUTPUT
@@ -42,23 +42,26 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-          
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          
+          python-version: "3.11"
+
       - name: Install Python dependencies
         run: pip install requests
-        
+
       - name: Fetch course data from NCNU API
         run: python scripts/fetch_course_data.py
-        
+
+      - name: Fetch department data
+        run: python scripts/fetch_departments.py
+
       - name: Force commit and push to main
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add frontend/public/data/本學期開課資訊API.json
+          git add frontend/public/data/本學期開課資訊API.json frontend/public/data/departments.json
           git commit -m "Data: 週期性同步課程資料 (main分支) - $(date +'%Y-%m-%d %H:%M')" || echo "無新變更"
           git push origin main
           echo "✔ Main分支課程資料同步完成！"
@@ -72,23 +75,26 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: develop
-          
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          
+          python-version: "3.11"
+
       - name: Install Python dependencies
         run: pip install requests
-        
+
       - name: Fetch course data from NCNU API
         run: python scripts/fetch_course_data.py
-        
+
+      - name: Fetch department data
+        run: python scripts/fetch_departments.py
+
       - name: Force commit and push to develop
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add frontend/public/data/本學期開課資訊API.json
+          git add frontend/public/data/本學期開課資訊API.json frontend/public/data/departments.json
           git commit -m "Data: 週期性同步課程資料 (develop分支) - $(date +'%Y-%m-%d %H:%M')" || echo "無新變更"
           git push origin develop
           echo "✔ Develop分支課程資料同步完成！"

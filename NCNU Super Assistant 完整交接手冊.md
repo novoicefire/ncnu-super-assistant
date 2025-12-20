@@ -21,7 +21,8 @@
 | **身分驗證** | Google OAuth 2.0 | `frontend/src/AuthContext.jsx` | GCP OAuth 憑證需定期更新 |
 | **推播通知** | Web Push + VAPID | `backend/push_service.py` | VAPID 金鑰管理 |
 | **多國語系** | i18next | `frontend/src/i18n/` | 翻譯檔案維護 |
-| **自動化任務** | GitHub Actions | `.github/workflows/` (4個工作流程) | 資料同步、服務保活、資料庫監控 |
+| **Edge 代理** | Cloudflare Workers | `workers/` | 宿舍包裹查詢加速 |
+| **自動化任務** | GitHub Actions | `.github/workflows/` (3個工作流程) | 資料同步、服務保活、資料庫監控 |
 | **版本管理** | Git (GitFlow) | `main` (生產), `develop` (開發) | PR 審核後自動部署 |
 
 ## 2. 系統架構與資料流程
@@ -35,14 +36,18 @@ flowchart LR
 
   subgraph Backend (Render)
     C -->|Supabase Client| D[Supabase Database]
-    C -->|Lazy Load| E[NCNU API & Google Calendar]
+    C -->|Legacy API| E[NCNU API]
+  end
+
+  subgraph Edge (Cloudflare)
+    K[Workers] -->|Proxy| E
   end
 
   subgraph Automation (GitHub)
     F[Weekly Sync] -->|每週一| G[scripts/fetch_course_data.py]
-    G -->|git push| H[GitHub Repo]
+    L[Daily Sync] -->|每日| M[scripts/fetch_calendar/dept.py]
+    G & M -->|git push| H[GitHub Repo]
     H -->|Webhook| B
-    I[Keep-Alive] -->|每5分鐘| C
     J[Supabase Keep-Alive] -->|定時| D
   end
 ```
@@ -73,80 +78,32 @@ flowchart LR
 ncnu-super-assistant/
 ├─ .github/
 │  └─ workflows/
-│     ├─ daily_data_sync.yml      # 每週課程資料同步（智能時段控制）
-│     ├─ keep-render-alive.yml    # Render 後端保活機制（每5分鐘）
+│     ├─ daily_data_sync.yml      # 每日課程與開課單位資料同步
+│     ├─ update-calendar.yml      # 🆕 每日行事曆同步
 │     ├─ supabase-keepalive.yml   # Supabase 資料庫保活
 │     └─ keepalive.yml            # 備用保活腳本
 ├─ backend/
 │  ├─ app.py                    # 後端 Flask API 主程式
-│  ├─ dorm_mail.py              # 🆕 宿舍包裹查詢服務
+│  ├─ dorm_mail.py              # 宿舍包裹查詢服務 (Legacy)
 │  ├─ notifications.py          # 通知服務 API
 │  ├─ push_service.py           # Web Push 推播服務
 │  └─ requirements.txt          # Python 套件依賴
+├─ workers/                     # 🆕 Cloudflare Workers
+│  ├─ dorm-mail-worker.js       # 宿舍包裹代理服務
+│  └─ wrangler.toml             # Worker 設定檔
 ├─ frontend/
 │  ├─ public/
-│  │  ├─ data/                  # 自動同步的課程資料 (JSON)
+│  │  ├─ data/                  # 自動同步的靜態資料 (JSON)
+│  │  │  ├─ calendar.json       # 🆕 靜態行事曆
+│  │  │  └─ departments.json    # 🆕 靜態系所清單
 │  │  ├─ icons/                 # PWA 應用圖標
-│  │  ├─ manifest.json          # PWA 設定檔
-│  │  ├─ service-worker.js      # Service Worker（推播通知）
-│  │  └─ calendar.ics           # 校曆 .ics 檔案
-│  ├─ src/
-│  │  ├─ App.jsx                # React 主應用元件與路由
-│  │  ├─ main.jsx               # React 應用程式進入點
-│  │  ├─ AuthContext.jsx        # Google 登入驗證 + 推播訂閱
-│  │  ├─ components/            # 各功能UI元件
-│  │  │  ├─ 0_Dashboard/         # 首頁儀表板
-│  │  │  │  ├─ Dashboard.jsx
-│  │  │  │  ├─ WelcomeBanner.jsx
-│  │  │  │  ├─ QuickLinks.jsx    # 常用連結
-│  │  │  │  ├─ GymScheduleCard.jsx # 體育館時間卡片
-│  │  │  │  ├─ DormMailCard.jsx   # 🆕 宿舍包裹查詢卡片
-│  │  │  │  ├─ WeatherWidget.jsx # 天氣小工具
-│  │  │  │  └─ AnnouncementCard.jsx # 公告卡片
-│  │  │  ├─ 1_CoursePlanner/     # 課程規劃
-│  │  │  │  ├─ CoursePlanner.jsx
-│  │  │  │  └─ CourseTable.jsx
-│  │  │  ├─ 2_GraduationTracker/ # 畢業進度
-│  │  │  │  └─ GraduationTracker.jsx
-│  │  │  ├─ 4_UniversityCalendar/# 校園行事曆
-│  │  │  │  └─ UniversityCalendar.jsx
-│  │  │  ├─ 5_UpdateLog/         # 更新日誌
-│  │  │  │  └─ UpdateLog.jsx
-│  │  │  ├─ Admin/               # 🆕 管理中心
-│  │  │  │  ├─ AdminDashboard.jsx    # 管理儀表板
-│  │  │  │  ├─ AdminAnnouncements.jsx # 公告管理
-│  │  │  │  └─ AdminNotifications.jsx # 通知推播管理
-│  │  │  ├─ common/              # 共用元件 (錯誤邊界、載入指示器)
-│  │  │  │  ├─ ErrorBoundary.jsx
-│  │  │  │  └─ LazyLoader.jsx
-│  │  │  ├─ SideNav.jsx          # 🆕 桌面版側邊導航
-│  │  │  ├─ MobileHeader.jsx     # 🆕 行動版頁首
-│  │  │  ├─ BottomNavBar.jsx     # 🆕 行動版底部導航
-│  │  │  ├─ PWAInstallPrompt.jsx # 🆕 PWA 安裝引導
-│  │  │  ├─ DisclaimerModal.jsx  # 免責聲明
-│  │  │  └─ Toast.jsx            # 🆕 Toast 通知元件
-│  │  ├─ contexts/               # 🆕 React Context
-│  │  │  ├─ ThemeContext.jsx     # 主題管理（深色/淺色模式）
-│  │  │  └─ NotificationContext.jsx # 通知狀態管理
-│  │  ├─ hooks/                  # 🆕 自定義 Hook
-│  │  │  └─ usePushNotification.js # 推播通知 Hook
-│  │  ├─ i18n/                   # 🆕 多國語系
-│  │  │  ├─ index.js             # i18next 設定
-│  │  │  └─ locales/
-│  │  │     ├─ zh-TW.json        # 繁體中文
-│  │  │     └─ en.json           # 英文
-│  │  ├─ services/               # API 服務
-│  │  │  └─ weatherService.js    # 天氣 API 服務
-│  │  └─ styles/                 # 全域樣式
-│  │     ├─ themes.css           # 主題變數
-│  │     └─ animations.css       # 動畫樣式
-│  ├─ index.html               # SPA 進入點 HTML
-│  ├─ package.json             # 前端套件依賴
-│  ├─ vite.config.js           # Vite 設定檔
-│  └─ vercel.json              # Vercel 部署設定
+...
 ├─ scripts/
 │  ├─ convert_excel.py        # Excel 轉換腳本
-│  └─ fetch_course_data.py      # 抓取課程資料腳本
+│  ├─ fetch_course_data.py      # 抓取課程資料腳本
+│  ├─ fetch_calendar.py         # 🆕 抓取行事曆腳本
+│  ├─ fetch_departments.py      # 🆕 抓取系所腳本
+│  └─ convert_images.js         # 🆕 圖片轉 WebP 腳本
 ├─ .gitignore
 ├─ README.md
 └─ package.json                 # 專案級套件依賴
@@ -194,13 +151,13 @@ npm run dev
 | :--- | :--- | :--- |
 | **Render** | `SUPABASE_URL` | Supabase 專案 URL |
 | | `SUPABASE_KEY` | Supabase 專案 Public Key |
-| | `ALLOWED_ORIGINS` | 允許跨域請求的來源 (Vercel 網址) |
 | | `VAPID_PRIVATE_KEY` | 🆕 Web Push 私鑰 |
 | | `VAPID_PUBLIC_KEY` | 🆕 Web Push 公鑰 |
 | | `VAPID_CLAIMS_EMAIL` | 🆕 VAPID 認證信箱 |
 | **Vercel** | `VITE_API_URL` | 指向 Render 後端服務的 URL |
 | | `VITE_GOOGLE_CLIENT_ID` | Google OAuth Client ID |
 | | `VITE_VAPID_PUBLIC_KEY` | 🆕 Web Push 公鑰（前端用）|
+| | `VITE_DORM_MAIL_WORKER_URL` | 🆕 Worker 代理網址（選填）|
 
 #### GitHub Secrets (自動化任務用)
 
@@ -221,10 +178,7 @@ npm run dev
 | `/api/auth/google` | POST | Google 登入驗證，新增/更新使用者 | Bearer Token | 使用 Google OAuth |
 | `/api/schedule` | GET/POST | 讀取/儲存個人排課資料 | Supabase Auth | v5.0+ 支援彈性課程 |
 | `/api/courses/hotness`| GET | 計算課程熱門度 | 公開 | 包含固定與彈性課程 |
-| `/api/departments` | GET | 取得所有開課單位 | 公開 | 從 NCNU API 快取 |
-| `/api/contacts` | GET | 取得校園聯絡資訊 | 公開 | 整合單位網址資訊 |
-| `/api/calendar` | GET | 取得完整校曆事件 | 公開 | Google Calendar iCal |
-| `/api/events/today` | GET | 取得今日行事曆活動 | 公開 | Dashboard 首頁使用 |
+| `/api/courses/hotness`| GET | 計算課程熱門度 | 公開 | 包含固定與彈性課程 |
 | `/api/notifications` | GET | 🆕 取得所有通知 | 公開 | 支援分頁 |
 | `/api/notifications` | POST | 🆕 發送新通知 | 管理員 | 需驗證管理員權限 |
 | `/api/notifications/<id>` | DELETE | 🆕 刪除通知 | 管理員 | 需驗證管理員權限 |
@@ -232,6 +186,7 @@ npm run dev
 | `/api/push/unsubscribe` | POST | 🆕 取消訂閱推播 | Bearer Token | 移除訂閱 |
 | `/api/announcements` | GET/POST | 🆕 公告管理 | 管理員 | 首頁公告 CRUD |
 | `/api/dorm-mail` | GET | 🆕 宿舍包裹查詢 | 公開 | 支援 department 或 name 參數 |
+| `Workers Proxy` | GET | 🆕 宿舍包裹查詢 (加速) | 公開 | 建議優先使用 Cloudflare Worker |
 
 ### 5.2. 重要 API 說明
 

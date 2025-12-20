@@ -202,7 +202,11 @@ export const AuthProvider = ({ children }) => {
 
             const response = await axios.post(`${API_URL}/api/auth/google`, userInfo);
 
-            const fullUserData = response.data;
+            // 儲存用戶資料與原始 credential（用於管理員 API 驗證）
+            const fullUserData = {
+                ...response.data,
+                credential: credentialResponse.credential  // 保存 ID Token
+            };
             localStorage.setItem('user', JSON.stringify(fullUserData));
             setUser(fullUserData);
             // 注意：訂閱會由上面的 useEffect 自動觸發
