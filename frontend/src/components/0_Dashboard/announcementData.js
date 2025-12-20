@@ -20,20 +20,12 @@ export const announcementData = [
     embeds: [
       {
         type: "link",
-        url: "",
+        url: "https://docs.google.com/forms/d/e/1FAIpQLScrui8yeaU23fVCCAwYA8O6bqKnlwDf7XMfTFunuwC6zQcyaQ/viewform",
         title: "✨ 「只做最真實的整理，你的經驗就是力量」",
-        description: ""
+        description: "👉立即投稿你的故事吧!"
       }
     ],
-    buttons: [
-      {
-        "text": "立即投稿你的故事吧!",
-        "url": "https://docs.google.com/forms/d/e/1FAIpQLScrui8yeaU23fVCCAwYA8O6bqKnlwDf7XMfTFunuwC6zQcyaQ/viewform",
-        "style": "success",
-        "icon": "👉",
-        "external": true
-      }
-    ]
+    buttons: []
   },  
   {
     id: 2,
