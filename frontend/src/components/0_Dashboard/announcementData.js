@@ -5,7 +5,7 @@ export const announcementData = [
     title: "🏠 【 暨大國企企專租屋大調查 】",
     date: "2025-12-20",
     priority: "high",
-    content: '<iframe src="https://embed.dcard.tw/post/260489435" style='border:none' width="100%" height="441px"></iframe>',
+    content: "<iframe src="https://embed.dcard.tw/post/260489435" style='border:none' width="100%" height="441px"></iframe>",
     images: [],
     embeds: [],
     buttons:[]
