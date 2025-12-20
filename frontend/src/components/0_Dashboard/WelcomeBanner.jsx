@@ -37,23 +37,88 @@ const motivationalQuotes = [
 const RECOMMENDED_MIN_CREDITS = 16;
 const RECOMMENDED_MAX_CREDITS = 20;
 
-const getSemesterProgress = () => {
+/**
+ * 計算學期進度與當前周次（動態從行事曆取得開學日）
+ * 
+ * @param {Array} calendarEvents - 行事曆事件陣列
+ * @returns {Object} 學期進度資訊
+ */
+const getSemesterProgress = (calendarEvents = []) => {
   const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  let semesterStart;
-  if (month >= 8) {
-    semesterStart = new Date(year, 8, 9);
-  } else if (month >= 1) {
-    semesterStart = new Date(year, 1, 17);
-  } else {
-    semesterStart = new Date(year - 1, 8, 9);
+  const month = now.getMonth();  // 0-11
+  const day = now.getDate();
+
+  // 從行事曆中尋找「開始上課」事件
+  // 找出最近一次（當前日期之前）的開學日
+  const semesterStartEvents = calendarEvents
+    .filter(event => event.summary && event.summary.includes('開始上課'))
+    .map(event => ({
+      date: new Date(event.start),
+      summary: event.summary
+    }))
+    .sort((a, b) => b.date - a.date);  // 由新到舊排序
+
+  // 找出當前學期的開學日（最近一次 <= 今天的「開始上課」）
+  const currentSemesterStart = semesterStartEvents.find(event => event.date <= now);
+
+  /**
+   * 判斷假期類型的輔助函數
+   * 寒假：12月、1月、2月（大約 12 月底 ~ 2 月底）
+   * 暑假：6月、7月、8月、9月前半（大約 6 月中 ~ 9 月中）
+   */
+  const getVacationType = () => {
+    // 寒假：12月(11) 或 1月(0) 或 2月(1)
+    if (month === 11 || month === 0 || month === 1) {
+      return 'winter';
+    }
+    // 暑假：6月(5) 或 7月(6) 或 8月(7) 或 9月前半(8, day < 15)
+    if (month >= 5 && month <= 7) {
+      return 'summer';
+    }
+    if (month === 8) {
+      return 'summer';  // 9月初也可能還在暑假
+    }
+    return 'break';
+  };
+
+  // 建立假期回傳物件
+  const vacationResult = {
+    currentWeek: 0,
+    totalWeeks: 16,
+    progress: 0,
+    isVacation: true,
+    vacationType: getVacationType()
+  };
+
+  // 如果找不到開學日，表示假期中
+  if (!currentSemesterStart) {
+    return vacationResult;
   }
-  const weeksPassed = Math.floor((now - semesterStart) / (7 * 24 * 60 * 60 * 1000));
-  const currentWeek = Math.max(1, Math.min(16, weeksPassed + 1));
+
+  // 計算當前周次（16 週含期末考）
+  const weeksPassed = Math.floor((now - currentSemesterStart.date) / (7 * 24 * 60 * 60 * 1000));
+  const currentWeek = weeksPassed + 1;
+
+  // 如果超過 16 週，表示已放假
+  if (currentWeek > 16) {
+    return vacationResult;
+  }
+
+  // 如果還沒開學（currentWeek < 1）
+  if (currentWeek < 1) {
+    return vacationResult;
+  }
+
   const totalWeeks = 16;
   const progress = (currentWeek / totalWeeks) * 100;
-  return { currentWeek, totalWeeks, progress };
+
+  return {
+    currentWeek,
+    totalWeeks,
+    progress,
+    isVacation: false,
+    semesterStartDate: currentSemesterStart.date
+  };
 };
 
 const WelcomeBanner = () => {
@@ -62,9 +127,13 @@ const WelcomeBanner = () => {
   const { events: allCalendarEvents, loading: calendarLoading } = useCalendarEvents();
 
   const [quote, setQuote] = useState(null);
-  const [semesterProgress] = useState(getSemesterProgress());
   const [expandedCard, setExpandedCard] = useState(null);
   const bannerRef = useRef(null);
+
+  // 動態計算學期進度（當行事曆載入完成後更新）
+  const semesterProgress = React.useMemo(() => {
+    return getSemesterProgress(allCalendarEvents);
+  }, [allCalendarEvents]);
 
   const [todayData, setTodayData] = useState({
     courses: [],
@@ -437,10 +506,21 @@ const WelcomeBanner = () => {
         </div>
 
         <div className="semester-row">
-          <span className="semester-text">第 {semesterProgress.currentWeek} 週 / {semesterProgress.totalWeeks} 週</span>
-          <div className="semester-progress-bar">
-            <div className="progress-fill" style={{ width: `${semesterProgress.progress}%` }}></div>
-          </div>
+          {semesterProgress.isVacation ? (
+            <span className="semester-text vacation">
+              🎉 {semesterProgress.vacationType === 'winter' ? '寒假' :
+                semesterProgress.vacationType === 'summer' ? '暑假' : '假期'}中
+            </span>
+          ) : (
+            <>
+              <span className="semester-text">
+                第 {semesterProgress.currentWeek} 週 / {semesterProgress.totalWeeks} 週
+              </span>
+              <div className="semester-progress-bar">
+                <div className="progress-fill" style={{ width: `${semesterProgress.progress}%` }}></div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="status-cards-row">
