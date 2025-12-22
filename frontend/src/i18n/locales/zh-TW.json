@@ -413,6 +413,17 @@
         "installConfirm": "「安裝」",
         "androidStep3b": "確認",
         "androidStep3Hint": "完成後請從主畫面開啟 App",
-        "installNow": "立即安裝"
+        "installNow": "立即安裝",
+        "installTitleShort": "加入主畫面",
+        "openInSafariShort": "複製連結到 Safari 瀏覽器開啟",
+        "openInChromeShort": "複製連結到 Chrome 瀏覽器開啟",
+        "iosInstallHint": "點擊底部",
+        "iosInstallHint2": "→「加入主畫面」",
+        "featureAppShort": "獨立 App",
+        "featurePushShort": "推播通知",
+        "androidInstallHint": "獲得完整 App 體驗與推播通知",
+        "androidManualHint": "點擊右上角",
+        "androidManualHint2": "→「安裝應用程式」",
+        "installApp": "安裝 App"
     }
 }

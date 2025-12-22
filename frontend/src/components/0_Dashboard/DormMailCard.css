@@ -1,6 +1,6 @@
-/* DormMailCard.css - 宿舍包裹查詢卡片樣式 */
+/* DormMailCard.css - 宿�??�裹?�詢?��?�?? */
 
-/* ========== 卡片容器 ========== */
+/* ========== ?��?容器 ========== */
 .dorm-mail-card {
     background: var(--theme-bg-card);
     border-radius: 16px;
@@ -14,14 +14,14 @@
     box-shadow: var(--theme-shadow-md, 0 8px 30px rgba(0, 0, 0, 0.12));
 }
 
-/* 深色模式 */
-.dark-mode .dorm-mail-card,
+/* 深色模�? */
+.dark-theme .dorm-mail-card,
 [data-theme="dark"] .dorm-mail-card {
     background: var(--theme-bg-card);
     border-color: var(--theme-border-secondary);
 }
 
-/* ========== 卡片標題 - 與 GymScheduleCard/QuickLinks 一致 ========== */
+/* ========== ?��?標�? - ??GymScheduleCard/QuickLinks 一??========== */
 .dorm-mail-header {
     display: flex;
     justify-content: space-between;
@@ -60,12 +60,12 @@
     color: var(--theme-text-tertiary);
 }
 
-.dark-mode .dorm-mail-header h3,
+.dark-theme .dorm-mail-header h3,
 [data-theme="dark"] .dorm-mail-header h3 {
     color: var(--theme-text-primary, #fff);
 }
 
-/* 收合按鈕 - 與 QuickLinks .collapse-toggle.modern 一致 */
+/* ?��??��? - ??QuickLinks .collapse-toggle.modern 一??*/
 .dorm-mail-header .collapse-toggle {
     background: var(--theme-bg-tertiary);
     border: none;
@@ -85,7 +85,7 @@
     color: white;
 }
 
-/* ========== 可收合內容區域 ========== */
+/* ========== ?�收?�內容�???========== */
 .dorm-mail-content {
     padding: 20px;
     overflow: hidden;
@@ -98,12 +98,12 @@
     opacity: 0;
 }
 
-/* 收合狀態時隱藏 header 底線 */
+/* ?��??�?��??��? header 底�? */
 .dorm-mail-card:has(.dorm-mail-content.collapsed) .dorm-mail-header {
     border-bottom: none;
 }
 
-/* ========== 查詢模式切換 ========== */
+/* ========== ?�詢模�??��? ========== */
 .query-mode-tabs {
     display: flex;
     gap: 0.5rem;
@@ -130,7 +130,7 @@
     background: rgba(0, 0, 0, 0.05);
 }
 
-.dark-mode .mode-tab:hover,
+.dark-theme .mode-tab:hover,
 [data-theme="dark"] .mode-tab:hover {
     background: rgba(255, 255, 255, 0.1);
 }
@@ -141,13 +141,13 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-.dark-mode .mode-tab.active,
+.dark-theme .mode-tab.active,
 [data-theme="dark"] .mode-tab.active {
     background: var(--theme-bg-secondary, #2a2a2a);
     color: var(--primary-color, #4fd1c5);
 }
 
-/* ========== 查詢輸入區 ========== */
+/* ========== ?�詢輸入?� ========== */
 .query-input-section {
     margin-bottom: 1.5rem;
 }
@@ -164,7 +164,7 @@
     margin-bottom: 0.5rem;
 }
 
-.dark-mode .input-group label,
+.dark-theme .input-group label,
 [data-theme="dark"] .input-group label {
     color: var(--theme-text-primary, #fff);
 }
@@ -181,8 +181,8 @@
     transition: all 0.2s;
 }
 
-.dark-mode .department-select,
-.dark-mode .name-input,
+.dark-theme .department-select,
+.dark-theme .name-input,
 [data-theme="dark"] .department-select,
 [data-theme="dark"] .name-input {
     background: var(--theme-bg-tertiary, #2a2a2a);
@@ -210,7 +210,7 @@
     color: #f59e0b;
 }
 
-/* ========== 搜尋按鈕 ========== */
+/* ========== ?��??��? ========== */
 .search-btn {
     width: 100%;
     padding: 0.875rem 1.5rem;
@@ -240,7 +240,7 @@
     cursor: not-allowed;
 }
 
-/* === 錯誤訊息 === */
+/* === ?�誤訊息 === */
 .error-message {
     display: flex;
     align-items: center;
@@ -254,7 +254,7 @@
     margin-bottom: 1rem;
 }
 
-/* === 查詢結果 === */
+/* === ?�詢結�? === */
 .mail-results {
     margin-top: 1.5rem;
 }
@@ -289,7 +289,7 @@
     gap: 12px;
 }
 
-/* ========== 包裹項目 ========== */
+/* ========== ?�裹?�目 ========== */
 .mail-item {
     background: var(--theme-bg-secondary, #f9fafb);
     border: 1px solid var(--theme-border-secondary, #e5e7eb);
@@ -300,7 +300,7 @@
     position: relative;
 }
 
-.dark-mode .mail-item,
+.dark-theme .mail-item,
 [data-theme="dark"] .mail-item {
     background: var(--theme-bg-tertiary, #2a2a2a);
     border-color: var(--theme-border-secondary, #444);
@@ -322,7 +322,7 @@
     border-bottom: 1px solid var(--theme-border-secondary, #e5e7eb);
 }
 
-.dark-mode .mail-item-header,
+.dark-theme .mail-item-header,
 [data-theme="dark"] .mail-item-header {
     border-bottom-color: var(--theme-border-secondary, #444);
 }
@@ -336,7 +336,7 @@
     font-size: 0.9rem;
 }
 
-.dark-mode .mail-id,
+.dark-theme .mail-id,
 [data-theme="dark"] .mail-id {
     color: var(--theme-text-primary, #fff);
 }
@@ -348,7 +348,7 @@
     gap: 8px;
 }
 
-/* ========== 剩餘天數標籤 ========== */
+/* ========== ?��?天數標籤 ========== */
 .remaining-badge {
     display: inline-flex;
     align-items: center;
@@ -359,26 +359,26 @@
     font-weight: 600;
 }
 
-/* 綠色 - 安全 (≥3 天) */
+/* 綠色 - 安全 (?? �? */
 .remaining-badge.safe {
     background: rgba(34, 197, 94, 0.15);
     color: #16a34a;
 }
 
-/* 黃色 - 警告 (2 天) */
+/* 黃色 - 警�? (2 �? */
 .remaining-badge.warning {
     background: rgba(251, 191, 36, 0.2);
     color: #d97706;
 }
 
-/* 紅色 - 危險 (≤1 天) */
+/* 紅色 - ?�險 (?? �? */
 .remaining-badge.danger {
     background: rgba(239, 68, 68, 0.15);
     color: #dc2626;
     animation: pulse-urgent 1.5s ease-in-out infinite;
 }
 
-/* 紅色 - 已逾期 */
+/* 紅色 - 已逾�? */
 .remaining-badge.expired {
     background: rgba(239, 68, 68, 0.2);
     color: #b91c1c;
@@ -397,28 +397,28 @@
     }
 }
 
-/* 深色模式剩餘天數標籤 */
-.dark-mode .remaining-badge.safe,
+/* 深色模�??��?天數標籤 */
+.dark-theme .remaining-badge.safe,
 [data-theme="dark"] .remaining-badge.safe {
     background: rgba(34, 197, 94, 0.25);
     color: #4ade80;
 }
 
-.dark-mode .remaining-badge.warning,
+.dark-theme .remaining-badge.warning,
 [data-theme="dark"] .remaining-badge.warning {
     background: rgba(251, 191, 36, 0.25);
     color: #fbbf24;
 }
 
-.dark-mode .remaining-badge.danger,
-.dark-mode .remaining-badge.expired,
+.dark-theme .remaining-badge.danger,
+.dark-theme .remaining-badge.expired,
 [data-theme="dark"] .remaining-badge.danger,
 [data-theme="dark"] .remaining-badge.expired {
     background: rgba(239, 68, 68, 0.25);
     color: #f87171;
 }
 
-/* ========== 包裹類型標籤 ========== */
+/* ========== ?�裹類�?標籤 ========== */
 .mail-type {
     padding: 0.25rem 0.75rem;
     border-radius: 6px;
@@ -437,14 +437,14 @@
     color: #059669;
 }
 
-/* 深色模式標籤樣式 */
-.dark-mode .mail-type.package,
+/* 深色模�?標籤�?? */
+.dark-theme .mail-type.package,
 [data-theme="dark"] .mail-type.package {
     background: rgba(79, 209, 197, 0.2);
     color: #4fd1c5;
 }
 
-.dark-mode .mail-type.registered,
+.dark-theme .mail-type.registered,
 [data-theme="dark"] .mail-type.registered {
     background: rgba(52, 211, 153, 0.2);
     color: #34d399;
@@ -473,7 +473,7 @@
     min-width: 5rem;
 }
 
-.dark-mode .detail-label,
+.dark-theme .detail-label,
 [data-theme="dark"] .detail-label {
     color: var(--theme-text-secondary, #aaa);
 }
@@ -483,7 +483,7 @@
     font-weight: 500;
 }
 
-.dark-mode .detail-value,
+.dark-theme .detail-value,
 [data-theme="dark"] .detail-value {
     color: var(--theme-text-primary, #fff);
 }
@@ -493,7 +493,7 @@
     font-size: 0.8125rem;
 }
 
-/* === 資料來源 === */
+/* === 資�?來�? === */
 .dorm-mail-footer {
     margin-top: 1.5rem;
     padding-top: 1rem;
@@ -513,10 +513,10 @@
     text-decoration: underline;
 }
 
-/* ========== RWD 響應式設計 ========== */
+/* ========== RWD ?��?式設�?========== */
 @media (max-width: 768px) {
 
-    /* 內容區 */
+    /* ?�容?� */
     .dorm-mail-content {
         padding: 16px;
     }
@@ -525,13 +525,13 @@
         padding: 0 16px;
     }
 
-    /* 查詢表單 */
+    /* ?�詢表單 */
     .mode-tab {
         font-size: 0.8125rem;
         padding: 0.5rem 0.75rem;
     }
 
-    /* 包裹項目 - 緊湊版 */
+    /* ?�裹?�目 - 緊�???*/
     .mail-item {
         padding: 12px;
     }
@@ -550,7 +550,7 @@
         padding: 3px 8px;
     }
 
-    /* 結果明細 - 網格佈局更緊湊 */
+    /* 結�??�細 - 網格佈�??��?�?*/
     .mail-item-details {
         display: grid;
         grid-template-columns: repeat(2, 1fr);

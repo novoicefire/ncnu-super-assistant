@@ -265,6 +265,35 @@
     opacity: 0.6;
 }
 
+/* ========== 安裝 App 按鈕 ========== */
+.install-app-btn {
+    background: linear-gradient(135deg, rgba(0, 121, 107, 0.1), rgba(38, 166, 154, 0.05));
+    border: 1px solid rgba(0, 121, 107, 0.2);
+    cursor: pointer;
+}
+
+.install-app-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 121, 107, 0.15), rgba(38, 166, 154, 0.1));
+}
+
+.install-app-btn .more-icon {
+    color: #00796B;
+}
+
+/* 深色模式 */
+[data-theme="dark"] .install-app-btn {
+    background: linear-gradient(135deg, rgba(38, 166, 154, 0.15), rgba(0, 121, 107, 0.1));
+    border: 1px solid rgba(38, 166, 154, 0.3);
+}
+
+[data-theme="dark"] .install-app-btn:hover {
+    background: linear-gradient(135deg, rgba(38, 166, 154, 0.25), rgba(0, 121, 107, 0.15));
+}
+
+[data-theme="dark"] .install-app-btn .more-icon {
+    color: #26A69A;
+}
+
 /* ========== 響應式：手機版顯示 ========== */
 @media (max-width: 768px) {
     .bottom-nav {

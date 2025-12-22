@@ -1,9 +1,9 @@
 /**
- * GymScheduleCard.css - 體育館開放時間卡片樣式
- * 包含橫向日曆、設施卡片、進度條與各種狀態動畫
+ * GymScheduleCard.css - 體育館�??��??�卡?�樣�?
+ * ?�含橫�??��??�設?�卡?�、進度條�??�種?�?��???
  */
 
-/* ========== 卡片容器 ========== */
+/* ========== ?��?容器 ========== */
 .gym-schedule-card {
     background: var(--theme-bg-card);
     border-radius: 16px;
@@ -17,25 +17,25 @@
     box-shadow: var(--theme-shadow-md, 0 8px 30px rgba(0, 0, 0, 0.12));
 }
 
-/* 冬季主題 */
+/* ?�季主�? */
 .gym-schedule-card.winter-theme {
     background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
     border-color: rgba(33, 150, 243, 0.2);
 }
 
-/* 深色模式 */
-.dark-mode .gym-schedule-card,
+/* 深色模�? */
+.dark-theme .gym-schedule-card,
 [data-theme="dark"] .gym-schedule-card {
     background: var(--theme-bg-card);
     border-color: var(--theme-border-secondary);
 }
 
-.dark-mode .gym-schedule-card.winter-theme,
+.dark-theme .gym-schedule-card.winter-theme,
 [data-theme="dark"] .gym-schedule-card.winter-theme {
     background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
 }
 
-/* ========== 卡片標題 - 與 QuickLinks 一致 ========== */
+/* ========== ?��?標�? - ??QuickLinks 一??========== */
 .gym-schedule-header {
     display: flex;
     justify-content: space-between;
@@ -74,12 +74,12 @@
     color: var(--theme-text-tertiary);
 }
 
-.dark-mode .gym-schedule-header h3,
+.dark-theme .gym-schedule-header h3,
 [data-theme="dark"] .gym-schedule-header h3 {
     color: var(--theme-text-primary, #fff);
 }
 
-/* 可收合內容區域 */
+/* ?�收?�內容�???*/
 .gym-schedule-content {
     padding: 20px;
     overflow: hidden;
@@ -92,12 +92,12 @@
     opacity: 0;
 }
 
-/* 收合狀態時隱藏 header 底線 */
+/* ?��??�?��??��? header 底�? */
 .gym-schedule-card:has(.gym-schedule-content.collapsed) .gym-schedule-header {
     border-bottom: none;
 }
 
-/* 回到今日按鈕 - 正方形斜對角設計 */
+/* ?�到今日?��? - �?��形�?對�?設�? */
 .go-today-btn {
     display: flex;
     flex-direction: column;
@@ -135,7 +135,7 @@
     transform: scale(1.05);
 }
 
-/* ========== 橫向日曆選擇器 ========== */
+/* ========== 橫�??��??��???========== */
 .date-selector {
     display: flex;
     flex-direction: column;
@@ -143,7 +143,7 @@
     margin-bottom: 1.25rem;
 }
 
-/* 月份顯示 + 回到今日按鈕 */
+/* ?�份顯示 + ?�到今日?��? */
 .month-display {
     display: flex;
     align-items: center;
@@ -160,14 +160,14 @@
     border-radius: 20px;
 }
 
-.dark-mode .current-month,
+.dark-theme .current-month,
 [data-theme="dark"] .current-month {
     color: #fff;
     background: rgba(0, 150, 136, 0.3);
     border: 1px solid rgba(0, 150, 136, 0.4);
 }
 
-/* 日期導航列 */
+/* ?��?導航??*/
 .date-nav-row {
     display: flex;
     align-items: center;
@@ -196,7 +196,7 @@
     transform: scale(1.05);
 }
 
-.dark-mode .date-nav-btn,
+.dark-theme .date-nav-btn,
 [data-theme="dark"] .date-nav-btn {
     background: rgba(255, 255, 255, 0.15);
     color: #ddd;
@@ -224,7 +224,7 @@
     display: none;
 }
 
-/* 日曆滑動動畫 */
+/* ?��?滑�??�畫 */
 .date-scroll-container.slide-left {
     animation: slideOutLeft 0.5s ease-in-out forwards;
 }
@@ -322,20 +322,20 @@
     color: white;
 }
 
-.dark-mode .date-item,
+.dark-theme .date-item,
 [data-theme="dark"] .date-item {
     background: rgba(255, 255, 255, 0.1);
     color: #eee;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.dark-mode .date-item:hover,
+.dark-theme .date-item:hover,
 [data-theme="dark"] .date-item:hover {
     background: rgba(0, 150, 136, 0.25);
     border-color: rgba(0, 150, 136, 0.4);
 }
 
-.dark-mode .date-item.selected,
+.dark-theme .date-item.selected,
 [data-theme="dark"] .date-item.selected {
     background: linear-gradient(135deg, #00897B 0%, #00796B 100%);
     color: white;
@@ -346,7 +346,7 @@
         0 0 20px rgba(0, 150, 136, 0.1);
 }
 
-/* ========== 冬季休館提示 ========== */
+/* ========== ?�季休館?�示 ========== */
 .winter-closure-banner {
     display: flex;
     align-items: center;
@@ -388,14 +388,14 @@
     }
 }
 
-/* ========== 設施列表（三欄並排） ========== */
+/* ========== 設施?�表（�?欄並?��? ========== */
 .facilities-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
 
-/* ========== 精簡設施卡片 ========== */
+/* ========== 精簡設施?��? ========== */
 .facility-card-compact {
     position: relative;
     background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
@@ -407,7 +407,7 @@
     min-height: 100px;
 }
 
-/* 非當日卡片：縮小、黯淡 */
+/* ?�當?�卡?��?縮�??�黯�?*/
 .facility-card-compact.not-today {
     min-height: 70px;
     padding: 8px;
@@ -429,7 +429,7 @@
     font-size: 0.65rem;
 }
 
-/* 卡片背景進度條填充 - 使用設施本身顏色 */
+/* ?��??�景?�度條填??- 使用設施?�身顏色 */
 .card-progress-fill {
     position: absolute;
     top: 0;
@@ -442,13 +442,13 @@
     z-index: 0;
 }
 
-.dark-mode .card-progress-fill {
+.dark-theme .card-progress-fill {
     background: linear-gradient(90deg,
             color-mix(in srgb, var(--facility-color, #00796B) 30%, transparent) 0%,
             color-mix(in srgb, var(--facility-color, #00796B) 15%, transparent) 100%);
 }
 
-/* 精簡卡片內容 */
+/* 精簡?��??�容 */
 .compact-card-content {
     position: relative;
     z-index: 1;
@@ -477,7 +477,7 @@
     color: var(--text-primary, #333);
 }
 
-.dark-mode .compact-name,
+.dark-theme .compact-name,
 [data-theme="dark"] .compact-name {
     color: #fff;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -489,7 +489,7 @@
     font-weight: 500;
 }
 
-.dark-mode .compact-time,
+.dark-theme .compact-time,
 [data-theme="dark"] .compact-time {
     color: #ccc;
 }
@@ -513,21 +513,21 @@
     animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* 精簡卡片的狀態標籤 */
+/* 精簡?��??��??��?�?*/
 .facility-card-compact .facility-status-badge {
     font-size: 0.6rem;
     padding: 2px 6px;
     margin-top: 2px;
 }
 
-.dark-mode .facility-card-compact,
+.dark-theme .facility-card-compact,
 [data-theme="dark"] .facility-card-compact {
     background: linear-gradient(135deg, #3a3a3a 0%, #444 100%);
     border-color: rgba(255, 255, 255, 0.15);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* 精簡卡片動畫狀態 */
+/* 精簡?��??�畫?�??*/
 .facility-card-compact.animate-open {
     animation: breathe-glow-compact 3s ease-in-out infinite;
 }
@@ -566,7 +566,7 @@
     background: linear-gradient(180deg, #2196F3, #1565C0);
 }
 
-/* 精簡卡片響應式 */
+/* 精簡?��??��?�?*/
 @media (max-width: 600px) {
     .facilities-list {
         grid-template-columns: repeat(3, 1fr);
@@ -604,7 +604,7 @@
     }
 }
 
-/* ========== 設施卡片 ========== */
+/* ========== 設施?��? ========== */
 .facility-card {
     background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
     border-radius: 16px;
@@ -630,14 +630,14 @@
     width: 6px;
 }
 
-.dark-mode .facility-card {
+.dark-theme .facility-card {
     background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
     border-color: rgba(255, 255, 255, 0.08);
 }
 
-/* ========== 狀態動畫類別 ========== */
+/* ========== ?�?��??��???========== */
 
-/* 開放中 - 呼吸燈效果 */
+/* ?�放�?- ?�吸?��???*/
 .facility-card.animate-open {
     animation: breathe-glow 3s ease-in-out infinite;
 }
@@ -671,7 +671,7 @@
     }
 }
 
-/* 即將開放 - 柔和閃爍 */
+/* ?��??�放 - ?��??��? */
 .facility-card.animate-upcoming {
     animation: soft-blink 2s ease-in-out infinite;
 }
@@ -692,7 +692,7 @@
     }
 }
 
-/* 已關閉 - 灰階 */
+/* 已�???- ?��? */
 .facility-card.animate-closed {
     opacity: 0.7;
     filter: grayscale(30%);
@@ -702,7 +702,7 @@
     background: #9E9E9E;
 }
 
-/* 休館日 */
+/* 休館??*/
 .facility-card.animate-holiday {
     opacity: 0.6;
     filter: grayscale(50%);
@@ -712,7 +712,7 @@
     background: #B71C1C;
 }
 
-/* 冬季休館 - 冰凍效果 */
+/* ?�季休館 - ?��??��? */
 .facility-card.animate-winter {
     background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
 }
@@ -721,11 +721,11 @@
     background: linear-gradient(180deg, #2196F3, #1565C0);
 }
 
-.dark-mode .facility-card.animate-winter {
+.dark-theme .facility-card.animate-winter {
     background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
 }
 
-/* 雪花飄落容器 */
+/* ?�花飄落容器 */
 .snowfall-container {
     position: absolute;
     top: 0;
@@ -760,7 +760,7 @@
     }
 }
 
-/* ========== 設施標題區 ========== */
+/* ========== 設施標�??� ========== */
 .facility-header {
     display: flex;
     align-items: center;
@@ -797,7 +797,7 @@
     color: var(--text-primary, #333);
 }
 
-.dark-mode .facility-name {
+.dark-theme .facility-name {
     color: #fff;
 }
 
@@ -809,7 +809,7 @@
     gap: 6px;
 }
 
-.dark-mode .facility-time {
+.dark-theme .facility-time {
     color: #aaa;
 }
 
@@ -821,7 +821,7 @@
     border-radius: 4px;
 }
 
-/* 狀態標籤 */
+/* ?�?��?�?*/
 .facility-status-badge {
     font-size: 0.7rem;
     font-weight: 600;
@@ -868,7 +868,7 @@
     }
 }
 
-/* ========== 進度條區域 ========== */
+/* ========== ?�度條�???========== */
 .facility-progress-section {
     margin-top: 8px;
 }
@@ -881,7 +881,7 @@
     margin-bottom: 6px;
 }
 
-.dark-mode .progress-bar-container {
+.dark-theme .progress-bar-container {
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -938,15 +938,15 @@
     color: #00796B;
 }
 
-.dark-mode .progress-label {
+.dark-theme .progress-label {
     color: #aaa;
 }
 
-.dark-mode .progress-time {
+.dark-theme .progress-time {
     color: #4DB6AC;
 }
 
-/* 即將開放倒數 */
+/* ?��??�放?�數 */
 .upcoming-countdown {
     display: flex;
     align-items: center;
@@ -978,7 +978,7 @@
     }
 }
 
-/* 已關閉訊息 */
+/* 已�??��???*/
 .closed-message {
     font-size: 0.8rem;
     color: var(--text-secondary, #888);
@@ -998,7 +998,7 @@
     color: #1565C0;
 }
 
-/* ========== 底部連結 ========== */
+/* ========== 底部??? ========== */
 .schedule-footer {
     margin-top: 1rem;
     padding-top: 0.75rem;
@@ -1018,18 +1018,18 @@
     text-decoration: underline;
 }
 
-.dark-mode .schedule-footer {
+.dark-theme .schedule-footer {
     border-color: rgba(255, 255, 255, 0.08);
 }
 
-.dark-mode .source-link {
+.dark-theme .source-link {
     color: #aaa;
 }
 
-/* ========== 響應式設計 ========== */
+/* ========== ?��?式設�?========== */
 @media (max-width: 768px) {
 
-    /* 移除卡片額外 padding，與公告卡片、快速連結卡片保持一致 */
+    /* 移除?��?額�? padding，�??��??��??�快?��???��?保�?一??*/
     .gym-schedule-card {
         border-radius: 16px;
     }

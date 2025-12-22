@@ -15,8 +15,10 @@ html {
   font-size: 16px;
   line-height: 1.15;
   /* ✅ 雙重支援確保所有瀏覽器兼容 */
-  -webkit-text-size-adjust: 100%; /* Safari/舊版瀏覽器 */
-  text-size-adjust: 100%;          /* 現代瀏覽器標準 */
+  -webkit-text-size-adjust: 100%;
+  /* Safari/舊版瀏覽器 */
+  text-size-adjust: 100%;
+  /* 現代瀏覽器標準 */
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
 }
@@ -57,23 +59,30 @@ body {
   --primary-light: #48a999;
   --primary-dark: #004c40;
   --primary-ultra-light: #b2dfdb;
-  
+
   /* 🎯 功能色彩 */
   --success-color: #28a745;
   --warning-color: #ffc107;
   --error-color: #dc3545;
   --info-color: #17a2b8;
   --disabled-color: #6c757d;
-  
+
   /* 📐 間距系統 (8px 基礎單位) */
-  --spacing-xs: 0.25rem;    /* 4px */
-  --spacing-sm: 0.5rem;     /* 8px */
-  --spacing-md: 1rem;       /* 16px */
-  --spacing-lg: 1.5rem;     /* 24px */
-  --spacing-xl: 2rem;       /* 32px */
-  --spacing-2xl: 2.5rem;    /* 40px */
-  --spacing-3xl: 3rem;      /* 48px */
-  
+  --spacing-xs: 0.25rem;
+  /* 4px */
+  --spacing-sm: 0.5rem;
+  /* 8px */
+  --spacing-md: 1rem;
+  /* 16px */
+  --spacing-lg: 1.5rem;
+  /* 24px */
+  --spacing-xl: 2rem;
+  /* 32px */
+  --spacing-2xl: 2.5rem;
+  /* 40px */
+  --spacing-3xl: 3rem;
+  /* 48px */
+
   /* 🔄 圓角系統 */
   --radius-xs: 2px;
   --radius-sm: 4px;
@@ -82,7 +91,7 @@ body {
   --radius-xl: 16px;
   --radius-2xl: 20px;
   --radius-full: 50%;
-  
+
   /* ✨ 動畫系統 */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
@@ -90,14 +99,14 @@ body {
   --spring-easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --smooth-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --apple-easing: cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   /* 📱 斷點系統 */
   --breakpoint-xs: 480px;
   --breakpoint-sm: 768px;
   --breakpoint-md: 1024px;
   --breakpoint-lg: 1200px;
   --breakpoint-xl: 1400px;
-  
+
   /* 🎯 Z-index 層級系統 */
   --z-dropdown: 1000;
   --z-sticky: 1020;
@@ -108,30 +117,38 @@ body {
   --z-tooltip: 1070;
   --z-toast: 9999;
   --z-performance: 10000;
-  
+
   /* 📝 字體系統 */
-  --font-size-xs: 0.75rem;    /* 12px */
-  --font-size-sm: 0.875rem;   /* 14px */
-  --font-size-base: 1rem;     /* 16px */
-  --font-size-lg: 1.125rem;   /* 18px */
-  --font-size-xl: 1.25rem;    /* 20px */
-  --font-size-2xl: 1.5rem;    /* 24px */
-  --font-size-3xl: 1.875rem;  /* 30px */
-  --font-size-4xl: 2.25rem;   /* 36px */
-  
+  --font-size-xs: 0.75rem;
+  /* 12px */
+  --font-size-sm: 0.875rem;
+  /* 14px */
+  --font-size-base: 1rem;
+  /* 16px */
+  --font-size-lg: 1.125rem;
+  /* 18px */
+  --font-size-xl: 1.25rem;
+  /* 20px */
+  --font-size-2xl: 1.5rem;
+  /* 24px */
+  --font-size-3xl: 1.875rem;
+  /* 30px */
+  --font-size-4xl: 2.25rem;
+  /* 36px */
+
   --font-weight-light: 300;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
-  
+
   --line-height-tight: 1.25;
   --line-height-snug: 1.375;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.625;
   --line-height-loose: 2;
-  
+
   /* 🌊 陰影系統 */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -153,7 +170,7 @@ body {
   --theme-bg-overlay: rgba(255, 255, 255, 0.9);
   --theme-bg-hover: rgba(0, 0, 0, 0.04);
   --theme-bg-active: rgba(0, 0, 0, 0.08);
-  
+
   /* 文字色系 */
   --theme-text-primary: #333333;
   --theme-text-secondary: #666666;
@@ -161,14 +178,14 @@ body {
   --theme-text-disabled: #cccccc;
   --theme-text-inverse: #ffffff;
   --theme-text-on-primary: #ffffff;
-  
+
   /* 邊框與分隔線 */
   --theme-border-primary: #e0e0e0;
   --theme-border-secondary: #f0f0f0;
   --theme-border-focus: var(--primary-color);
   --theme-border-error: var(--error-color);
   --theme-border-success: var(--success-color);
-  
+
   /* 陰影系統 */
   --theme-shadow-primary: 0 2px 8px rgba(0, 0, 0, 0.1);
   --theme-shadow-secondary: 0 4px 16px rgba(0, 0, 0, 0.15);
@@ -187,7 +204,7 @@ body {
   --theme-bg-overlay: rgba(45, 45, 45, 0.9);
   --theme-bg-hover: rgba(255, 255, 255, 0.04);
   --theme-bg-active: rgba(255, 255, 255, 0.08);
-  
+
   /* 文字色系 */
   --theme-text-primary: #ffffff;
   --theme-text-secondary: #cccccc;
@@ -195,14 +212,14 @@ body {
   --theme-text-disabled: #666666;
   --theme-text-inverse: #1a1a1a;
   --theme-text-on-primary: #ffffff;
-  
+
   /* 邊框與分隔線 */
   --theme-border-primary: #404040;
   --theme-border-secondary: #353535;
   --theme-border-focus: var(--primary-light);
   --theme-border-error: #ff6b6b;
   --theme-border-success: #51cf66;
-  
+
   /* 陰影系統 */
   --theme-shadow-primary: 0 2px 8px rgba(0, 0, 0, 0.3);
   --theme-shadow-secondary: 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -220,8 +237,25 @@ body {
   overflow-x: hidden;
 }
 
+/* 🎨 主題切換過渡動畫 */
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    fill 0.3s ease !important;
+}
+
 /* 🎨 全域元素樣式重置與主題化 */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--theme-text-primary);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
@@ -229,12 +263,29 @@ h1, h2, h3, h4, h5, h6 {
   transition: color var(--transition-normal);
 }
 
-h1 { font-size: var(--font-size-4xl); }
-h2 { font-size: var(--font-size-3xl); }
-h3 { font-size: var(--font-size-2xl); }
-h4 { font-size: var(--font-size-xl); }
-h5 { font-size: var(--font-size-lg); }
-h6 { font-size: var(--font-size-base); }
+h1 {
+  font-size: var(--font-size-4xl);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+}
+
+h4 {
+  font-size: var(--font-size-xl);
+}
+
+h5 {
+  font-size: var(--font-size-lg);
+}
+
+h6 {
+  font-size: var(--font-size-base);
+}
 
 p {
   color: var(--theme-text-secondary);
@@ -367,7 +418,8 @@ pre code {
 }
 
 /* 📋 列表樣式 */
-ul, ol {
+ul,
+ol {
   color: var(--theme-text-secondary);
   padding-left: var(--spacing-lg);
 }
@@ -388,7 +440,8 @@ table {
   box-shadow: var(--theme-shadow-primary);
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: var(--spacing-sm) var(--spacing-md);
   border-bottom: 1px solid var(--theme-border-secondary);
@@ -490,35 +543,78 @@ a:focus-visible,
   border: 0 !important;
 }
 
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
+.text-center {
+  text-align: center;
+}
 
-.font-light { font-weight: var(--font-weight-light); }
-.font-normal { font-weight: var(--font-weight-normal); }
-.font-medium { font-weight: var(--font-weight-medium); }
-.font-semibold { font-weight: var(--font-weight-semibold); }
-.font-bold { font-weight: var(--font-weight-bold); }
+.text-left {
+  text-align: left;
+}
 
-.text-primary { color: var(--theme-text-primary); }
-.text-secondary { color: var(--theme-text-secondary); }
-.text-tertiary { color: var(--theme-text-tertiary); }
+.text-right {
+  text-align: right;
+}
 
-.bg-primary { background-color: var(--theme-bg-primary); }
-.bg-secondary { background-color: var(--theme-bg-secondary); }
-.bg-card { background-color: var(--theme-bg-card); }
+.font-light {
+  font-weight: var(--font-weight-light);
+}
+
+.font-normal {
+  font-weight: var(--font-weight-normal);
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.font-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+
+.font-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+.text-primary {
+  color: var(--theme-text-primary);
+}
+
+.text-secondary {
+  color: var(--theme-text-secondary);
+}
+
+.text-tertiary {
+  color: var(--theme-text-tertiary);
+}
+
+.bg-primary {
+  background-color: var(--theme-bg-primary);
+}
+
+.bg-secondary {
+  background-color: var(--theme-bg-secondary);
+}
+
+.bg-card {
+  background-color: var(--theme-bg-card);
+}
 
 /* 📱 響應式工具類別 */
 @media (max-width: 767px) {
-  .hidden-mobile { display: none !important; }
+  .hidden-mobile {
+    display: none !important;
+  }
 }
 
 @media (min-width: 768px) {
-  .hidden-desktop { display: none !important; }
+  .hidden-desktop {
+    display: none !important;
+  }
 }
 
 /* 🎯 無障礙優化 */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -534,7 +630,7 @@ a:focus-visible,
     --theme-border-primary: #000000;
     --theme-text-secondary: var(--theme-text-primary);
   }
-  
+
   [data-theme="dark"] {
     --theme-border-primary: #ffffff;
   }
@@ -548,63 +644,65 @@ a:focus-visible,
     box-shadow: none !important;
     text-shadow: none !important;
   }
-  
+
   a,
   a:visited {
     text-decoration: underline;
     color: black !important;
   }
-  
+
   a[href]:after {
     content: " (" attr(href) ")";
     font-size: 0.8em;
   }
-  
+
   abbr[title]:after {
     content: " (" attr(title) ")";
   }
-  
+
   pre,
   blockquote {
     border: 1px solid black;
     page-break-inside: avoid;
   }
-  
+
   thead {
     display: table-header-group;
   }
-  
+
   tr,
   img {
     page-break-inside: avoid;
   }
-  
+
   img {
     max-width: 100% !important;
   }
-  
+
   p,
   h2,
   h3 {
     /* ✅ 修復：使用 @supports 檢查支援度 */
     page-break-after: avoid;
   }
-  
+
   h2,
   h3 {
     page-break-after: avoid;
   }
-  
+
   /* ✅ 修復：使用 @supports 確保只在支援的瀏覽器中應用 */
   @supports (orphans: 3) {
+
     p,
     h2,
     h3 {
       orphans: 3;
     }
   }
-  
+
   @supports (widows: 3) {
+
     p,
     h2,
     h3 {

@@ -413,6 +413,17 @@
         "installConfirm": "\"Install\"",
         "androidStep3b": " to confirm",
         "androidStep3Hint": "After completing, open the app from home screen",
-        "installNow": "Install Now"
+        "installNow": "Install Now",
+        "installTitleShort": "Add to Home Screen",
+        "openInSafariShort": "Copy link and open in Safari browser",
+        "openInChromeShort": "Copy link and open in Chrome browser",
+        "iosInstallHint": "Tap",
+        "iosInstallHint2": "→ \"Add to Home Screen\"",
+        "featureAppShort": "App Mode",
+        "featurePushShort": "Push Notification",
+        "androidInstallHint": "Get full app experience with push notifications",
+        "androidManualHint": "Tap",
+        "androidManualHint2": "→ \"Install app\"",
+        "installApp": "Install App"
     }
 }

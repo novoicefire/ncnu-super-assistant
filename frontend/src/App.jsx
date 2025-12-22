@@ -7,6 +7,7 @@ import ReactGA from 'react-ga4';
 // 核心組件直接導入
 import { ThemeProvider } from './contexts/ThemeContext.jsx';
 import { NotificationProvider } from './contexts/NotificationContext.jsx';
+import { PWAProvider } from './contexts/PWAContext.jsx';
 import { LoadingProvider } from './components/common/LoadingManager.jsx';
 import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 import PerformanceMonitor from './components/common/PerformanceMonitor.jsx';
@@ -151,93 +152,95 @@ function App() {
       <ThemeProvider>
         <NotificationProvider>
           <LoadingProvider>
-            <Router>
-              <RouteTracker />
+            <PWAProvider>
+              <Router>
+                <RouteTracker />
 
-              {/* iOS PWA 強制安裝提示 */}
-              <PWAInstallPrompt />
+                {/* PWA 安裝提示 */}
+                <PWAInstallPrompt />
 
-              <DisclaimerModal
-                isVisible={showDisclaimer}
-                onAccept={handleAcceptDisclaimer}
-              />
-
-              <PerformanceMonitor
-                isEnabled={import.meta.env.DEV}
-                onMetrics={handlePerformanceMetrics}
-              />
-
-              {/* 🎯 主應用程式 - 新佈局結構 */}
-              <div className="app-layout">
-                {/* 側邊導航（電腦版） */}
-                <ErrorBoundary fallback={<div className="nav-error">導航欄載入失敗</div>}>
-                  <SideNav disclaimerAccepted={disclaimerAccepted} />
-                </ErrorBoundary>
-
-                {/* 手機版頂部標題欄 */}
-                <MobileHeader />
-
-                {/* 主內容區域 */}
-                <main className="main-content">
-                  <ErrorBoundary>
-                    <Suspense fallback={<PageLoadingFallback pageName="頁面" />}>
-                      <Routes>
-                        <Route path="/" element={
-                          <Suspense fallback={<PageLoadingFallback pageName="首頁" />}>
-                            <Dashboard />
-                          </Suspense>
-                        } />
-                        <Route path="/course-planner" element={
-                          <Suspense fallback={<PageLoadingFallback pageName="智慧排課" />}>
-                            <CoursePlanner />
-                          </Suspense>
-                        } />
-                        <Route path="/tracker" element={
-                          <Suspense fallback={<PageLoadingFallback pageName="畢業進度" />}>
-                            <GraduationTracker />
-                          </Suspense>
-                        } />
-                        <Route path="/calendar" element={
-                          <Suspense fallback={<PageLoadingFallback pageName="行事曆" />}>
-                            <UniversityCalendar />
-                          </Suspense>
-                        } />
-                        <Route path="/updates" element={
-                          <Suspense fallback={<PageLoadingFallback pageName="更新日誌" />}>
-                            <UpdateLog />
-                          </Suspense>
-                        } />
-                        <Route path="/admin" element={
-                          <Suspense fallback={<PageLoadingFallback pageName="管理中心" />}>
-                            <AdminDashboard />
-                          </Suspense>
-                        } />
-                      </Routes>
-                    </Suspense>
-                  </ErrorBoundary>
-                </main>
-
-                {/* 底部導航（手機版） */}
-                <BottomNavBar />
-
-                {/* 推播通知訂閱提示（用戶手動點擊觸發） */}
-                <PushNotificationPrompt />
-
-                <Toaster
-                  position="top-right"
-                  toastOptions={{
-                    duration: 4000,
-                    style: {
-                      background: 'var(--theme-bg-card)',
-                      color: 'var(--theme-text-primary)',
-                      border: '1px solid var(--theme-border-primary)',
-                      borderRadius: '12px',
-                      boxShadow: 'var(--theme-shadow-lg)'
-                    }
-                  }}
+                <DisclaimerModal
+                  isVisible={showDisclaimer}
+                  onAccept={handleAcceptDisclaimer}
                 />
-              </div>
-            </Router>
+
+                <PerformanceMonitor
+                  isEnabled={import.meta.env.DEV}
+                  onMetrics={handlePerformanceMetrics}
+                />
+
+                {/* 🎯 主應用程式 - 新佈局結構 */}
+                <div className="app-layout">
+                  {/* 側邊導航（電腦版） */}
+                  <ErrorBoundary fallback={<div className="nav-error">導航欄載入失敗</div>}>
+                    <SideNav disclaimerAccepted={disclaimerAccepted} />
+                  </ErrorBoundary>
+
+                  {/* 手機版頂部標題欄 */}
+                  <MobileHeader />
+
+                  {/* 主內容區域 */}
+                  <main className="main-content">
+                    <ErrorBoundary>
+                      <Suspense fallback={<PageLoadingFallback pageName="頁面" />}>
+                        <Routes>
+                          <Route path="/" element={
+                            <Suspense fallback={<PageLoadingFallback pageName="首頁" />}>
+                              <Dashboard />
+                            </Suspense>
+                          } />
+                          <Route path="/course-planner" element={
+                            <Suspense fallback={<PageLoadingFallback pageName="智慧排課" />}>
+                              <CoursePlanner />
+                            </Suspense>
+                          } />
+                          <Route path="/tracker" element={
+                            <Suspense fallback={<PageLoadingFallback pageName="畢業進度" />}>
+                              <GraduationTracker />
+                            </Suspense>
+                          } />
+                          <Route path="/calendar" element={
+                            <Suspense fallback={<PageLoadingFallback pageName="行事曆" />}>
+                              <UniversityCalendar />
+                            </Suspense>
+                          } />
+                          <Route path="/updates" element={
+                            <Suspense fallback={<PageLoadingFallback pageName="更新日誌" />}>
+                              <UpdateLog />
+                            </Suspense>
+                          } />
+                          <Route path="/admin" element={
+                            <Suspense fallback={<PageLoadingFallback pageName="管理中心" />}>
+                              <AdminDashboard />
+                            </Suspense>
+                          } />
+                        </Routes>
+                      </Suspense>
+                    </ErrorBoundary>
+                  </main>
+
+                  {/* 底部導航（手機版） */}
+                  <BottomNavBar />
+
+                  {/* 推播通知訂閱提示（用戶手動點擊觸發） */}
+                  <PushNotificationPrompt />
+
+                  <Toaster
+                    position="top-right"
+                    toastOptions={{
+                      duration: 4000,
+                      style: {
+                        background: 'var(--theme-bg-card)',
+                        color: 'var(--theme-text-primary)',
+                        border: '1px solid var(--theme-border-primary)',
+                        borderRadius: '12px',
+                        boxShadow: 'var(--theme-shadow-lg)'
+                      }
+                    }}
+                  />
+                </div>
+              </Router>
+            </PWAProvider>
           </LoadingProvider>
         </NotificationProvider>
       </ThemeProvider>

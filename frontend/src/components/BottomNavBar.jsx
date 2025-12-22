@@ -10,20 +10,22 @@ import {
     faHouse,
     faCalendarDays,
     faGraduationCap,
-    faAddressBook,
     faEllipsis,
     faCalendar,
     faClipboardList,
     faBook,
-    faXmark
+    faXmark,
+    faDownload
 } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { usePWA } from '../contexts/PWAContext';
 import './BottomNavBar.css';
 
 const BottomNavBar = () => {
     const { t } = useTranslation();
     const location = useLocation();
     const [showMore, setShowMore] = useState(false);
+    const { canShow: canShowPWA, openPrompt: openPWAPrompt } = usePWA();
 
     // 檢查用戶是否已經看過 IG 提示（從 localStorage 讀取）
     const [hasSeenIGHint, setHasSeenIGHint] = useState(() => {
@@ -37,6 +39,12 @@ const BottomNavBar = () => {
             setHasSeenIGHint(true);
         }
         setShowMore(!showMore);
+    };
+
+    // 處理安裝 App 按鈕點擊
+    const handleInstallClick = () => {
+        setShowMore(false);
+        openPWAPrompt();
     };
 
     // 主要 Tab 項目（使用翻譯 key）
@@ -85,6 +93,16 @@ const BottomNavBar = () => {
                             </button>
                         </div>
                         <div className="more-menu-items">
+                            {/* 安裝 App 按鈕（只在手機且可顯示時才顯示） */}
+                            {canShowPWA && (
+                                <button
+                                    className="more-menu-item install-app-btn"
+                                    onClick={handleInstallClick}
+                                >
+                                    <FontAwesomeIcon icon={faDownload} className="more-icon" />
+                                    <span>{t('pwa.installApp', '安裝 App')}</span>
+                                </button>
+                            )}
                             {moreItems.map((item) => (
                                 item.external ? (
                                     <a
