@@ -424,6 +424,6 @@
         "androidInstallHint": "Get full app experience with push notifications",
         "androidManualHint": "Tap",
         "androidManualHint2": "→ \"Install app\"",
-        "installApp": "Install App"
+        "installAppBtn": "Install App"
     }
 }

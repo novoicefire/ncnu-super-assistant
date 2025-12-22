@@ -424,6 +424,6 @@
         "androidInstallHint": "獲得完整 App 體驗與推播通知",
         "androidManualHint": "點擊右上角",
         "androidManualHint2": "→「安裝應用程式」",
-        "installApp": "安裝 App"
+        "installAppBtn": "安裝 App"
     }
 }

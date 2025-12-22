@@ -100,7 +100,7 @@ const BottomNavBar = () => {
                                     onClick={handleInstallClick}
                                 >
                                     <FontAwesomeIcon icon={faDownload} className="more-icon" />
-                                    <span>{t('pwa.installApp', '安裝 App')}</span>
+                                    <span>{t('pwa.installAppBtn', '安裝 App')}</span>
                                 </button>
                             )}
                             {moreItems.map((item) => (
