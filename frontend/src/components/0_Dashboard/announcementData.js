@@ -2,9 +2,19 @@
 export const announcementData = [
   {
     id: 1,
+    title: "🏠 【 暨大國企企專租屋大調查 】",
+    date: "2025-12-20",
+    priority: "high",
+    content: "<iframe src=\"https://embed.dcard.tw/post/260489435\" style='border:none' width=\"100%\" height=\"372px\"></iframe>",
+    images: [],
+    embeds: [],
+    buttons: []
+  },
+  {
+    id: 2,
     title: "友情提示🫶不是廣告",
-    date: "2025-09-01",
-    priority: "normal",
+    date: "2025-11-27",
+    priority: "high",
     content: "有需要【免費諮詢升學或職涯規劃】的人，可以找我要聯繫方式，而且他們在學校也有駐點，有興趣可以去問問看，反正問不用錢，祝大家學業順利💪大展鴻圖😎",
     images: [],
     embeds: [],
@@ -19,18 +29,33 @@ export const announcementData = [
     ]
   },
   {
-    id: 1,
-    title: "開學了，但一切尚未結束~",
-    date: "2025-09-07",
-    priority: "high",
-    content: "<iframe src=\"https://embed.dcard.tw/post/259732091\" style='border:none' width=\"100%\" height=\"372px\"></iframe>",
-    images: [],
-    embeds: [],
-    buttons: []
-  },
+    id: 3,
+    title: "🎓 暨大生使用回饋",
+    date: "2025-07-27",
+    priority: "low",
+    content: `感謝所有使用暨大生超級助理的同學們！您的支持是我們持續改進的動力。
 
+歡迎在使用過程中提供寶貴建議，讓我們一起打造更好的校園服務平台。`,
+    images: [],
+    embeds: [
+      {
+        type: "link",
+        url: "https://www.dcard.tw/f/ncnu/p/259365158",
+        title: "Dcard 網站介紹貼文",
+        description: "在下方留言或回報幫助我修復BUG與改進服務品質"
+      }
+    ],
+    buttons: [
+      {
+        text: "追蹤IG",
+        url: "https://www.instagram.com/ncnu_super_assistant/",
+        style: "success",
+        icon: "💬",
+        external: true
+      },
+    ]
+  }
   /*
-  
    {
       id: 2,
       title: "📚 9/1~9/5 為二階選課選課週時間",
@@ -60,32 +85,5 @@ export const announcementData = [
         }
       ]
     },
-    {
-      id: 3,
-      title: "🎓 暨大生使用回饋",
-      date: "2025-07-27", 
-      priority: "low",
-      content: `感謝所有使用暨大生超級助理的同學們！您的支持是我們持續改進的動力。
-  
-  歡迎在使用過程中提供寶貴建議，讓我們一起打造更好的校園服務平台。`,
-      images: [],
-      embeds: [
-        {
-          type: "link",
-          url: "https://www.dcard.tw/f/ncnu/p/259365158",
-          title: "Dcard 網站介紹貼文",
-          description: "在下方留言或回報幫助我修復BUG與改進服務品質"
-        }
-      ],
-      buttons: [
-        {
-          text: "追蹤IG",
-          url: "https://www.instagram.com/ncnu_super_assistant/", 
-          style: "success",
-          icon: "💬",
-          external: true
-        },
-      ]
-    }
   */
 ];

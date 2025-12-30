@@ -1,13 +1,19 @@
 # Python/Flask backend
+venv/
 backend/venv/
 __pycache__/
 *.pyc
 backend/.env
+
 # Node/React frontend
+node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/.env
+# OS
 .DS_Store
+
+# User custom
+TODO-優化清單.md
 venv/
 /node_modules/
-TODO-優化清單.md

@@ -1,0 +1,23 @@
+{
+    // Python 設定
+    "python.defaultInterpreterPath": "${workspaceFolder}\\venv\\Scripts\\python.exe",
+    "python.terminal.activateEnvironment": true,
+    // 終端機設定：自動啟用虛擬環境
+    "terminal.integrated.env.windows": {
+        "VIRTUAL_ENV": "${workspaceFolder}\\venv"
+    },
+    // PowerShell 終端機啟動時自動執行 venv 啟用指令並刷新環境變數
+    "terminal.integrated.profiles.windows": {
+        "PowerShell (venv)": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
+            "args": [
+                "-NoExit",
+                "-Command",
+                "& {$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User'); if (Test-Path '.\\venv\\Scripts\\Activate.ps1') { .\\venv\\Scripts\\Activate.ps1 }}"
+            ]
+        }
+    },
+    // 設定預設終端機為 PowerShell (venv)
+    "terminal.integrated.defaultProfile.windows": "PowerShell (venv)"
+}
