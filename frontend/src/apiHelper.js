@@ -70,7 +70,7 @@ export const robustRequest = async (method, url, options = {}) => {
 // 🎯 判斷是否應該重試
 const shouldRetryRequest = (error) => {
   if (!error.response) return true; // 網路錯誤
-  
+
   const status = error.response.status;
   return status >= 500 || status === 429; // 伺服器錯誤或限流
 };
@@ -97,7 +97,7 @@ export const checkSystemHealth = async () => {
     const startTime = Date.now();
     const response = await apiClient.get('/api/health', { timeout: 5000 });
     const responseTime = Date.now() - startTime;
-    
+
     return {
       status: 'online',
       responseTime,
@@ -139,13 +139,23 @@ export const getTodayEvents = async () => {
   try {
     // 修正點 1：呼叫正確的 API 路徑
     const response = await robustRequest('get', '/api/events/today');
-    
+
     // 修正點 2：後端已完成篩選，直接回傳 response 即可
     return response || [];
   } catch (error) {
     console.warn('無法載入今日活動:', error);
     // 修正點 3：API 失敗時回傳空陣列，而不是模擬資料
     return [];
+  }
+};
+
+export const getWrappedData = async (userId) => {
+  try {
+    const response = await robustRequest('get', `/api/wrapped/${userId}`);
+    return response;
+  } catch (error) {
+    console.warn('無法載入學期回顧資料:', error);
+    return null;
   }
 };
 

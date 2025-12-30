@@ -2,9 +2,48 @@
 
 export const updateHistory = [
   {
+    version: "v5.1.0",
+    date: "2024-12-31",
+    type: "feature",
+    title: "學期回顧功能 - 你的 2025 學期成就清單！",
+    description: "全新推出「Semester Wrapped」學期回顧功能！如同 Spotify Wrapped 一樣，為您精心整理本學期的課表數據與校園里程碑。透過精美的投影片式介面，展示您的加入排名、總學分、超越百分比與最愛領域。一鍵分享您的專屬學期回顧圖片到社群平台，並參與暨大租屋問卷調查！",
+    features: [
+      "🎉 7 頁精美投影片式回顧介面，呈現您的學期成就",
+      "📊 個人化數據統計：加入排名、總學分、全校百分比、最愛領域",
+      "🏆 動態標籤系統：根據學分數自動生成專屬稱號（卷哥卷姐候選人、佛系大學生等）",
+      "📸 高畫質圖片分享：使用 html-to-image 技術，3 倍解析度匯出回顧海報",
+      "🏠 Dcard 租屋問卷宣傳頁：嵌入式貼文預覽，支援點擊前往填寫問卷",
+      "🔄 重新分享按鈕：避免分享失敗，提供二次分享機會",
+      "✨ 豐富動畫效果：stampIn、slideUpFade、float、popInElastic 等多種動畫",
+      "🎨 響應式設計：完美適配手機與電腦螢幕，文字自動縮放與換行",
+      "👤 個人化顯示：總結頁面顯示您的真實姓名"
+    ],
+    technical: [
+      "後端 API 擴展:",
+      "新增 `/api/wrapped/<user_google_id>` 端點",
+      "實作加入排名計算邏輯（基於 created_at）",
+      "實作學分百分位數計算（與全校比較）",
+      "實作最愛領域分析（課程開課單位統計）",
+      "新增用戶姓名 (user_name) 回傳",
+      "前端實作:",
+      "建立 SemesterWrapped.jsx 組件與 7 張投影片",
+      "整合 html-to-image 替換 html2canvas，提升截圖品質",
+      "實作 .capturing CSS 類別，凍結動畫確保截圖完整",
+      "實作 captureAndShowPromo 與 finalizeShare 分離式分享流程",
+      "新增 Dcard 問卷宣傳頁（Slide 6）與 3 秒自動下載計時器",
+      "條件式隱藏點擊區域（tap-area）以解決按鈕點擊衝突",
+      "使用 clamp() 實作響應式字體大小",
+      "CSS 動畫系統:",
+      "stampIn, slideUpFade, float, popInElastic 關鍵影格動畫",
+      "fillProgress 進度條填充動畫（6 秒同步）",
+      "gradientShift 背景漸層動畫",
+      "btnPulse 分享按鈕脈衝效果"
+    ]
+  },
+  {
     version: "v5.0.0",
     date: "2025-11-16",
-    type: "major", 
+    type: "major",
     title: "新增彈性課程功能支援無固定時間課程",
     description: "引入了對彈性課程的全面支援，這類課程沒有固定的上課時間，例如專題研究或校外實習。透過後端 API 的擴展和前端介面的重新設計，使用者現在可以將這類課程加入個人課表，系統會自動將其學分計入總學分。這項功能顯著提升了課表管理的靈活性和完整性，確保所有類型的課程都能被有效追蹤和統計。",
     features: [
@@ -14,7 +53,7 @@ export const updateHistory = [
       "✅ 課程類型標籤與智能排序",
       "✅ 雲端同步與本地備份",
       "✅ 完整的響應式設計與深色模式支援"
-      ],
+    ],
     technical: [
       "改進:",
       "學分計算邏輯整合所有課程類型",
@@ -28,7 +67,7 @@ export const updateHistory = [
   {
     version: "v4.2.2",
     date: "2025-11-16",
-    type: "fix", 
+    type: "fix",
     title: "修復行事曆在手機上被切掉一部分的問題",
     description: "🔧解決大學行事曆組件在行動裝置上顯示不完整的問題。透過調整 CSS 樣式，特別是在小螢幕尺寸下，確保行事曆內容能夠完整呈現並提供更佳的視覺體驗。",
     features: [
@@ -39,14 +78,14 @@ export const updateHistory = [
   {
     version: "v4.2.1",
     date: "2025-11-16",
-    type: "improvement", 
+    type: "improvement",
     title: "學分小卡視覺優化",
     description: "⚡️優化前端儀表板頁面中「本學期總學分」小卡的用戶體驗。透過重新設計進度條的顏色機制，使其能根據學分數量動態變化，並加入建議學分範圍的視覺標記，讓用戶能更直觀地了解其學分安排的合理性。同時，也對相關組件進行了重構，提升了代碼的可維護性。",
     features: [
       "🎨重新設計首頁「本學期總學分」小卡的進度條，使其能根據學分數量動態顯示顏色，並透過顏色漸變提供更細緻的視覺回饋。",
       "🎨學分狀態顏色機制: 引入新的顏色插值邏輯，根據總學分與建議學分範圍的距離，動態計算進度條的顏色，從綠色（合理）漸變到黃色（警告）再到紅色（偏離）。",
       "⚡️進度條建議範圍標記: 在總學分進度條上新增了視覺標記，明確指出建議的最低與最高學分範圍，幫助用戶快速判斷學分狀況。"
-      ],
+    ],
     technical: [
       "StatusCard 組件重構: StatusCard 組件現在直接接收 statusColor 屬性，將顏色邏輯從組件內部移至父組件 TodayStatus.jsx 進行集中管理，提升了組件的靈活性。"
     ]
@@ -54,7 +93,7 @@ export const updateHistory = [
   {
     version: "v4.2.0",
     date: "2025-09-10",
-    type: "improvement", 
+    type: "improvement",
     title: "暨大行事曆介面優化",
     description: "🎨現在行事曆分頁更好用也不再像之前一樣醜醜的咯🤩",
     features: [
@@ -62,7 +101,7 @@ export const updateHistory = [
       "⚡️新增備用讀取機制，若過久沒有讀取到官方API將自動調用網站備份行事曆檔案",
       "🐛修正了之前日期不會自動定位到當日的問題",
       "🐛修正了之前沒有完全是配夜間模式的主題切換的問題"
-      ],
+    ],
     technical: [
       "✨新增骨架式結構與",
       "🎨加上微光與脈衝效果載入動畫"
@@ -71,7 +110,7 @@ export const updateHistory = [
   {
     version: "v4.1.0",
     date: "2025-08-10",
-    type: "feature", 
+    type: "feature",
     title: "優化開課單位列表與修復課程資料顯示",
     description: "優化選擇開課單位的過程，並修復「智慧選課」課程教室位置沒有顯示出來的問題",
     features: [
@@ -83,7 +122,7 @@ export const updateHistory = [
   {
     version: "v4.0.0",
     date: "2025-08-03",
-    type: "major", 
+    type: "major",
     title: "重大界面改版與深色模式上線",
     description: "首頁全面Dashboard化改版，新增深色模式支援" +
       "\n" +
@@ -108,9 +147,9 @@ export const updateHistory = [
     date: "2025-07-25",
     type: "feature",
     title: "導航欄新增LOGO與IBS專區整合",
-    description:"新增自訂Logo支援，國企系學士班手冊Notion連結按鈕"+
-                "\n"+
-                "(畢竟我是國企的，加個IBS資訊專區的按鈕方便系上學弟妹沒問題的吧)",
+    description: "新增自訂Logo支援，國企系學士班手冊Notion連結按鈕" +
+      "\n" +
+      "(畢竟我是國企的，加個IBS資訊專區的按鈕方便系上學弟妹沒問題的吧)",
     features: [
       "🎨 新增自訂SVG Logo",
       "🎓 整合國企系IBS學士班手冊專區連結",
@@ -148,7 +187,7 @@ export const updateHistory = [
     description: "重大更新！新增法律保護機制，並全面優化智能更新系統，提供更穩定可靠的服務體驗",
     features: [
       "⚖️ 新增免責聲明公告系統，確保用戶了解服務性質",
-      "🔒 每次載入必讀聲明，強化法律保護機制", 
+      "🔒 每次載入必讀聲明，強化法律保護機制",
       "🎨 專業公告欄設計，支援響應式全螢幕顯示",
       "🤖 AI 更新日誌系統深度優化，提升生成品質",
       "🔧 API 介面穩定性改善，減少服務中斷問題",
@@ -156,7 +195,7 @@ export const updateHistory = [
     ],
     technical: [
       "實作 DisclaimerModal 元件與完整樣式系統",
-      "修復前端依賴衝突導致的部署緩慢問題", 
+      "修復前端依賴衝突導致的部署緩慢問題",
       "改善 Gemini API 調用機制與錯誤處理邏輯",
       "優化 GitHub Actions 工作流程配置"
     ]

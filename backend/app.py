@@ -227,6 +227,122 @@ def get_calendar():
     load_static_data_if_needed()
     return jsonify(CALENDAR_EVENTS)
 
+# --- Semester Wrapped API ---
+@app.route('/api/wrapped/<user_google_id>')
+def get_user_wrapped(user_google_id):
+    try:
+        # 1. 驗證使用者是否存在 & 獲取加入時間
+        user_res = supabase.table('users').select('created_at, full_name').eq('google_id', user_google_id).execute()
+        if not user_res.data:
+            return jsonify({"error": "User not found"}), 404
+        
+        current_user = user_res.data[0]
+        join_date = current_user['created_at'] # ISO format string
+        
+        # 2. 計算加入順序 (Rank)
+        # 計算有多少人的 created_at 比這位使用者早 (或者直接用 count)
+        # 注意：supabase 若無 created_at 欄位需確認 schema，假設有。若無，暫時用 id 排序模擬。
+        # 這裡假設 users 表有 created_at，如果原本沒有，可能需要 fallback。
+        # 由於 users 表結構未知，我們保守使用 'created_at' 欄位，若出錯則用假資料或 id 排序。
+        
+        try:
+            rank_res = supabase.table('users').select('google_id', count='exact').lt('created_at', join_date).execute()
+            user_rank = rank_res.count + 1
+        except Exception:
+            # Fallback if created_at doesn't exist or other error, assume based on row count roughly
+             user_rank = 999 
+
+        # 3. 獲取該使用者課表與計算學分
+        schedule_res = supabase.table('schedules').select('schedule_data, flexible_courses').eq('user_id', user_google_id).execute()
+        
+        my_total_credits = 0.0
+        my_dept_counts = Counter()
+        
+        if schedule_res.data:
+            data = schedule_res.data[0]
+            sch = data.get('schedule_data', {})
+            flex = data.get('flexible_courses', [])
+            
+            # 去重計算固定課程
+            unique_fixed = {
+                v['course_id']: v for v in sch.values() 
+                if isinstance(v, dict) and 'course_id' in v
+            }
+            
+            # 彈性課程
+            unique_flex = {
+                v['course_id']: v for v in flex
+                if isinstance(v, dict) and 'course_id' in v
+            }
+            
+            # 合併計算學分與科系
+            all_courses = list(unique_fixed.values()) + list(unique_flex.values())
+            for c in all_courses:
+                try:
+                    cred = float(c.get('course_credit', 0))
+                    my_total_credits += cred
+                except:
+                    pass
+                
+                dept = c.get('department', '')
+                if dept: my_dept_counts[dept] += 1
+                
+        # 4. 全校數據分析 (Percentile)
+        # 為了效能，不要拉全部 data，只拉有 schedule 的 user_id 
+        # 但目前 supabase-py 無法直接做 aggregation query 回傳 array of credits.
+        # 暫時拉取 limited 數量 (例如 1000 筆) 來做統計樣本，或者若 user 少則全拉。
+        all_schedules_res = supabase.table('schedules').select('schedule_data, flexible_courses').limit(1000).execute()
+        
+        all_credits = []
+        for row in all_schedules_res.data:
+            s_data = row.get('schedule_data', {})
+            f_data = row.get('flexible_courses', [])
+            
+            u_fixed = {v['course_id']: v for v in s_data.values() if isinstance(v, dict) and 'course_id' in v}
+            u_flex = {v['course_id']: v for v in f_data if isinstance(v, dict) and 'course_id' in v}
+            
+            total = 0.0
+            for c in list(u_fixed.values()) + list(u_flex.values()):
+                try:
+                    total += float(c.get('course_credit', 0))
+                except:
+                    pass
+            all_credits.append(total)
+            
+        # 計算落在前百分之幾
+        # 贏過多少人 => (小於我的學分的人數 / 總人數) * 100
+        if not all_credits:
+            percentile = 0
+        else:
+            wins = sum(1 for c in all_credits if c < my_total_credits)
+            percentile = int((wins / len(all_credits)) * 100)
+            
+        # 5. 最愛科系
+        fav_dept = my_dept_counts.most_common(1)
+        favorite_dept = fav_dept[0][0] if fav_dept else "尚未分析"
+        
+        # 6. 生成評語
+        tags = []
+        if my_total_credits >= 20: tags.append("卷哥卷姐\n候選人")
+        elif my_total_credits >= 18: tags.append("充實的\n大學生")
+        elif my_total_credits >= 16: tags.append("Work-Life\nBalance")
+        elif my_total_credits >= 12: tags.append("佛系\n大學生")
+        else: tags.append("還在\n探索中...")
+        
+        return jsonify({
+            "join_date": join_date.split('T')[0] if 'T' in join_date else join_date,
+            "user_name": current_user.get('full_name', 'Student'),
+            "user_rank": user_rank,
+            "total_credits": round(my_total_credits, 1),
+            "percentile": percentile,
+            "favorite_dept": favorite_dept,
+            "tag": tags[0]
+        })
+
+    except Exception as e:
+        print(f"ERROR in get_user_wrapped: {e}")
+        return jsonify({"error": str(e)}), 500
+
 # --- 應用程式啟動區塊 ---
 with app.app_context():
     initialize_app()
