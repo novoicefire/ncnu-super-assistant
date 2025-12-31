@@ -471,6 +471,37 @@
         max-height: 100%;
         border-radius: 0;
     }
+    
+    .slide-content {
+        padding: 20px 15px; /* Reduced padding for mobile */
+        overflow-y: auto; /* Allow scrolling if content overflows */
+    }
+    
+    .summary-poster {
+        padding: 15px; /* Reduced padding */
+        min-height: auto; /* Allow flexible height */
+    }
+    
+    .poster-header h2 {
+        font-size: 1.8rem; /* Slightly smaller title */
+    }
+    
+    .poster-stats-grid {
+        gap: 10px; /* Reduced gap */
+    }
+    
+    .wrapped-stat-item {
+        padding: 10px; /* Reduced padding */
+    }
+    
+    .wrapped-stat-value {
+        font-size: 1.2rem; /* Slightly smaller values */
+    }
+    
+    .poster-tag {
+        font-size: 2.2rem; /* Slightly smaller tag */
+        padding: 8px 15px;
+    }
 }
 
 .share-btn {
