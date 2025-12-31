@@ -143,7 +143,15 @@ const SemesterWrapped = ({ userId, onClose }) => {
         }
     };
 
-    if (loading) return null;
+    if (loading) {
+        return (
+            <div className="wrapped-overlay">
+                <div className="wrapped-container" style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <h2 style={{ animation: 'btnPulse 1s infinite' }}>✨ 正在準備您的回顧...</h2>
+                </div>
+            </div>
+        );
+    }
     if (error) {
         return (
             <div className="wrapped-overlay" onClick={onClose}>
