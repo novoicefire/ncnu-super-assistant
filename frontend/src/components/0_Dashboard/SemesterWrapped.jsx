@@ -182,15 +182,31 @@ const SemesterWrapped = ({ userId, onClose }) => {
                         <div className="poster-hero">
                             <h1 style={{ fontSize: '3rem', lineHeight: '0.9' }}>2025 / 114-1 SEMESTER<br />WRAPPED</h1>
                             <div className="poster-tag" style={{ transform: 'rotate(-5deg)', marginTop: '20px' }}>學期回顧</div>
+
+                            {/* Hola Bakery Promo Tag */}
+                            <div className="poster-tag" style={{
+                                fontSize: '1rem',
+                                padding: '8px 15px',
+                                marginTop: '15px',
+                                background: '#000',
+                                color: '#fff',
+                                transform: 'rotate(10deg)', // 更活潑的傾斜
+                                boxShadow: '5px 5px 0px rgba(0,0,0,0.5)',
+                                animationName: 'stampInRight', // 專屬右傾動畫
+                                animationDelay: '0.8s',
+                                textShadow: 'none',
+                                lineHeight: '1.4'
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'center' }}>
+                                    <span style={{ fontSize: '1.2rem' }}>🧁</span> Hola Bakery 甜點工作室
+                                </div>
+                                <div style={{ fontSize: '0.8rem', marginTop: '2px', fontWeight: 'normal', letterSpacing: '2px', opacity: 0.9 }}>
+                                    暖心應援
+                                </div>
+                            </div>
                         </div>
                         <div className="poster-footer">
                             <p>點擊開啟 👉</p>
-                            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.3)', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <span style={{ fontSize: '1.4rem' }}>🧁</span> Hola Bakery 甜點工作室
-                                </div>
-                                <div style={{ fontSize: '0.9rem', color: '#fff', opacity: 0.9, letterSpacing: '2px' }}>暖心應援</div>
-                            </div>
                         </div>
                     </div>
                 );
