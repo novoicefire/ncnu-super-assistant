@@ -57,6 +57,70 @@ const Dashboard = () => {
         </div>
       )}
 
+      {/* 🍰 Hola Bakery Banner */}
+      <div
+        className="promo-banner"
+        onClick={() => window.open('https://www.instagram.com/hola._.bakery/?hl=zh-tw', '_blank')}
+        style={{
+          background: 'linear-gradient(135deg, #0f0f0f, #2b2b2b)', // 黑金低調質感
+          color: '#d4af37', // 經典金
+          padding: '15px 20px',
+          borderRadius: '12px',
+          marginBottom: '20px',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          border: '1px solid rgba(212, 175, 55, 0.3)', // 金色細邊框
+          boxShadow: '0 4px 15px rgba(0,0,0,0.5)', // 深色陰影
+          transition: 'transform 0.2s',
+          fontWeight: 'bold',
+          marginTop: isLoggedIn ? '-10px' : '10px'
+        }}
+        onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.01)'}
+        onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img
+            src="/hola_logo.jpg"
+            alt="Hola Bakery Logo"
+            style={{
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+              border: '2px solid #d4af37', // 金色邊框
+              objectFit: 'cover',
+              background: '#000'
+            }}
+          />
+          <div>
+            <div style={{
+              fontSize: '0.75rem',
+              background: '#d4af37',
+              color: '#000',
+              width: 'fit-content',
+              padding: '2px 8px',
+              borderRadius: '4px', // 方一點更俐落
+              marginBottom: '4px',
+              fontWeight: 800
+            }}>✨ 幫姊姊宣傳</div>
+            <div style={{ fontSize: '1.1rem', color: '#fff' }}>Hola Bakery 甜點工作室</div>
+            <div style={{ fontSize: '0.8rem', opacity: 0.8, fontWeight: 'normal', color: '#ccc' }}>
+              精緻手作 • 專屬客製化甜點 💝
+            </div>
+          </div>
+        </div>
+        <span style={{
+          fontSize: '0.9rem',
+          border: '1px solid #d4af37',
+          color: '#d4af37',
+          padding: '5px 12px',
+          borderRadius: '20px'
+        }}>
+          去逛逛 ↗
+        </span>
+      </div>
+
       <div className="dashboard-main">
         <div className="dashboard-sidebar">
           <TodayStatus />

@@ -148,6 +148,12 @@ const SemesterWrapped = ({ userId, onClose }) => {
             <div className="wrapped-overlay">
                 <div className="wrapped-container" style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <h2 style={{ animation: 'btnPulse 1s infinite' }}>✨ 正在準備您的回顧...</h2>
+                    <div style={{ marginTop: '25px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                        <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#FFD700', textShadow: '0 2px 10px rgba(0,0,0,0.5)', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <span style={{ fontSize: '1.6rem' }}>🧁</span> Hola Bakery 甜點工作室
+                        </div>
+                        <div style={{ fontSize: '1rem', color: '#FFD700', opacity: 0.9, letterSpacing: '2px' }}>暖心應援</div>
+                    </div>
                 </div>
             </div>
         );
@@ -179,6 +185,12 @@ const SemesterWrapped = ({ userId, onClose }) => {
                         </div>
                         <div className="poster-footer">
                             <p>點擊開啟 👉</p>
+                            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.3)', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span style={{ fontSize: '1.4rem' }}>🧁</span> Hola Bakery 甜點工作室
+                                </div>
+                                <div style={{ fontSize: '0.9rem', color: '#fff', opacity: 0.9, letterSpacing: '2px' }}>暖心應援</div>
+                            </div>
                         </div>
                     </div>
                 );
