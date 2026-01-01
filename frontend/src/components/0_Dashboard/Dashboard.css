@@ -3229,3 +3229,24 @@
   pointer-events: none;
   z-index: 1;
 }
+
+/* Semester Wrapped Banner Animation */
+.wrapped-banner {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.wrapped-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  transform: skewX(-25deg);
+  animation: shimmer 6s infinite ease-in-out;
+  animation-delay: 3s;
+  pointer-events: none;
+  z-index: 1;
+}
