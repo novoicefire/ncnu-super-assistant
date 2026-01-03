@@ -325,30 +325,38 @@ const SemesterWrapped = ({ userId, onClose }) => {
                 );
             case 6: // Dcard Promo Slide
                 return (
-                    <div className="slide-content slide-promo" style={{ background: '#006aa6', color: '#fff' }}>
-                        <div className="poster-header">
-                            <span>HOUSING SURVEY</span>
+                    <div className="slide-content slide-promo" style={{ background: '#006aa6', color: '#fff', overflow: 'hidden' }}>
+                        <div className="poster-header" style={{ marginBottom: '8px' }}>
+                            <span style={{ fontSize: '1rem', letterSpacing: '2px' }}>HOUSING SURVEY</span>
                         </div>
-                        <div className="poster-hero">
+                        <div className="poster-hero" style={{ padding: '0 15px' }}>
                             <h2 style={{
                                 fontSize: 'clamp(1.8rem, 6vw, 2.5rem)',
                                 color: '#fff',
                                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                                lineHeight: 1.3
+                                lineHeight: 1.2,
+                                marginBottom: '12px'
                             }}>
                                 你的房間是避風港，<br />還是修煉場？🏠
                             </h2>
-                            <div className="poster-tag" style={{ fontSize: '1.5rem', background: '#fff', color: '#006aa6', transform: 'rotate(-2deg)' }}>
-                                租屋鬼故事募集 👻
+                            <div className="poster-tag" style={{
+                                fontSize: 'clamp(1rem, 4vw, 1.3rem)',
+                                background: '#fff',
+                                color: '#006aa6',
+                                transform: 'rotate(-2deg)',
+                                padding: '8px 15px',
+                                lineHeight: 1.3
+                            }}>
+                                第二次抽獎來咯！🎁<br />租屋鬼故事募集 👻
                             </div>
                             <div
                                 className="promo-container"
                                 onClick={() => window.open('https://www.dcard.tw/f/ncnu/p/260489435', '_blank', 'noopener,noreferrer')}
                                 style={{
-                                    marginTop: '20px',
-                                    padding: '10px',
+                                    marginTop: '12px',
+                                    padding: '8px',
                                     background: 'rgba(255,255,255,0.1)',
-                                    borderRadius: '15px',
+                                    borderRadius: '12px',
                                     border: '2px solid rgba(255,255,255,0.2)',
                                     cursor: 'pointer',
                                     position: 'relative'
@@ -357,44 +365,45 @@ const SemesterWrapped = ({ userId, onClose }) => {
                                 <iframe
                                     src="https://embed.dcard.tw/post/260489435"
                                     width="100%"
-                                    height="300"
-                                    style={{ border: 'none', borderRadius: '10px', pointerEvents: 'none' }}
+                                    height="220"
+                                    style={{ border: 'none', borderRadius: '8px', pointerEvents: 'none' }}
                                     title="Dcard Post"
                                 ></iframe>
                                 <div style={{
                                     position: 'absolute',
-                                    bottom: '15px',
-                                    right: '15px',
+                                    bottom: '12px',
+                                    right: '12px',
                                     background: 'rgba(0,0,0,0.6)',
                                     color: '#fff',
-                                    padding: '5px 10px',
-                                    borderRadius: '5px',
-                                    fontSize: '0.8rem'
+                                    padding: '4px 8px',
+                                    borderRadius: '4px',
+                                    fontSize: '0.7rem'
                                 }}>
                                     👆 點擊查看完整貼文
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', gap: '10px', marginTop: '15px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                            <div style={{ display: 'flex', gap: '8px', marginTop: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         window.open('https://www.dcard.tw/f/ncnu/p/260489435', '_blank', 'noopener,noreferrer');
                                     }}
                                     style={{
-                                        padding: '10px 20px',
-                                        background: '#fff',
-                                        color: '#006aa6',
+                                        padding: '10px 18px',
+                                        background: 'linear-gradient(90deg, #FFD700, #FFA500)',
+                                        color: '#000',
                                         borderRadius: '50px',
-                                        border: 'none',
+                                        border: '2px solid #fff',
                                         cursor: 'pointer',
-                                        fontWeight: 800,
+                                        fontWeight: 900,
                                         fontSize: '0.95rem',
-                                        boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+                                        boxShadow: '0 4px 15px rgba(255,215,0,0.5)',
                                         position: 'relative',
-                                        zIndex: 10
+                                        zIndex: 10,
+                                        animation: 'btnPulse 1.5s infinite'
                                     }}
                                 >
-                                    👉 前往問卷
+                                    🎉 填問卷抽獎 🎁
                                 </button>
                                 <button
                                     onClick={(e) => {
@@ -403,15 +412,15 @@ const SemesterWrapped = ({ userId, onClose }) => {
                                         setCurrentSlide(5);
                                     }}
                                     style={{
-                                        padding: '10px 20px',
+                                        padding: '8px 16px',
                                         background: 'rgba(255,255,255,0.3)',
                                         color: '#fff',
                                         borderRadius: '50px',
                                         border: '2px solid #fff',
                                         cursor: 'pointer',
-                                        fontWeight: 800,
-                                        fontSize: '0.95rem',
-                                        boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+                                        fontWeight: 700,
+                                        fontSize: '0.85rem',
+                                        boxShadow: '0 3px 10px rgba(0,0,0,0.2)',
                                         position: 'relative',
                                         zIndex: 10
                                     }}
@@ -419,10 +428,7 @@ const SemesterWrapped = ({ userId, onClose }) => {
                                     🔄 重新分享
                                 </button>
                             </div>
-                            <h3 className="poster-subtitle" style={{ marginTop: '10px', fontSize: '0.85rem' }}>正在為您生成回顧圖片... ⏳</h3>
-                        </div>
-                        <div className="poster-footer">
-                            <p>系統自動下載中...</p>
+                            <p style={{ marginTop: '8px', fontSize: '0.75rem', opacity: 0.8 }}>正在為您生成回顧圖片... ⏳</p>
                         </div>
                     </div>
                 );

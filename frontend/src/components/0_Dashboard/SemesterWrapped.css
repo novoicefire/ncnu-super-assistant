@@ -113,7 +113,8 @@
     align-items: center;
     /* Generally center, but internal flexible poster parts handle self-alignment */
     text-align: center;
-    padding: 30px;
+    padding: 50px 30px 30px 30px;
+    /* Increased top padding to avoid progress bar overlap */
     animation: fadeIn 0.5s ease;
     position: relative;
     overflow: hidden;
@@ -471,36 +472,46 @@
         max-height: 100%;
         border-radius: 0;
     }
-    
+
     .slide-content {
-        padding: 20px 15px; /* Reduced padding for mobile */
-        overflow-y: auto; /* Allow scrolling if content overflows */
+        padding: 50px 15px 20px 15px;
+        /* Increased top padding for progress bar, reduced sides for mobile */
+        overflow-y: auto;
+        /* Allow scrolling if content overflows */
     }
-    
+
     .summary-poster {
-        padding: 15px; /* Reduced padding */
-        min-height: auto; /* Allow flexible height */
+        padding: 15px;
+        /* Reduced padding */
+        min-height: auto;
+        /* Allow flexible height */
     }
-    
+
     .poster-header h2 {
-        font-size: 1.8rem; /* Slightly smaller title */
+        font-size: 1.8rem;
+        /* Slightly smaller title */
     }
-    
+
     .poster-stats-grid {
-        gap: 10px; /* Reduced gap */
+        gap: 10px;
+        /* Reduced gap */
     }
-    
+
     .wrapped-stat-item {
-        padding: 10px; /* Reduced padding */
+        padding: 10px;
+        /* Reduced padding */
     }
-    
+
     .wrapped-stat-value {
-        font-size: 1.2rem; /* Slightly smaller values */
+        font-size: 1.2rem;
+        /* Slightly smaller values */
     }
-    
-    .poster-tag {
-        font-size: 2.2rem; /* Slightly smaller tag */
-        padding: 8px 15px;
+
+    /* Only affect summary slide tag, not promo slide */
+    .slide-summary .poster-tag {
+        font-size: clamp(3rem, 12vw, 5rem);
+        padding: 15px 25px;
+        transform: rotate(-5deg) scale(1.1);
     }
 }
 
@@ -739,8 +750,23 @@
 /* .capturing .wrapped-stat-item { } -- removed */
 /* Right Tilted Stamp Animation */
 @keyframes stampInRight {
-    0% { opacity: 0; transform: rotate(20deg) scale(2); }
-    50% { opacity: 0.8; transform: rotate(5deg) scale(0.8); }
-    70% { opacity: 1; transform: rotate(12deg) scale(1.1); }
-    100% { opacity: 1; transform: rotate(10deg) scale(1); }
+    0% {
+        opacity: 0;
+        transform: rotate(20deg) scale(2);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: rotate(5deg) scale(0.8);
+    }
+
+    70% {
+        opacity: 1;
+        transform: rotate(12deg) scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotate(10deg) scale(1);
+    }
 }

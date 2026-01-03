@@ -49,8 +49,8 @@ const Dashboard = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontSize: '1.5rem' }}>✨</span>
             <div>
-              <div style={{ fontSize: '1.1rem' }}>2025 學期回顧</div>
-              <div style={{ fontSize: '0.8rem', opacity: 0.9, fontWeight: 'normal' }}>點擊查看你的專屬學期總結</div>
+              <div style={{ fontSize: '1.1rem' }}>2025 學期回顧 <span style={{ background: '#FFD700', color: '#000', padding: '2px 6px', borderRadius: '4px', fontSize: '0.75rem', marginLeft: '5px' }}>🎁 抽獎</span></div>
+              <div style={{ fontSize: '0.8rem', opacity: 0.9, fontWeight: 'normal' }}>查看回顧 + 填問卷抽好禮！</div>
             </div>
           </div>
           <span>查看 👉</span>
