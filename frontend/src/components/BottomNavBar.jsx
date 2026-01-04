@@ -1,6 +1,7 @@
 /**
  * BottomNavBar.jsx - 手機版底部 Tab Bar + i18n
  * 參考 eMenu Tokyo 設計，毛玻璃效果
+ * 使用統一的 BottomSheet 組件
  */
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -14,14 +15,15 @@ import {
     faCalendar,
     faClipboardList,
     faBook,
-    faXmark,
-    faDownload
+    faDownload,
+    faFileContract
 } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { usePWA } from '../contexts/PWAContext';
+import BottomSheet from './common/BottomSheet';
 import './BottomNavBar.css';
 
-const BottomNavBar = () => {
+const BottomNavBar = ({ onOpenTerms }) => {
     const { t } = useTranslation();
     const location = useLocation();
     const [showMore, setShowMore] = useState(false);
@@ -79,62 +81,69 @@ const BottomNavBar = () => {
 
     return (
         <>
-            {/* 更多選單彈出層 */}
-            {showMore && (
-                <div className="bottom-nav-overlay" onClick={() => setShowMore(false)}>
-                    <div className="more-menu" onClick={(e) => e.stopPropagation()}>
-                        <div className="more-menu-header">
-                            <span>{t('common.moreFeatures')}</span>
-                            <button
-                                className="close-btn"
+            {/* 使用統一的 BottomSheet 組件 */}
+            <BottomSheet
+                isVisible={showMore}
+                onClose={() => setShowMore(false)}
+                title={t('common.moreFeatures')}
+                showCloseButton={true}
+                maxHeight="50vh"
+                className="more-menu-sheet"
+            >
+                <div className="more-menu-items">
+                    {/* 安裝 App 按鈕（只在手機且可顯示時才顯示） */}
+                    {canShowPWA && (
+                        <button
+                            className="more-menu-item install-app-btn"
+                            onClick={handleInstallClick}
+                        >
+                            <FontAwesomeIcon icon={faDownload} className="more-icon" />
+                            <span>{t('pwa.installAppBtn', '安裝 App')}</span>
+                        </button>
+                    )}
+                    {/* 服務條款按鈕 */}
+                    {onOpenTerms && (
+                        <button
+                            className="more-menu-item terms-btn"
+                            onClick={() => {
+                                setShowMore(false);
+                                onOpenTerms();
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faFileContract} className="more-icon" />
+                            <span>{t('nav.viewTerms')}</span>
+                        </button>
+                    )}
+                    {moreItems.map((item) => (
+                        item.external ? (
+                            <a
+                                key={item.path}
+                                href={item.path}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="more-menu-item external"
                                 onClick={() => setShowMore(false)}
                             >
-                                <FontAwesomeIcon icon={faXmark} />
-                            </button>
-                        </div>
-                        <div className="more-menu-items">
-                            {/* 安裝 App 按鈕（只在手機且可顯示時才顯示） */}
-                            {canShowPWA && (
-                                <button
-                                    className="more-menu-item install-app-btn"
-                                    onClick={handleInstallClick}
-                                >
-                                    <FontAwesomeIcon icon={faDownload} className="more-icon" />
-                                    <span>{t('pwa.installAppBtn', '安裝 App')}</span>
-                                </button>
-                            )}
-                            {moreItems.map((item) => (
-                                item.external ? (
-                                    <a
-                                        key={item.path}
-                                        href={item.path}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="more-menu-item external"
-                                        onClick={() => setShowMore(false)}
-                                    >
-                                        <FontAwesomeIcon icon={item.icon} className="more-icon" />
-                                        <span>{t(item.labelKey)}</span>
-                                        <span className="external-badge">↗</span>
-                                    </a>
-                                ) : (
-                                    <NavLink
-                                        key={item.path}
-                                        to={item.path}
-                                        className={({ isActive }) =>
-                                            `more-menu-item ${isActive ? 'active' : ''}`
-                                        }
-                                        onClick={() => setShowMore(false)}
-                                    >
-                                        <FontAwesomeIcon icon={item.icon} className="more-icon" />
-                                        <span>{t(item.labelKey)}</span>
-                                    </NavLink>
-                                )
-                            ))}
-                        </div>
-                    </div>
+                                <FontAwesomeIcon icon={item.icon} className="more-icon" />
+                                <span>{t(item.labelKey)}</span>
+                                <span className="external-badge">↗</span>
+                            </a>
+                        ) : (
+                            <NavLink
+                                key={item.path}
+                                to={item.path}
+                                className={({ isActive }) =>
+                                    `more-menu-item ${isActive ? 'active' : ''}`
+                                }
+                                onClick={() => setShowMore(false)}
+                            >
+                                <FontAwesomeIcon icon={item.icon} className="more-icon" />
+                                <span>{t(item.labelKey)}</span>
+                            </NavLink>
+                        )
+                    ))}
                 </div>
-            )}
+            </BottomSheet>
 
             {/* 底部導航欄 */}
             <nav className="bottom-nav">

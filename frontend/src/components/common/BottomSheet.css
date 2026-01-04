@@ -1,0 +1,243 @@
+/**
+ * BottomSheet.css - 統一的手機版底部彈出視窗樣式
+ * 手機版：從底部滑入 | 電腦版：居中 Modal
+ */
+
+/* ========== 遮罩層 ========== */
+.bottom-sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: flex-end;
+    /* 手機版預設底部對齊 */
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    overscroll-behavior: contain;
+    /* 防止滾動穿透 */
+}
+
+.bottom-sheet-overlay.active {
+    opacity: 1;
+}
+
+.bottom-sheet-overlay.closing {
+    opacity: 0;
+}
+
+/* ========== 主容器 - 手機版（預設） ========== */
+.bottom-sheet-container {
+    width: 100%;
+    max-height: var(--max-height, 85vh);
+    background: var(--theme-bg-card, #ffffff);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow: hidden;
+}
+
+.bottom-sheet-container.active {
+    transform: translateY(0);
+}
+
+.bottom-sheet-container.closing {
+    transform: translateY(100%);
+}
+
+/* 深色模式 */
+[data-theme="dark"] .bottom-sheet-container {
+    background: var(--theme-bg-card, #2d2d2d);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ========== 拖曳指示條 ========== */
+.bottom-sheet-handle {
+    display: flex;
+    justify-content: center;
+    padding: 12px 0 8px;
+    flex-shrink: 0;
+}
+
+.handle-bar {
+    width: 36px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+[data-theme="dark"] .handle-bar {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ========== 標題列 ========== */
+.bottom-sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 20px 16px;
+    /* 增加預設上內距（無小橫條時使用） */
+    border-bottom: 1px solid var(--theme-border-secondary, #f0f0f0);
+    flex-shrink: 0;
+}
+
+/* 當有小橫條時，移除標題列上內距（避免間距過大） */
+.bottom-sheet-handle+.bottom-sheet-header {
+    padding-top: 0;
+}
+
+[data-theme="dark"] .bottom-sheet-header {
+    border-bottom-color: var(--theme-border-primary, #404040);
+}
+
+.header-text {
+    flex: 1;
+}
+
+.bottom-sheet-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--theme-text-primary, #333);
+    margin: 0 0 4px;
+}
+
+.bottom-sheet-subtitle {
+    font-size: 0.85rem;
+    color: var(--theme-text-secondary, #666);
+    margin: 0;
+}
+
+.bottom-sheet-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--theme-text-secondary, #666);
+    cursor: pointer;
+    display: none;
+    /* 手機版預設隱藏 */
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 12px;
+}
+
+.bottom-sheet-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--theme-text-primary, #333);
+}
+
+[data-theme="dark"] .bottom-sheet-close {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .bottom-sheet-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ========== 內容區域 ========== */
+.bottom-sheet-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+}
+
+/* 自訂滾動條 */
+.bottom-sheet-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.bottom-sheet-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.bottom-sheet-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+}
+
+[data-theme="dark"] .bottom-sheet-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ========== 電腦版：居中 Modal ========== */
+@media (min-width: 769px) {
+    .bottom-sheet-overlay {
+        align-items: center;
+        /* 居中對齊 */
+    }
+
+    .bottom-sheet-container {
+        width: 90%;
+        max-width: 520px;
+        border-radius: 20px;
+        /* 四周圓角 */
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        transform: translateY(30px) scale(0.95);
+        opacity: 0;
+        transition:
+            transform 0.3s cubic-bezier(0.32, 0.72, 0, 1),
+            opacity 0.3s ease;
+    }
+
+    .bottom-sheet-container.active {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    .bottom-sheet-container.closing {
+        transform: translateY(20px) scale(0.98);
+        opacity: 0;
+    }
+
+    /* 電腦版隱藏拖曳指示條 */
+    .bottom-sheet-handle {
+        display: none;
+    }
+
+    /* 電腦版顯示 X 按鈕 */
+    .bottom-sheet-close {
+        display: flex;
+    }
+
+    .bottom-sheet-header {
+        padding: 20px 24px 16px;
+    }
+
+    /* 電腦版始終保持上內距（因為小橫條已隱藏） */
+    .bottom-sheet-handle+.bottom-sheet-header {
+        padding-top: 20px;
+    }
+
+    .bottom-sheet-content {
+        padding: 20px 24px;
+        padding-bottom: 24px;
+    }
+}
+
+/* ========== 減少動畫偏好 ========== */
+@media (prefers-reduced-motion: reduce) {
+
+    .bottom-sheet-overlay,
+    .bottom-sheet-container {
+        transition: none;
+    }
+
+    .bottom-sheet-container {
+        transform: none;
+        opacity: 1;
+    }
+}

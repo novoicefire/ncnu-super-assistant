@@ -20,7 +20,10 @@ export const updateHistory = [
       "🌤️ 天氣小工具（埔里地區即時天氣）",
       "📦 宿舍包裹查詢（即時查詢未領包裹、剩餘天數提醒、緊急程度標示）",
       "🔗 常用連結擴充（Moodle、圖書館門禁 QRCode）",
-      "📱 iOS Safe Area 完整適配（支援 iPhone 瀏海與 Home Indicator）"
+      "📱 iOS Safe Area 完整適配（支援 iPhone 瀏海與 Home Indicator）",
+      "📜 8 章節完整服務條款與免責聲明（版本控制機制）",
+      "👀 可從導航欄隨時重新開啟服務條款，顯示同意日期",
+      "📱 通用 BottomSheet 元件（手機版底部滑入、支援滑動關閉手勢）"
     ],
     technical: [
       "前端架構升級:",
@@ -28,6 +31,8 @@ export const updateHistory = [
       "i18next 多國語系框架整合",
       "Service Worker 推播通知實作",
       "ThemeContext 與 NotificationContext 狀態管理",
+      "BottomSheet 通用元件（滑動手勢、動畫過渡）",
+      "DisclaimerModal 重構（版本控制、同意記錄）",
       "後端新增:",
       "push_service.py（Web Push 推播服務）",
       "notifications.py（通知 API）",

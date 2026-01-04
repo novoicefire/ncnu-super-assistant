@@ -29,7 +29,8 @@ import {
     faExclamationTriangle,
     faXmark,
     faGear,
-    faShieldHalved
+    faShieldHalved,
+    faFileContract
 } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import './SideNav.css';
@@ -43,7 +44,7 @@ const languages = [
 // 管理員 email 列表
 const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS || '').split(',').map(e => e.trim());
 
-const SideNav = ({ disclaimerAccepted }) => {
+const SideNav = ({ disclaimerAccepted, onOpenTerms }) => {
     const { t, i18n } = useTranslation();
     const { isLoggedIn, user, logout, isLoading } = useAuth();
     const { theme, toggleTheme } = useTheme();
@@ -204,6 +205,16 @@ const SideNav = ({ disclaimerAccepted }) => {
                         </>
                     )}
                 </a>
+
+                {/* 查看服務條款 */}
+                <button
+                    className="side-nav-item terms-link"
+                    onClick={onOpenTerms}
+                    title={isCollapsed ? t('nav.viewTerms') : ''}
+                >
+                    <FontAwesomeIcon icon={faFileContract} className="nav-icon" />
+                    {!isCollapsed && <span className="nav-label">{t('nav.viewTerms')}</span>}
+                </button>
             </div>
 
             {/* 底部區域：工具按鈕 + 用戶資訊 */}

@@ -73,7 +73,28 @@ function RouteTracker() {
 }
 
 function App() {
-  const [showDisclaimer, setShowDisclaimer] = useState(true);
+  // 🎯 免責聲明版本控制
+  const DISCLAIMER_VERSION = '2025.01.02'; // 更新此版本號以強制重新顯示免責聲明
+
+  const [showDisclaimer, setShowDisclaimer] = useState(() => {
+    // 檢查 localStorage 中儲存的版本
+    try {
+      const acceptedVersion = localStorage.getItem('disclaimer_accepted_version');
+      // 如果版本不符或從未接受過，就顯示免責聲明
+      return acceptedVersion !== DISCLAIMER_VERSION;
+    } catch {
+      return true; // localStorage 不可用時預設顯示
+    }
+  });
+
+  const [isFirstVisit, setIsFirstVisit] = useState(() => {
+    try {
+      return localStorage.getItem('disclaimer_accepted_version') !== DISCLAIMER_VERSION;
+    } catch {
+      return true;
+    }
+  });
+
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
   const [isAppReady, setIsAppReady] = useState(false);
 
@@ -108,11 +129,26 @@ function App() {
   const handleAcceptDisclaimer = () => {
     setShowDisclaimer(false);
     setDisclaimerAccepted(true);
+
+    // 儲存接受的版本號和時間到 localStorage
+    try {
+      localStorage.setItem('disclaimer_accepted_version', DISCLAIMER_VERSION);
+      localStorage.setItem('disclaimer_accepted_date', new Date().toISOString());
+    } catch {
+      console.warn('Failed to save disclaimer acceptance to localStorage');
+    }
+
     ReactGA.event({
       category: 'User Interaction',
       action: 'Accept Disclaimer',
-      label: 'Initial Visit'
+      label: `Version ${DISCLAIMER_VERSION}`
     });
+  };
+
+  // 🎯 開啟條款（從導航欄觸發）
+  const handleOpenTerms = () => {
+    setShowDisclaimer(true);
+    setIsFirstVisit(false); // 從導航欄開啟時不是首次訪問
   };
 
   // 🎯 防止背景滾動
@@ -162,6 +198,7 @@ function App() {
                 <DisclaimerModal
                   isVisible={showDisclaimer}
                   onAccept={handleAcceptDisclaimer}
+                  isFirstVisit={isFirstVisit}
                 />
 
                 <PerformanceMonitor
@@ -173,7 +210,7 @@ function App() {
                 <div className="app-layout">
                   {/* 側邊導航（電腦版） */}
                   <ErrorBoundary fallback={<div className="nav-error">導航欄載入失敗</div>}>
-                    <SideNav disclaimerAccepted={disclaimerAccepted} />
+                    <SideNav disclaimerAccepted={disclaimerAccepted} onOpenTerms={handleOpenTerms} />
                   </ErrorBoundary>
 
                   {/* 手機版頂部標題欄 */}
@@ -220,7 +257,7 @@ function App() {
                   </main>
 
                   {/* 底部導航（手機版） */}
-                  <BottomNavBar />
+                  <BottomNavBar onOpenTerms={handleOpenTerms} />
 
                   {/* 推播通知訂閱提示（用戶手動點擊觸發） */}
                   <PushNotificationPrompt />
