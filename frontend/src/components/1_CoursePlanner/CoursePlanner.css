@@ -106,7 +106,340 @@
   gap: 1rem;
   margin-bottom: 1rem;
   padding: 1rem;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 12px;
+  box-shadow: var(--theme-shadow-primary);
 }
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--theme-text-primary);
+}
+
+.header-credits {
+  font-size: 0.9rem;
+  color: var(--theme-text-secondary);
+}
+
+/* 頁首學年設定 - 行內顯示 */
+.header-year-settings {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--theme-border-secondary);
+}
+
+.header-year-settings .year-label {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+  white-space: nowrap;
+}
+
+.header-year-settings .year-dropdown {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 6px;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  min-width: 90px;
+}
+
+.header-year-settings .year-dropdown:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.header-year-settings .year-separator {
+  font-size: 0.85rem;
+  color: var(--theme-text-tertiary);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-semester-selector {
+  display: flex;
+  align-items: center;
+}
+
+.semester-dropdown {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.semester-dropdown:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+.sync-status {
+  font-size: 0.85rem;
+  color: var(--theme-text-tertiary);
+}
+
+/* ✅ v2.0：課程搜尋區（右側） */
+.course-search-container {
+  flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+  height: 85vh;
+  border: 1px solid var(--theme-border-primary);
+  padding: 1rem;
+  border-radius: 12px;
+  background: var(--theme-bg-card);
+  box-shadow: var(--theme-shadow-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow: hidden;
+  /* 容器本身不滾動 */
+}
+
+/* 可折疊篩選器按鈕 */
+.filters-toggle-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--theme-bg-secondary);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--theme-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.filters-toggle-btn:hover {
+  background: var(--theme-bg-hover);
+  border-color: var(--primary-color);
+}
+
+.filters-toggle-btn .toggle-icon {
+  font-size: 0.8rem;
+  color: var(--theme-text-secondary);
+}
+
+.search-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.search-filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.search-filter-item label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--theme-text-secondary);
+}
+
+.search-filter-item input,
+.search-filter-item select {
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  transition: all 0.2s ease;
+}
+
+.search-filter-item input:focus,
+.search-filter-item select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.1);
+}
+
+.conflict-toggle {
+  padding-top: 0.5rem;
+}
+
+/* Toggle Switch 滑動開關樣式 */
+.toggle-switch-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--theme-text-primary);
+  padding: 0.5rem 0;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: all 0.3s ease;
+  border-radius: 24px;
+}
+
+.toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked+.toggle-slider {
+  background-color: var(--primary-color);
+}
+
+.toggle-switch input:checked+.toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.toggle-switch input:focus+.toggle-slider {
+  box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.2);
+}
+
+/* 衝堂課程模式選擇按鈕組 */
+.conflict-mode-buttons {
+  display: flex;
+  gap: 4px;
+  background: var(--theme-bg-secondary);
+  border-radius: 8px;
+  padding: 3px;
+  border: 1px solid var(--theme-border-primary);
+}
+
+.conflict-mode-buttons button {
+  flex: 1;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--theme-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.conflict-mode-buttons button:hover {
+  background: var(--theme-bg-hover);
+  color: var(--theme-text-primary);
+}
+
+.conflict-mode-buttons button.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 121, 107, 0.3);
+}
+
+/* 灰色禁用課程樣式 */
+.course-list li.course-disabled,
+.mobile-course-list li.course-disabled {
+  opacity: 0.5;
+  background: var(--theme-bg-secondary);
+  pointer-events: none;
+}
+
+.course-list li.course-disabled .course-toggle-btn,
+.mobile-course-list li.course-disabled .course-toggle-btn {
+  background: #ccc !important;
+  cursor: not-allowed;
+}
+
+/* 衝堂標籤 */
+.course-type-badge.conflict,
+.course-badge-conflict {
+  background: #ffebee;
+  color: #c62828;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+/* 手機版衝堂模式區域 */
+.mobile-conflict-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mobile-conflict-mode label {
+  font-size: 0.85rem;
+  color: var(--theme-text-secondary);
+  font-weight: 500;
+}
+
+.search-results-divider {
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--theme-border-secondary);
+  border-bottom: 1px solid var(--theme-border-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--theme-text-secondary);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.course-list-wrapper {
+  flex: 1;
+  min-height: 200px;
+  /* 確保至少有足夠空間顯示課程 */
+  overflow-y: auto;
+}
+
 
 .filters {
   background: var(--theme-bg-card);
@@ -293,10 +626,28 @@
   padding: 0 1rem;
 }
 
+/* ✅ v2.0：左側課表區（包含彈性課程） */
+.schedule-section {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.schedule-section .schedule-container {
+  flex: none;
+}
+
+.schedule-section .flexible-courses-container {
+  margin-top: 0;
+}
+
 .course-list-container {
   flex: 1;
-  min-width: 300px;
-  max-height: 70vh;
+  min-width: 280px;
+  max-width: 400px;
+  max-height: 80vh;
   overflow-y: auto;
   border: 1px solid var(--theme-border-primary);
   padding: 1rem;
@@ -305,6 +656,40 @@
   box-shadow: var(--theme-shadow-primary);
   transition: all 0.3s ease;
 }
+
+/* ✅ v2.0：頁底學年設定區 */
+.year-settings-footer {
+  margin: 1rem;
+  padding: 1rem;
+  background: var(--theme-bg-card);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 12px;
+  box-shadow: var(--theme-shadow-primary);
+}
+
+.year-settings-footer .year-settings-inline {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.year-settings-footer .year-settings-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.year-settings-footer .year-inputs {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.year-settings-footer .year-actions {
+  flex-shrink: 0;
+}
+
 
 .course-list {
   list-style: none;
@@ -595,13 +980,14 @@
     flex-direction: column;
   }
 
-  .course-list-container {
-    max-height: 40vh;
-    order: 2;
+  .schedule-section {
+    order: 1;
   }
 
-  .schedule-container {
-    order: 1;
+  .course-list-container {
+    max-height: 50vh;
+    max-width: none;
+    order: 2;
   }
 
   .filters input,
@@ -623,6 +1009,11 @@
   .save-image-btn {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
+  }
+
+  .year-settings-footer .year-settings-content {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
@@ -886,6 +1277,26 @@
 
 /* 🆕 響應式設計 */
 @media (max-width: 768px) {
+
+  /* 手機版頁首學年設定 */
+  .header-year-settings {
+    border-left: none;
+    padding-left: 0;
+    padding-top: 0.5rem;
+    width: 100%;
+  }
+
+  .header-year-settings .year-label {
+    font-size: 0.75rem;
+  }
+
+  .header-year-settings .year-dropdown {
+    flex: 1;
+    min-width: 70px;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.4rem;
+  }
+
   .flexible-courses-container {
     padding: 16px;
   }
@@ -905,17 +1316,22 @@
     flex-direction: column;
   }
 
-  /* 課程列表放在最上面 */
-  .course-list-container {
+  /* 課表區（含彈性課程）放在上面 */
+  .schedule-section {
     order: 1;
-    min-width: auto;
-    max-height: 40vh;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* 課表放在中間 */
+  /* 課表放在彈性課程上方 */
   .schedule-container {
-    order: 2;
+    order: 1;
     overflow-x: auto;
+  }
+
+  /* 彈性課程區放在課表下方 */
+  .flexible-courses-container {
+    order: 2;
   }
 
   /* 篩選器樣式調整 */
@@ -958,4 +1374,114 @@
 [data-theme="dark"] .flexible-course-list li:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================
+   📱 手機版課程搜尋 BottomSheet
+   ======================================== */
+
+/* 浮動按鈕 - 僅手機版顯示 */
+.mobile-search-fab {
+  display: none;
+  /* 桌面版隱藏 */
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #e8f5f2;
+  color: #5a6872;
+  border: 1px solid #d0e8e4;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.2s ease;
+}
+
+.mobile-search-fab:hover,
+.mobile-search-fab:active {
+  background: #d0e8e4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* 桌面版課程搜尋區 - 僅桌面版顯示 */
+.course-search-container {
+  display: flex;
+}
+
+/* BottomSheet 內部樣式 */
+.mobile-search-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--theme-border-secondary);
+  margin-bottom: 1rem;
+}
+
+.mobile-search-filters input {
+  padding: 0.75rem;
+  border: 1px solid var(--theme-border-primary);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+}
+
+/* 手機版 toggle 不需要額外樣式，共用 .toggle-switch-label */
+.mobile-toggle {
+  margin-top: 0.5rem;
+}
+
+.mobile-course-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-course-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--theme-border-secondary);
+}
+
+.mobile-course-list li:last-child {
+  border-bottom: none;
+}
+
+.mobile-course-list .course-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mobile-course-list .course-info strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--theme-text-primary);
+}
+
+.mobile-course-list .course-info small {
+  color: var(--theme-text-secondary);
+  font-size: 0.8rem;
+}
+
+/* 響應式切換 */
+@media (max-width: 768px) {
+
+  /* 手機版：隱藏桌面版課程搜尋區 */
+  .course-search-container {
+    display: none !important;
+  }
+
+  /* 手機版：顯示浮動按鈕 */
+  .mobile-search-fab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

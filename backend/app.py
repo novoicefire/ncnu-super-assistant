@@ -82,68 +82,77 @@ def google_auth():
         print(f"ERROR in google_auth: {e}")
         return jsonify({"error": str(e)}), 500
 
-# 🔄 修改：支援 flexible_courses 欄位
+# 🔄 v2.0：多學期課表支援
+def get_current_semester():
+    """根據日期計算當前學期"""
+    now = datetime.utcnow()
+    year = now.year - 1911 if now.month > 6 else now.year - 1912
+    semester = "1" if now.month >= 8 or now.month < 2 else "2"
+    return f"{year}-{semester}"
+
 @app.route("/api/schedule", methods=['GET', 'POST'])
 def handle_schedule():
     user_id = request.args.get('user_id')
     if not user_id: 
         return jsonify({"error": "User ID is required"}), 400
     
+    # 🆕 v2.0：semester 參數（預設為當前學期，向後相容）
+    semester = request.args.get('semester', get_current_semester())
+    
     if request.method == 'POST':
-        # 🆕 接收兩種資料：schedule_data 和 flexible_courses
         data = request.json
         
-        # 兼容舊版前端（直接傳 schedule_data 物件）
+        # 兼容舊版前端
         if isinstance(data, dict) and 'schedule_data' not in data and 'flexible_courses' not in data:
-            # 舊版格式：直接傳課表物件
             schedule_data = data
             flexible_courses = []
         else:
-            # 新版格式：包含 schedule_data 和 flexible_courses
             schedule_data = data.get('schedule_data', {})
             flexible_courses = data.get('flexible_courses', [])
         
         try:
-            response = supabase.table('schedules').select('id').eq('user_id', user_id).limit(1).execute()
+            # 🆕 查詢時加入 semester 條件
+            response = supabase.table('schedules').select('id').eq('user_id', user_id).eq('semester', semester).limit(1).execute()
             if response.data:
-                # 更新現有記錄
                 update_response = supabase.table('schedules').update({
                     'schedule_data': schedule_data,
-                    'flexible_courses': flexible_courses  # 🆕 同時更新彈性課程
-                }).eq('user_id', user_id).execute()
-                return jsonify({"success": True, "action": "updated", "data": update_response.data[0]})
+                    'flexible_courses': flexible_courses
+                }).eq('user_id', user_id).eq('semester', semester).execute()
+                return jsonify({"success": True, "action": "updated", "semester": semester, "data": update_response.data[0]})
             else:
-                # 新增記錄
                 insert_response = supabase.table('schedules').insert({
                     'user_id': user_id,
+                    'semester': semester,  # 🆕 儲存學期
                     'schedule_data': schedule_data,
-                    'flexible_courses': flexible_courses  # 🆕 同時插入彈性課程
+                    'flexible_courses': flexible_courses
                 }).execute()
-                return jsonify({"success": True, "action": "inserted", "data": insert_response.data[0]})
+                return jsonify({"success": True, "action": "inserted", "semester": semester, "data": insert_response.data[0]})
         except Exception as e:
-            print(f"!!!!!! FATAL ERROR during POST /api/schedule for user {user_id} !!!!!!")
+            print(f"!!!!!! FATAL ERROR during POST /api/schedule for user {user_id} semester {semester} !!!!!!")
             import traceback
             traceback.print_exc()
             return jsonify({"error": str(e)}), 500
     
     if request.method == 'GET':
         try:
-            # 🆕 同時查詢 schedule_data 和 flexible_courses
-            response = supabase.table('schedules').select('schedule_data, flexible_courses').eq('user_id', user_id).limit(1).execute()
+            # 🆕 查詢時加入 semester 條件
+            response = supabase.table('schedules').select('schedule_data, flexible_courses, semester').eq('user_id', user_id).eq('semester', semester).limit(1).execute()
             
             if response.data:
                 return jsonify({
                     'schedule_data': response.data[0].get('schedule_data', {}),
-                    'flexible_courses': response.data[0].get('flexible_courses', [])  # 🆕 回傳彈性課程
+                    'flexible_courses': response.data[0].get('flexible_courses', []),
+                    'semester': response.data[0].get('semester', semester)
                 })
             else:
-                # 無資料時回傳預設值
                 return jsonify({
                     'schedule_data': {},
-                    'flexible_courses': []
+                    'flexible_courses': [],
+                    'semester': semester
                 })
         except Exception as e: 
             return jsonify({"error": str(e)}), 500
+
 
 @app.route("/api/courses/hotness")
 def get_course_hotness():
@@ -180,6 +189,71 @@ def get_course_hotness():
     except Exception as e:
         print(f"ERROR in get_course_hotness: {e}")
         return jsonify({"error": "An error occurred while calculating course hotness."}), 500
+
+
+# 🆕 v2.0：使用者入學年/畢業年設定
+@app.route("/api/user/years", methods=['GET', 'POST'])
+def handle_user_years():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
+    
+    if request.method == 'POST':
+        data = request.json
+        enrollment_year = data.get('enrollment_year')
+        graduation_year = data.get('graduation_year')
+        
+        try:
+            response = supabase.table('users').update({
+                'enrollment_year': enrollment_year,
+                'graduation_year': graduation_year
+            }).eq('google_id', user_id).execute()
+            
+            if response.data:
+                return jsonify({"success": True, "data": response.data[0]})
+            else:
+                return jsonify({"error": "User not found"}), 404
+        except Exception as e:
+            print(f"ERROR in handle_user_years POST: {e}")
+            return jsonify({"error": str(e)}), 500
+    
+    if request.method == 'GET':
+        try:
+            response = supabase.table('users').select('enrollment_year, graduation_year').eq('google_id', user_id).limit(1).execute()
+            
+            if response.data:
+                return jsonify({
+                    'enrollment_year': response.data[0].get('enrollment_year'),
+                    'graduation_year': response.data[0].get('graduation_year')
+                })
+            else:
+                return jsonify({
+                    'enrollment_year': None,
+                    'graduation_year': None
+                })
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+
+# 🆕 v2.0：取得可用學期列表
+@app.route("/api/semesters/available")
+def get_available_semesters():
+    """回傳當今學年 ±4 年的學期列表"""
+    now = datetime.utcnow()
+    current_year = now.year - 1911 if now.month > 6 else now.year - 1912
+    
+    semesters = []
+    for year in range(current_year - 4, current_year + 5):
+        semesters.append({"id": f"{year}-1", "label": f"{year} 學年第 1 學期"})
+        semesters.append({"id": f"{year}-2", "label": f"{year} 學年第 2 學期"})
+    
+    # 依年份降序排列
+    semesters.sort(key=lambda x: x['id'], reverse=True)
+    
+    return jsonify({
+        "semesters": semesters,
+        "current": get_current_semester()
+    })
 
 
 

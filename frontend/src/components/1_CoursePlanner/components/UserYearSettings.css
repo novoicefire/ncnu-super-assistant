@@ -1,0 +1,231 @@
+/**
+ * UserYearSettings.css - 入學/畢業年設定樣式
+ */
+
+/* Modal 遮罩 */
+.year-settings-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.year-settings-modal {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+
+[data-theme="dark"] .year-settings-modal {
+    background: var(--theme-bg-card);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.year-settings-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.year-settings-header .header-icon {
+    font-size: 3rem;
+    color: #00796b;
+    margin-bottom: 1rem;
+}
+
+[data-theme="dark"] .year-settings-header .header-icon {
+    color: #4db6ac;
+}
+
+.year-settings-header h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+[data-theme="dark"] .year-settings-header h3 {
+    color: var(--theme-text-primary);
+}
+
+.year-settings-header .subtitle {
+    color: #666;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] .year-settings-header .subtitle {
+    color: var(--theme-text-secondary);
+}
+
+/* 輸入區 */
+.year-inputs {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.year-input-group {
+    flex: 1;
+}
+
+.year-input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] .year-input-group label {
+    color: var(--theme-text-primary);
+}
+
+.year-input-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .year-input-group select {
+    background: var(--theme-bg-secondary);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-border-primary);
+}
+
+.year-input-group select:focus {
+    outline: none;
+    border-color: #00796b;
+    box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.2);
+}
+
+.year-separator {
+    font-size: 1.5rem;
+    color: #666;
+    padding-bottom: 0.75rem;
+}
+
+/* 錯誤訊息 */
+.year-error {
+    color: #d32f2f;
+    background: #ffebee;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] .year-error {
+    background: rgba(211, 47, 47, 0.2);
+}
+
+/* 按鈕 */
+.year-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.btn-save,
+.btn-cancel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #00796b 0%, #009688 100%);
+    color: white;
+}
+
+.btn-save:hover {
+    background: linear-gradient(135deg, #00695c 0%, #00897b 100%);
+    transform: translateY(-2px);
+}
+
+.btn-cancel {
+    background: #e0e0e0;
+    color: #666;
+}
+
+[data-theme="dark"] .btn-cancel {
+    background: var(--theme-bg-tertiary);
+    color: var(--theme-text-secondary);
+}
+
+.btn-cancel:hover {
+    background: #bdbdbd;
+}
+
+/* Inline 樣式 */
+.year-settings-inline {
+    background: var(--theme-bg-secondary, #f5f5f5);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 1px solid var(--theme-border-primary, #e0e0e0);
+}
+
+.year-settings-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 0.75rem;
+}
+
+[data-theme="dark"] .year-settings-label {
+    color: var(--theme-text-secondary);
+}
+
+/* 響應式 */
+@media (max-width: 480px) {
+    .year-inputs {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .year-separator {
+        display: none;
+    }
+
+    .year-settings-modal {
+        padding: 1.5rem;
+    }
+}

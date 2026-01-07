@@ -1,0 +1,79 @@
+/**
+ * SemesterSelector.css - 學期選擇器樣式
+ */
+
+.semester-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-radius: 12px;
+  border: 1px solid #a5d6a7;
+  margin-bottom: 1rem;
+}
+
+[data-theme="dark"] .semester-selector {
+  background: linear-gradient(135deg, #1b3a1a 0%, #2d4a2e 100%);
+  border-color: #4a7c4b;
+}
+
+.semester-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #2e7d32;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .semester-label {
+  color: #81c784;
+}
+
+.semester-label svg {
+  font-size: 1.1rem;
+}
+
+.semester-select {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #a5d6a7;
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .semester-select {
+  background: var(--theme-bg-secondary);
+  color: var(--theme-text-primary);
+  border-color: #4a7c4b;
+}
+
+.semester-select:focus {
+  outline: none;
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+}
+
+.semester-select:hover {
+  border-color: #2e7d32;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .semester-selector {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .semester-select {
+    width: 100%;
+  }
+}

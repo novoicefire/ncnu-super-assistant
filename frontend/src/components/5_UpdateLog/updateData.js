@@ -23,7 +23,11 @@ export const updateHistory = [
       "📱 iOS Safe Area 完整適配（支援 iPhone 瀏海與 Home Indicator）",
       "📜 8 章節完整服務條款與免責聲明（版本控制機制）",
       "👀 可從導航欄隨時重新開啟服務條款，顯示同意日期",
-      "📱 通用 BottomSheet 元件（手機版底部滑入、支援滑動關閉手勢）"
+      "📱 通用 BottomSheet 元件（手機版底部滑入、支援滑動關閉手勢）",
+      "🎨 手機版排課介面優化（搜尋按鈕改為懸浮按鈕、佈局調整）",
+      "📅 學年設定介面優化（移至頁首卡片內、行內顯示選單）",
+      "⚔️ 衝堂課程顯示模式升級（支援顯示/灰色/隱藏三種模式）",
+      "🕒 手機版搜尋面板新增「上課時間」篩選功能"
     ],
     technical: [
       "前端架構升級:",
@@ -33,6 +37,8 @@ export const updateHistory = [
       "ThemeContext 與 NotificationContext 狀態管理",
       "BottomSheet 通用元件（滑動手勢、動畫過渡）",
       "DisclaimerModal 重構（版本控制、同意記錄）",
+      "手機版 CoursePlanner UI 重構（FAB 設計、CSS Order 調整）",
+      "CoursePlanner 衝堂過濾邏輯重構（Conflict Mode）",
       "後端新增:",
       "push_service.py（Web Push 推播服務）",
       "notifications.py（通知 API）",

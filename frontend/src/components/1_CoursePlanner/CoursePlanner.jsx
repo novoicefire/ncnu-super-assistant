@@ -1,16 +1,39 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (移除樣式衝突版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (v2.0 多學期版)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
 import { useTranslation } from 'react-i18next';
 import CourseTable from './CourseTable.jsx';
+import SemesterSelector from './components/SemesterSelector.jsx';
+import UserYearSettings from './components/UserYearSettings.jsx';
+import { useSemester } from './hooks/useSemester.js';
+import BottomSheet from '../common/BottomSheet.jsx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import './CoursePlanner.css';
 import { useAuth } from '../../AuthContext.jsx';
 import { robustRequest } from '../../apiHelper.js';
 
+
+
 const CoursePlanner = () => {
   const { t } = useTranslation();
   const { user, isLoggedIn } = useAuth();
+
+  // 🆕 v2.0：學期管理 Hook
+  const {
+    selectedSemester,
+    setSelectedSemester,
+    enrollmentYear,
+    graduationYear,
+    availableSemesters,
+    yearOptions,
+    isLoading: semesterLoading,
+    needsSetup,
+    saveYearSettings,
+    currentSemester
+  } = useSemester();
+
   const [staticCourses, setStaticCourses] = useState([]);
   const [hotnessData, setHotnessData] = useState({});
   const [schedule, setSchedule] = useState({});
@@ -24,7 +47,7 @@ const CoursePlanner = () => {
     department: '',
     division: '',
     time: '',
-    hideConflicting: false
+    conflictMode: 'show' // 'show' = 顯示全部, 'gray' = 灰色顯示, 'hide' = 完全隱藏
   });
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [notifications, setNotifications] = useState([]);
@@ -32,6 +55,9 @@ const CoursePlanner = () => {
   const [scheduledCredits, setScheduledCredits] = useState(0);
   const [flexibleCredits, setFlexibleCredits] = useState(0);
   const [flexibleSort, setFlexibleSort] = useState({ key: 'added_time', order: 'asc' });
+  const [filtersExpanded, setFiltersExpanded] = useState(false); // 預設收起篩選器
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false); // 手機版課程搜尋 BottomSheet
+
 
   // 🎨 簡化的樣式注入（移除 CourseTable 相關樣式）
   useEffect(() => {
@@ -254,13 +280,33 @@ const CoursePlanner = () => {
     }
   }, [t]);
 
-  // 🔄 載入真實課程資料
+  // 🔄 v2.0：載入開課資料（依學期切換）
   useEffect(() => {
+    // 等待學期設定載入完成
+    if (semesterLoading || !selectedSemester) return;
+
     const fetchData = async () => {
       setIsLoading(true);
+
+      // 解析學期格式 "114-1" -> year=114, sem=1
+      const [year, sem] = selectedSemester.split('-');
+
+      // 優先載入學期專屬檔案，fallback 到舊版
+      const semesterFile = `/data/開課資訊_${year}_${sem}.json`;
+      const legacyFile = '/data/本學期開課資訊API.json';
+
       try {
-        console.log('🔄 開始載入課程資料...');
-        const courseRes = await axios.get('/data/本學期開課資訊API.json');
+        console.log(`🔄 載入 ${selectedSemester} 開課資料...`);
+
+        let courseRes;
+        try {
+          courseRes = await axios.get(semesterFile);
+          console.log(`✅ 載入學期專屬檔案: ${semesterFile}`);
+        } catch {
+          console.log(`⚠️ 學期檔案不存在，使用舊版檔案`);
+          courseRes = await axios.get(legacyFile);
+        }
+
         const rawCourses = courseRes.data?.course_ncnu?.item || [];
 
         const normalizedCourses = rawCourses.map(course => {
@@ -271,77 +317,72 @@ const CoursePlanner = () => {
           return normalized;
         });
 
-        console.log('✅ 課程資料載入完成，共', normalizedCourses.length, '門課程');
+        console.log(`✅ ${selectedSemester} 開課資料載入完成，共`, normalizedCourses.length, '門課程');
         setStaticCourses(normalizedCourses);
 
         // 課程熱度資料載入
         try {
-          console.log('🔄 開始載入課程熱度資料...');
+          console.log('🔄 載入課程熱度資料...');
           const hotnessResult = await robustRequest('get', '/api/courses/hotness');
 
           if (hotnessResult && typeof hotnessResult === 'object') {
             console.log('✅ 課程熱度資料載入成功，共', Object.keys(hotnessResult).length, '筆記錄');
             setHotnessData(hotnessResult);
           } else {
-            console.log('⚠️ 課程熱度資料格式異常或為空，使用空物件');
             setHotnessData({});
           }
         } catch (hotnessError) {
-          console.warn('⚠️ 課程熱度資料載入失敗，但不影響主要功能:', hotnessError.message);
+          console.warn('⚠️ 課程熱度載入失敗:', hotnessError.message);
           setHotnessData({});
         }
 
       } catch (error) {
-        console.error("❌ 主要資料載入失敗:", error);
-        // 備用載入邏輯
-        try {
-          const courseRes = await axios.get('/data/本學期開課資訊API.json');
-          const rawCourses = courseRes.data?.course_ncnu?.item || [];
-          const normalizedCourses = rawCourses.map(course => {
-            const normalized = normalizeCourseDepartment(course);
-            if (!normalized.division || normalized.division.trim() === '') {
-              normalized.division = '一般班';
-            }
-            return normalized;
-          });
-          setStaticCourses(normalizedCourses);
-          console.log('✅ 備用載入成功');
-        } catch (staticError) {
-          console.error("❌ 備用載入也失敗:", staticError);
-        }
+        console.error("❌ 開課資料載入失敗:", error);
+        setStaticCourses([]);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [normalizeCourseDepartment]);
+  }, [normalizeCourseDepartment, selectedSemester, semesterLoading]);
 
-  // 🔄 載入課表資料（登入用戶從雲端，未登入用戶從本地）
+  // 🔄 v2.0：載入課表資料（依學期）
   useEffect(() => {
-    if (isLoggedIn && user?.google_id) {
-      // 登入用戶：從雲端載入
-      robustRequest('get', '/api/schedule', { params: { user_id: user.google_id } })
-        .then(data => {
+    // 等待學期設定載入完成
+    if (semesterLoading || !selectedSemester) return;
+
+    const loadScheduleForSemester = async () => {
+      const localKey = `course-schedule-${selectedSemester}`;
+      const localFlexibleKey = `flexible-courses-${selectedSemester}`;
+
+      if (isLoggedIn && user?.google_id) {
+        // 登入用戶：從雲端載入
+        try {
+          const data = await robustRequest('get', '/api/schedule', {
+            params: { user_id: user.google_id, semester: selectedSemester }
+          });
           setSchedule(data?.schedule_data || {});
           setFlexibleCourses(data?.flexible_courses || []);
-        })
-        .catch(err => {
+        } catch (err) {
           console.error('雲端課表載入失敗:', err);
           // 雲端載入失敗時嘗試載入本地資料
-          const localSchedule = localStorage.getItem('course-schedule');
-          const localFlexible = localStorage.getItem('flexible-courses');
+          const localSchedule = localStorage.getItem(localKey);
+          const localFlexible = localStorage.getItem(localFlexibleKey);
           setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
           setFlexibleCourses(localFlexible ? JSON.parse(localFlexible) : []);
-        });
-    } else {
-      // 未登入用戶：從本地載入
-      const localSchedule = localStorage.getItem('course-schedule');
-      const localFlexible = localStorage.getItem('flexible-courses');
-      setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
-      setFlexibleCourses(localFlexible ? JSON.parse(localFlexible) : []);
-    }
-  }, [isLoggedIn, user]);
+        }
+      } else {
+        // 未登入用戶：從本地載入
+        const localSchedule = localStorage.getItem(localKey);
+        const localFlexible = localStorage.getItem(localFlexibleKey);
+        setSchedule(localSchedule ? JSON.parse(localSchedule) : {});
+        setFlexibleCourses(localFlexible ? JSON.parse(localFlexible) : []);
+      }
+    };
+
+    loadScheduleForSemester();
+  }, [isLoggedIn, user, selectedSemester, semesterLoading]);
 
   useEffect(() => {
     // 計算固定時間課程學分（去重）
@@ -386,9 +427,11 @@ const CoursePlanner = () => {
     if (filters.time) {
       result = result.filter(c => c.time && c.time.toLowerCase().includes(filters.time.toLowerCase()));
     }
-    if (filters.hideConflicting) {
+    if (filters.conflictMode === 'hide') {
+      // 完全隱藏衝堂課程
       result = result.filter(course => !hasTimeConflict(course));
     }
+    // 'gray' 模式和 'show' 模式不在這裡過濾，在渲染時處理
 
     setFilteredCourses(result);
   }, [filters, staticCourses, hasTimeConflict]);
@@ -431,21 +474,23 @@ const CoursePlanner = () => {
     }, 4000);
   }, []);
 
-  // 🔄 儲存課表（登入用戶同步雲端，未登入用戶存本地）
+  // 🔄 v2.0：儲存課表（依學期）
   const saveSchedule = useCallback(async (newSchedule, newFlexibleCourses, actionType = 'update', courseName = '') => {
     setSchedule(newSchedule);
     setFlexibleCourses(newFlexibleCourses);
 
-    // 🔄 總是先儲存到本地（作為備份）
-    localStorage.setItem('course-schedule', JSON.stringify(newSchedule));
-    localStorage.setItem('flexible-courses', JSON.stringify(newFlexibleCourses));
+    // 🔄 儲存到本地（作為備份，key 包含學期）
+    const localKey = `course-schedule-${selectedSemester}`;
+    const localFlexibleKey = `flexible-courses-${selectedSemester}`;
+    localStorage.setItem(localKey, JSON.stringify(newSchedule));
+    localStorage.setItem(localFlexibleKey, JSON.stringify(newFlexibleCourses));
 
     if (isLoggedIn && user?.google_id) {
       // 🌐 登入用戶：同步到雲端
       setSaveStatus("saving");
       try {
         const response = await robustRequest('post', '/api/schedule', {
-          params: { user_id: user.google_id },
+          params: { user_id: user.google_id, semester: selectedSemester },
           data: {
             schedule_data: newSchedule,
             flexible_courses: newFlexibleCourses
@@ -479,7 +524,7 @@ const CoursePlanner = () => {
         showNotification(t('coursePlanner.notifyRemovedLocal', { courseName }), 'success');
       }
     }
-  }, [isLoggedIn, user, showNotification]);
+  }, [isLoggedIn, user, showNotification, selectedSemester]);
 
   // 新增彈性課程
   const addFlexibleCourse = useCallback((course) => {
@@ -657,21 +702,311 @@ const CoursePlanner = () => {
         ))}
       </div>
 
+      {/* ✅ v2.0：頁首區塊（標題 + 學期選擇器） */}
       <div className="planner-header">
-        <h1>{t('coursePlanner.title')}</h1>
-        <div className="header-info">
-          <span>
+        <div className="header-left">
+          <h1>{t('coursePlanner.title')}</h1>
+          <span className="header-credits">
             {t('coursePlanner.selectedCredits')}: {totalCredits} {t('coursePlanner.creditsUnit')}
             {totalCredits > 0 && `（${t('coursePlanner.fixed')} ${scheduledCredits} + ${t('coursePlanner.flexible')} ${flexibleCredits}）`}
           </span>
-          <span>{getSaveStatusMessage()}</span>
+          {/* 學年設定 - 行內顯示 */}
+          {availableSemesters.length > 0 && (
+            <div className="header-year-settings">
+              <span className="year-label">{t('coursePlanner.enrollmentYear', '入學年')}</span>
+              <select
+                value={enrollmentYear}
+                onChange={(e) => {
+                  const newEnrollment = parseInt(e.target.value);
+                  saveYearSettings(newEnrollment, graduationYear);
+                }}
+                className="year-dropdown"
+              >
+                {yearOptions.map(year => (
+                  <option key={year} value={year}>{year} {t('coursePlanner.academicYear', '學年')}</option>
+                ))}
+              </select>
+              <span className="year-separator">~</span>
+              <select
+                value={graduationYear}
+                onChange={(e) => {
+                  const newGraduation = parseInt(e.target.value);
+                  saveYearSettings(enrollmentYear, newGraduation);
+                }}
+                className="year-dropdown"
+              >
+                {yearOptions.map(year => (
+                  <option key={year} value={year}>{year} {t('coursePlanner.academicYear', '學年')}</option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+        <div className="header-right">
+          {availableSemesters.length > 0 && (
+            <div className="header-semester-selector">
+              <select
+                value={selectedSemester}
+                onChange={(e) => setSelectedSemester(e.target.value)}
+                className="semester-dropdown"
+              >
+                {availableSemesters.map(sem => (
+                  <option key={sem.id} value={sem.id}>
+                    {sem.id}{sem.id === currentSemester ? ` (${t('coursePlanner.current', '當前')})` : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          <span className="sync-status">{getSaveStatusMessage()}</span>
         </div>
       </div>
 
-      {/* 篩選器區域 */}
-      <div className="filters">
-        <div className="filter-group">
-          <label>{t('coursePlanner.courseName')}</label>
+      {/* 🆕 v2.0：首次使用時顯示入學年設定 Modal */}
+      {needsSetup && (
+        <UserYearSettings
+          enrollmentYear={enrollmentYear}
+          graduationYear={graduationYear}
+          yearOptions={yearOptions}
+          onSave={saveYearSettings}
+          isModal={true}
+        />
+      )}
+
+      <div className="planner-content">
+        {/* ✅ 左側：課表顯示區 + 彈性課程區 */}
+        <div className="schedule-section">
+          <div className="schedule-container">
+            <div className="schedule-header">
+              <div>
+                <h3>{t('coursePlanner.mySchedule')}</h3>
+                <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
+                  {t('coursePlanner.clickToRemove')}
+                </p>
+              </div>
+              <button
+                className="save-image-btn"
+                onClick={captureScheduleImage}
+                disabled={isCapturing}
+                title={t('coursePlanner.saveImage')}
+              >
+                {isCapturing ? t('coursePlanner.generating') : t('coursePlanner.saveImage')}
+              </button>
+            </div>
+            <CourseTable
+              schedule={schedule}
+              onRemove={removeFromSchedule}
+            />
+          </div>
+
+          {/* 彈性/無固定時間課程區（在課表下方） */}
+          <div className="flexible-courses-container">
+            <div className="schedule-header flexible-header">
+              <div className="flexible-header-title">
+                <h3>{t('coursePlanner.flexibleCourses')}</h3>
+                <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
+                  {t('coursePlanner.flexibleDesc')}
+                </p>
+              </div>
+              <div className="flexible-sort-buttons">
+                <button onClick={() => handleFlexibleSort('course_credit')} className={flexibleSort.key === 'course_credit' ? 'active' : ''}>
+                  {t('coursePlanner.credits')} {flexibleSort.key === 'course_credit' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+                </button>
+                <button onClick={() => handleFlexibleSort('course_cname')} className={flexibleSort.key === 'course_cname' ? 'active' : ''}>
+                  {t('coursePlanner.name')} {flexibleSort.key === 'course_cname' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+                </button>
+                <button onClick={() => handleFlexibleSort('added_time')} className={flexibleSort.key === 'added_time' ? 'active' : ''}>
+                  {t('coursePlanner.addedTime')} {flexibleSort.key === 'added_time' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
+                </button>
+              </div>
+            </div>
+            {flexibleCourses.length === 0 ? (
+              <p style={{ textAlign: 'center', color: 'var(--theme-text-tertiary)', padding: '20px', lineHeight: '1.6' }}>
+                {t('coursePlanner.noFlexibleCourses')}
+              </p>
+            ) : (
+              <ul className="flexible-course-list">
+                {sortedFlexibleCourses.map(fc => (
+                  <li key={fc.course_id}>
+                    <div className="course-info">
+                      <strong>{fc.course_cname}</strong>
+                      <small>
+                        {fc.teacher} | {fc.department} | {fc.course_credit}{t('coursePlanner.creditsUnit')}
+                      </small>
+                    </div>
+                    <button
+                      className="course-toggle-btn remove"
+                      onClick={() => removeFlexibleCourse(fc.course_id)}
+                    >
+                      −
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        {/* ✅ 右側：課程搜尋區（含可折疊篩選器） */}
+        <div className="course-search-container">
+          {/* 可折疊篩選器標題 */}
+          <button
+            className="filters-toggle-btn"
+            onClick={() => setFiltersExpanded(!filtersExpanded)}
+          >
+            <span>🔍 {t('coursePlanner.courseSearch', '課程搜尋區')}</span>
+            <span className="toggle-icon">{filtersExpanded ? '▲' : '▼'}</span>
+          </button>
+
+          {/* 篩選器內容（可折疊） */}
+          {filtersExpanded && (
+            <div className="search-filters">
+              <div className="search-filter-item">
+                <label>{t('coursePlanner.courseName')}</label>
+                <input
+                  type="text"
+                  name="courseName"
+                  value={filters.courseName}
+                  onChange={handleFilterChange}
+                  placeholder={t('coursePlanner.searchCoursePlaceholder')}
+                />
+              </div>
+              <div className="search-filter-item">
+                <label>{t('coursePlanner.teacher')}</label>
+                <input
+                  type="text"
+                  name="teacher"
+                  value={filters.teacher}
+                  onChange={handleFilterChange}
+                  placeholder={t('coursePlanner.searchTeacherPlaceholder')}
+                />
+              </div>
+              <div className="search-filter-item">
+                <label>{t('coursePlanner.department', '開課')}</label>
+                <input
+                  type="text"
+                  name="department"
+                  list="department-list"
+                  value={filters.department}
+                  onChange={handleFilterChange}
+                  placeholder={t('coursePlanner.selectDepartment', '搜尋科系')}
+                />
+                <datalist id="department-list">
+                  <option value="">{t('coursePlanner.allDepartments', '全部')}</option>
+                  {uniqueDepartments.map(dept => (
+                    <option key={dept} value={dept} />
+                  ))}
+                </datalist>
+              </div>
+              <div className="search-filter-item">
+                <label>{t('coursePlanner.classTime')}</label>
+                <input
+                  type="text"
+                  name="time"
+                  value={filters.time}
+                  onChange={handleFilterChange}
+                  placeholder={t('coursePlanner.classTimePlaceholder')}
+                />
+              </div>
+              <div className="search-filter-item conflict-mode">
+                <label>{t('coursePlanner.conflictCourses', '衝堂課程')}</label>
+                <div className="conflict-mode-buttons">
+                  <button
+                    type="button"
+                    className={filters.conflictMode === 'show' ? 'active' : ''}
+                    onClick={() => setFilters(prev => ({ ...prev, conflictMode: 'show' }))}
+                  >
+                    {t('coursePlanner.showAll', '顯示')}
+                  </button>
+                  <button
+                    type="button"
+                    className={filters.conflictMode === 'gray' ? 'active' : ''}
+                    onClick={() => setFilters(prev => ({ ...prev, conflictMode: 'gray' }))}
+                  >
+                    {t('coursePlanner.showGray', '灰色')}
+                  </button>
+                  <button
+                    type="button"
+                    className={filters.conflictMode === 'hide' ? 'active' : ''}
+                    onClick={() => setFilters(prev => ({ ...prev, conflictMode: 'hide' }))}
+                  >
+                    {t('coursePlanner.hideAll', '隱藏')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 搜尋結果分隔線 */}
+          <div className="search-results-divider">
+            <span>{t('coursePlanner.foundCourses', '共找到')} {filteredCourses.length} {t('coursePlanner.coursesUnit', '門課程')}</span>
+          </div>
+
+          {/* 課程列表 */}
+          <div className="course-list-wrapper">
+            {isLoading ? (
+              <p>{t('coursePlanner.loading')}</p>
+            ) : (
+              <ul className="course-list">
+                {filteredCourses.map((course, index) => {
+                  const isConflicting = hasTimeConflict(course);
+                  const isDisabled = filters.conflictMode === 'gray' && isConflicting;
+                  return (
+                    <li
+                      key={`${course.course_id}-${course.time}-${index}`}
+                      className={isDisabled ? 'course-disabled' : ''}
+                    >
+                      <div className="course-info">
+                        <div className="course-title-container">
+                          <strong>{course.course_cname}</strong>
+                          {!course.time && <span className="course-type-badge flexible">{t('coursePlanner.flexible')}</span>}
+                          {isDisabled && <span className="course-type-badge conflict">{t('coursePlanner.conflicting', '衝堂')}</span>}
+                        </div>
+                        {hotnessData && hotnessData[course.course_id] && (
+                          <span className="hotness-indicator">
+                            🔥 {hotnessData[course.course_id]}{t('coursePlanner.people')}
+                          </span>
+                        )}
+                        <small>
+                          {formatCourseInfo(course)}
+                        </small>
+                      </div>
+                      <button
+                        className={`course-toggle-btn ${isCourseInSchedule(course) || isCourseInFlexible(course) ? 'remove' : 'add'}`}
+                        onClick={() => handleCourseToggle(course)}
+                        disabled={isDisabled}
+                      >
+                        {isCourseInSchedule(course) || isCourseInFlexible(course) ? '−' : '+'}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 📱 手機版：課程搜尋浮動按鈕 */}
+      <button
+        className="mobile-search-fab"
+        onClick={() => setMobileSearchOpen(true)}
+        title={t('coursePlanner.courseSearch', '課程搜尋')}
+      >
+        <FontAwesomeIcon icon={faMagnifyingGlass} />
+      </button>
+
+      {/* 📱 手機版：課程搜尋 BottomSheet */}
+      <BottomSheet
+        isVisible={mobileSearchOpen}
+        onClose={() => setMobileSearchOpen(false)}
+        title={t('coursePlanner.courseSearch', '課程搜尋區')}
+        subtitle={`${t('coursePlanner.foundCourses', '共找到')} ${filteredCourses.length} ${t('coursePlanner.coursesUnit', '門課程')}`}
+        maxHeight="85vh"
+        className="course-search-bottom-sheet"
+      >
+        {/* 篩選器 */}
+        <div className="mobile-search-filters">
           <input
             type="text"
             name="courseName"
@@ -679,10 +1014,6 @@ const CoursePlanner = () => {
             onChange={handleFilterChange}
             placeholder={t('coursePlanner.searchCoursePlaceholder')}
           />
-        </div>
-
-        <div className="filter-group">
-          <label>{t('coursePlanner.teacher')}</label>
           <input
             type="text"
             name="teacher"
@@ -690,10 +1021,19 @@ const CoursePlanner = () => {
             onChange={handleFilterChange}
             placeholder={t('coursePlanner.searchTeacherPlaceholder')}
           />
-        </div>
-
-        <div className="filter-group">
-          <label>{t('coursePlanner.classTime')}</label>
+          <input
+            type="text"
+            name="department"
+            list="mobile-department-list"
+            value={filters.department}
+            onChange={handleFilterChange}
+            placeholder={t('coursePlanner.selectDepartment', '輸入或選擇開課單位')}
+          />
+          <datalist id="mobile-department-list">
+            {uniqueDepartments.map(dept => (
+              <option key={dept} value={dept} />
+            ))}
+          </datalist>
           <input
             type="text"
             name="time"
@@ -701,250 +1041,61 @@ const CoursePlanner = () => {
             onChange={handleFilterChange}
             placeholder={t('coursePlanner.classTimePlaceholder')}
           />
-        </div>
-
-        <div className="filter-group">
-          <label>{t('coursePlanner.department')}</label>
-          <input
-            type="text"
-            name="department"
-            list="department-list"
-            value={filters.department}
-            onChange={handleFilterChange}
-            placeholder={t('coursePlanner.selectDepartment')}
-            autoComplete="off"
-          />
-          <datalist id="department-list">
-            <option value="">{t('coursePlanner.allDepartments')}</option>
-
-            {/* 人文學院 */}
-            <option value="中文系">📚 人文學院 - 中國語文學系</option>
-            <option value="外文系">📚 人文學院 - 外國語文學系</option>
-            <option value="歷史系">📚 人文學院 - 歷史學系</option>
-            <option value="社工系">📚 人文學院 - 社會政策與社會工作學系</option>
-            <option value="公行系">📚 人文學院 - 公共行政與政策學系</option>
-            <option value="東南亞系">📚 人文學院 - 東南亞學系</option>
-            <option value="國比系">📚 人文學院 - 國際文教與比較教育學系</option>
-            <option value="原住民文化與社工學士專班">📚 人文學院 - 原住民文化產業與社會工作學士學位學程原住民族專班</option>
-            <option value="東南亞系人類學">📚 人文學院 - 東南亞學系人類學</option>
-            <option value="東南亞系在職專班">📚 人文學院 - 東南亞學系碩士在職專班</option>
-            <option value="社工系二年制專班">📚 人文學院 - 社會政策與社會工作學系二年制在職專班</option>
-            <option value="公行專班">📚 人文學院 - 公共行政與政策學系碩士在職專班</option>
-            <option value="華文學程">📚 人文學院 - 華語文教學碩士學位學程</option>
-            <option value="非營利組織專班">📚 人文學院 - 非營利組織經營管理碩士學位學程在職專班</option>
-            <option value="國際文教管理人才博士學位學程">📚 人文學院 - 國際文教管理人才博士學位學程</option>
-            <option value="國際文教人才博士班">📚 人文學院 - 文化創意與社會行銷碩士學位學程</option>
-
-            {/* 管理學院 */}
-            <option value="經濟系">💼 管理學院 - 經濟學系</option>
-            <option value="國企系">💼 管理學院 - 國際企業學系</option>
-            <option value="資管系">💼 管理學院 - 資訊管理學系</option>
-            <option value="財金系">💼 管理學院 - 財務金融學系</option>
-            <option value="觀光餐旅系觀光">💼 管理學院 - 觀光休閒與餐旅管理學系</option>
-            <option value="觀光餐旅系餐旅">💼 管理學院 - 觀光休閒與餐旅管理學系餐旅</option>
-            <option value="管院學士班">💼 管理學院 - 管理學院學士班</option>
-            <option value="國企專班">💼 管理學院 - 國際企業學系碩士在職專班</option>
-            <option value="資管專班">💼 管理學院 - 資訊管理學系碩士在職專班</option>
-            <option value="財金專班">💼 管理學院 - 財務金融學系碩士在職專班</option>
-            <option value="高階經管班">💼 管理學院 - 高階經營管理碩士學位學程</option>
-            <option value="新興產業博士班">💼 管理學院 - 新興產業策略與發展博士學位學程</option>
-            <option value="新興產業碩士班">💼 管理學院 - 新興產業策略與發展碩士學位學程</option>
-            <option value="區域產碩專班">💼 管理學院 - 區域發展重點產業碩士專班</option>
-            <option value="兩岸高階主管班">💼 管理學院 - 兩岸高階主管經營管理境外碩士在職學位學程</option>
-            <option value="管院全英學程">💼 管理學院 - 管理學院商業管理及資訊科技創新應用全英語碩士學位學程</option>
-
-            {/* 科技學院 */}
-            <option value="資工系">💻 科技學院 - 資訊工程學系</option>
-            <option value="土木系">💻 科技學院 - 土木工程學系</option>
-            <option value="電機系">💻 科技學院 - 電機工程學系</option>
-            <option value="應化系">💻 科技學院 - 應用化學系</option>
-            <option value="應光系">💻 科技學院 - 應用材料及光電工程學系</option>
-            <option value="科院學士班">💻 科技學院 - 科技學院學士班</option>
-            <option value="電機通訊所">💻 科技學院 - 電機工程學系通訊工程</option>
-            <option value="地震所">💻 科技學院 - 地震與防災工程研究所</option>
-            <option value="應化生醫所">💻 科技學院 - 應用化學系生物醫學</option>
-            <option value="光電碩專班">💻 科技學院 - 光電科技碩士學位學程</option>
-            <option value="人工智慧學程">💻 科技學院 - 人工智慧與機器人碩士學位學程</option>
-            <option value="光電產碩專班">💻 科技學院 - 光電材料產業碩士專班</option>
-            <option value="精準農博">💻 科技學院 - 智慧精準農業產學研發博士學位學程</option>
-            <option value="智慧農學">💻 科技學院 - 智慧暨永續農業學士學位學程</option>
-
-            {/* 教育學院 */}
-            <option value="教政系">🎓 教育學院 - 教育政策與行政學系</option>
-            <option value="諮人系">🎓 教育學院 - 諮商心理與人力資源發展學系</option>
-            <option value="教院學士班">🎓 教育學院 - 教育學院學士班</option>
-            <option value="諮人系終身學習與人力資源">🎓 教育學院 - 諮商心理與人力資源發展學系終身學習與人力資源發展</option>
-            <option value="課科所">🎓 教育學院 - 課程教學與科技研究所</option>
-            <option value="終身學習專班">🎓 教育學院 - 終身學習與人力資源發展碩士學位學程碩士在職專班</option>
-            <option value="諮人系輔諮新加坡專班">🎓 教育學院 - 諮商心理與人力資源發展學系輔導與諮商新加坡境外碩士在職專班</option>
-            <option value="心理健康與諮詢專班">🎓 教育學院 - 心理健康與諮詢碩士學位學程在職專班</option>
-            <option value="心理健康新加坡專班">🎓 教育學院 - 心理健康與輔導諮商碩士在職進修新加坡境外專班</option>
-
-            {/* 水沙連學院 */}
-            <option value="地方創生學程">🌊 水沙連學院 - 地方創生與跨域治理碩士學位學程</option>
-
-            {/* 護理暨健康福祉學院 */}
-            <option value="護理系">🏥 護理暨健康福祉學院 - 護理學系</option>
-            <option value="護理系原專班">🏥 護理暨健康福祉學院 - 護理學系原住民族專班</option>
-            <option value="高齡長照專班">🏥 護理暨健康福祉學院 - 高齡健康與長期照顧管理學士學位學程原住民族專班</option>
-            <option value="長照專班">🏥 護理暨健康福祉學院 - 長期照顧經營管理碩士在職學位學程在職專班</option>
-
-            {/* 通識 */}
-            <option value="通識">📋 通識 - 通識領域課程</option>
-
-            {/* 不分學院 */}
-            <option value="共同必">🏛️ 不分學院 - 全校共同基本必修</option>
-            <option value="共同選">🏛️ 不分學院 - 全校共同選修</option>
-            <option value="體育室">🏛️ 不分學院 - 體育室</option>
-            <option value="軍訓室">🏛️ 不分學院 - 軍訓室</option>
-            <option value="共同科">🏛️ 不分學院 - 共同科</option>
-            <option value="教育學程">🏛️ 不分學院 - 教育學程</option>
-            <option value="遠距">🏛️ 不分學院 - 遠距教學中心</option>
-
-          </datalist>
-        </div>
-
-        <div className="filter-group">
-          <label>{t('coursePlanner.division')}</label>
-          <select name="division" value={filters.division} onChange={handleFilterChange}>
-            <option value="">{t('coursePlanner.allDivisions')}</option>
-            {uniqueDivisions.map(division => (
-              <option key={division} value={division}>{division}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group conflict-filter-group">
-          <label className="conflict-filter-label">
-            <span className="conflict-label-text">{t('coursePlanner.hideConflicts')}</span>
-            <div className="toggle-switch">
-              <input
-                type="checkbox"
-                name="hideConflicting"
-                checked={filters.hideConflicting}
-                onChange={handleFilterChange}
-                className="toggle-input"
-              />
-              <span className="toggle-slider"></span>
+          <div className="mobile-conflict-mode">
+            <label>{t('coursePlanner.conflictCourses', '衝堂課程')}</label>
+            <div className="conflict-mode-buttons">
+              <button
+                type="button"
+                className={filters.conflictMode === 'show' ? 'active' : ''}
+                onClick={() => setFilters(prev => ({ ...prev, conflictMode: 'show' }))}
+              >
+                {t('coursePlanner.showAll', '顯示')}
+              </button>
+              <button
+                type="button"
+                className={filters.conflictMode === 'gray' ? 'active' : ''}
+                onClick={() => setFilters(prev => ({ ...prev, conflictMode: 'gray' }))}
+              >
+                {t('coursePlanner.showGray', '灰色')}
+              </button>
+              <button
+                type="button"
+                className={filters.conflictMode === 'hide' ? 'active' : ''}
+                onClick={() => setFilters(prev => ({ ...prev, conflictMode: 'hide' }))}
+              >
+                {t('coursePlanner.hideAll', '隱藏')}
+              </button>
             </div>
-            {conflictingCoursesCount > 0 && (
-              <span className="conflict-count">({conflictingCoursesCount})</span>
-            )}
-          </label>
-          <div className="filter-info">
-            {t('coursePlanner.conflictHint')}
           </div>
         </div>
-      </div>
 
-      <div className="planner-content">
         {/* 課程列表 */}
-        <div className="course-list-container">
-          <h3>{t('coursePlanner.courseList')} ({filteredCourses.length})</h3>
-          {isLoading ? (
-            <p>{t('coursePlanner.loading')}</p>
-          ) : (
-            <ul className="course-list">
-              {filteredCourses.map((course, index) => (
-                <li key={`${course.course_id}-${course.time}-${index}`}>
-                  <div className="course-info">
-                    <div className="course-title-container">
-                      <strong>{course.course_cname}</strong>
-                      {!course.time && <span className="course-type-badge flexible">{t('coursePlanner.flexible')}</span>}
-                    </div>
-                    {hotnessData && hotnessData[course.course_id] && (
-                      <span className="hotness-indicator">
-                        🔥 {hotnessData[course.course_id]}{t('coursePlanner.people')}
-                      </span>
-                    )}
-                    <small>
-                      {formatCourseInfo(course)}
-                    </small>
-                  </div>
-                  <button
-                    className={`course-toggle-btn ${isCourseInSchedule(course) || isCourseInFlexible(course) ? 'remove' : 'add'
-                      }`}
-                    onClick={() => handleCourseToggle(course)}
-                  >
-                    {isCourseInSchedule(course) || isCourseInFlexible(course) ? '−' : '+'}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* 課表顯示區域 */}
-        <div className="schedule-container">
-          <div className="schedule-header">
-            <div>
-              <h3>{t('coursePlanner.mySchedule')}</h3>
-              <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
-                {t('coursePlanner.clickToRemove')}
-              </p>
-            </div>
-            <button
-              className="save-image-btn"
-              onClick={captureScheduleImage}
-              disabled={isCapturing}
-              title={t('coursePlanner.saveImage')}
-            >
-              {isCapturing ? t('coursePlanner.generating') : t('coursePlanner.saveImage')}
-            </button>
-          </div>
-          <CourseTable
-            schedule={schedule}
-            onRemove={removeFromSchedule}
-          />
-        </div>
-      </div>
-
-      {/* 彈性/無固定時間課程區 */}
-      <div className="flexible-courses-container">
-        <div className="schedule-header flexible-header">
-          <div className="flexible-header-title">
-            <h3>{t('coursePlanner.flexibleCourses')}</h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--theme-text-secondary)', marginTop: '4px', fontWeight: 'normal' }}>
-              {t('coursePlanner.flexibleDesc')}
-            </p>
-          </div>
-          <div className="flexible-sort-buttons">
-            <button onClick={() => handleFlexibleSort('course_credit')} className={flexibleSort.key === 'course_credit' ? 'active' : ''}>
-              {t('coursePlanner.credits')} {flexibleSort.key === 'course_credit' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
-            </button>
-            <button onClick={() => handleFlexibleSort('course_cname')} className={flexibleSort.key === 'course_cname' ? 'active' : ''}>
-              {t('coursePlanner.name')} {flexibleSort.key === 'course_cname' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
-            </button>
-            <button onClick={() => handleFlexibleSort('added_time')} className={flexibleSort.key === 'added_time' ? 'active' : ''}>
-              {t('coursePlanner.addedTime')} {flexibleSort.key === 'added_time' && (flexibleSort.order === 'asc' ? '↑' : '↓')}
-            </button>
-          </div>
-        </div>
-        {flexibleCourses.length === 0 ? (
-          <p style={{ textAlign: 'center', color: 'var(--theme-text-tertiary)', padding: '20px', lineHeight: '1.6' }}>
-            {t('coursePlanner.noFlexibleCourses')}
-          </p>
-        ) : (
-          <ul className="flexible-course-list">
-            {sortedFlexibleCourses.map(fc => (
-              <li key={fc.course_id}>
+        <ul className="mobile-course-list">
+          {filteredCourses.map((course, index) => {
+            const isConflicting = hasTimeConflict(course);
+            const isDisabled = filters.conflictMode === 'gray' && isConflicting;
+            return (
+              <li
+                key={`mobile-${course.course_id}-${course.time}-${index}`}
+                className={isDisabled ? 'course-disabled' : ''}
+              >
                 <div className="course-info">
-                  <strong>{fc.course_cname}</strong>
-                  <small>
-                    {fc.teacher} | {fc.department} | {fc.course_credit}{t('coursePlanner.creditsUnit')}
-                  </small>
+                  <strong>{course.course_cname}</strong>
+                  {isDisabled && <span className="course-badge-conflict">{t('coursePlanner.conflicting', '衝堂')}</span>}
+                  <small>{formatCourseInfo(course)}</small>
                 </div>
                 <button
-                  className="course-toggle-btn remove"
-                  onClick={() => removeFlexibleCourse(fc.course_id)}
+                  className={`course-toggle-btn ${isCourseInSchedule(course) || isCourseInFlexible(course) ? 'remove' : 'add'}`}
+                  onClick={() => handleCourseToggle(course)}
+                  disabled={isDisabled}
                 >
-                  −
+                  {isCourseInSchedule(course) || isCourseInFlexible(course) ? '−' : '+'}
                 </button>
               </li>
-            ))}
-          </ul>
-        )}
-      </div>
+            );
+          })}
+        </ul>
+      </BottomSheet>
     </div>
   );
 };
