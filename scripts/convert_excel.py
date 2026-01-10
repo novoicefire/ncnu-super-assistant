@@ -70,7 +70,7 @@ def convert():
         df['course_id'] = df['course_id'].astype(str)
         for col in df.columns:
             if df[col].dtype == 'object':
-                df[col].fillna("", inplace=True)
+                df[col] = df[col].fillna("")
 
         final_df = df[required_keys]
         course_list = final_df.to_dict(orient='records')
@@ -80,7 +80,7 @@ def convert():
         with open(TARGET_JSON_PATH, 'w', encoding='utf-8') as f:
             json.dump(output_json, f, ensure_ascii=False, indent=4)
             
-        print(f"✔ 轉換成功！資料已儲存至: {TARGET_JSON_PATH}")
+        print(f"[OK] 轉換成功！資料已儲存至: {TARGET_JSON_PATH}")
         return True
     except Exception as e:
         print(f"在轉換過程中發生錯誤: {e}")
@@ -108,7 +108,7 @@ def git_commit_and_push():
         origin = repo.remote(name='origin')
         print("   正在推送到遠端倉庫...")
         origin.push()
-        print("✔ 推送成功！Vercel 將會開始自動部署新版本的網站。")
+        print("[OK] 推送成功！Vercel 將會開始自動部署新版本的網站。")
         
         # [新增功能] 推送成功後，執行刪除
         delete_source_excel()
@@ -125,7 +125,7 @@ def delete_source_excel():
     try:
         if INPUT_EXCEL_PATH.exists():
             INPUT_EXCEL_PATH.unlink()
-            print(f"✔ 成功刪除來源 Excel 檔案: {SOURCE_EXCEL_FILENAME}")
+            print(f"[OK] 成功刪除來源 Excel 檔案: {SOURCE_EXCEL_FILENAME}")
         else:
             print(f"警告：找不到來源 Excel 檔案 {SOURCE_EXCEL_FILENAME}，可能已被刪除。")
     except OSError as e:
