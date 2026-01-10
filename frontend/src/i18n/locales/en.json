@@ -281,8 +281,8 @@
         "coursesUnit": "courses"
     },
     "graduation": {
-        "title": "Graduation Progress Tracker",
-        "subtitle": "Check your course status and credits",
+        "title": "Required Course Tracker",
+        "subtitle": "Check your required course status and credits",
         "selectDepartment": "Dept",
         "selectClass": "Class",
         "loading": "Loading required courses...",

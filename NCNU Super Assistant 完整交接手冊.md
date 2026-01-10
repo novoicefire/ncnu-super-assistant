@@ -7,7 +7,7 @@
 **NCNU Super Assistant** 為國立暨南大學學生設計的單頁式應用(SPA)，整合四大核心功能：
 
 *   **課程規劃 (Course Planner)**
-*   **智慧排課系統 (Smart Course Planner)**（v6.1.0 新增，含畢業進度追蹤與自動排課建議）
+*   **智慧排課系統 (Smart Course Planner)**（v6.1.0 新增，含必修課追蹤與自動排課建議）
 *   **校園單位導覽 (Campus Directory)**
 *   **校園行事曆 (University Calendar)**
 
@@ -186,7 +186,7 @@ npm run dev
 | `/api/push/unsubscribe` | POST | 🆕 取消訂閱推播 | Bearer Token | 移除訂閱 |
 | `/api/announcements` | GET/POST | 🆕 公告管理 | 管理員 | 首頁公告 CRUD |
 | `/api/dorm-mail` | GET | 🆕 宿舍包裹查詢 | 公開 | 支援 department 或 name 參數 |
-| `/api/graduation-progress` | GET/POST | 🆕 畢業進度存取 | Supabase Auth | 儲存/讀取畢業進度與已修課程 |
+| `/api/graduation-progress` | GET/POST | 🆕 必修課進度存取 | Supabase Auth | 儲存/讀取必修課進度與已修課程 |
 | `/api/graduation-progress/sync` | POST | 🆕 從課表同步進度 | Supabase Auth | 自動分析歷史課表並標記已修畢 |
 | `Workers Proxy` | GET | 🆕 宿舍包裹查詢 (加速) | 公開 | 建議優先使用 Cloudflare Worker |
 
@@ -351,7 +351,7 @@ python scripts/cleanup_push_subscriptions.py
 }
 ```
 
-### 畢業進度資料管理
+### 必修課進度資料管理
 
 **位置**：`frontend/public/data/`
 
@@ -385,7 +385,7 @@ python scripts/cleanup_push_subscriptions.py
 
 ## 6.3. 🆕 重要功能更新說明
 
-### 🆕 畢業追蹤整合與同步 (2026-01)
+### 🆕 必修課追蹤整合與同步 (2026-01)
 
 **功能說明**：
 - **整合至 CoursePlanner**：不再是獨立頁面，而是作為排課頁面的 `GraduationPanel` 面板，方便對照。
@@ -697,7 +697,7 @@ const CoursePlanner = lazy(() => import('./components/1_CoursePlanner/CoursePlan
 ### 已實現功能 ✅
 
 - ✅ **智慧選課系統**（v1.0-v5.0）：課程規劃、彈性課程、課表管理
-- ✅ **畢業進度追蹤**（v2.2）：全校 100+ 系所必修課程追蹤
+- ✅ **必修課追蹤**（v2.2）：全校 100+ 系所必修課程追蹤
 - ✅ **校園資訊整合**（v1.0）：行事曆、更新日誌、常用連結
 - ✅ **Dashboard 首頁**（v4.0.0）：儀表板設計與深色模式
 - ✅ **自動化監控**（2025）：Keep-Alive 機制確保服務穩定

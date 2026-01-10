@@ -272,7 +272,7 @@
         "addToSchedule": "加入課表"
     },
     "graduation": {
-        "title": "畢業學分進度追蹤器",
+        "title": "必修課追蹤器",
         "subtitle": "確認您的修課狀態與畢業學分",
         "selectDepartment": "系所",
         "selectClass": "班別",
