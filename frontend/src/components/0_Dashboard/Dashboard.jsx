@@ -13,7 +13,10 @@ const Dashboard = () => {
       {/* 整合版 Welcome Banner（含今日狀態功能） */}
       <WelcomeBanner />
 
-      {/* 主內容區域：公告 + 常用連結 */}
+      {/* 橫向快速連結按鈕列 */}
+      <QuickLinks />
+
+      {/* 主內容區域：公告 + 其他卡片 */}
       <div className="dashboard-main simplified">
         <div className="dashboard-sidebar">
           <AnnouncementCard />
@@ -21,8 +24,6 @@ const Dashboard = () => {
         <div className="dashboard-content">
           <GymScheduleCard />
           <DormMailCard />
-          <QuickLinks />
-
         </div>
       </div>
     </div>
