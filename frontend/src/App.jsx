@@ -72,6 +72,23 @@ function RouteTracker() {
   return null;
 }
 
+// ✅ 路由切換時自動滾動到頂部（修復手機端頁面不在頂部問題）
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // 強制滾動到頂部
+    window.scrollTo(0, 0);
+
+    // 同時處理可能的 scroll restoration
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   // 🎯 免責聲明版本控制
   const DISCLAIMER_VERSION = '2025.01.02'; // 更新此版本號以強制重新顯示免責聲明
@@ -191,6 +208,7 @@ function App() {
             <PWAProvider>
               <Router>
                 <RouteTracker />
+                <ScrollToTop />
 
                 {/* PWA 安裝提示 */}
                 <PWAInstallPrompt />

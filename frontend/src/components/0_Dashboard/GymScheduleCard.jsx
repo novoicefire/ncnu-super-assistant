@@ -53,14 +53,23 @@ const GymScheduleCard = () => {
     const dateScrollRef = useRef(null);
     const selectedDateRef = useRef(null);
 
-    // 滾動到選取的日期位置（加入延遲確保元素已渲染）
+    // 滾動到選取的日期位置（只影響水平滾動容器，不影響頁面垂直滾動）
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (selectedDateRef.current) {
-                selectedDateRef.current.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'center',
+            if (selectedDateRef.current && dateScrollRef.current) {
+                const container = dateScrollRef.current;
+                const element = selectedDateRef.current;
+
+                // 計算元素在容器內的位置，使其置中
+                const elementLeft = element.offsetLeft;
+                const elementWidth = element.offsetWidth;
+                const containerWidth = container.offsetWidth;
+                const scrollPosition = elementLeft - (containerWidth / 2) + (elementWidth / 2);
+
+                // 只滾動水平容器，不影響頁面垂直位置
+                container.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
                 });
             }
         }, 100);
