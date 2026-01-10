@@ -231,11 +231,6 @@ function App() {
                               <CoursePlanner />
                             </Suspense>
                           } />
-                          <Route path="/tracker" element={
-                            <Suspense fallback={<PageLoadingFallback pageName="畢業進度" />}>
-                              <GraduationTracker />
-                            </Suspense>
-                          } />
                           <Route path="/calendar" element={
                             <Suspense fallback={<PageLoadingFallback pageName="行事曆" />}>
                               <UniversityCalendar />

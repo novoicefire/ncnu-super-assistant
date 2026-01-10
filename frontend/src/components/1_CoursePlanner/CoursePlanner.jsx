@@ -1,4 +1,4 @@
-// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (v2.0 多學期版)
+// frontend/src/components/1_CoursePlanner/CoursePlanner.jsx (v3.0 學業規劃器版)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import CourseTable from './CourseTable.jsx';
 import SemesterSelector from './components/SemesterSelector.jsx';
 import UserYearSettings from './components/UserYearSettings.jsx';
+import GraduationPanel from './components/GraduationPanel.jsx';
 import { useSemester } from './hooks/useSemester.js';
 import BottomSheet from '../common/BottomSheet.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,8 +18,18 @@ import { robustRequest } from '../../apiHelper.js';
 
 
 const CoursePlanner = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, isLoggedIn } = useAuth();
+
+  // 🆕 v3.0：根據語言設定取得課程名稱
+  const getCourseName = useCallback((course) => {
+    if (!course) return '';
+    // 英文模式且有英文名稱時使用英文，否則使用中文
+    if (i18n.language === 'en' && course.course_ename) {
+      return course.course_ename;
+    }
+    return course.course_cname || '';
+  }, [i18n.language]);
 
   // 🆕 v2.0：學期管理 Hook
   const {
@@ -43,6 +54,7 @@ const CoursePlanner = () => {
   const [isCapturing, setIsCapturing] = useState(false);
   const [filters, setFilters] = useState({
     courseName: '',
+    courseId: '',  // 🆕 課程代碼篩選
     teacher: '',
     department: '',
     division: '',
@@ -218,19 +230,25 @@ const CoursePlanner = () => {
     return course;
   }, []);
 
-  // 🎯 格式化課程資訊顯示函數
+  // 🎯 格式化課程資訊顯示函數（支援英文模式）
   const formatCourseInfo = useCallback((course) => {
     const info = [];
 
-    if (course.teacher) info.push(course.teacher);
-    if (course.department) info.push(course.department);
-    if (course.division) info.push(course.division);
+    // 根據語言選擇對應欄位
+    const teacher = (i18n.language === 'en' && course.eteacher) ? course.eteacher : course.teacher;
+    const department = (i18n.language === 'en' && course.edepartment) ? course.edepartment : course.department;
+    const division = (i18n.language === 'en' && course.edivision) ? course.edivision : course.division;
+    const credits = i18n.language === 'en' ? 'credits' : '學分';
+
+    if (teacher) info.push(teacher);
+    if (department) info.push(department);
+    if (division) info.push(division);
     if (course.time) info.push(course.time);
     if (course.location && course.location.trim() !== '') info.push(course.location);
-    if (course.course_credit) info.push(`${course.course_credit}學分`);
+    if (course.course_credit) info.push(`${course.course_credit}${credits}`);
 
     return info.join(' | ');
-  }, []);
+  }, [i18n.language]);
 
   // 截圖功能
   const captureScheduleImage = useCallback(async () => {
@@ -413,16 +431,39 @@ const CoursePlanner = () => {
     let result = staticCourses;
 
     if (filters.courseName) {
-      result = result.filter(c => c.course_cname.toLowerCase().includes(filters.courseName.toLowerCase()));
+      const searchTerm = filters.courseName.toLowerCase();
+      // 同時搜尋中文和英文課程名稱
+      result = result.filter(c =>
+        c.course_cname?.toLowerCase().includes(searchTerm) ||
+        c.course_ename?.toLowerCase().includes(searchTerm)
+      );
+    }
+    if (filters.courseId) {
+      result = result.filter(c => c.course_id && c.course_id.includes(filters.courseId));
     }
     if (filters.teacher) {
-      result = result.filter(c => c.teacher.toLowerCase().includes(filters.teacher.toLowerCase()));
+      const searchTerm = filters.teacher.toLowerCase();
+      // 同時搜尋中文和英文教師名稱
+      result = result.filter(c =>
+        c.teacher?.toLowerCase().includes(searchTerm) ||
+        c.eteacher?.toLowerCase().includes(searchTerm)
+      );
     }
     if (filters.department) {
-      result = result.filter(c => c.department === filters.department);
+      const searchTerm = filters.department.toLowerCase();
+      // 同時比對中文和英文系所（大小寫不敏感）
+      result = result.filter(c =>
+        c.department?.toLowerCase().includes(searchTerm) ||
+        c.edepartment?.toLowerCase().includes(searchTerm)
+      );
     }
     if (filters.division) {
-      result = result.filter(c => c.division === filters.division);
+      const searchTerm = filters.division.toLowerCase();
+      // 同時比對中文和英文班別（大小寫不敏感）
+      result = result.filter(c =>
+        c.division?.toLowerCase().includes(searchTerm) ||
+        c.edivision?.toLowerCase().includes(searchTerm)
+      );
     }
     if (filters.time) {
       result = result.filter(c => c.time && c.time.toLowerCase().includes(filters.time.toLowerCase()));
@@ -436,32 +477,50 @@ const CoursePlanner = () => {
     setFilteredCourses(result);
   }, [filters, staticCourses, hasTimeConflict]);
 
+  // 🆕 系所列表（包含中英文）
   const uniqueDepartments = useMemo(() => {
     if (staticCourses.length === 0) return [];
 
-    const departments = staticCourses
-      .map(c => c.department)
-      .filter(dept => dept && dept.trim() !== '')
-      .filter(Boolean);
+    // 建立系所對應表（中文名 -> 英文名）
+    const deptMap = new Map();
+    staticCourses.forEach(c => {
+      if (c.department && c.department.trim() !== '') {
+        if (!deptMap.has(c.department)) {
+          deptMap.set(c.department, c.edepartment || '');
+        }
+      }
+    });
 
-    const uniqueDepts = [...new Set(departments)].sort();
-    console.log('📊 開課單位列表:', uniqueDepts);
+    // 轉為物件陣列
+    const depts = Array.from(deptMap.entries())
+      .map(([cname, ename]) => ({ cname, ename }))
+      .sort((a, b) => a.cname.localeCompare(b.cname, 'zh-Hant'));
 
-    return uniqueDepts;
+    console.log('📊 開課單位列表:', depts);
+    return depts;
   }, [staticCourses]);
 
+  // 🆕 班別列表（包含中英文）
   const uniqueDivisions = useMemo(() => {
     if (staticCourses.length === 0) return [];
 
-    const divisions = staticCourses
-      .map(c => c.division)
-      .filter(division => division && division.trim() !== '' && division !== '通識')
-      .filter(Boolean);
+    // 建立班別對應表（中文名 -> 英文名）
+    const divMap = new Map();
+    staticCourses.forEach(c => {
+      if (c.division && c.division.trim() !== '' && c.division !== '通識') {
+        if (!divMap.has(c.division)) {
+          divMap.set(c.division, c.edivision || '');
+        }
+      }
+    });
 
-    const uniqueDivs = [...new Set(divisions)].sort();
-    console.log('📊 班別列表:', uniqueDivs);
+    // 轉為物件陣列
+    const divs = Array.from(divMap.entries())
+      .map(([cname, ename]) => ({ cname, ename }))
+      .sort((a, b) => a.cname.localeCompare(b.cname, 'zh-Hant'));
 
-    return uniqueDivs;
+    console.log('📊 班別列表:', divs);
+    return divs;
   }, [staticCourses]);
 
   const showNotification = useCallback((message, type = 'info') => {
@@ -776,6 +835,16 @@ const CoursePlanner = () => {
       <div className="planner-content">
         {/* ✅ 左側：課表顯示區 + 彈性課程區 */}
         <div className="schedule-section">
+          {/* 🆕 v3.0：畢業進度追蹤面板 */}
+          <GraduationPanel
+            selectedSemester={selectedSemester}
+            onSearchCourseId={(courseId) => {
+              // 設定 courseId 篩選器，讓用戶在課程搜尋區選擇班次
+              setFilters(prev => ({ ...prev, courseId: courseId, courseName: '' }));
+              // 展開篩選器
+              setFiltersExpanded(true);
+            }}
+          />
           <div className="schedule-container">
             <div className="schedule-header">
               <div>
@@ -829,9 +898,9 @@ const CoursePlanner = () => {
                 {sortedFlexibleCourses.map(fc => (
                   <li key={fc.course_id}>
                     <div className="course-info">
-                      <strong>{fc.course_cname}</strong>
+                      <strong>{getCourseName(fc)}</strong>
                       <small>
-                        {fc.teacher} | {fc.department} | {fc.course_credit}{t('coursePlanner.creditsUnit')}
+                        {(i18n.language === 'en' && fc.eteacher) ? fc.eteacher : fc.teacher} | {(i18n.language === 'en' && fc.edepartment && fc.edepartment !== '0') ? fc.edepartment : fc.department} | {fc.course_credit}{t('coursePlanner.creditsUnit')}
                       </small>
                     </div>
                     <button
@@ -872,6 +941,16 @@ const CoursePlanner = () => {
                 />
               </div>
               <div className="search-filter-item">
+                <label>{t('coursePlanner.courseId', '課號')}</label>
+                <input
+                  type="text"
+                  name="courseId"
+                  value={filters.courseId}
+                  onChange={handleFilterChange}
+                  placeholder={t('coursePlanner.searchCourseIdPlaceholder', '例: 120134')}
+                />
+              </div>
+              <div className="search-filter-item">
                 <label>{t('coursePlanner.teacher')}</label>
                 <input
                   type="text"
@@ -893,9 +972,14 @@ const CoursePlanner = () => {
                 />
                 <datalist id="department-list">
                   <option value="">{t('coursePlanner.allDepartments', '全部')}</option>
-                  {uniqueDepartments.map(dept => (
-                    <option key={dept} value={dept} />
-                  ))}
+                  {uniqueDepartments.map(dept => {
+                    // 判斷是否使用英文名稱：英文模式 + ename 有值且不為空字串或 "0"
+                    const isValidEname = dept.ename && dept.ename.trim() !== '' && dept.ename !== '0';
+                    const displayName = (i18n.language === 'en' && isValidEname)
+                      ? dept.ename
+                      : dept.cname;
+                    return <option key={dept.cname} value={displayName} />;
+                  })}
                 </datalist>
               </div>
               <div className="search-filter-item">
@@ -958,7 +1042,7 @@ const CoursePlanner = () => {
                     >
                       <div className="course-info">
                         <div className="course-title-container">
-                          <strong>{course.course_cname}</strong>
+                          <strong>{getCourseName(course)}</strong>
                           {!course.time && <span className="course-type-badge flexible">{t('coursePlanner.flexible')}</span>}
                           {isDisabled && <span className="course-type-badge conflict">{t('coursePlanner.conflicting', '衝堂')}</span>}
                         </div>
@@ -1080,7 +1164,7 @@ const CoursePlanner = () => {
                 className={isDisabled ? 'course-disabled' : ''}
               >
                 <div className="course-info">
-                  <strong>{course.course_cname}</strong>
+                  <strong>{getCourseName(course)}</strong>
                   {isDisabled && <span className="course-badge-conflict">{t('coursePlanner.conflicting', '衝堂')}</span>}
                   <small>{formatCourseInfo(course)}</small>
                 </div>

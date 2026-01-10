@@ -53,7 +53,6 @@ const BottomNavBar = ({ onOpenTerms }) => {
     const mainTabs = [
         { path: '/', labelKey: 'nav.home', icon: faHouse },
         { path: '/course-planner', labelKey: 'nav.coursePlanner', icon: faCalendarDays },
-        { path: '/tracker', labelKey: 'nav.progress', icon: faGraduationCap },
         { path: '/calendar', labelKey: 'nav.calendar', icon: faCalendar },
     ];
 

@@ -166,18 +166,6 @@
         "closeBtn": "Close",
         "acceptedDate": "You accepted these terms on {{date}} in this browser"
     },
-    "directory": {
-        "title": "Campus Directory",
-        "subtitle": "Find contact information for NCNU departments",
-        "loading": "Loading campus directory...",
-        "searchPlaceholder": "Search by department name...",
-        "totalUnits": "Total Units",
-        "searchResults": "Results",
-        "phone": "Phone",
-        "fax": "Fax",
-        "noResults": "No matching departments found",
-        "tryAgain": "Please try different keywords"
-    },
     "calendar": {
         "title": "University Calendar",
         "loadFailed": "Loading failed",
@@ -280,7 +268,19 @@
         "weekday二": "Tuesday",
         "weekday三": "Wednesday",
         "weekday四": "Thursday",
-        "weekday五": "Friday"
+        "weekday五": "Friday",
+        "addToSchedule": "Add to Schedule",
+        "courseId": "Course ID",
+        "searchCourseIdPlaceholder": "e.g. 120134",
+        "selectDepartment": "Search Department",
+        "allDepartments": "All",
+        "conflictCourses": "Conflicts",
+        "showAll": "Show",
+        "showGray": "Gray",
+        "hideAll": "Hide",
+        "courseSearch": "Course Search",
+        "foundCourses": "Found",
+        "coursesUnit": "courses"
     },
     "graduation": {
         "title": "Graduation Progress Tracker",
@@ -304,7 +304,8 @@
         "credits": " Credits",
         "selectedDept": "Selected Dept",
         "noDataMsg": " has no required courses or this class is not offered",
-        "loadFailedMsg": " required courses data failed to load"
+        "loadFailedMsg": " required courses data failed to load",
+        "offeredThisSemester": "Offered This Semester"
     },
     "notifications": {
         "syncComplete": "Schedule synced",

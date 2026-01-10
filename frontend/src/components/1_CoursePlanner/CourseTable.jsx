@@ -3,7 +3,16 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const CourseTable = ({ schedule, onRemove }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  // 根據語言設定取得課程名稱
+  const getCourseName = (course) => {
+    if (!course) return '';
+    if (i18n.language === 'en' && course.course_ename) {
+      return course.course_ename;
+    }
+    return course.course_cname || '';
+  };
   useEffect(() => {
     const courseTableIsolatedStyles = `
       /* ✅ 基礎表格樣式 */
@@ -238,19 +247,22 @@ const CourseTable = ({ schedule, onRemove }) => {
     }
 
     if (course) {
+      // 根據語言取得教師名稱
+      const teacher = (i18n.language === 'en' && course.eteacher) ? course.eteacher : course.teacher;
+
       return (
         <td
           key={`${day}-${period}`}
           className="course-cell-filled"
           onClick={() => {
-            if (onRemove && window.confirm(t('coursePlanner.confirmRemove', { courseName: course.course_cname }))) {
+            if (onRemove && window.confirm(t('coursePlanner.confirmRemove', { courseName: getCourseName(course) }))) {
               onRemove(course.course_id, course.time);
             }
           }}
-          title={`${t('coursePlanner.courseLabel')}: ${course.course_cname}\n${t('coursePlanner.teacher')}: ${course.teacher}\n${t('coursePlanner.room')}: ${course.location}\n${t('coursePlanner.credits')}: ${course.course_credit}`}
+          title={`${t('coursePlanner.courseLabel')}: ${getCourseName(course)}\n${t('coursePlanner.teacher')}: ${teacher}\n${t('coursePlanner.room')}: ${course.location}\n${t('coursePlanner.credits')}: ${course.course_credit}`}
         >
-          <div className="course-name">{course.course_cname}</div>
-          <div className="course-teacher">{course.teacher}</div>
+          <div className="course-name">{getCourseName(course)}</div>
+          <div className="course-teacher">{teacher}</div>
           <div className="course-room">{course.location}</div>
         </td>
       );

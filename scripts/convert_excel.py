@@ -1,4 +1,4 @@
-# scripts/convert_excel.py (整合了 Git 自動推送與自動刪除功能)
+# scripts/convert_excel.py (v2.0 - 系所名稱標準化 + 自動偵測學期)
 
 import pandas as pd
 import json
@@ -14,21 +14,24 @@ except ImportError:
 
 # --- 您需要設定的區域 ---
 SOURCE_EXCEL_FILENAME = "Data Export.xlsx" 
-ACADEMIC_YEAR = "114"
-ACADEMIC_SEMESTER = "1"
+# 若 Excel 中無學年/學期欄位，請手動設定：
+MANUAL_ACADEMIC_YEAR = "114"
+MANUAL_ACADEMIC_SEMESTER = "2" 
 
 # --- 自動化設定 ---
 SCRIPT_DIR = Path(__file__).parent
 INPUT_EXCEL_PATH = SCRIPT_DIR / SOURCE_EXCEL_FILENAME
 REPO_PATH = SCRIPT_DIR.parent
-TARGET_JSON_PATH = REPO_PATH / "frontend" / "public" / "data" / "本學期開課資訊API.json"
+DATA_DIR = REPO_PATH / "frontend" / "public" / "data"
+DEPT_MAPPING_PATH = DATA_DIR / "開課單位代碼API.json"
 
 # [非常重要] Excel 欄位名稱 -> JSON Key 的對應字典
 COLUMN_MAPPING = {
     "課號": "course_id", "班級": "class", "科目": "course_cname", "科目英文名稱": "course_ename",
     "學分": "course_credit", "系所": "department", "學制": "division", "任課教師": "teacher",
-    "上課時間": "time", "上課教室": "location",
+    "上課時間": "time", "上課教室": "location", "學年": "year", "學期": "semester",
 }
+
 DEPT_TO_FACULTY_MAPPING = {
     "中文系": "人文學院", "外文系": "人文學院", "社工系": "人文學院", "公行系": "人文學院", "歷史系": "人文學院", "東南亞系": "人文學院",
     "國企系": "管理學院", "經濟系": "管理學院", "資管系": "管理學院", "財金系": "管理學院", "觀光餐旅系觀光": "管理學院", "管院": "管理學院",
@@ -38,12 +41,36 @@ DEPT_TO_FACULTY_MAPPING = {
     "通識": "水沙連學院", "共同必": "水沙連學院", "共同選": "水沙連學院"
 }
 
+def load_department_mapping():
+    """載入系所全名 -> 簡稱對照表"""
+    if not DEPT_MAPPING_PATH.exists():
+        print(f"警告：找不到系所對照表 '{DEPT_MAPPING_PATH}'，將跳過名稱轉換。")
+        return {}
+    
+    try:
+        with open(DEPT_MAPPING_PATH, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        # 建立 全名 -> 簡稱 對照字典
+        mapping = {}
+        for item in data.get('course_deptId', {}).get('item', []):
+            full_name = item.get('單位中文名稱', '')
+            short_name = item.get('單位中文簡稱', '')
+            if full_name and short_name:
+                mapping[full_name] = short_name
+        
+        print(f"   已載入 {len(mapping)} 筆系所對照資料。")
+        return mapping
+    except Exception as e:
+        print(f"警告：載入系所對照表失敗: {e}")
+        return {}
+
 def convert():
     """主轉換函數"""
     print("--- 1. 開始 Excel 轉換作業 ---")
     if not INPUT_EXCEL_PATH.exists():
         print(f"錯誤：找不到 Excel 檔案 '{SOURCE_EXCEL_FILENAME}'。")
-        return False
+        return None, None, None
 
     try:
         df = pd.read_excel(INPUT_EXCEL_PATH, engine='openpyxl', header=1)
@@ -53,13 +80,41 @@ def convert():
         
         if 'department' not in df.columns:
             print("錯誤：'department' 欄位不存在。請檢查 COLUMN_MAPPING 中的鍵名是否與 Excel 標題完全匹配。")
-            return False
+            return None, None, None
 
+        # === 自動偵測學期（若無則使用手動設定）===
+        detected_year = None
+        detected_semester = None
+        
+        if 'year' in df.columns and not df['year'].isna().all():
+            detected_year = str(int(df['year'].mode()[0]))
+        if 'semester' in df.columns and not df['semester'].isna().all():
+            detected_semester = str(int(df['semester'].mode()[0]))
+        
+        # Fallback 到手動設定
+        if not detected_year:
+            detected_year = MANUAL_ACADEMIC_YEAR
+            print(f"   ⚠ 無法自動偵測學年，使用手動設定: {detected_year}")
+        if not detected_semester:
+            detected_semester = MANUAL_ACADEMIC_SEMESTER
+            print(f"   ⚠ 無法自動偵測學期，使用手動設定: {detected_semester}")
+        
+        print(f"   ✔ 使用學期: {detected_year}-{detected_semester}")
+        
+        # === 系所名稱標準化 ===
+        dept_mapping = load_department_mapping()
+        if dept_mapping:
+            original_depts = df['department'].unique()
+            df['department'] = df['department'].map(lambda x: dept_mapping.get(x, x))
+            converted_count = sum(1 for d in original_depts if d in dept_mapping)
+            print(f"   ✔ 已轉換 {converted_count} 個系所名稱為簡稱。")
+        
+        # 學院對應
         if 'faculty' not in df.columns:
             df['faculty'] = df['department'].map(DEPT_TO_FACULTY_MAPPING).fillna('')
         
-        df['year'] = ACADEMIC_YEAR
-        df['semester'] = ACADEMIC_SEMESTER
+        df['year'] = detected_year
+        df['semester'] = detected_semester
         
         required_keys = ["faculty", "year", "semester", "department", "course_id", "class", "course_cname", "course_ename", "time", "location", "teacher", "division", "course_credit"]
         for key in required_keys:
@@ -76,17 +131,24 @@ def convert():
         course_list = final_df.to_dict(orient='records')
         output_json = {"course_ncnu": {"item": course_list}}
 
-        TARGET_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
-        with open(TARGET_JSON_PATH, 'w', encoding='utf-8') as f:
+        # === 動態輸出檔名 ===
+        output_filename = f"開課資訊_{detected_year}_{detected_semester}.json"
+        target_json_path = DATA_DIR / output_filename
+        
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        with open(target_json_path, 'w', encoding='utf-8') as f:
             json.dump(output_json, f, ensure_ascii=False, indent=4)
             
-        print(f"✔ 轉換成功！資料已儲存至: {TARGET_JSON_PATH}")
-        return True
+        print(f"✔ 轉換成功！資料已儲存至: {target_json_path}")
+        return target_json_path, detected_year, detected_semester
+        
     except Exception as e:
         print(f"在轉換過程中發生錯誤: {e}")
-        return False
+        import traceback
+        traceback.print_exc()
+        return None, None, None
 
-def git_commit_and_push():
+def git_commit_and_push(target_json_path, year, semester):
     """自動執行 git add, commit, push，並在成功後刪除 Excel 檔案"""
     print("\n--- 2. 開始自動推送到 GitHub ---")
     try:
@@ -94,14 +156,14 @@ def git_commit_and_push():
         
         if not repo.is_dirty(untracked_files=True):
             print("資料轉換前後沒有任何變更，無需推送。")
-            # 即使沒有推送，也要刪除 Excel 檔案
             delete_source_excel()
             return
 
         print("正在將更新的課程資料加入版本控制...")
-        repo.index.add([str(TARGET_JSON_PATH)])
+        repo.index.add([str(target_json_path)])
         
-        commit_message = f"Data: 自動更新 {ACADEMIC_YEAR}-{ACADEMIC_SEMESTER} 課程資料 (來自 {SOURCE_EXCEL_FILENAME})"
+        # === 動態 Commit 訊息 ===
+        commit_message = f"Data: 更新 {year} 學年第 {semester} 學期開課資訊"
         repo.index.commit(commit_message)
         print(f"   已建立 Commit: '{commit_message}'")
 
@@ -110,7 +172,6 @@ def git_commit_and_push():
         origin.push()
         print("✔ 推送成功！Vercel 將會開始自動部署新版本的網站。")
         
-        # [新增功能] 推送成功後，執行刪除
         delete_source_excel()
 
     except git.exc.InvalidGitRepositoryError:
@@ -133,5 +194,7 @@ def delete_source_excel():
 
 # --- 主執行區 ---
 if __name__ == "__main__":
-    if convert():
-        git_commit_and_push()
+    result = convert()
+    if result[0]:
+        target_path, year, semester = result
+        git_commit_and_push(target_path, year, semester)

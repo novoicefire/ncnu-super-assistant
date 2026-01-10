@@ -8,6 +8,7 @@
 | :--- | :--- | :--- | :--- |
 | `users` | 使用者資訊（Google 登入） | ✅ | 手動建立 |
 | `schedules` | 課表資料（含彈性課程） | ✅ | 手動建立 |
+| `graduation_progress` | 畢業進度追蹤 | ✅ | `graduation_progress_setup.sql` |
 | `notifications` | 站內通知 | ✅ | `supabase_notifications_setup.sql` |
 | `notification_reads` | 已讀狀態追蹤 | ✅ | `notification_reads_setup.sql` |
 | `push_subscriptions` | 推播訂閱資訊 | ✅ | `supabase_notifications_setup.sql` |
@@ -134,7 +135,52 @@ CREATE POLICY "Service can access all schedules" ON schedules
 
 ---
 
-## 3. notifications 表
+## 3. graduation_progress 表
+
+**用途**：儲存使用者的畢業進度追蹤資料（已完成必修課程）。
+
+**設定檔**：`backend/graduation_progress_setup.sql`
+
+### 結構定義
+
+```sql
+CREATE TABLE IF NOT EXISTS graduation_progress (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    dept_id TEXT NOT NULL,
+    class_type TEXT NOT NULL,
+    completed_courses JSONB DEFAULT '[]'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(user_id, dept_id, class_type)
+);
+
+CREATE INDEX IF NOT EXISTS idx_graduation_progress_user_id ON graduation_progress(user_id);
+```
+
+### 欄位說明
+
+| 欄位 | 類型 | 必填 | 說明 |
+| :--- | :--- | :--- | :--- |
+| `id` | UUID | ✅ | 主鍵 |
+| `user_id` | TEXT | ✅ | 使用者 Google ID |
+| `dept_id` | TEXT | ✅ | 系所代碼（如 "12"） |
+| `class_type` | TEXT | ✅ | 班別：B/G/P |
+| `completed_courses` | JSONB | | 已完成課程 ID 陣列 |
+| `created_at` | TIMESTAMP | | 建立時間 |
+| `updated_at` | TIMESTAMP | | 更新時間（自動） |
+
+### RLS 政策
+
+```sql
+ALTER TABLE graduation_progress ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all access" ON graduation_progress
+    FOR ALL USING (true) WITH CHECK (true);
+```
+
+---
+
+## 4. notifications 表
 
 **用途**：儲存站內通知訊息，支援全站通知與個人通知。
 

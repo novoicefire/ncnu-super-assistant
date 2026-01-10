@@ -166,18 +166,6 @@
         "closeBtn": "關閉",
         "acceptedDate": "您已於 {{date}} 於此瀏覽器同意本條款"
     },
-    "directory": {
-        "title": "校園通訊錄",
-        "subtitle": "快速查詢暨南大學各單位聯絡資訊",
-        "loading": "正在載入校園通訊錄...",
-        "searchPlaceholder": "搜尋單位名稱或英文名稱...",
-        "totalUnits": "總單位數",
-        "searchResults": "搜尋結果",
-        "phone": "電話",
-        "fax": "傳真",
-        "noResults": "找不到符合條件的單位",
-        "tryAgain": "請嘗試使用不同的關鍵字搜尋"
-    },
     "calendar": {
         "title": "暨大行事曆",
         "loadFailed": "載入失敗",
@@ -280,7 +268,8 @@
         "weekday二": "星期二",
         "weekday三": "星期三",
         "weekday四": "星期四",
-        "weekday五": "星期五"
+        "weekday五": "星期五",
+        "addToSchedule": "加入課表"
     },
     "graduation": {
         "title": "畢業學分進度追蹤器",
@@ -304,7 +293,11 @@
         "credits": "學分",
         "selectedDept": "所選系所",
         "noDataMsg": "目前無必修課程資料或該班別未開設課程",
-        "loadFailedMsg": "的必修課程資料暫時無法載入"
+        "loadFailedMsg": "的必修課程資料暫時無法載入",
+        "offeredThisSemester": "本學期有開",
+        "foundCourses": "共找到",
+        "coursesUnit": "門課程",
+        "courseSearch": "課程搜尋區"
     },
     "notifications": {
         "syncComplete": "課表同步完成",

@@ -7,7 +7,7 @@
 **NCNU Super Assistant** 為國立暨南大學學生設計的單頁式應用(SPA)，整合四大核心功能：
 
 *   **課程規劃 (Course Planner)**
-*   **畢業進度追蹤 (Graduation Tracker)**
+*   **智慧排課系統 (Smart Course Planner)**（v6.1.0 新增，含畢業進度追蹤與自動排課建議）
 *   **校園單位導覽 (Campus Directory)**
 *   **校園行事曆 (University Calendar)**
 
@@ -186,6 +186,8 @@ npm run dev
 | `/api/push/unsubscribe` | POST | 🆕 取消訂閱推播 | Bearer Token | 移除訂閱 |
 | `/api/announcements` | GET/POST | 🆕 公告管理 | 管理員 | 首頁公告 CRUD |
 | `/api/dorm-mail` | GET | 🆕 宿舍包裹查詢 | 公開 | 支援 department 或 name 參數 |
+| `/api/graduation-progress` | GET/POST | 🆕 畢業進度存取 | Supabase Auth | 儲存/讀取畢業進度與已修課程 |
+| `/api/graduation-progress/sync` | POST | 🆕 從課表同步進度 | Supabase Auth | 自動分析歷史課表並標記已修畢 |
 | `Workers Proxy` | GET | 🆕 宿舍包裹查詢 (加速) | 公開 | 建議優先使用 Cloudflare Worker |
 
 ### 5.2. 重要 API 說明
@@ -382,6 +384,18 @@ python scripts/cleanup_push_subscriptions.py
 ```
 
 ## 6.3. 🆕 重要功能更新說明
+
+### 🆕 畢業追蹤整合與同步 (2026-01)
+
+**功能說明**：
+- **整合至 CoursePlanner**：不再是獨立頁面，而是作為排課頁面的 `GraduationPanel` 面板，方便對照。
+- **一鍵同步功能**：後端 `/api/graduation-progress/sync` 自動掃描使用者歷史課表，比對課程名稱/代碼，自動勾選已修畢的必修課。
+- **多語言與搜尋優化**：課程篩選器支援中英雙語搜尋，並新增 Course ID 搜尋功能。
+
+**技術實作**：
+- **Hook 重構**：`useCourseData` 統一管理課程資料流，減少分散的 API 呼叫。
+- **後端同步邏輯**：使用 `difflib` 進行課程名稱模糊比對，並結合 Course ID 精確比對，提高自動標記準確度。
+- **I18n 增強**：解決了教師與系所名稱在英文模式下的顯示問題。
 
 ### 🆕 排課系統 UI 優化（2026-01）
 

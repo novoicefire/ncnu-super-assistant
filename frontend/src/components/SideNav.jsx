@@ -63,7 +63,6 @@ const SideNav = ({ disclaimerAccepted, onOpenTerms }) => {
     const navItems = [
         { path: '/', labelKey: 'nav.home', icon: faHouse },
         { path: '/course-planner', labelKey: 'nav.coursePlanner', icon: faCalendarDays },
-        { path: '/tracker', labelKey: 'nav.progress', icon: faGraduationCap },
         { path: '/calendar', labelKey: 'nav.calendar', icon: faCalendar },
         { path: '/updates', labelKey: 'nav.updateLog', icon: faClipboardList },
     ];

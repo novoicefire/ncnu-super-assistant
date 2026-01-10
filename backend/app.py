@@ -256,9 +256,173 @@ def get_available_semesters():
     })
 
 
+# 🆕 畢業進度追蹤 API
+@app.route("/api/graduation-progress", methods=['GET', 'POST'])
+def handle_graduation_progress():
+    """畢業進度追蹤 API - 儲存/讀取使用者的已完成必修課程"""
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
+    
+    if request.method == 'POST':
+        data = request.json
+        dept_id = data.get('dept_id')
+        class_type = data.get('class_type')
+        completed_courses = data.get('completed_courses', [])
+        
+        if not dept_id or not class_type:
+            return jsonify({"error": "dept_id and class_type are required"}), 400
+        
+        try:
+            # 查詢是否已有記錄
+            response = supabase.table('graduation_progress').select('id').eq('user_id', user_id).eq('dept_id', dept_id).eq('class_type', class_type).limit(1).execute()
+            
+            if response.data:
+                # 更新現有記錄
+                update_response = supabase.table('graduation_progress').update({
+                    'completed_courses': completed_courses
+                }).eq('user_id', user_id).eq('dept_id', dept_id).eq('class_type', class_type).execute()
+                return jsonify({"success": True, "action": "updated", "data": update_response.data[0] if update_response.data else None})
+            else:
+                # 新增記錄
+                insert_response = supabase.table('graduation_progress').insert({
+                    'user_id': user_id,
+                    'dept_id': dept_id,
+                    'class_type': class_type,
+                    'completed_courses': completed_courses
+                }).execute()
+                return jsonify({"success": True, "action": "inserted", "data": insert_response.data[0] if insert_response.data else None})
+        except Exception as e:
+            print(f"ERROR in handle_graduation_progress POST: {e}")
+            import traceback
+            traceback.print_exc()
+            return jsonify({"error": str(e)}), 500
+    
+    if request.method == 'GET':
+        dept_id = request.args.get('dept_id')
+        class_type = request.args.get('class_type')
+        
+        if not dept_id or not class_type:
+            return jsonify({"error": "dept_id and class_type are required"}), 400
+        
+        try:
+            response = supabase.table('graduation_progress').select('completed_courses').eq('user_id', user_id).eq('dept_id', dept_id).eq('class_type', class_type).limit(1).execute()
+            
+            if response.data:
+                return jsonify({
+                    'completed_courses': response.data[0].get('completed_courses', [])
+                })
+            else:
+                return jsonify({
+                    'completed_courses': []
+                })
+        except Exception as e:
+            print(f"ERROR in handle_graduation_progress GET: {e}")
+            return jsonify({"error": str(e)}), 500
 
 
-
+# 🆕 自動同步畢業進度 API
+@app.route("/api/graduation-progress/sync", methods=['POST'])
+def sync_graduation_progress():
+    """
+    自動同步畢業進度 - 從用戶所有學期課表中提取 course_id，與必修課程比對後自動標記為已完成
+    
+    Request Body:
+    {
+        "user_id": "google_id",
+        "dept_id": "12",
+        "class_type": "B",
+        "required_course_ids": ["120001", "120013", ...]  # 前端傳入必修課程 ID 列表
+    }
+    """
+    data = request.json
+    user_id = data.get('user_id')
+    dept_id = data.get('dept_id')
+    class_type = data.get('class_type')
+    required_course_ids = data.get('required_course_ids', [])
+    
+    if not user_id or not dept_id or not class_type:
+        return jsonify({"error": "user_id, dept_id, and class_type are required"}), 400
+    
+    try:
+        # 1. 查詢用戶所有學期的課表
+        schedules_response = supabase.table('schedules').select('schedule_data, flexible_courses').eq('user_id', user_id).execute()
+        
+        if not schedules_response.data:
+            return jsonify({
+                "success": True,
+                "synced_count": 0,
+                "synced_courses": [],
+                "message": "沒有找到用戶課表資料"
+            })
+        
+        # 2. 提取所有 course_id（從固定課程和彈性課程）
+        all_course_ids = set()
+        
+        for schedule_record in schedules_response.data:
+            # 固定時間課程
+            schedule_data = schedule_record.get('schedule_data', {})
+            if isinstance(schedule_data, dict):
+                for slot, course in schedule_data.items():
+                    if isinstance(course, dict) and 'course_id' in course:
+                        all_course_ids.add(course['course_id'])
+            
+            # 彈性課程
+            flexible_courses = schedule_record.get('flexible_courses', [])
+            if isinstance(flexible_courses, list):
+                for course in flexible_courses:
+                    if isinstance(course, dict) and 'course_id' in course:
+                        all_course_ids.add(course['course_id'])
+        
+        # 3. 與必修課程 ID 比對
+        synced_courses = list(all_course_ids.intersection(set(required_course_ids)))
+        
+        if not synced_courses:
+            return jsonify({
+                "success": True,
+                "synced_count": 0,
+                "synced_courses": [],
+                "message": "課表中沒有匹配的必修課程"
+            })
+        
+        # 4. 查詢現有的 graduation_progress 記錄
+        existing_response = supabase.table('graduation_progress').select('completed_courses').eq('user_id', user_id).eq('dept_id', dept_id).eq('class_type', class_type).limit(1).execute()
+        
+        existing_completed = []
+        if existing_response.data:
+            existing_completed = existing_response.data[0].get('completed_courses', []) or []
+        
+        # 5. 合併（不重複）
+        merged_completed = list(set(existing_completed + synced_courses))
+        
+        # 6. 儲存到 graduation_progress
+        if existing_response.data:
+            supabase.table('graduation_progress').update({
+                'completed_courses': merged_completed
+            }).eq('user_id', user_id).eq('dept_id', dept_id).eq('class_type', class_type).execute()
+        else:
+            supabase.table('graduation_progress').insert({
+                'user_id': user_id,
+                'dept_id': dept_id,
+                'class_type': class_type,
+                'completed_courses': merged_completed
+            }).execute()
+        
+        new_synced = [c for c in synced_courses if c not in existing_completed]
+        
+        return jsonify({
+            "success": True,
+            "synced_count": len(new_synced),
+            "synced_courses": new_synced,
+            "total_completed": len(merged_completed),
+            "message": f"成功同步 {len(new_synced)} 門課程"
+        })
+        
+    except Exception as e:
+        print(f"ERROR in sync_graduation_progress: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route('/api/dorm-mail', methods=['GET'])
