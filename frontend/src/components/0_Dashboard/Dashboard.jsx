@@ -14,48 +14,38 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      {showWrapped && user?.google_id && (
+      {showWrapped && (
         <SemesterWrapped
-          userId={user.google_id}
           onClose={() => setShowWrapped(false)}
         />
       )}
 
       <WelcomeBanner user={user} isLoggedIn={isLoggedIn} />
 
-      {/* 🎁 學期回顧 Banner - 移動到這裡以在手機版顯示最上方 */}
-      {isLoggedIn && (
-        <div
-          className="wrapped-banner"
-          onClick={() => setShowWrapped(true)}
-          style={{
-            background: 'linear-gradient(90deg, #ff00cc, #333399)',
-            color: 'white',
-            padding: '15px 20px',
-            borderRadius: '12px',
-            marginBottom: '20px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-            transition: 'transform 0.2s',
-            fontWeight: 'bold',
-            marginTop: '10px'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.01)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '1.5rem' }}>✨</span>
-            <div>
-              <div style={{ fontSize: '1.1rem' }}>2025 學期回顧 <span style={{ background: '#FFD700', color: '#000', padding: '2px 6px', borderRadius: '4px', fontSize: '0.75rem', marginLeft: '5px' }}>🎁 抽獎</span></div>
-              <div style={{ fontSize: '0.8rem', opacity: 0.9, fontWeight: 'normal' }}>查看回顧 + 填問卷抽好禮！</div>
+      {/* 🎁 租屋鬼故事募集 Banner */}
+      <div
+        className="wrapped-banner ghost-promo-banner"
+        onClick={() => setShowWrapped(true)}
+      >
+        <div className="ghost-promo-content">
+          <div className="ghost-icon">👻</div>
+          <div className="ghost-text-group">
+            <div className="ghost-title">
+              第二次抽獎來咯！ <span className="ghost-highlight">🎁租屋鬼故事募集</span>
+            </div>
+            <div className="ghost-subtitle">
+              你的房間是避風港，還是修煉場？🏠
             </div>
           </div>
-          <span>查看 👉</span>
         </div>
-      )}
+
+        {/* Decorative Circle */}
+        <div className="ghost-decorative-circle"></div>
+
+        <div className="ghost-action-btn">
+          立即參加 👉
+        </div>
+      </div>
 
       {/* 🍰 Hola Bakery Banner */}
       <div

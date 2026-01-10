@@ -8,8 +8,15 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 🎨 歡迎橫幅 */
@@ -141,11 +148,25 @@
 }
 
 /* 🎯 狀態指示器 */
-.status-active { border-left: 4px solid #28a745; }
-.status-warning { border-left: 4px solid #ffc107; }
-.status-error { border-left: 4px solid #dc3545; }
-.status-info { border-left: 4px solid #17a2b8; }
-.status-empty { border-left: 4px solid #6c757d; }
+.status-active {
+  border-left: 4px solid #28a745;
+}
+
+.status-warning {
+  border-left: 4px solid #ffc107;
+}
+
+.status-error {
+  border-left: 4px solid #dc3545;
+}
+
+.status-info {
+  border-left: 4px solid #17a2b8;
+}
+
+.status-empty {
+  border-left: 4px solid #6c757d;
+}
 
 /* 💬 懸停卡片 */
 .status-card-popup {
@@ -165,8 +186,15 @@
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(-50%) translateX(-10px); }
-  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
 }
 
 .status-card-popup-arrow {
@@ -194,22 +222,26 @@
 }
 
 /* 📚 課程/活動項目 */
-.course-item, .event-item {
+.course-item,
+.event-item {
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--theme-border-secondary);
 }
 
-.course-item:last-child, .event-item:last-child {
+.course-item:last-child,
+.event-item:last-child {
   border-bottom: none;
 }
 
-.course-name, .event-name {
+.course-name,
+.event-name {
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: var(--theme-text-primary);
 }
 
-.course-details, .event-time {
+.course-details,
+.event-time {
   font-size: 0.85rem;
   color: var(--theme-text-secondary);
 }
@@ -255,7 +287,8 @@
   box-shadow: var(--theme-shadow-primary);
   border: 1px solid var(--theme-border-primary);
   position: relative;
-  z-index: 1; /* 降低課表預覽的層級 */
+  z-index: 1;
+  /* 降低課表預覽的層級 */
 }
 
 .course-preview-header {
@@ -294,7 +327,8 @@
   border-radius: 12px;
   border: 1px solid var(--theme-border-primary);
   position: relative;
-  z-index: 1; /* 確保課表不會擋到彈出卡片 */
+  z-index: 1;
+  /* 確保課表不會擋到彈出卡片 */
 }
 
 .course-table {
@@ -405,7 +439,8 @@
 
 
 /* 🔄 載入狀態 */
-.preview-loading, .today-status.loading {
+.preview-loading,
+.today-status.loading {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -438,13 +473,19 @@
   animation: pulse 1.4s ease-in-out infinite both;
 }
 
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
 
 /* TodayStatus 區域層級設定 */
 .today-status {
   position: relative;
-  z-index: 2; /* 稍微提高今日狀態區的層級 */
+  z-index: 2;
+  /* 稍微提高今日狀態區的層級 */
 }
 
 /* 追加到 frontend/src/components/0_Dashboard/Dashboard.css */
@@ -499,15 +540,27 @@
   animation: bounce-loading 1.4s ease-in-out infinite both;
 }
 
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-.loading-dots span:nth-child(3) { animation-delay: 0s; }
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0s;
+}
 
 @keyframes bounce-loading {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     transform: scale(0.8);
     opacity: 0.5;
   }
+
   40% {
     transform: scale(1.2);
     opacity: 1;
@@ -516,17 +569,17 @@
 
 /* 📱 手機版系統狀態優化 */
 @media (max-width: 768px) {
-  
+
 
   .last-update {
     font-size: 0.75rem;
   }
 
-  
 
-  
 
-  
+
+
+
 
   .status-sub {
     font-size: 0.65rem;
@@ -558,6 +611,7 @@
     transform: translateY(20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -606,10 +660,12 @@
     transform: scale(0.8);
     opacity: 0.6;
   }
+
   50% {
     transform: scale(1.2);
     opacity: 0.3;
   }
+
   100% {
     transform: scale(1.5);
     opacity: 0;
@@ -672,6 +728,7 @@
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -777,7 +834,8 @@
   gap: 0.25rem;
 }
 
-.course-teacher, .course-location {
+.course-teacher,
+.course-location {
   font-size: 0.8rem;
   color: var(--theme-text-secondary);
 }
@@ -1246,9 +1304,7 @@
 
 [data-theme="dark"] .today-status,
 [data-theme="dark"] .course-preview,
-[data-theme="dark"] 
-
-[data-theme="dark"] .course-table {
+[data-theme="dark"] [data-theme="dark"] .course-table {
   background: var(--theme-bg-secondary);
 }
 
@@ -1450,8 +1506,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* ✅ SystemStatus 按鈕位置完全修復 */
@@ -1486,8 +1549,13 @@
 
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* ✅ 系統動作按鈕 */
@@ -1500,27 +1568,9 @@
 
 
 /* ✅ 手機版樣式 */
-@media (max-width: 768px) {
-  
+@media (max-width: 768px) {}
 
-  
-
-  
-
-  
-
-  
-}
-
-@media (max-width: 480px) {
-  
-
-  
-
-  
-
-  
-}
+@media (max-width: 480px) {}
 
 /* ✅ StatusCard 彈出卡片完整樣式 */
 .status-card-popup {
@@ -1542,6 +1592,7 @@
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1673,7 +1724,8 @@
   margin: 0;
 }
 
-.teacher, .classroom {
+.teacher,
+.classroom {
   font-size: 0.8rem;
   color: var(--theme-text-secondary);
 }
@@ -1870,7 +1922,7 @@
   margin: 0 !important;
 }
 
-.popup-body-glass .teacher, 
+.popup-body-glass .teacher,
 .popup-body-glass .classroom {
   font-size: 0.8rem !important;
   color: rgba(108, 117, 125, 0.9) !important;
@@ -2003,21 +2055,22 @@
 
 /* ✅ Safari 不支援 backdrop-filter 時的降級方案 */
 @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+
   .popup-body-glass .course-item,
   .popup-body-glass .event-item {
     background: rgba(255, 255, 255, 0.9) !important;
   }
-  
+
   [data-theme="dark"] .popup-body-glass .course-item,
   [data-theme="dark"] .popup-body-glass .event-item {
     background: rgba(74, 85, 104, 0.9) !important;
   }
-  
+
   .popup-body-glass .live-badge,
   .popup-body-glass .upcoming-badge {
     background: rgba(220, 53, 69, 1) !important;
   }
-  
+
   .popup-body-glass .upcoming-badge {
     background: rgba(255, 193, 7, 1) !important;
   }
@@ -2071,43 +2124,9 @@
 
 
 /* 手機版樣式 */
-@media (max-width: 768px) {
-  
+@media (max-width: 768px) {}
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-}
-
-@media (max-width: 480px) {
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-}
+@media (max-width: 480px) {}
 
 /* 📱 響應式設計 */
 @media (max-width: 1024px) {
@@ -2161,7 +2180,7 @@
     z-index: 1001;
   }
 
-  
+
 
   .course-table {
     font-size: 0.8rem;
@@ -2184,7 +2203,7 @@
 
   .today-status,
   .course-preview,
-  
+
 
   .course-table {
     font-size: 0.7rem;
@@ -2210,9 +2229,7 @@
 
 [data-theme="dark"] .today-status,
 [data-theme="dark"] .course-preview,
-[data-theme="dark"] 
-
-[data-theme="dark"] .course-table {
+[data-theme="dark"] [data-theme="dark"] .course-table {
   background: var(--theme-bg-secondary);
 }
 
@@ -2278,6 +2295,7 @@
 [data-theme="dark"] .legend-item {
   color: var(--theme-text-secondary);
 }
+
 /* ===== 總學分彈出卡片樣式 ===== */
 
 /* ✅ 學分概覽容器 - Safari 兼容性毛玻璃效果 */
@@ -2593,13 +2611,14 @@
 
 /* ✅ Safari 降級方案 */
 @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+
   .popup-body-glass .credits-summary,
   .popup-body-glass .credits-progress,
   .popup-body-glass .credits-breakdown,
   .popup-body-glass .credits-recommendations {
     background: rgba(255, 255, 255, 0.9) !important;
   }
-  
+
   [data-theme="dark"] .popup-body-glass .credits-summary,
   [data-theme="dark"] .popup-body-glass .credits-progress,
   [data-theme="dark"] .popup-body-glass .credits-breakdown,
@@ -2684,7 +2703,7 @@
   max-height: 600px;
   opacity: 1;
   padding: 0;
-  
+
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
 }
@@ -3031,32 +3050,32 @@
   }
 
   .announcement-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-  border-bottom: none;
-  margin-bottom: 1.5rem;
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 1.5rem;
+  }
 
   .announcement-card .collapsible-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 600px;
-  opacity: 1;
-  padding: 0;
-  
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
-}
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 600px;
+    opacity: 1;
+    padding: 0;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+  }
 
   .announcement-card .collapsible-content.collapsed {
-  max-height: 0;
-  opacity: 0;
-  padding: 0;
-  overflow: hidden;
-}
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+  }
 
   .announcement-card .collapsible-content::-webkit-scrollbar {
     width: 4px;
@@ -3082,25 +3101,25 @@
 
 @media (max-width: 480px) {
   .announcement-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-  border-bottom: none;
-  margin-bottom: 1.5rem;
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 1.5rem;
+  }
 
   .announcement-card .collapsible-content {
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 600px;
-  opacity: 1;
-  padding: 0;
-  
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
-}
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 600px;
+    opacity: 1;
+    padding: 0;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
+  }
 
   .announcement-item {
     padding: 0.75rem;
@@ -3134,7 +3153,7 @@
   max-height: 600px;
   opacity: 1;
   padding: 0;
-  
+
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) var(--theme-bg-tertiary);
 }
@@ -3206,9 +3225,20 @@
 
 /* Hola Bakery Promo Banner Animation */
 @keyframes shimmer {
-  0% { left: -100%; opacity: 0; }
-  15% { left: 100%; opacity: 0.8; }
-  100% { left: 100%; opacity: 0; }
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+
+  15% {
+    left: 100%;
+    opacity: 0.8;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
 }
 
 .promo-banner {
@@ -3249,4 +3279,134 @@
   animation-delay: 3s;
   pointer-events: none;
   z-index: 1;
+}
+
+/* 👻 鬼故事募集 Banner (Ghost Promo) */
+.ghost-promo-banner {
+  background: linear-gradient(135deg, #2b1055 0%, #7597de 100%);
+  /* Spooky Purple to Ghostly Blue */
+  color: white;
+  padding: 16px 24px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(76, 29, 149, 0.3);
+  /* Purple shadow */
+  transition: all 0.3s ease;
+  font-weight: bold;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ghost-promo-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(76, 29, 149, 0.5);
+}
+
+.ghost-promo-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ghost-icon {
+  font-size: 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 50%;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ghost-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ghost-title {
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ghost-highlight {
+  color: #FFD700;
+}
+
+.ghost-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: normal;
+  color: #e2e8f0;
+}
+
+.ghost-decorative-circle {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  filter: blur(20px);
+}
+
+.ghost-action-btn {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* 📱 Mobile Responsive Adjustments */
+@media (max-width: 600px) {
+  .ghost-promo-banner {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+
+  .ghost-promo-content {
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ghost-icon {
+    font-size: 1.5rem;
+    padding: 8px;
+  }
+
+  .ghost-title {
+    font-size: 1rem;
+  }
+
+  /* Force line break for the highlighted part */
+  .ghost-highlight {
+    display: block;
+    margin-top: 2px;
+  }
+
+  .ghost-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .ghost-action-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    margin-left: auto;
+    transform: scale(0.9);
+  }
 }
