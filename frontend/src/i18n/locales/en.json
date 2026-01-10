@@ -272,8 +272,6 @@
         "addToSchedule": "Add to Schedule",
         "courseId": "Course ID",
         "searchCourseIdPlaceholder": "e.g. 120134",
-        "selectDepartment": "Search Department",
-        "allDepartments": "All",
         "conflictCourses": "Conflicts",
         "showAll": "Show",
         "showGray": "Gray",

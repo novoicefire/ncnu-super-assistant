@@ -21,7 +21,7 @@ import PushNotificationPrompt from './components/PushNotificationPrompt.jsx';
 // 🎯 懶載入頁面組件
 const Dashboard = lazy(() => import('./components/0_Dashboard/Dashboard.jsx'));
 const CoursePlanner = lazy(() => import('./components/1_CoursePlanner/CoursePlanner.jsx'));
-const GraduationTracker = lazy(() => import('./components/2_GraduationTracker/GraduationTracker.jsx'));
+
 const UniversityCalendar = lazy(() => import('./components/4_UniversityCalendar/UniversityCalendar.jsx'));
 const UpdateLog = lazy(() => import('./components/5_UpdateLog/UpdateLog.jsx'));
 const AdminNotifications = lazy(() => import('./components/Admin/AdminNotifications.jsx'));
