@@ -362,3 +362,96 @@
 
     /* 在動畫的 40%-100% 期間保持靜止，創造間歇效果 */
 }
+
+/* ========== IG 特別樣式按鈕 ========== */
+.bottom-nav-tab.ig-highlight {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    color: white;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    padding: 0;
+
+    /* 懸浮凸起效果 */
+    position: relative;
+    top: -12px;
+    box-shadow: 0 4px 10px rgba(220, 39, 67, 0.4);
+    border: 3px solid rgba(255, 255, 255, 0.9);
+
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 隱藏 IG 文字，只顯示圖示 */
+.bottom-nav-tab.ig-highlight .tab-label {
+    display: none;
+}
+
+/* 調整 IG 圖示大小 */
+.bottom-nav-tab.ig-highlight .tab-icon {
+    font-size: 1.4rem;
+}
+
+/* 點擊/懸停效果 */
+.bottom-nav-tab.ig-highlight:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 15px rgba(220, 39, 67, 0.5);
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    color: white;
+}
+
+/* 深色模式適配 */
+[data-theme="dark"] .bottom-nav-tab.ig-highlight {
+    border-color: #1a202c;
+    /* 改為深色邊框以融入背景 */
+    box-shadow: 0 4px 12px rgba(220, 39, 67, 0.6);
+}
+
+/* 進入首頁時的跳動動畫 */
+.bottom-nav-tab.ig-highlight.bounce-active {
+    animation: igBubbleBounce 2s ease-in-out;
+}
+
+/* ========== IG 每分鐘閃光動效 ========== */
+@keyframes igShine {
+    0% {
+        left: -100%;
+        opacity: 0;
+    }
+
+    1% {
+        opacity: 0.5;
+    }
+
+    2%,
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+.bottom-nav-tab.ig-highlight {
+    /* 確保閃光不溢出圓形按鈕 */
+    overflow: hidden;
+}
+
+.bottom-nav-tab.ig-highlight::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+
+    /* 閃光漸層：透明 -> 半透明白 -> 透明 */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0) 100%);
+
+    /* 傾斜角度讓閃光更自然 */
+    transform: skewX(-25deg);
+
+    /* 每 60 秒執行一次 */
+    animation: igShine 60s infinite ease-in-out;
+
+    /* 避免阻擋點擊 */
+    pointer-events: none;
+}

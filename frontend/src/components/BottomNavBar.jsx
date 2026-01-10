@@ -29,17 +29,7 @@ const BottomNavBar = ({ onOpenTerms }) => {
     const [showMore, setShowMore] = useState(false);
     const { canShow: canShowPWA, openPrompt: openPWAPrompt } = usePWA();
 
-    // 檢查用戶是否已經看過 IG 提示（從 localStorage 讀取）
-    const [hasSeenIGHint, setHasSeenIGHint] = useState(() => {
-        return localStorage.getItem('hasSeenIGHint') === 'true';
-    });
-
-    // 當用戶點開「其他」選單時，標記已看過
     const handleMoreClick = () => {
-        if (!hasSeenIGHint) {
-            localStorage.setItem('hasSeenIGHint', 'true');
-            setHasSeenIGHint(true);
-        }
         setShowMore(!showMore);
     };
 
@@ -53,10 +43,18 @@ const BottomNavBar = ({ onOpenTerms }) => {
     const mainTabs = [
         { path: '/', labelKey: 'nav.home', icon: faHouse },
         { path: '/course-planner', labelKey: 'nav.coursePlanner', icon: faCalendarDays },
+        // IG 在中間
         { path: '/calendar', labelKey: 'nav.calendar', icon: faCalendar },
     ];
 
-    // 更多選單項目
+    // IG 連結設定
+    const igLink = {
+        path: 'https://www.instagram.com/ncnu_super_assistant/',
+        labelKey: 'nav.contactIG',
+        icon: faInstagram
+    };
+
+    // 更多選單項目 (移除 IG)
     const moreItems = [
         { path: '/updates', labelKey: 'nav.updateLog', icon: faClipboardList },
         {
@@ -64,13 +62,7 @@ const BottomNavBar = ({ onOpenTerms }) => {
             labelKey: 'nav.ibsZone',
             icon: faBook,
             external: true
-        },
-        {
-            path: 'https://www.instagram.com/ncnu_super_assistant/',
-            labelKey: 'nav.contactIG',
-            icon: faInstagram,
-            external: true
-        },
+        }
     ];
 
     // 檢查更多選單中是否有 active 項目
@@ -146,28 +138,57 @@ const BottomNavBar = ({ onOpenTerms }) => {
 
             {/* 底部導航欄 */}
             <nav className="bottom-nav">
-                {mainTabs.map((tab) => (
-                    <NavLink
-                        key={tab.path}
-                        to={tab.path}
-                        className={({ isActive }) =>
-                            `bottom-nav-tab ${isActive ? 'active' : ''}`
-                        }
-                    >
-                        <FontAwesomeIcon icon={tab.icon} className="tab-icon" />
-                        <span className="tab-label">{t(tab.labelKey)}</span>
-                    </NavLink>
-                ))}
+                {/* 1. 首頁 */}
+                <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                        `bottom-nav-tab ${isActive ? 'active' : ''}`
+                    }
+                >
+                    <FontAwesomeIcon icon={faHouse} className="tab-icon" />
+                    <span className="tab-label">{t('nav.home')}</span>
+                </NavLink>
 
-                {/* 更多按鈕 */}
+                {/* 2. 排課 */}
+                <NavLink
+                    to="/course-planner"
+                    className={({ isActive }) =>
+                        `bottom-nav-tab ${isActive ? 'active' : ''}`
+                    }
+                >
+                    <FontAwesomeIcon icon={faCalendarDays} className="tab-icon" />
+                    <span className="tab-label">{t('nav.coursePlanner')}</span>
+                </NavLink>
+
+                {/* 3. IG (中央) - 外部連結 */}
+                <a
+                    href={igLink.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`bottom-nav-tab ig-highlight ${location.pathname === '/' ? 'bounce-active' : ''}`}
+                >
+                    <FontAwesomeIcon icon={igLink.icon} className="tab-icon" />
+                    <span className="tab-label">IG</span>
+                </a>
+
+                {/* 4. 行事曆 */}
+                <NavLink
+                    to="/calendar"
+                    className={({ isActive }) =>
+                        `bottom-nav-tab ${isActive ? 'active' : ''}`
+                    }
+                >
+                    <FontAwesomeIcon icon={faCalendar} className="tab-icon" />
+                    <span className="tab-label">{t('nav.calendar')}</span>
+                </NavLink>
+
+                {/* 5. 更多按鈕 */}
                 <button
                     className={`bottom-nav-tab more-btn ${showMore || isMoreActive ? 'active' : ''}`}
                     onClick={handleMoreClick}
                 >
                     <FontAwesomeIcon icon={faEllipsis} className="tab-icon" />
                     <span className="tab-label">{t('nav.more')}</span>
-                    {/* IG 提示泡泡：只有在用戶尚未看過時才顯示 */}
-                    {!hasSeenIGHint && <span className="ig-hint-bubble">IG</span>}
                 </button>
             </nav>
         </>
